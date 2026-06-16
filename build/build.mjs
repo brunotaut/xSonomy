@@ -2,14 +2,14 @@
 /**
  * xSonomy catalogue build.
  * Fetches the UAVs + Listings tables from Airtable, maps them to the shapes the
- * front-end expects, injects them into build/template.html, and writes ../index.html.
+ * front-end expects, downloads product images, injects everything into
+ * build/template.html, and writes ../index.html (+ ../images/).
  *
- * Runs in GitHub Actions (which can reach api.airtable.com). Requires env AIRTABLE_TOKEN
- * (a personal access token scoped to this base, read-only is enough).
- *
+ * Runs in GitHub Actions (which can reach api.airtable.com). Requires env
+ * AIRTABLE_TOKEN (a personal access token scoped to this base; read-only is enough).
  * Node 18+ (uses global fetch).
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -21,9 +21,8 @@ const T_SENSOR = "tblTGH1m1Txi3eibs";
 
 /* ---- PUBLISH GATE -------------------------------------------------------
  * Which rows go live. Per the project's human-gate rule, production should be
- * ["Live"] only. Default is null = publish everything (current review-stage
- * behaviour) so the site isn't empty before rows are approved. Flip to ["Live"]
- * once you've reviewed rows and set their Status to Live in Airtable.            */
+ * ["Live"] only. Default null = publish everything (review-stage behaviour) so
+ * the site isn't empty before rows are approved. Flip to ["Live"] when ready.   */
 const PUBLISH_STATUSES = null; // e.g. ["Live"]
 /* ------------------------------------------------------------------------ */
 
@@ -36,7 +35,7 @@ const U = {
   mtow:"fldvAemhhLGbAhtEo", payload:"fldRa0Ez64pvcxNhb", endurance:"fldhb7yHmt3lBEzUc",
   range:"fldYtIpBeUYSNDH0q", propulsion:"fldnPkaeNoLxOt9ZT", year:"fldEsuyrAiFnccKLK",
   production:"fldVAHi3ZlCFQ2DMe", cls:"fldSJ0rTFBwhpyuC0", role:"fld3HcQEplxobjlJf",
-  combat:"fldVNDJFOBp02jjaB",
+  combat:"fldVNDJFOBp02jjaB", image:"fldng82meOtH3QZbc",
 };
 const S = {
   name:"fldP9VC0nFwnkVu43", company:"fldwMFOLXInXz9z5G", category:"fld4uDczDuHcuriBQ",
@@ -47,7 +46,7 @@ const S = {
   price:"fldXqQ6c8G8860kB6", modality:"fldOYs992okz3wk2G", formFactor:"fldBXmrBIBGAaSqys",
   acType:"fldSLyzIEzoNYehev", acDetect:"fldBSUFERca3UaAni", acCoverage:"fldHhpBqN4tTWuxDn",
   classification:"fldhy0OoSaGVzfPXz", partners:"fldcF8E9XVcVQ1Eci", architecture:"flddRITP6Ud2wNPhr",
-  weight:"fld8hObnNitSl7WqD", frequency:"fldebLlA8SYB4q1Z1",
+  weight:"fld8hObnNitSl7WqD", frequency:"fldebLlA8SYB4q1Z1", image:"fldP3b1e2imhm9vsP",
 };
 
 // ---- helpers ----
@@ -68,7 +67,7 @@ async function fetchAll(table) {
   return out;
 }
 const num = (v) => (typeof v === "number" ? v : (v == null || v === "" ? null : (isNaN(parseFloat(v)) ? null : parseFloat(v))));
-const firstNum = (txt) => { // lower bound of a range like "15.4–16.7"
+const firstNum = (txt) => {
   if (txt == null) return null;
   const m = String(txt).replace(/[–—]/g, "-").match(/-?\d+(\.\d+)?/);
   return m ? parseFloat(m[0]) : null;
@@ -86,6 +85,37 @@ const slugId = (name) => {
   slugSeen.add(id);
   return id;
 };
+
+// Images: pick the large thumbnail (small file); URLs expire, so download at build time.
+const pickImage = (f, fld) => {
+  const a = f[fld];
+  if (Array.isArray(a) && a.length) {
+    const at = a[0];
+    const url = (at.thumbnails && at.thumbnails.large && at.thumbnails.large.url) || at.url;
+    return url ? { url, type: at.type || "image/jpeg" } : null;
+  }
+  return null;
+};
+const extFromType = (t) => ({ "image/jpeg": "jpg", "image/jpg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" }[t] || "jpg");
+const IMG_DIR = join(__dir, "..", "images");
+async function downloadImages(rows) {
+  for (const r of rows) {
+    if (r._img) {
+      try {
+        const res = await fetch(r._img.url);
+        if (res.ok) {
+          const buf = Buffer.from(await res.arrayBuffer());
+          const rel = `images/${r.id}.${extFromType(r._img.type)}`;
+          mkdirSync(IMG_DIR, { recursive: true });
+          writeFileSync(join(__dir, "..", rel), buf);
+          r.image = rel;
+        } else { console.error(`image ${r.id}: HTTP ${res.status}`); }
+      } catch (e) { console.error(`image ${r.id}: ${e.message}`); }
+    }
+    delete r._img;
+  }
+}
+
 const COUNTRY_SHORT = { Poland: "PL", Ukraine: "UA" };
 const ROLE_FIX = { "LOITERING MUNITION": "LOITERING" };
 const frameToSchematic = (frame) => {
@@ -129,6 +159,8 @@ function mapUAV(records) {
       summary: f[U.summary] || "",
       website: f[U.website] || "",
       note: f[U.sourceUrls] || "",
+      image: null,
+      _img: pickImage(f, U.image),
     };
   });
   const MAX = {
@@ -179,6 +211,8 @@ function mapSensor(records) {
         summary: f[S.summary] || "",
         website: f[S.website] || "",
         note: f[S.sourceUrls] || "",
+        image: null,
+        _img: pickImage(f, S.image),
       };
     });
   const FILTERS = {
@@ -199,6 +233,8 @@ const run = async () => {
   const [uavRecs, senRecs] = await Promise.all([fetchAll(T_UAV), fetchAll(T_SENSOR)]);
   const uav = mapUAV(uavRecs);
   const sen = mapSensor(senRecs);
+  await downloadImages(uav.rows);
+  await downloadImages(sen.rows);
 
   const uavBlock =
     `// generated by build/build.mjs — do not edit by hand\n` +
@@ -223,4 +259,3 @@ const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.arg
 if (isMain) run().catch((e) => { console.error(e); process.exit(1); });
 
 export { mapUAV, mapSensor };
-

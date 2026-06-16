@@ -1,14 +1,16 @@
 # Allowlist — ignore everything at the repo root by default...
 /*
 
-# ...except the files that make up the published site:
-!/index.html
+# ...except the SOURCE files. The site (index.html + images/) is BUILT by the
+# GitHub Action and published straight to Pages — it is never committed, so it
+# can never cause a merge conflict.
+!/build
+!/.github
 !/DEPLOY.md
 !/SETUP-GITHUB.md
 !/.gitignore
-!/build
-!/.github
 
-# Never commit these, even inside allowed folders:
+# Generated / local artifacts — never commit:
 build/node_modules/
 **/.DS_Store
+/_site/

@@ -1,17 +1,20 @@
-# Publish xSonomy to xsonomy.ai — GitHub Pages setup
+# Publish xSonomy to xsonomy.com — GitHub Pages (built by Actions)
 
-A complete, do-this-in-order guide. Assumes: domain `xsonomy.ai` registered at
-GoDaddy, host = GitHub Pages. For how the auto-rebuild works internally, see `DEPLOY.md`.
+The GitHub Action builds the site from Airtable and deploys it to Pages. The
+generated `index.html` and `images/` are **never committed**, so the repo can't
+get merge conflicts. For how the build works internally, see `DEPLOY.md`.
 
-Placeholders: replace `‹USERNAME›` with your GitHub username and `‹REPO›` with your
-repo name (e.g. `xsonomy-catalogue`).
+Placeholders: `‹USERNAME›` = your GitHub username, `‹REPO›` = repo name
+(e.g. `xsonomy-catalogue`).
+
+> **Where each step happens:** **GitHub Desktop** (the app) only pushes the source
+> files. Everything else — secret, Pages, custom domain — is done on the
+> **github.com website**, under your repo's **Settings** tab.
 
 ---
 
-## 0. What goes in the repo
-These 7 items (with their folders):
+## 0. What goes in the repo (SOURCE FILES ONLY)
 ```
-index.html                     # the served site (generated)
 build/template.html
 build/build.mjs
 .github/workflows/deploy.yml
@@ -19,68 +22,43 @@ DEPLOY.md
 SETUP-GITHUB.md
 .gitignore
 ```
-**Can't see `.github` or `.gitignore` in Finder?** They start with a dot, so macOS
-hides them. Press **Cmd + Shift + .** (period) in Finder to show hidden files.
+Do **not** add `index.html` or an `images/` folder — the Action generates and
+publishes those. (`.gitignore` already ignores them, so even if they're in your
+folder, git skips them.)
 
-You don't have to hand-pick them, though: `.gitignore` is an **allowlist** — it tells
-git to ignore *everything* in this folder except those 7 items. So with the GitHub
-Desktop method below you can just copy the whole xSonomy folder in and git commits
-only the right files (your notes, CSVs, mockups, `node_modules`, etc. are skipped).
+**Can't see `.github` or `.gitignore` in Finder?** They start with a dot — press
+**Cmd + Shift + .** (period) to show hidden files.
 
 ---
 
 ## 1. Create the repository
-1. Sign in at github.com.
-2. Top-right **+ → New repository**.
-3. Name: `‹REPO›` (e.g. `xsonomy-catalogue`). Visibility: **Public**
-   (free GitHub Pages needs public; the catalogue is public anyway).
-4. Leave everything else blank → **Create repository**.
+1. github.com → **+ → New repository**.
+2. Name `‹REPO›`, visibility **Public** → **Create repository**.
 
-## 2. Upload the files (keep the folder structure!)
-The `build/` and `.github/workflows/` folders **must** stay nested. Two ways:
-
-**A — GitHub Desktop (recommended — handles hidden files, makes future pushes one click):**
+## 2. Push the source files (GitHub Desktop)
 1. Install GitHub Desktop, sign in.
-2. **File → Clone repository →** pick `‹REPO›` → clone to your computer.
-3. Copy **everything** from your xSonomy folder into the cloned folder (you can select
-   all — the allowlist `.gitignore` skips the files that shouldn't be published).
-   Make sure `.gitignore` itself comes along (Cmd+Shift+. to see it).
-4. In GitHub Desktop the left panel will show only the ~7 site files as changes
-   (this confirms the allowlist worked) → enter a summary → **Commit to main** →
-   **Push origin**.
+2. **File → Clone repository →** pick `‹REPO›`.
+3. Copy your xSonomy folder's contents into the clone. The allowlist `.gitignore`
+   means only the ~6 source files above show up as changes (your notes, CSVs,
+   `index.html`, `images/`, `node_modules` are skipped — that's correct).
+4. Enter a summary → **Commit to main** → **Push origin**.
 
-**B — Web upload:**
-1. On the repo page: **Add file → Upload files**.
-2. Drag the whole set in — drag the **folders** `build` and `.github` (not just the
-   loose files) so the structure is preserved.
-3. **Commit changes**.
+## 3. Add the Airtable token (github.com)
+- **Settings → Secrets and variables → Actions → New repository secret.**
+  Name `AIRTABLE_TOKEN`; value = an Airtable PAT scoped to this base, `data.records:read`.
 
-> ⚠️ If after upload you don't see `.github/workflows/deploy.yml` at that exact path,
-> the Action won't run. Re-upload preserving folders.
-
-## 3. Give the Action its token + permission
-1. **Settings → Secrets and variables → Actions → New repository secret.**
-   - Name: `AIRTABLE_TOKEN`
-   - Value: an Airtable personal access token (airtable.com → Builder hub → Personal
-     access tokens; scope this base only, `data.records:read`).
-2. **Settings → Actions → General → Workflow permissions →** select
-   **Read and write permissions** → **Save**. (Lets the build commit `index.html`.)
-
-## 4. Turn on GitHub Pages
-1. **Settings → Pages.**
-2. **Build and deployment → Source = Deploy from a branch.**
-3. Branch = **main**, folder = **/ (root)** → **Save**.
-4. After ~1 min the temporary URL works: `https://‹USERNAME›.github.io/‹REPO›/`.
+## 4. Turn on Pages — as GitHub Actions
+- **Settings → Pages → Build and deployment → Source = GitHub Actions.**
+  (NOT "Deploy from a branch" — that's the old way that caused conflicts.)
 
 ## 5. Set the custom domain
-1. Still on **Settings → Pages → Custom domain**, enter: `xsonomy.ai` → **Save**.
-   (This commits a `CNAME` file to the repo root — leave it there.)
-2. GitHub will show "DNS check in progress" — expected until step 6 propagates.
+- **Settings → Pages → Custom domain =** `xsonomy.com` → Save.
+  (The build also writes a CNAME into each deploy, so it persists.)
 
 ## 6. Point DNS at GitHub (GoDaddy)
-GoDaddy → **My Products → xsonomy.ai → DNS / Manage DNS.**
+GoDaddy → **My Products → xsonomy.com → DNS / Manage DNS.**
 
-**a) Apex (`xsonomy.ai`) — add four A records:**
+**a) Apex (`xsonomy.com`) — four A records:**
 | Type | Name | Value |
 |------|------|-------|
 | A | @ | 185.199.108.153 |
@@ -88,42 +66,43 @@ GoDaddy → **My Products → xsonomy.ai → DNS / Manage DNS.**
 | A | @ | 185.199.110.153 |
 | A | @ | 185.199.111.153 |
 
-**b) www — add one CNAME:**
+**b) www — one CNAME:**
 | Type | Name | Value |
 |------|------|-------|
 | CNAME | www | ‹USERNAME›.github.io |
 
-(Just the github.io host — no `https://`, no `/‹REPO›`.)
-
 **c) Remove conflicts:** delete GoDaddy's default parked `@` A record and any
-**Domain Forwarding** on the domain — these break the connection.
+**Domain Forwarding**.
 
-**d) Optional (IPv6) — four AAAA records, Name `@`:**
+**d) Optional IPv6 — four AAAA records, Name `@`:**
 `2606:50c0:8000::153` · `2606:50c0:8001::153` · `2606:50c0:8002::153` · `2606:50c0:8003::153`
 
-## 7. Enforce HTTPS
-1. Back on **Settings → Pages**, wait until the domain check passes (DNS + cert
-   usually settle in 10–60 min, occasionally a few hours).
-2. Tick **Enforce HTTPS**.
-
-## 8. First build from Airtable
-1. Repo → **Actions** tab → **Build & publish catalogue** → **Run workflow** → Run.
-2. It pulls Airtable, regenerates `index.html`, commits it; Pages republishes.
-3. After it succeeds, `https://xsonomy.ai` shows the live catalogue. From then on it
-   rebuilds automatically every day (and on every push).
+## 7. Build & go live
+1. Repo → **Actions** → **Build & publish catalogue** → **Run workflow**.
+   It pulls Airtable, downloads images, and deploys to Pages.
+2. **Settings → Pages →** tick **Enforce HTTPS** once the cert provisions (10–60 min).
+3. `https://xsonomy.com` is live and rebuilds itself daily.
 
 ---
 
+## If you already set this up the old way (branch deploy)
+You previously committed `index.html`. To stop tracking it (one time):
+**Repository → Open in Terminal**, then:
+```
+git rm -r --cached index.html images 2>/dev/null
+git add -A
+git commit -m "Deploy via Actions; stop tracking generated files"
+git push
+```
+Then do step 4 (Pages Source = GitHub Actions) and step 7.
+
 ## Verify checklist
-- [ ] `https://‹USERNAME›.github.io/‹REPO›/` loads (before DNS)
-- [ ] `AIRTABLE_TOKEN` secret set; workflow permissions = read/write
-- [ ] A records (4) + www CNAME added at GoDaddy; parked record/forwarding removed
-- [ ] Pages custom domain = `xsonomy.ai`; Enforce HTTPS ticked
-- [ ] Actions run succeeded; `https://xsonomy.ai` and `https://www.xsonomy.ai` load
+- [ ] Only source files committed (no `index.html` / `images/` in the repo)
+- [ ] `AIRTABLE_TOKEN` secret set
+- [ ] Pages Source = **GitHub Actions**; custom domain = `xsonomy.com`
+- [ ] DNS: 4 A records + www CNAME; parked record/forwarding removed
+- [ ] Action run succeeded; `https://xsonomy.com` loads; Enforce HTTPS on
 
 ## Notes
-- `.ai` domains work normally with GitHub Pages — nothing special needed.
-- The `CNAME` file in the repo root must stay; the daily build only rewrites
-  `index.html`, so it won't disturb your domain config.
-- Steps that need a login (GitHub, GoDaddy, enabling HTTPS, the Airtable token) are
-  yours to do — credentials can't be handled for you.
+- `.com` domains work normally with GitHub Pages.
+- Golden rule: only edit files under `build/`. Never touch `index.html`.
