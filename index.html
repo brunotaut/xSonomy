@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=1280"/>
+<title>xSonomy // UAV Catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<style>
+/* ============================================================
+   xSonomy UAV CATALOGUE — hangar / loadout aesthetic
+   ============================================================ */
+:root {
+  --bg-0:#0a0d10; --bg-1:#0f1418; --bg-2:#141a1f; --bg-3:#1a2128;
+  --line:rgba(255,255,255,0.08); --line-2:rgba(255,255,255,0.14);
+  --ink-0:#e7ecef; --ink-1:#b8c2c8; --ink-2:#6b7780; --ink-3:#44505a;
+  --accent:#ff7a1a; --accent-soft:rgba(255,122,26,0.12); --accent-line:rgba(255,122,26,0.45);
+  --warn:#ffcc33; --bad:#ff3b3b; --good:#6be675; --restricted:#ff3b6b;
+  --mono:ui-monospace,"JetBrains Mono","IBM Plex Mono",Menlo,Consolas,monospace;
+  --sans:"Inter Tight","Helvetica Neue",system-ui,sans-serif;
+  --display:"Oswald","Bebas Neue","Inter Tight",sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg-0);color:var(--ink-0);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px,40px 40px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);}
+body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(255,255,255,0.012) 3px,rgba(255,255,255,0.012) 4px);pointer-events:none;z-index:1;}
+.app{position:relative;z-index:2;}
+
+/* Top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg-1),var(--bg-0));position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);}
+.brand{display:flex;align-items:center;gap:14px;font-family:var(--display);letter-spacing:0.18em;}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent);position:relative;}
+.brand-mark::before,.brand-mark::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--accent);}
+.brand-mark::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.brand-mark::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+.brand-text{display:flex;flex-direction:column;line-height:1;}
+.brand-text .b1{font-size:18px;color:var(--ink-0);}
+.brand-text .b2{font-size:9px;color:var(--ink-2);margin-top:5px;letter-spacing:0.3em;}
+.topbar-nav{display:flex;gap:4px;}
+.topbar-nav a{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-1);padding:8px 14px;border:1px solid transparent;text-decoration:none;position:relative;cursor:pointer;}
+.topbar-nav a.active{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft);}
+.topbar-nav a.disabled{color:var(--ink-3);cursor:not-allowed;}
+.topbar-nav a:hover:not(.active):not(.disabled){color:var(--ink-0);border-color:var(--line);}
+.topbar-meta{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:0.15em;}
+.topbar-meta .pulse{display:inline-block;width:6px;height:6px;background:var(--good);border-radius:50%;margin-right:6px;box-shadow:0 0 8px var(--good);animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{50%{opacity:0.35;}}
+
+/* Hero */
+.hero{position:relative;border-bottom:1px solid var(--line);padding:28px;display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:28px;background:radial-gradient(ellipse 70% 100% at 70% 50%,var(--accent-soft) 0%,transparent 60%),linear-gradient(180deg,var(--bg-1) 0%,var(--bg-0) 100%);min-height:360px;}
+.hero-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.3em;color:var(--accent);margin-bottom:12px;}
+.hero-title{font-family:var(--display);font-size:52px;line-height:0.95;letter-spacing:0.04em;margin:0 0 8px;text-transform:uppercase;}
+.hero-sub{color:var(--ink-1);font-size:14px;margin:0 0 18px;max-width:42ch;}
+.hero-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:18px;}
+.hero-meta-grid>div{background:var(--bg-1);padding:10px 12px;}
+.hero-meta-grid .lbl{font-family:var(--mono);font-size:9px;color:var(--ink-2);letter-spacing:0.2em;margin-bottom:4px;}
+.hero-meta-grid .val{font-family:var(--display);font-size:18px;color:var(--ink-0);letter-spacing:0.05em;}
+.hero-actions{display:flex;gap:10px;margin-top:22px;}
+.hero-render{position:relative;border:1px solid var(--line-2);background:linear-gradient(180deg,var(--bg-2),var(--bg-1));min-height:320px;overflow:hidden;}
+.hero-render::before{content:"FEATURED · CATALOGUE";position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:9px;letter-spacing:0.3em;color:var(--accent);z-index:2;}
+.hero-render::after{content:"SCH ●";position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--bad);z-index:2;}
+.hero-render-corner{position:absolute;width:12px;height:12px;border-color:var(--accent);border-style:solid;border-width:0;z-index:3;}
+.hero-render-corner.tl{top:6px;left:6px;border-top-width:1px;border-left-width:1px;}
+.hero-render-corner.tr{top:6px;right:6px;border-top-width:1px;border-right-width:1px;}
+.hero-render-corner.bl{bottom:6px;left:6px;border-bottom-width:1px;border-left-width:1px;}
+.hero-render-corner.br{bottom:6px;right:6px;border-bottom-width:1px;border-right-width:1px;}
+.hero-stat-rail{display:flex;flex-direction:column;gap:12px;}
+.hero-stat-rail h4{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--ink-2);margin:0 0 6px;text-transform:uppercase;}
+.radar-wrap{border:1px solid var(--line);background:var(--bg-1);padding:16px;position:relative;}
+
+/* Buttons */
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:10px 16px;background:transparent;border:1px solid var(--line-2);color:var(--ink-0);cursor:pointer;position:relative;display:inline-flex;align-items:center;gap:8px;transition:all 0.15s ease;text-decoration:none;}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+.btn.primary{background:var(--accent);color:#0a0d10;border-color:var(--accent);}
+.btn.primary:hover{filter:brightness(1.1);color:#0a0d10;}
+.btn.ghost{border-color:var(--line);}
+.btn.sm{padding:6px 10px;font-size:10px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* Layout */
+.main-grid{display:grid;grid-template-columns:280px 1fr;gap:0;min-height:100vh;}
+
+/* Sidebar */
+.sidebar{border-right:1px solid var(--line);background:var(--bg-1);padding:20px;}
+.filter-block{margin-bottom:22px;}
+.filter-block h5{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--ink-2);margin:0 0 10px;display:flex;align-items:center;justify-content:space-between;}
+.filter-block h5 .ix{color:var(--accent);font-family:var(--mono);}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;padding:5px 9px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink-1);cursor:pointer;transition:all 0.12s;user-select:none;}
+.chip:hover{color:var(--ink-0);border-color:var(--line-2);}
+.chip.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.chip .ct{color:var(--ink-3);margin-left:6px;}
+.chip.on .ct{color:var(--accent);opacity:0.6;}
+.range-input{display:flex;flex-direction:column;gap:6px;}
+.range-input .vals{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:0.1em;}
+.range-input input[type=range]{-webkit-appearance:none;height:2px;background:var(--line-2);width:100%;}
+.range-input input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--accent);cursor:pointer;border:2px solid var(--bg-0);}
+.range-input input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--accent);cursor:pointer;border:2px solid var(--bg-0);}
+.reset-row{display:flex;gap:6px;margin-top:20px;border-top:1px dashed var(--line);padding-top:16px;}
+.sidebar-frame-corner{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.2em;text-align:right;margin-bottom:8px;}
+
+/* Catalogue */
+.catalogue{padding:20px 28px 140px;}
+.cat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.cat-header .title-block{display:flex;align-items:baseline;gap:14px;}
+.cat-header h2{font-family:var(--display);font-size:22px;letter-spacing:0.12em;text-transform:uppercase;margin:0;}
+.cat-header .count{font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:0.15em;}
+.cat-header .count b{color:var(--accent);font-weight:500;}
+.cat-controls{display:flex;gap:8px;align-items:center;}
+.sort-select{font-family:var(--mono);font-size:10px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-1);padding:7px 10px;letter-spacing:0.15em;text-transform:uppercase;}
+.cat-note{font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:0.1em;border:1px dashed var(--line);background:var(--bg-1);padding:9px 12px;margin-bottom:16px;line-height:1.6;}
+.cat-note b{color:var(--warn);font-weight:500;}
+
+/* Grid */
+.uav-grid{display:grid;gap:14px;}
+.uav-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.uav-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.uav-grid.cols-5{grid-template-columns:repeat(5,1fr);}
+@media (max-width:1400px){.uav-grid.cols-5{grid-template-columns:repeat(4,1fr);}}
+@media (max-width:1100px){.uav-grid.cols-4,.uav-grid.cols-5{grid-template-columns:repeat(3,1fr);}}
+
+/* Card */
+.card{position:relative;background:var(--bg-1);border:1px solid var(--line);display:flex;flex-direction:column;cursor:pointer;transition:all 0.18s ease;overflow:hidden;}
+.card:hover{border-color:var(--accent);background:var(--bg-2);transform:translateY(-2px);box-shadow:0 6px 30px -12px var(--accent-soft),0 0 0 1px var(--accent-line) inset;}
+.card-corners>i{position:absolute;width:10px;height:10px;border-color:var(--accent);border-style:solid;z-index:4;opacity:0;transition:opacity 0.2s;}
+.card:hover .card-corners>i{opacity:1;}
+.card-corners .tl{top:-1px;left:-1px;border-width:1px 0 0 1px;}
+.card-corners .tr{top:-1px;right:-1px;border-width:1px 1px 0 0;}
+.card-corners .bl{bottom:-1px;left:-1px;border-width:0 0 1px 1px;}
+.card-corners .br{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+.card-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-family:var(--mono);font-size:9.5px;color:var(--ink-2);letter-spacing:0.2em;border-bottom:1px solid var(--line);}
+.card-head .id{color:var(--accent);}
+.tier{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;padding:2px 6px;border:1px solid var(--line-2);}
+.tier.MED{color:var(--ink-1);}
+.tier.HIGH{color:var(--good);border-color:rgba(107,230,117,0.4);background:rgba(107,230,117,0.08);}
+.tier.LOW{color:var(--warn);border-color:rgba(255,204,51,0.4);background:rgba(255,204,51,0.08);}
+.card-art{position:relative;aspect-ratio:4 / 3;background:radial-gradient(ellipse at center,var(--bg-2),var(--bg-1) 70%);border-bottom:1px solid var(--line);color:var(--accent);overflow:hidden;}
+.card-art .silhouette-mode{position:absolute;inset:14% 14%;display:grid;place-items:center;}
+.card-art .schematic-mode{position:absolute;inset:0;}
+.card-art .art-tag{position:absolute;left:8px;bottom:6px;font-family:var(--mono);font-size:8.5px;letter-spacing:0.2em;color:var(--ink-3);}
+.card-art .art-tag-r{position:absolute;right:8px;bottom:6px;font-family:var(--mono);font-size:8.5px;letter-spacing:0.15em;color:var(--ink-3);}
+.card-body{padding:12px;display:flex;flex-direction:column;gap:10px;}
+.card-name{font-family:var(--display);font-size:18px;letter-spacing:0.06em;text-transform:uppercase;margin:0;line-height:1;}
+.card-mfr{font-family:var(--mono);font-size:9.5px;color:var(--ink-2);letter-spacing:0.16em;margin-top:3px;}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;padding:3px 6px;border:1px solid var(--line);background:var(--bg-0);color:var(--ink-1);}
+.tag.role{color:var(--accent);border-color:var(--accent-line);}
+.stat-bars{display:flex;flex-direction:column;gap:5px;margin-top:4px;}
+.stat-row{display:grid;grid-template-columns:54px 1fr 52px;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;}
+.stat-row .lbl{color:var(--ink-2);}
+.stat-row .val{color:var(--ink-0);text-align:right;}
+.stat-row .val.na{color:var(--ink-3);}
+.bar{height:4px;background:var(--bg-3);position:relative;overflow:hidden;}
+.bar>i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);background-image:linear-gradient(90deg,transparent 0 50%,rgba(0,0,0,0.25) 50% 100%);background-size:4px 100%;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:1px solid var(--line);background:var(--bg-0);font-family:var(--mono);font-size:10px;letter-spacing:0.12em;}
+.card-footer .price{color:var(--accent);font-family:var(--display);font-size:16px;letter-spacing:0.05em;}
+.card-footer .lt{color:var(--ink-2);}
+.card-actions{display:flex;gap:4px;}
+.icon-btn{width:26px;height:26px;display:grid;place-items:center;background:transparent;border:1px solid var(--line);color:var(--ink-2);cursor:pointer;transition:all 0.12s;text-decoration:none;}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent);}
+.icon-btn.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.icon-btn svg{display:block;}
+.status-flag{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8.5px;letter-spacing:0.2em;padding:3px 6px;z-index:2;}
+.status-flag.PROD{color:var(--good);border:1px solid rgba(107,230,117,0.4);background:rgba(107,230,117,0.08);}
+.status-flag.OTHER{color:var(--warn);border:1px solid rgba(255,204,51,0.4);background:rgba(255,204,51,0.08);}
+
+/* Compare tray */
+.compare-tray{position:fixed;bottom:0;left:280px;right:0;background:linear-gradient(180deg,var(--bg-2),var(--bg-1));border-top:1px solid var(--accent-line);padding:14px 28px;display:flex;align-items:stretch;gap:16px;z-index:40;box-shadow:0 -10px 30px -10px rgba(0,0,0,0.6);transform:translateY(0);transition:transform 0.25s ease;}
+.compare-tray.empty{transform:translateY(calc(100% - 38px));}
+.compare-tray-head{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--accent);display:flex;align-items:center;gap:10px;border-right:1px solid var(--line);padding-right:16px;flex-direction:column;justify-content:center;min-width:110px;}
+.compare-tray-head .ct-title{display:flex;align-items:center;gap:8px;}
+.compare-tray-head .ct-sub{font-size:9px;color:var(--ink-2);letter-spacing:0.18em;}
+.compare-slots{display:flex;gap:12px;flex:1;}
+.compare-slot{flex:1;border:1px dashed var(--line-2);background:var(--bg-0);padding:8px 12px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.15em;position:relative;min-height:60px;}
+.compare-slot.filled{border-style:solid;border-color:var(--accent-line);background:var(--accent-soft);color:var(--ink-0);}
+.compare-slot .num{font-family:var(--display);font-size:18px;color:var(--ink-3);letter-spacing:0;}
+.compare-slot.filled .num{color:var(--accent);}
+.compare-slot .info{display:flex;flex-direction:column;gap:2px;}
+.compare-slot .info .nm{color:var(--ink-0);font-family:var(--display);font-size:14px;letter-spacing:0.05em;}
+.compare-slot .info .id{color:var(--accent);font-size:9px;letter-spacing:0.2em;}
+.compare-slot .x{position:absolute;top:4px;right:4px;width:18px;height:18px;display:grid;place-items:center;background:transparent;border:none;color:var(--ink-2);cursor:pointer;font-family:var(--mono);}
+.compare-slot .x:hover{color:var(--bad);}
+.compare-cta{display:flex;align-items:center;padding-left:16px;border-left:1px solid var(--line);}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,8,10,0.85);backdrop-filter:blur(4px);z-index:100;display:grid;place-items:center;padding:40px;}
+.modal{width:min(900px,100%);max-height:88vh;background:var(--bg-1);border:1px solid var(--accent-line);display:grid;grid-template-columns:1.1fr 1fr;position:relative;overflow:hidden;}
+.modal-close{position:absolute;top:10px;right:10px;width:28px;height:28px;border:1px solid var(--line-2);background:var(--bg-2);color:var(--ink-1);cursor:pointer;z-index:5;font-family:var(--mono);}
+.modal-close:hover{color:var(--accent);border-color:var(--accent);}
+.modal-art{background:linear-gradient(180deg,var(--bg-2),var(--bg-0));border-right:1px solid var(--line);position:relative;min-height:480px;color:var(--accent);}
+.modal-info{padding:28px;overflow-y:auto;}
+.modal-id{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.3em;}
+.modal-name{font-family:var(--display);font-size:34px;letter-spacing:0.06em;text-transform:uppercase;margin:4px 0 2px;}
+.modal-mfr{font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:0.2em;margin-bottom:16px;}
+.modal-summary{color:var(--ink-1);margin-bottom:22px;}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+.spec-grid>div{background:var(--bg-1);padding:10px 12px;}
+.spec-grid .lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--ink-2);margin-bottom:4px;}
+.spec-grid .val{font-family:var(--display);font-size:15px;letter-spacing:0.04em;color:var(--ink-0);}
+.spec-grid .val.na{color:var(--ink-3);}
+.modal-actions{display:flex;gap:8px;margin-top:18px;}
+.source-note{font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:0.08em;line-height:1.6;margin-top:18px;border-top:1px dashed var(--line);padding-top:14px;}
+.source-note b{color:var(--warn);font-weight:500;}
+.source-note a{color:var(--accent);text-decoration:none;word-break:break-all;}
+.source-note a:hover{text-decoration:underline;}
+
+/* Compare modal */
+.cmp-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
+.cmp-table th,.cmp-table td{border:1px solid var(--line);padding:10px 12px;text-align:left;letter-spacing:0.06em;}
+.cmp-table thead th{background:var(--bg-2);color:var(--ink-0);font-family:var(--display);font-size:15px;letter-spacing:0.05em;text-transform:uppercase;}
+.cmp-table thead th:first-child{background:var(--bg-1);}
+.cmp-table tbody th{background:var(--bg-2);color:var(--ink-2);font-weight:400;text-transform:uppercase;letter-spacing:0.18em;font-size:9.5px;width:120px;}
+.cmp-table td{color:var(--ink-0);}
+.cmp-table td.best{color:var(--accent);background:var(--accent-soft);}
+.cmp-table td.na{color:var(--ink-3);}
+.cmp-modal{width:min(960px,100%);max-height:88vh;background:var(--bg-1);border:1px solid var(--accent-line);position:relative;overflow:auto;padding:28px;}
+.cmp-modal h2{font-family:var(--display);font-size:26px;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 18px;}
+
+/* Detail page */
+.detail{padding:24px 28px 90px;max-width:1180px;margin:0 auto;}
+.detail-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-1);background:transparent;border:1px solid var(--line);padding:8px 14px;cursor:pointer;margin-bottom:22px;transition:all 0.15s;}
+.detail-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.detail-id{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.3em;}
+.detail-name{font-family:var(--display);font-size:46px;letter-spacing:0.05em;text-transform:uppercase;margin:6px 0 2px;line-height:0.95;}
+.detail-mfr{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:0.2em;margin-bottom:22px;}
+.detail-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;align-items:start;}
+@media (max-width:900px){.detail-grid{grid-template-columns:1fr;}}
+.detail-art{position:relative;border:1px solid var(--line-2);background:linear-gradient(180deg,var(--bg-2),var(--bg-1));aspect-ratio:4 / 3;overflow:hidden;color:var(--accent);}
+.detail-art .lbl-tl{position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:0.3em;z-index:2;}
+.detail-art .lbl-bl{position:absolute;bottom:12px;left:12px;right:12px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.2em;}
+.detail-radar{border:1px solid var(--line);background:var(--bg-1);padding:18px;margin-top:22px;}
+.detail-radar h4{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--ink-2);margin:0 0 6px;text-transform:uppercase;}
+.detail-radar svg{max-width:300px;display:block;margin:0 auto;}
+.detail-summary{color:var(--ink-1);margin:0 0 20px;font-size:14px;line-height:1.6;}
+.detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+
+/* Sensor info-blocks (no schematic image) */
+.sensor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:1080px){.sensor-grid{grid-template-columns:1fr;}}
+.sblock{position:relative;background:var(--bg-1);border:1px solid var(--line);padding:22px 24px;display:flex;flex-direction:column;cursor:pointer;transition:all 0.18s ease;}
+.sblock:hover{border-color:var(--accent);background:var(--bg-2);box-shadow:0 6px 30px -14px var(--accent-soft),0 0 0 1px var(--accent-line) inset;}
+.sblock-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.sblock-num{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--ink-2);text-transform:uppercase;}
+.sblock-num b{color:var(--accent);font-weight:500;}
+.sblock-geo{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--ink-1);border:1px solid var(--line);padding:5px 10px;display:inline-flex;gap:8px;align-items:center;white-space:nowrap;}
+.sblock-title{display:flex;align-items:center;gap:16px;margin-top:16px;}
+.sblock-ic{width:54px;height:54px;border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;border-radius:50%;flex-shrink:0;}
+.sblock-name{font-family:var(--display);font-size:30px;letter-spacing:0.04em;margin:0;line-height:1;text-transform:none;}
+.sblock-sub{font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--accent);margin-top:7px;}
+.sblock-summary{color:var(--ink-1);font-size:14px;line-height:1.6;margin:18px 0 0;}
+.sblock-summary.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+.why{border-left:3px solid var(--accent);background:var(--bg-2);padding:14px 18px;margin-top:18px;}
+.why h6{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--accent);margin:0 0 6px;}
+.why p{margin:0;color:var(--ink-0);font-size:13.5px;line-height:1.55;}
+.sblock-specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:18px;}
+.sblock-specs>div{background:var(--bg-1);padding:12px 14px;}
+.sblock-specs .lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--ink-2);margin-bottom:5px;text-transform:uppercase;}
+.sblock-specs .val{font-size:13.5px;color:var(--ink-0);line-height:1.4;}
+.sblock-specs .val.na{color:var(--ink-3);}
+.sblock-specs .val.price{color:var(--accent);font-family:var(--mono);letter-spacing:0.04em;}
+.sblock-specs a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent-line);}
+.sblock-specs a:hover{filter:brightness(1.15);}
+.sblock-foot{display:flex;justify-content:flex-end;gap:6px;margin-top:16px;}
+
+.divider{height:1px;background:var(--line);margin:14px 0;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- ============ DATA (snapshot from Airtable UAVs table · 2026-06-16) ============ -->
+<script>
+// xSonomy UAV catalogue — real data, Review stage. Specs may be unverified; see each unit's source.
+window.UAV_DATA = [
+  {id:"RB-03",codename:"RAYBIRD-3",name:"Raybird-3 (ACS-3)",manufacturer:"Skyeton",country:"UA",countryFull:"Ukraine",cls:"TACTICAL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:null,payload_kg:10,flight_min:1680,speed:160,mtow:23,propulsion:"Combustion",year:2018,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Small tactical fixed-wing UAS for medium-altitude, long-endurance ISR, with a fuel-injected gasoline engine enabling up to ~28 h endurance. Adopted by the Armed Forces of Ukraine as ACS-3 since 2018; noted for jamming and weather resistance.",
+   website:"https://skyeton.com/uas-uav-raybird-3",
+   note:"Control/comms range LEFT BLANK — datalink ~225 km vs 2,500 km total ferry range. MTOW 20–23 kg (used 23)."},
+  {id:"FT-05",codename:"LOS",name:"FT-5 Łoś",manufacturer:"WB Electronics",country:"PL",countryFull:"Poland, Ukraine",cls:"TACTICAL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:150,payload_kg:null,flight_min:600,speed:null,mtow:85,propulsion:"Combustion",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Tactical fixed-wing ISR UAV used by the Polish Land Forces for battlefield surveillance, border patrol and disaster survey; carries an EO/IR (day+thermal) gimbal. Forms the reconnaissance element of WB Group's GLADIUS system.",
+   website:"https://www.wbgroup.pl/en/produkt/ft-5-los-tactical-uav/",
+   note:"Max speed + discrete payload mass not on mfr page (blank). 85 kg = MTOW (~55 kg airborne). 150 km = radio LOS; 300 km = weapon range."},
+  {id:"PD-02",codename:"PD-2",name:"PD-2",manufacturer:"UkrSpecSystems",country:"UA",countryFull:"Ukraine",cls:"TACTICAL",role:"MULTI-ROLE",frame:"VTOL HYBRID",subtype:"VTOL UAV",range_km:180,payload_kg:11,flight_min:480,speed:140,mtow:55,propulsion:"Hybrid",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"vtol",
+   summary:"Modular multi-role UAS reconfigurable between VTOL-hybrid and fixed-wing in minutes; gasoline engine with onboard electric generator for long-endurance ISR, mapping and relay. Supports EO/IR payloads with encrypted anti-jam datalinks.",
+   website:"https://ukrspecsystems.com/drones/pd-2-uas",
+   note:"Range 180 km = comms (mfr markets 200+ km). Endurance 480 min = conservative VTOL (fixed-wing 10+ h). Propulsion piston+generator, classed Hybrid."},
+  {id:"SHK-02",codename:"SHARK-M",name:"SHARK-M",manufacturer:"UkrSpecSystems",country:"UA",countryFull:"Ukraine",cls:"SMALL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:180,payload_kg:null,flight_min:420,speed:130,mtow:14.5,propulsion:"Electric",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Autonomous fixed-wing reconnaissance UAV (evolution of the Shark) with up to ~7 h endurance and communication range up to 180 km; carries gyro-stabilized EO/IR payloads and can act as a signal repeater for strike drones, with enhanced EW resistance.",
+   website:"https://ukrspecsystems.com/drones/shark-m-uas",
+   note:"Distinct from base Shark. Payload not published. 180 km = communication range. Wingspan 3.4 m, ceiling 3,000 m."},
+  {id:"FT-LOS",codename:"FLYEYE",name:"FlyEye",manufacturer:"WB Electronics",country:"PL",countryFull:"Poland, Ukraine",cls:"MINI",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:50,payload_kg:4,flight_min:180,speed:170,mtow:12,propulsion:"Electric",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Hand-launched electric fixed-wing mini-ISR UAV, widely fielded by Polish forces and in Ukraine. Backpack-portable, parachute recovery, day/thermal EO payloads for artillery observation and reconnaissance.",
+   website:"https://www.wbgroup.pl/en/produkt/flyeye-unmanned-aerial-system/",
+   note:"Multiple generations (3.0 vs 3.6). Speed cited 50–170 km/h; endurance ~150–240 min; 50 km = control radius (autonomous mission up to 200 km)."},
+  {id:"PD-01",codename:"PD-1",name:"PD-1",manufacturer:"UkrSpecSystems",country:"UA",countryFull:"Ukraine",cls:"TACTICAL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:100,payload_kg:8,flight_min:600,speed:140,mtow:33,propulsion:"Combustion",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Modular fixed-wing ISR UAS (in development since 2015), convertible between fixed-wing and VTOL configurations, with a 4-stroke combustion engine and encrypted datalink (optional satellite control). Carries modular EO/IR payloads.",
+   website:"https://ukrspecsystems.com/pd-1-3",
+   note:"Sources conflict — payload 8 vs 10 kg, MTOW 33 vs 40 kg, endurance 10+ vs 15 h. 100 km = datalink baseline."},
+  {id:"UJ-22",codename:"AIRBORNE",name:"UJ-22 Airborne",manufacturer:"UkrJet",country:"UA",countryFull:"Ukraine",cls:"TACTICAL",role:"MULTI-ROLE",frame:"FIXED-WING",subtype:"Multi-role UAV",range_km:100,payload_kg:20,flight_min:480,speed:160,mtow:null,propulsion:"Combustion",year:null,confidence:"Low",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Multi-purpose fixed-wing UAS for day/night, all-weather operation, with modular payloads up to ~20 kg; used for both reconnaissance and long-range one-way attack roles. Combustion-powered.",
+   website:"https://ukrjet.com/",
+   note:"Official UkrJet page unconfirmed (URL guessed). Range ~100 km GCS vs up to ~800 km autonomous. MTOW not found."},
+  {id:"SHK-01",codename:"SHARK",name:"Shark",manufacturer:"UkrSpecSystems",country:"UA",countryFull:"Ukraine",cls:"SMALL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:80,payload_kg:null,flight_min:240,speed:130,mtow:12.5,propulsion:"Electric",year:2022,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Electric fixed-wing tactical reconnaissance UAV developed during the 2022 war; catapult-launched, parachute recovery, stabilized Full-HD 30x EO gimbal, AES256-encrypted datalink operating up to ~80 km in contested EW environments.",
+   website:"https://ukrspecsystems.com/drones/shark-uas",
+   note:"SHARK-M and Mini Shark are separate variants. Payload not published. Range 80 km = comms radius."},
+  {id:"MSK-01",codename:"MINI-SHARK",name:"Mini Shark",manufacturer:"UkrSpecSystems",country:"UA",countryFull:"Ukraine",cls:"MINI",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:45,payload_kg:null,flight_min:210,speed:120,mtow:5,propulsion:"Electric",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Compact hand-launched fixed-wing reconnaissance UAV with a gyro-stabilized USG-261 camera (10x optical zoom, Full-HD); battery-electric, no catapult required. Designed for short-range tactical reconnaissance and target detection.",
+   website:"https://ukrspecsystems.com/drones/mini-shark-uas",
+   note:"Specs version-dependent (2025 model: 3.5 h, 45 km comms). Earlier ~2 h / 35 km. Cruise 55 km/h. Payload not published."},
+  {id:"LLK-100",codename:"LELEKA",name:"Leleka-100",manufacturer:"DeViRo",country:"UA",countryFull:"Ukraine",cls:"SMALL",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:80,payload_kg:null,flight_min:null,speed:140,mtow:5.5,propulsion:"Electric",year:null,confidence:"Low",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"All-electric fixed-wing tactical reconnaissance UAV, catapult-launched with parachute recovery; carries day EO and thermal payloads. One of the most widely fielded ISR drones in Ukrainian service for surveillance and fire adjustment.",
+   website:"https://deviro.ua/produkciya/leleka/?lang=en",
+   note:"Endurance LEFT BLANK — sources conflict 150 vs 300 min. Max speed 140 (some cite ~70 cruise). Range 80 km radius (mission up to 100 km). Payload not published."},
+  {id:"FUR-01",codename:"FURIA",name:"A1-CM Furia",manufacturer:"Athlon Avia",country:"UA",countryFull:"Ukraine",cls:"MINI",role:"ISR",frame:"FIXED-WING",subtype:"Reconnaissance UAV",range_km:50,payload_kg:null,flight_min:180,speed:130,mtow:5.5,propulsion:"Electric",year:2014,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Electric fixed-wing tactical ISR UAV in Ukrainian service (state-adopted 2020); catapult-launched, parachute recovery, interchangeable day/night payloads for reconnaissance and artillery fire correction.",
+   website:"https://athlonavia.com/en/furia/",
+   note:"Max speed 130 (cruise 65); payload not separately published; 50 km = operating radius."},
+  {id:"BSP-01",codename:"BSP-U",name:"BSP-U",manufacturer:"WB Group",country:"PL",countryFull:"Poland",cls:"TACTICAL",role:"STRIKE",frame:"FIXED-WING",subtype:"Strike UAV",range_km:null,payload_kg:null,flight_min:120,speed:220,mtow:31.5,propulsion:null,year:null,confidence:"Medium",production:"In production",combat:"Unknown",schematic:"fixed",
+   summary:"Search-and-strike fixed-wing UAV within WB Group's GLADIUS reconnaissance-strike system, operating alongside FT-5 recon drones and Warmate loitering munitions. A BSP-U(T) training version exists.",
+   website:"https://www.wbgroup.pl/en/produkt/gladius-reconnaissance-and-strike-system/",
+   note:"Specs from MILMAG. 220 km/h = dash (cruise 100–120). Range + propulsion not found."},
+  {id:"WRM-05",codename:"WARMATE-5",name:"Warmate 5",manufacturer:"WB Group",country:"PL",countryFull:"Poland",cls:"SMALL",role:"LOITERING",frame:"FPV–LOITERING",subtype:"Loitering munition",range_km:100,payload_kg:10,flight_min:null,speed:null,mtow:null,propulsion:null,year:null,confidence:"Medium",production:"In production",combat:"Unknown",schematic:"quad",
+   summary:"Extended-range precision-strike loitering munition for high-value and armored targets, accepting modular warheads (HE-frag, thermobaric, anti-tank). Loiters and engages autonomously or on external targeting from FT-5/FlyEye recon UAVs.",
+   website:"https://www.wbgroup.pl/en/produkt/warmate-5-loitering-munition/",
+   note:"Separate from base Warmate. Max payload 10 = upper of modular 5–10 kg warhead. Speed, MTOW, endurance not on mfr page."},
+  {id:"ST-35",codename:"SILENT-THUNDER",name:"ST-35 Silent Thunder",manufacturer:"Athlon Avia",country:"UA",countryFull:"Ukraine",cls:"SMALL",role:"LOITERING",frame:"FPV–LOITERING",subtype:"Loitering munition",range_km:30,payload_kg:3.5,flight_min:null,speed:140,mtow:9.5,propulsion:"Electric",year:null,confidence:"Medium",production:"In production",combat:"Unknown",schematic:"quad",
+   summary:"Precision loitering munition (unveiled 2019) vertically launched via a multirotor carrier that also relays control and payload data. Carries a 3.5 kg warhead (HE/thermobaric/HEAT/incendiary options) to a ~30 km operational radius.",
+   website:"https://athlonavia.com/en/st-35-silent-thunder/",
+   note:"Cruise 120–140 km/h. Payload = 3.5 kg warhead. Endurance not published. Ceiling ~1,200 m."},
+  {id:"WRM-01",codename:"WARMATE",name:"Warmate",manufacturer:"WB Electronics",country:"PL",countryFull:"Poland, Ukraine",cls:"MINI",role:"LOITERING",frame:"FIXED-WING",subtype:"Loitering munition",range_km:30,payload_kg:1.4,flight_min:70,speed:150,mtow:5.7,propulsion:"Electric",year:null,confidence:"Medium",production:"In production",combat:"Yes",schematic:"fixed",
+   summary:"Man-portable electric loitering munition with modular interchangeable warhead (HE-FRAG, HEAT, thermobaric); loiters, identifies and strikes targets autonomously or on command. Also offered in a recon-only configuration.",
+   website:"https://www.wbgroup.pl/en/produkt/warmate-loitering-munnitions/",
+   note:"Base Warmate figures. Endurance 60–70 min; speed ~120 cruise / 150 attack. Larger Warmate 3/5 are separate products."},
+  {id:"BRD-01",codename:"BIRDIE",name:"Birdie",manufacturer:"FlyTech UAV",country:"PL",countryFull:"Poland",cls:"SMALL",role:"MAPPING",frame:"FIXED-WING",subtype:"Mapping UAV",range_km:null,payload_kg:null,flight_min:60,speed:null,mtow:null,propulsion:"Electric",year:null,confidence:"Low",production:"In production",combat:"No",schematic:"fixed",
+   summary:"Fixed-wing surveying/mapping UAV with PPK, full-frame camera and GSM connectivity; an optional detachable module adds VTOL capability. Marketed for surveying and agriculture, covering up to ~8 km² per flight.",
+   website:"https://flytechuav.com/",
+   note:"Official URL (flytechuav.com) unconfirmed. Wingspan/MTOW/speed not found. Optional VTOL module = VTOL hybrid variant."},
+];
+
+// Maxima for stat bars / radar normalisation (derived from data, padded)
+window.UAV_MAX = { range:200, endurance:1700, payload:25, speed:250, mtow:90 };
+
+window.UAV_FILTERS = {
+  cls: ["MINI","SMALL","TACTICAL"],
+  role: ["ISR","STRIKE","MULTI-ROLE","MAPPING","LOITERING"],
+  frame: ["FIXED-WING","VTOL HYBRID","FPV–LOITERING"],
+  manufacturer: ["Athlon Avia","DeViRo","FlyTech UAV","Skyeton","UkrJet","UkrSpecSystems","WB Electronics","WB Group"],
+};
+</script>
+
+<!-- ============ SENSOR DATA (snapshot from Airtable Listings table · 2026-06-16) ============ -->
+<script>
+window.SENSOR_DATA = [{"id": "SNS-01", "name": "ARGOS APS", "company": "RISEPORT Europe", "category": "Radar–C-UAS sensor", "subtype": "Multi-modal C-UAS", "country": "Germany", "modality": "Acoustic + optical (radar-free)", "formFactor": "Mobile · radar-free", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Acoustic + optical fusion (radar-free)", "price": "No info · pre-production", "classification": null, "partners": null, "confidence": "Low", "summary": "German startup that completed the final design review of its ARGOS APS sensor module Nov 2025. Combines AI-assisted acoustic + optical fusion — no radar by design, because radar emissions reveal the unit. Pairs detection with a kinetic interceptor; intended as a last-line, mobile, distributed protective layer for infantry / maneuver units.", "website": "https://riseport.eu/", "note": "https://riseport.eu/\nImported from products-radars.csv. ⚠ Pre-production; acoustic+optical, no radar by design. Analyst note: validates running fusion stacks where radar is intentionally absent in the forward layer."}, {"id": "SNS-02", "name": "SkySentry", "company": "Microflown AVISA", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Netherlands", "modality": "Acoustic particle velocity", "formFactor": "Vehicle / tripod", "type": "Particle velocity", "band": null, "coverage": null, "use": null, "detection_km": 1, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "Quote-based · high-end · no public pricing", "classification": null, "partners": null, "confidence": "Medium", "summary": "Unique technology: instead of microphone arrays, acoustic particle-velocity sensors (the 'Microflown' probe) directly measure the air-particle motion of a sound wave. Established Dutch military partnership; used for shot-ranging and UAV detection. SkySentry reportedly detects 2 kg fixed-wing drones at 1 km, manned helicopters at 10 km. Vehicle integrations.", "website": "https://www.microflown-avisa.com/", "note": "https://www.microflown-avisa.com/\nImported from products-radars.csv. ⚠ Acoustic (not radar); ~1 km for 2 kg drone, 10 km for helicopter. Analyst note: leading non-microphone acoustic approach for extreme directionality."}, {"id": "SNS-03", "name": "Hidden Level Sensor + DaaS", "company": "Hidden Level", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "United States", "modality": "Passive radar + RF DF", "formFactor": "Vertically integrated", "type": "Passive", "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Passive radar + RF DF", "price": "Quote-based · HW or DaaS subscription", "classification": null, "partners": "Lockheed Martin Ventures; Booz Allen; DFJ Growth; Valor Equity", "confidence": "Medium", "summary": "The dominant pure-play passive-radar startup. Founded 2018; $100M raised in 12 months ($35M Series B, $65M Series C in Feb 2025), ~$500M valuation. Backed by DFJ Growth, Lockheed Martin Ventures, Booz Allen, Valor Equity. Detects 'dark drones' (no RF emissions) plus operator location. Title-18 compliant. Customers: U.S. Army / Air Force / AFRICOM / INDOPACOM / CENTCOM / NORTHCOM, federal/state/local. Revenue trajectory $5M (2024) to $25M (2025).", "website": "https://www.hiddenlevel.com/", "note": "https://www.hiddenlevel.com/\nImported from products-radars.csv. ⚠ Analyst note: model for passive sensing as a scalable utility; sells data-as-a-service in addition to hardware."}, {"id": "SNS-04", "name": "IRIS · ELVIRA", "company": "Robin Radar Systems", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "Netherlands", "modality": "Active FMCW 3D", "formFactor": "29 kg · MIL-STD", "type": "FMCW", "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": 5, "frequency_ghz": null, "weight_kg": 29, "architecture": "FMCW 3D", "price": "Quote-based · est. low–mid six-figures/unit", "classification": null, "partners": "Dutch MoD (100-unit IRIS); US DHS (FIFA 2026)", "confidence": "Medium", "summary": "IRIS is 29 kg, 360° azimuth × 60° elevation, with a 5 km baseline range and a 12 km Long-Range Mode unlocked by software alone — claimed to detect & classify Shahed-class loitering munitions. ELVIRA is the lower-cost 2D sibling. Recent 100-unit IRIS contract with Dutch MoD (Europe's largest publicly disclosed drone-radar buy). Deploying with US DHS for FIFA World Cup 2026.", "website": "https://www.robinradar.com/", "note": "https://www.robinradar.com/\nImported from products-radars.csv. ⚠ Detection range 5 km baseline (12 km in Long-Range Mode). Analyst note: European reference point for fielded compact C-UAS radar; already pairing radar with acoustic nodes."}, {"id": "SNS-05", "name": "Twinvis Sheltered", "company": "Hensoldt", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Germany", "modality": "FM/DAB/DVB-T PCL", "formFactor": "Up to 250 km · 1 s refresh", "type": "Passive", "band": null, "coverage": "3D", "use": "Air surveillance", "detection_km": 250, "frequency_ghz": null, "weight_kg": null, "architecture": "FM/DAB/DVB-T PCL", "price": "Quote-based · prime-grade", "classification": null, "partners": "Diehl (IRIS-T launcher integration)", "confidence": "Medium", "summary": "The European reference for prime-grade passive radar. Exploits VHF/UHF signals from analogue/digital radio and TV. Provides omnidirectional 3D tracking of 180+ objects to 250 km when integrated with IRIS-T launchers. Twinvis Sheltered (Aug 2023) is the deployable shelter variant — set up by two people. Several systems under contract inside and outside NATO; Hensoldt expects 100+ orders. FAA tested in Miami 2023 vs ASR-8/9/11 active radars. New production line in Ulm.", "website": "https://www.hensoldt.net/products/twinvis-passive-radar-surveillance-of-noiseless-objects", "note": "https://www.hensoldt.net/products/twinvis-passive-radar-surveillance-of-noiseless-objects\nImported from products-radars.csv. ⚠ 250 km range is with IRIS-T integration (air surveillance, not C-UAS-specific). Analyst note: prime-procurement-end passive radar; cleared for German Air Force evaluation."}, {"id": "SNS-06", "name": "Giraffe 1X", "company": "Saab", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "Sweden", "modality": "Active 3D", "formFactor": "<150 kg · vehicle", "type": "3D", "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "3D AESA", "price": "~€9.2M BE order (multi-unit)", "classification": null, "partners": "Belgian MoD (~€9.2M order)", "confidence": "Medium", "summary": "A compact 3D multi-mission radar weighing under 150 kg (~100 kg topside) — light enough to mount on a pickup. Refreshes the full 360° volume roughly every second. Belgium ordered units in 2025 under a ~€9.2M contract as part of a quick-fix counter-drone package after airspace incursions, alongside a €2.8M deal with DroneShield for jammers.", "website": "https://www.saab.com/products/giraffe-1x", "note": "https://www.saab.com/products/giraffe-1x\nImported from products-radars.csv. ⚠ Multi-mission 3D; ~1 s volume refresh. Analyst note: benchmark for fast, mobile, NATO-ready small radar; software-defined threat libraries."}, {"id": "SNS-07", "name": "AULOS Passive Covert Radar", "company": "Leonardo", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Italy", "modality": "PCR 2D/3D", "formFactor": "Fixed + transportable", "type": "Passive", "band": null, "coverage": null, "use": "Air surveillance", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Passive Covert Radar (PCR) 2D/3D", "price": "Quote-based · prime-grade", "classification": null, "partners": null, "confidence": "Medium", "summary": "Italian prime-grade Passive Covert Radar. Processes reflections from commercial broadcast illuminators for defence and homeland-security applications. Two fixed variants: a 2D version with high-gain directional antennas, and a 3D version with omnidirectional / multi-elevation arrays. Marketed alongside Leonardo's wider air-defence portfolio.", "website": "https://electronics.leonardo.com/en/products/aulos", "note": "https://electronics.leonardo.com/en/products/aulos\nImported from products-radars.csv. ⚠ Analyst note: one of few Tier-1 passive radars with both fixed and transportable variants; NATO-procurement-friendly."}, {"id": "SNS-08", "name": "Bystra (ZDPSR Bystra)", "company": "PIT-RADWAR", "category": "Radar–C-UAS sensor", "subtype": "C-UAS radar", "country": "Poland", "modality": null, "formFactor": null, "type": "3D", "band": null, "coverage": "360°", "use": "Air surveillance", "detection_km": 80, "frequency_ghz": null, "weight_kg": null, "architecture": "3D AESA (digital beamforming)", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Multifunction 3D AESA short-range air-surveillance radar feeding SHORAD/VSHORAD units; detects and tracks aircraft, hovering helicopters, missiles, UAVs and mortar rounds (C-RAM). Fielded by the Polish Armed Forces.", "website": "https://en.pitradwar.com/oferta/592,bystra-redeployable-radar", "note": "https://en.pitradwar.com/oferta/592,bystra-redeployable-radar ; https://en.wikipedia.org/wiki/ZDPSR_Bystra\n⚠ REVIEW: 80 km range from secondary source. Band is dual (S for UAVs, C for helicopters) — LEFT BLANK as single-select can't hold both. Min RCS not published. Verify vs PIT-RADWAR datasheet."}, {"id": "SNS-09", "name": "NW0 Ethernet sensor", "company": "Zvook", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Ukraine", "modality": "Parabolic acoustic + ML", "formFactor": "150–450 m · 360° · IP67", "type": "Parabolic + ML", "band": null, "coverage": "360°", "use": null, "detection_km": 0.45, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "~$500 est. (Brave1-priced)", "classification": null, "partners": null, "confidence": "Medium", "summary": "Brave1-pool Ukrainian startup. Sensors mounted on radio towers — passive parabolic-antenna acoustic + microcomputer running ML, covering ~5% of Ukrainian territory. NW0 Ethernet tactical sensor launched January 2026: 150–450 m, 360°, IP67, explicit FPV detection including fiber-optic FPVs — the threats radar can't see. Zvook UI manages dozens-to-hundreds of sensors on an interactive map.", "website": "https://www.zvook.tech/en", "note": "https://www.zvook.tech/en\nImported from products-radars.csv. ⚠ Acoustic; NW0 range 150–450 m (entered 0.45 = upper). Detects fiber-optic FPVs that radar misses. Analyst note: tactical, redeployable per-unit sensor."}, {"id": "SNS-10", "name": "Monava acoustic (undisclosed)", "company": "Monava", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Sweden", "modality": "Acoustic", "formFactor": "Undisclosed", "type": null, "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "No info · pilot-stage", "classification": null, "partners": null, "confidence": "Low", "summary": "Early-stage Swedish acoustic startup. Claims TRL6, a paid pilot programme with an unnamed defence contractor, and first units sold. Limited public detail, but identified in Osinto's acoustic-vendor mapping as part of the Nordic cohort alongside Squarehead.", "website": "https://monava.se/", "note": "https://monava.se/\nImported from products-radars.csv. ⚠ Early-stage, limited public detail. Analyst note: watch-list; worth a discovery call as Nordic capital backs dual-use defence-tech."}, {"id": "SNS-11", "name": "A400 (AUDS) · B202 portable", "company": "Blighter Surveillance Systems", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United Kingdom", "modality": "Active ESA", "formFactor": "Backpack to fixed", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": 10, "frequency_ghz": null, "weight_kg": null, "architecture": "E-scan ESA (AUDS)", "price": "Quote-based · AUDS bundle six-figures+", "classification": "ITAR-free", "partners": null, "confidence": "Medium", "summary": "A400 series radar is the radar half of the AUDS system (Anti-UAV Defence System) — UK consortium kit deployed by US forces, monitoring the Korean DMZ and on the US southern border. AUDS detect-track-identify-defeat in ~15 seconds at up to 10 km. Also the B202 Mk 2 man-portable battery radar in transport backpacks for rapid deployment.", "website": "https://www.blighter.com/", "note": "https://www.blighter.com/\nImported from products-radars.csv. ⚠ Up to 10 km (AUDS). Analyst note: operationally proven across theatres; ITAR-free simplifies NATO-but-not-US procurement."}, {"id": "SNS-12", "name": "Custom multi-static + Ubiquitous", "company": "Plextek", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "United Kingdom", "modality": "Multi-static SDR (+ active PESA option)", "formFactor": "Low-SWaP node mesh", "type": "Passive", "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Multi-static SDR (+ active PESA option)", "price": "No info · custom engagement", "classification": null, "partners": "Cranfield University; L3Harris", "confidence": "Low", "summary": "UK engineering house. Proof-of-concept multi-static passive radar with Cranfield University and L3Harris — demonstrated detection and tracking of small UAVs using terrestrial broadcast towers. Receiver nodes use track-before-detect to reduce false alarms and improve low-SNR detection. Bespoke fusion engine combines detections across the network for 3D tracking. Plextek also offers Ubiquitous Radar (active PESA) with continuous surveillance via fixed beams.", "website": "https://www.plextek.com/exceptional-engineering/radar-systems/multi-static-and-passive-radar/", "note": "https://www.plextek.com/exceptional-engineering/radar-systems/multi-static-and-passive-radar/\nImported from products-radars.csv. ⚠ Custom-build partner, not off-the-shelf. Analyst note: call when a client requirement is unusual/unique."}, {"id": "SNS-13", "name": "AR-300 · 4-unit cell", "company": "Magos Systems", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "Israel", "modality": "Active perimeter", "formFactor": "Compact tile (4 = 360°)", "type": null, "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": 0.3, "frequency_ghz": null, "weight_kg": null, "architecture": "Compact perimeter radar", "price": "Quote-based · low five-figures/radar (est.)", "classification": null, "partners": null, "confidence": "Medium", "summary": "Compact perimeter radar specialist. AR-300 delivers 300+ m drone detection range; four AR-300 units plus a single PTZ camera form the canonical 360° drone-detection cell. Strong existing C-UAS integration ecosystem; widely paired with third-party RF and EO/IR.", "website": "https://magossystems.com/", "note": "https://magossystems.com/\nImported from products-radars.csv. ⚠ 0.3 km per unit; 360° via 4-unit tile. Analyst note: cleanest tile-and-stitch architecture for short-range protected areas."}, {"id": "SNS-14", "name": "TrueView R20 · DroneHunter", "company": "Fortem Technologies", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United States", "modality": "Active Ku-band ESA", "formFactor": "Compact panel", "type": null, "band": "Ku", "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": 15.4, "weight_kg": null, "architecture": "Ku-band ESA", "price": "Quote-based · system bundles", "classification": null, "partners": "Boeing HorizonX", "confidence": "Medium", "summary": "Fortem is one of the few vendors selling both radar and a kinetic interceptor (DroneHunter — net-firing UAV). The R20 operates 15.4–16.7 GHz with up to 180 MHz bandwidth, ±2° angular accuracy, 120° azimuth × 60° elevation, four Rx channels, sub-second track update. Boeing HorizonX-backed.", "website": "https://fortemtech.com/", "note": "https://fortemtech.com/\nImported from products-radars.csv. ⚠ Band Ku (15.4–16.7 GHz). FoV 120°az × 60°el (not 360°). Analyst note: full-stack radar+interceptor vendor; R20 well documented in academic UAV-detection papers."}, {"id": "SNS-15", "name": "DroneSentry-X · RfPatrol", "company": "DroneShield", "category": "Radar–C-UAS sensor", "subtype": "Multi-modal C-UAS", "country": "Australia", "modality": "Multi-modal (RF + acoustic + radar slew-to-cue)", "formFactor": "Site-scale", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Multi-modal (RF + acoustic + radar slew-to-cue)", "price": "~€2.8M BE jammer contract reference", "classification": null, "partners": null, "confidence": "Medium", "summary": "Established C-UAS prime. Their DroneSentry ecosystem incorporates acoustic alongside RF detection and slew-to-cue radar. Belgium signed a €2.8M jammer contract in 2025 alongside the Saab Giraffe order — illustrative of how acoustic+RF and radar are bundled at NATO procurement scale. Listed on ASX; large public-market capitalisation.", "website": "https://www.droneshield.com/", "note": "https://www.droneshield.com/\nImported from products-radars.csv. ⚠ Multi-modal prime (AU/US). Analyst note: 'established competitor' reference for multi-modal fusion positioning; understand bundle pricing."}, {"id": "SNS-16", "name": "Defence radar (auto-derived)", "company": "smartmicro", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "Germany", "modality": "Active FMCW (auto-derived)", "formFactor": "Compact", "type": "FMCW", "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "FMCW (automotive-derived MMIC)", "price": "No info · auto-volume cost-curve play", "classification": null, "partners": null, "confidence": "Low", "summary": "German radar specialist with deep automotive heritage now offering a defence radar line for drone and perimeter use. The relevance is the cost curve: automotive-volume MMICs and packaging brought into low-end perimeter sensing. Less of a battlefield-grade play; more of an integrate-many-cheap-nodes play.", "website": "https://www.smartmicro.com/defense-radar-solutions/", "note": "https://www.smartmicro.com/defense-radar-solutions/\nImported from products-radars.csv. ⚠ Analyst note: possible low-cost radar-layer path not dependent on defence-prime pricing; worth a direct conversation."}, {"id": "SNS-17", "name": "Acoustic detection IP (license-only)", "company": "Fraunhofer IDMT", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Germany", "modality": "Acoustic IP / DSP", "formFactor": "Software / DSP", "type": "Acoustic IP", "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "License-based · negotiated terms", "classification": null, "partners": null, "confidence": "Low", "summary": "German Fraunhofer institute branch with mature acoustic-drone-detection R&D — projects AMBOS (BMBF) and ALADDIN (Horizon 2020) since 2016. Explicitly targeting integrators and OEMs as customers: pitched as an inexpensive, low-maintenance complement to existing radar/optical/lidar stacks. NLOS detection in built-up / forested terrain ('hears around corners').", "website": "https://www.idmt.fraunhofer.de/en.html", "note": "https://www.idmt.fraunhofer.de/en.html\nImported from products-radars.csv. ⚠ IP partner, not a vendor/product. Analyst note: fast-path to a defensible acoustic layer for an integrator without in-house DSP/ML acoustics."}, {"id": "SNS-18", "name": "S81 4D imaging radar", "company": "Uhnder", "category": "Radar–C-UAS sensor", "subtype": "4D imaging radar", "country": "United States", "modality": "4D DCM (Digital Code Modulation)", "formFactor": "Single-chip · 96-channel", "type": null, "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "4D DCM (Digital Code Modulation)", "price": "Auto-grade chip · no C-UAS product yet", "classification": null, "partners": "HASCO ADAS", "confidence": "Low", "summary": "US digital-radar specialist. 2024 launch of the S81 mass-market 4D imaging radar using Digital Code Modulation (DCM) — interference-immune, single-chip, supporting up to 96 MIMO channels with High Contrast Resolution. May 2024 partnership with HASCO ADAS for production-vehicle integration. Like Arbe, the relevance is the substrate; defence-product applications follow. No C-UAS product yet.", "website": "https://www.uhnder.com/", "note": "https://www.uhnder.com/\nImported from products-radars.csv. ⚠ Adjacent — automotive chip, no C-UAS product yet. Analyst note: DCM addresses mutual-jamming in dense distributed C-UAS deployments."}, {"id": "SNS-19", "name": "Portable 360 Radar", "company": "MatrixSpace", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United States", "modality": "Active edge-AI", "formFactor": "Car-transportable", "type": null, "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Edge-AI radar (AiCloud networking)", "price": "Quote-based · marketed 'most affordable'", "classification": null, "partners": "L3Harris (investor); Raptor Group; OTB Ventures", "confidence": "Medium", "summary": "December 2025 launch of the Portable 360 Radar: positioned as the industry's lowest-power, most portable, most affordable low-airspace drone-detection system. Won best active sensor at the U.S. Army's xTechCounter Strike. $58M total funding; October 2025 Series B brought in L3Harris as an investor alongside The Raptor Group and OTB Ventures. Multi-radar networking via MatrixSpace AiCloud.", "website": "https://www.matrixspace.com/", "note": "https://www.matrixspace.com/\nImported from products-radars.csv. ⚠ Analyst note: clearest expression of 'make compact radar a commodity'; L3Harris strategic investment signals prime-integrator bets."}, {"id": "SNS-20", "name": "GLADIUS (RADD)", "company": "RADD", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "United States", "modality": "Soldier-borne acoustic mesh", "formFactor": "Mesh / TAK", "type": "Mesh array", "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "No info · pre-LRIP · DIU/CENTCOM evaluation", "classification": null, "partners": null, "confidence": "Low", "summary": "Stealth-launched 2025, spun out of TurbineOne. Led by ex-TurbineOne CGO (Court Vanzant) and a 29-year Special Forces officer (Dave Lucas). The GLADIUS sensor (Ground-based Lightweight Acoustic Dismounted Integrated UAS Sensor) is soldier-borne, mesh-networked, with relay to a C2 node integrated with TAK and other COP suites. In the EXTiC 26-01 exercise (DIU + CENTCOM), GLADIUS detected 100% of drones in range at up to several hundred metres. Explicitly built around the fiber-optic FPV gap.", "website": "https://radd-co.com/", "note": "https://radd-co.com/\nImported from products-radars.csv. ⚠ Acoustic; name 'GLADIUS' clashes with WB Group's GLADIUS UAS system — different product. Analyst note: US-side analog of Zvook; TAK integration is the procurement-friendly detail."}, {"id": "SNS-21", "name": "MAVERICK M8", "company": "Silentium Defence", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Australia", "modality": "SDR PCL portable", "formFactor": "Backpack · <7 min · no part >6 kg", "type": "Passive", "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": 7, "frequency_ghz": null, "weight_kg": null, "architecture": "SDR PCL", "price": "Quote-based · LAND 156 reference", "classification": null, "partners": "USSOCOM (Trident Spectre 2024); AU LAND 156", "confidence": "Medium", "summary": "The state-of-the-art portable passive radar. Deployed from backpack to operational in <7 minutes. No component >6 kg. Detects drones in 360° at 3–7 km; fixed/rotary aircraft at up to 20 km. Ruggedised, no moving parts, runs on 3× standard hot-swap batteries. USSOCOM tested at Trident Spectre 2024; selected under Australian LAND 156 contract (part of $1.3B C-UAS programme). MAPIT mission-planning tool for performance prediction. First US sales Oct 2023.", "website": "https://www.silentiumdefence.com.au/maverick-m8-maritime-littoral-surveillance/", "note": "https://www.silentiumdefence.com.au/maverick-m8-maritime-littoral-surveillance/\nImported from products-radars.csv. ⚠ Drone detection 3–7 km (entered 7 = upper); aircraft up to 20 km. Analyst note: strongest match for a soldier-portable, networkable mobile fire team."}, {"id": "SNS-22", "name": "UDL-64 (Ultimate Drone Listener)", "company": "Hall Lidar Inc.", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "United States", "modality": "Acoustic array", "formFactor": "200 m / 500 m mesh", "type": "Microphone array", "band": null, "coverage": null, "use": null, "detection_km": 0.2, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "No info · US-built premium positioning", "classification": null, "partners": null, "confidence": "Low", "summary": "Founded by David Hall (Velodyne LiDAR founder, 100+ patents, 2018 Smithsonian Inventor of the Year). The UDL-64 launched late 2025: 200 m standalone, ~500 m collaborative networked. Emits no signals, fully covert. Pitched specifically on US-only manufacturing for federal procurement compliance.", "website": "https://halllidar.com/", "note": "https://halllidar.com/\nImported from products-radars.csv. ⚠ Acoustic (not radar); 0.2 km standalone, ~0.5 km networked. Analyst note: federal-procurement-clean supply chain; planned acoustic+lidar+camera stack."}, {"id": "SNS-23", "name": "VERA-NG / SICORRA", "company": "ERA", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Czechia", "modality": "PET / TDOA multilateration", "formFactor": "Multi-station mesh", "type": "Passive", "band": null, "coverage": null, "use": "Air surveillance", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "PET / TDOA multilateration", "price": "Quote-based · NATO program-grade", "classification": null, "partners": null, "confidence": "Medium", "summary": "A different flavour of passive: not PCL but Passive ESM Tracker (PET). Multiple receiver stations triangulate emitters (aircraft radars, IFF, comms) via TDOA. Tracks hundreds of targets simultaneously. Strong combat-survivability case: active radars in conflict have ~20–30 minute survival rates against anti-radiation munitions, while passive systems can't be located by emission. ERA also developing SICORRA as the next-gen multi-position system. Deployed across multiple NATO and partner nations.", "website": "https://www.era.aero/en/products/defence/vera-ng", "note": "https://www.era.aero/en/products/defence/vera-ng\nImported from products-radars.csv. ⚠ PET (tracks emitters, not echoes) — different threat catalogue than PCL. Analyst note: dominant passive ESM tracker in NATO."}, {"id": "SNS-24", "name": "AX250 · GAX500-3D", "company": "Spotter Global / SpotterRF", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United States", "modality": "Active 3D solid-state", "formFactor": "5.4 kg · 18 Hz", "type": null, "band": null, "coverage": "3D", "use": "Counter-UAS", "detection_km": 0.5, "frequency_ghz": null, "weight_kg": 5.4, "architecture": "3D solid-state (Compact Holographic)", "price": "Quote-based · est. mid five-figures/unit", "classification": "EAR (not ITAR); State Dept CJ-classified commercial", "partners": null, "confidence": "Medium", "summary": "DARPA-pedigreed compact surveillance radar specialist. The AX250 creates a full 0–90° vertical × 360° dome from a single 12 lb (5.4 kg) unit, 500 m hemispherical coverage. The new GAX500-3D (2026) introduces Compact Holographic 3D scanning at 18 Hz volumetric refresh — explicitly positioned for swarm response. State Department CJ-classified as commercial, EAR-not-ITAR exportable.", "website": "https://www.spotterglobal.com/", "note": "https://www.spotterglobal.com/\nImported from products-radars.csv. ⚠ 0.5 km hemispherical (AX250). Analyst note: one of the lightest 3D radars; easy export classification simplifies civil/commercial integration."}, {"id": "SNS-25", "name": "Vanquish · CDN", "company": "Chaos Industries", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United States", "modality": "Distributed coherent network", "formFactor": "Multi-node", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "Coherent Distributed Network (CDN)", "price": "No info · early USAF $2M contract only", "classification": null, "partners": "USAF (early contract); Ziva Corp (acquired)", "confidence": "Low", "summary": "The most aggressively-funded radar startup of the cycle. $510M Series D in late 2025, $1B total raised, $4.5B valuation. Founded 2022. The Vanquish radar is purpose-built for small UAVs, claimed to detect threats from 'hundreds of kilometres away'. CDN stitches multiple radar nodes into a single phase-coherent picture, claimed to detect threats up to 10 minutes faster than legacy. Acquired Ziva Corp for time-sync IP.", "website": "https://www.chaosindustries.com/", "note": "https://www.chaosindustries.com/\nImported from products-radars.csv. ⚠ Claims unverified; only one $2M USAF contract publicly disclosed at $4.5B valuation — execution risk. Analyst note: if CDN works as advertised, distributed cheap nodes beat single big radar."}, {"id": "SNS-26", "name": "Discovair G2+", "company": "Squarehead Technology", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Norway", "modality": "Directional acoustic array", "formFactor": "105°/unit · 4 = 360°", "type": "Microphone array", "band": null, "coverage": "360°", "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "~£25k+ per unit (est.)", "classification": null, "partners": null, "confidence": "Medium", "summary": "Likely the Western market leader in directional acoustic arrays. Discovair G2+: passive, 105° azimuth per sensor, four sensors form 360° coverage. Operates by triggering high-resolution acoustic beams in any sector that registers change. Used by allied forces in conflict zones, deployed at Falcon Peak (NORTHCOM C-sUAS exercises), demonstrated at marathons / motorsports / borders.", "website": "https://www.sqhead.com/drone-detection", "note": "https://www.sqhead.com/drone-detection\nImported from products-radars.csv. ⚠ Acoustic (not radar). Analyst note: reference high-end directional acoustic array; often integrated inside larger primes' systems."}, {"id": "SNS-27", "name": "HA 100", "company": "Thales", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "France", "modality": "FM/TV PCL", "formFactor": "Low/medium altitude", "type": "Passive", "band": null, "coverage": null, "use": "Air surveillance", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "FM/TV PCL", "price": "Quote-based · prime-grade", "classification": null, "partners": null, "confidence": "Medium", "summary": "Thales's commercial passive radar product for low/medium-altitude air surveillance, airport / high-value-asset / force-projection protection. Uses ambient FM and TV signals — no spectrum allocation required. Famously deployed by the French Air Force during the Bastille Day flypast over Paris in 2010 and many high-profile events since. Marketed on low power consumption and zero EM emissions.", "website": "https://www.thalesgroup.com/en/worldwide/homeland-alerter-100", "note": "https://www.thalesgroup.com/en/worldwide/homeland-alerter-100\nImported from products-radars.csv. ⚠ Analyst note: one of the longest-fielded commercial PCL products; reference Thales line for European procurement comparison."}, {"id": "SNS-28", "name": "Passive Location System (SPL / PCL-PET)", "company": "PIT-RADWAR", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Poland", "modality": null, "formFactor": null, "type": "Passive", "band": null, "coverage": "3D", "use": "Air surveillance", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "PCL + PET fusion (4 stations)", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Emission-free passive surveillance system fusing Passive Coherent Location (uses FM/DVB-T/GSM transmitters of opportunity) and Passive Emitter Tracking (detects onboard radar/datalink/IFF emissions). Provides covert airspace monitoring with claimed anti-stealth and anti-UAV capability.", "website": "https://en.pitradwar.com/oferta/1226,passive-location-system", "note": "https://en.pitradwar.com/oferta/1226,passive-location-system ; https://www.defence24.com/pit-radwar-sa/polish-passive-location-system-response-to-active-jamming-and-stealth-technologies\n⚠ REVIEW: detection range varies by emitter (PCL: FM up to 200 km, DVB-T 80, GSM 10; PET up to 200 km) — LEFT BLANK. Band N/A (passive). Partly in development/contracting as of 2025 — confirm it's a finished marketed product."}, {"id": "SNS-29", "name": "HAWK Counter-Drone System", "company": "Hertz Systems", "category": "Radar–C-UAS sensor", "subtype": "C-UAS radar", "country": "Poland", "modality": null, "formFactor": null, "type": null, "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": 16, "frequency_ghz": null, "weight_kg": null, "architecture": "Multi-sensor: HR50000 radar + HA200 acoustic + HC500 EO/IR", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Integrated anti-drone suite combining radar (HR50000), acoustic (HA200) and EO/IR camera (HC500) sensors with data fusion to detect, track and neutralize UAS at fixed sites. The radar can integrate with external air-defence assets via C4I. Deployed on Poland's eastern border.", "website": "https://www.hertzsystems.com/en/portfolio/anti-drone-systems/", "note": "https://hertznt.eu/wp-content/uploads/2024/10/Hawk-catalogue.pdf ; https://www.hertzsystems.com/en/portfolio/anti-drone-systems/\n⚠ REVIEW: radar type + band not published (blank). 16 km = detection at RCS 1 m²; 6 km at micro-drone 0.01 m²; >30 km effective radius. Two entities (Hertz Systems / Hertz New Technologies) market HAWK — confirm correct entity/URL."}, {"id": "SNS-30", "name": "Silent Sentry (legacy)", "company": "Lockheed Martin", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "United States", "modality": "FM/TV PCL", "formFactor": "~100 NM · 200 tracks/8 Hz", "type": "Passive", "band": null, "coverage": "360°", "use": "Air surveillance", "detection_km": 185, "frequency_ghz": 0.04, "weight_kg": null, "architecture": "FM/TV PCL (Adcock + linear arrays)", "price": "$3–5M historical (per system)", "classification": null, "partners": null, "confidence": "Medium", "summary": "The original commercially launched passive radar — Lockheed Martin Mission Systems, 1998. Uses FM radio and analogue TV signals (40–100 MHz). Detects aircraft, helicopters, cruise missiles, ballistic missiles, RPVs / drones. Update rate 200+ tracks at 8 Hz; total system fits in ~27 sq ft. Two antenna variants: 360° four-beam Adcock array, and 100°/six-beam linear array. Range up to ~100 nautical miles. Programme dormant but the architectural reference for everything that followed.", "website": "https://www.lockheedmartin.com/", "note": "https://www.lockheedmartin.com/\nImported from products-radars.csv. ⚠ Detection ~185 km (=~100 NM). Programme dormant. Analyst note: benchmark for historical passive-radar cost and how SDR has driven it down."}, {"id": "SNS-31", "name": "Phoenix chipset", "company": "Arbe Robotics", "category": "Radar–C-UAS sensor", "subtype": "4D imaging radar", "country": "Israel", "modality": "4D MIMO imaging radar", "formFactor": "Chip + module", "type": null, "band": null, "coverage": null, "use": null, "detection_km": 0.3, "frequency_ghz": null, "weight_kg": null, "architecture": "4D MIMO imaging radar (1728 virtual channels)", "price": "Auto-grade chip · no C-UAS product yet", "classification": null, "partners": "HiRain (China LRR615)", "confidence": "Low", "summary": "Public-market Israeli radar specialist. Phoenix offers 1728 virtual MIMO channels, 1° azimuth resolution, 30 FPS, claimed zero false alarms to 300 m. Top patent holder in 4D radar IP. April 2025 partnership with HiRain (China LRR615 long-range product). High-density radar IP that, applied to slow-moving sky-domain detection, would represent a sharp jump in classifier-grade radar data. No C-UAS product yet.", "website": "https://arberobotics.com/", "note": "https://arberobotics.com/\nImported from products-radars.csv. ⚠ Adjacent — automotive chip, no C-UAS product yet; 300 m, 1° az. Analyst note: tracking signal — a C-UAS licensing of Arbe's chipset shifts price/performance."}, {"id": "SNS-32", "name": "Pole-mounted acoustic mesh nodes", "company": "Sky Fortress", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Ukraine", "modality": "Mesh acoustic", "formFactor": "Distributed national mesh", "type": "Mesh array", "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "$400–1,000 per node (combat-proven)", "classification": null, "partners": null, "confidence": "Medium", "summary": "Started by two Ukrainian engineers in a garage with phones, microphones and 6-foot poles. Today: ~14,000 sensors deployed, with NATO funding for an additional 15,000 third-generation units. Each node $400–1000. 20% of all targets entering Ukrainian airspace are tracked via acoustic data alone. In one Shahed wave, helped down 80 of 84 incoming UAVs. Demonstrated at Ramstein; Romania actively testing. ML-trained on large datasets — only ~3% accuracy decline when Russians altered drone noise signatures.", "website": "https://brave1.gov.ua/en/", "note": "https://brave1.gov.ua/en/\nImported from products-radars.csv. ⚠ Acoustic mesh (national network, not a single sensor spec); official product URL is the Brave1 portal. Analyst note: the proof case — network cost < two Patriot missiles."}, {"id": "SNS-33", "name": "EchoGuard / EchoShield (MESA)", "company": "Echodyne", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "United States", "modality": "Active ESA (MESA metamaterials)", "formFactor": "~Hardback book", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "MESA (metamaterials ESA)", "price": "Quote-based · est. mid five-figures+/unit", "classification": null, "partners": "Dedrone (fused C-UAS); investors Bill Gates / Paul Allen", "confidence": "Medium", "summary": "The reference compact ESA. Echodyne's MESA (Metamaterials Electronically Scanned Array) collapsed traditional ESA radar's size, weight and power into a unit roughly the size of a hardback book. EchoGuard / EchoShield are the long-running C-UAS lines. Backed in the Bill Gates / Paul Allen Series B and tightly integrated with Dedrone for fused C-UAS deployments.", "website": "https://www.echodyne.com/", "note": "https://www.echodyne.com/\nImported from products-radars.csv. ⚠ Analyst note: The benchmark for 'ESA without the price tag of a fighter jet.' Sets the bar most newer entrants quote against."}, {"id": "SNS-34", "name": "Dumbo · 6-node site", "company": "Insignito", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Israel", "modality": "Acoustic triangulation", "formFactor": "6-node site · 2 km tested", "type": "Microphone array", "band": null, "coverage": null, "use": null, "detection_km": 2, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "~1/10th legacy · est. low five-figs/6-node site", "classification": null, "partners": null, "confidence": "Medium", "summary": "Founded 2022 by ex-IAF engineers. Each protected site uses 6 networked Dumbo sensors for sound-triangulation; tested to 2 km detection range with accurate bearing. November 2025 contract for 180 systems for VIP/high-security sites rolling out through 2026. $1.5M pre-seed from Fresh Defense Fund and ICI Fund. Claims ~1/10th the cost of legacy approaches. Also developing quieter UAS propellers and an acoustic-aware mission-planning tool (Waveguide).", "website": "https://www.insignito.com/", "note": "https://www.insignito.com/\nImported from products-radars.csv. ⚠ Acoustic (not radar); 2 km tested. Analyst note: direct cost-disruption play (~1/10th legacy)."}, {"id": "SNS-35", "name": "VYYR-series 4D Radar-on-Chip", "company": "Vayyar Imaging", "category": "Radar–C-UAS sensor", "subtype": "4D imaging radar", "country": "Israel", "modality": "4D Radar-on-Chip", "formFactor": "Single-chip", "type": null, "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "4D Radar-on-Chip", "price": "Auto-grade chip · no C-UAS product yet", "classification": null, "partners": "Koch Disruptive Technologies", "confidence": "Low", "summary": "Israeli 4D Radar-on-Chip pioneer. $109M Series D in 2019 at >$600M valuation; backed by Koch Disruptive Technologies. Mass-volume RoC for automotive cabin sensing, smart buildings and senior-care fall detection. Privacy-by-design (no optical data). The chip-level economics are the relevant data point for defence-side adoption. No C-UAS product yet.", "website": "https://vayyar.com/", "note": "https://vayyar.com/\nImported from products-radars.csv. ⚠ Adjacent — automotive/IoT RoC, no C-UAS product yet. Analyst note: reference for single-SoC radar economics; partner-mediated integration is the realistic path."}, {"id": "SNS-36", "name": "Bimodal beamforming acoustic", "company": "AReS Technologies", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Ukraine", "modality": "Phased-array acoustic beamforming", "formFactor": "Hemispherical", "type": "Phased-array beamforming", "band": null, "coverage": "Hemispherical", "use": null, "detection_km": 5, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "No info · pre-batch · Brave1-grant stage", "classification": null, "partners": null, "confidence": "Low", "summary": "Presented at Brave1 Components Dec 2025. Uses phased-array microphones with bimodal beamforming — scans the sky with millions of acoustic 'beams'. FPV: 200–300 m targeting; Shahed-class: up to 5 km. Tested live during Shahed waves and cruise-missile launches. Hemispherical scan, multi-target, urban-noise-resilient. Designed for engagement, not just detection — outputs targeting-quality coordinates to automated weapon stations.", "website": "https://brave1.gov.ua/en/", "note": "https://brave1.gov.ua/en/\nImported from products-radars.csv. ⚠ Acoustic; FPV 0.2–0.3 km, Shahed up to 5 km (entered 5). Pre-batch. Official URL is Brave1 portal. Analyst note: first acoustic system explicitly designed as a fire-control sensor."}, {"id": "SNS-37", "name": "Soła (ZDPSR Soła)", "company": "PIT-RADWAR", "category": "Radar–C-UAS sensor", "subtype": "Air surveillance radar", "country": "Poland", "modality": null, "formFactor": null, "type": "3D", "band": null, "coverage": "360°", "use": "Air surveillance", "detection_km": 60, "frequency_ghz": null, "weight_kg": null, "architecture": "3D PESA (dual-band)", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Three-coordinate redeployable PESA radar for SHORAD/VSHORAD air defence with C-RAM capability; detects aircraft, UAVs, mortar rounds and (on a dedicated C-band channel) hovering helicopters, tracking up to 99 targets. Mounted on a Żubr-P vehicle.", "website": "https://en.pitradwar.com/oferta/594,sola-redeployable-radar", "note": "https://en.pitradwar.com/oferta/594,sola-redeployable-radar ; https://en.wikipedia.org/wiki/ZDPSR_So%C5%82a\n⚠ REVIEW: dual-band S+C — band LEFT BLANK (single-select). Min RCS not published. 60 km range + bands from Wikipedia/Radartutorial; verify vs PIT-RADWAR datasheet."}, {"id": "SNS-38", "name": "Welles drone-mounted particle-velocity acoustic", "company": "Welles Acoustics (Quantum Systems)", "category": "Acoustic sensor", "subtype": "Acoustic sensor", "country": "Germany", "modality": "Airborne acoustic particle velocity", "formFactor": "Airborne (drone-mounted)", "type": "Particle velocity", "band": null, "coverage": null, "use": null, "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": null, "price": "No info · bundled into Quantum drones", "classification": null, "partners": null, "confidence": "Low", "summary": "Polish particle-velocity acoustic specialist (similar tech class to Microflown). Acquired by Quantum Systems (Bavaria-based ISR-drone maker) in February 2025. Now integrated onto Quantum's ISR drone platform for airborne acoustic detection and artillery ranging — a different deployment vector than ground-based arrays.", "website": "https://quantum-systems.com/", "note": "https://quantum-systems.com/\nImported from products-radars.csv. ⚠ Polish origin (PL→DE), acquired by Quantum Systems Feb 2025; country set to Germany (current ops). Acoustic, airborne. Analyst note: primes absorbing acoustic IP directly."}, {"id": "SNS-39", "name": "MS Azimuth", "company": "Kvertus", "category": "Radar–C-UAS sensor", "subtype": "RF detector", "country": "Ukraine", "modality": null, "formFactor": null, "type": "Passive", "band": null, "coverage": "360°", "use": "Counter-UAS", "detection_km": 30, "frequency_ghz": null, "weight_kg": null, "architecture": "Passive RF direction-finder (30–6000 MHz)", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Passive (non-emitting) RF detection station that identifies UAVs, their repeaters, control stations and EW assets by RF emissions across 30-6000 MHz; detects UAVs at up to ~30 km and tracks up to 100 simultaneously, with a video-feed interception function. Detection element of Kvertus' Atlas C-UAS complex.", "website": "https://kvertus.ua/en/product/kvertus-ms-azimuth/", "note": "https://kvertus.ua/en/product/kvertus-ms-azimuth/ ; https://www.janes.com/osint-insights/defence-news/weapons/ukraines-kvertus-develops-defence-system-for-neutralising-uavs-at-1800-m\n⚠ REVIEW: passive RF direction-finder, NOT an active radar — RCS/band fields N/A (covers 30-6000 MHz). Detection range 30 km (mfr) vs ~15 km (earlier report). Filed as RF detector."}, {"id": "SNS-40", "name": "MAVERICK Fortress-3D", "company": "Silentium Defence", "category": "Radar–C-UAS sensor", "subtype": "Passive radar", "country": "Australia", "modality": "SDR PCL 3D", "formFactor": "Cabin · 3D coverage", "type": "Passive", "band": null, "coverage": "3D", "use": "Air surveillance", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "SDR PCL 3D", "price": "Quote-based · program-grade", "classification": null, "partners": "Lockheed Martin Australia (AIR6500 Tranche 2A)", "confidence": "Medium", "summary": "The 3D big sibling of the M8. Cabin-based, 3D passive surveillance for land/sea/air with very low EM signature — difficult to geolocate. Operates standalone or networked into a common operating picture. Selected under Australian AIR6500 Tranche 2A via Lockheed Martin Australia (Joint Air Battle Management System). Marketed alongside MAVERICK-S, the larger 'Space Observatory in a Box' for low-Earth-orbit surveillance.", "website": "https://www.silentiumdefence.com.au/our-solutions/maverick-m-series/", "note": "https://www.silentiumdefence.com.au/our-solutions/maverick-m-series/\nImported from products-radars.csv. ⚠ Analyst note: productised 3D passive surveillance is rare; Lockheed Martin Australia partnership (AIR6500) is a strong endorsement."}, {"id": "SNS-41", "name": "AARTOS DDS", "company": "Aaronia", "category": "Radar–C-UAS sensor", "subtype": "RF + radar system", "country": "Germany", "modality": "RF DF + optional radar", "formFactor": "Multi-station", "type": null, "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "RF DF (IsoLOG 3D) + optional radar layer", "price": "Quote-based · system-level pricing", "classification": null, "partners": null, "confidence": "Medium", "summary": "Made-in-Germany integrated C-UAS / EW system. Built around the IsoLOG 3D direction-finding antenna and Spectran V5 RF analysers, with optional radar layers. Marketed as 'conflict-proven'. Strong on RF triangulation; treats radar as a complementary layer rather than the headline sensor.", "website": "https://aaronia.com/", "note": "https://aaronia.com/\nImported from products-radars.csv. ⚠ Analyst note: useful reference for RF-centric architecture that integrates radar; integration patterns publicly documented."}, {"id": "SNS-42", "name": "Spexer 2000 family", "company": "Hensoldt", "category": "Radar–C-UAS sensor", "subtype": "Active radar", "country": "Germany", "modality": "Active 3D ESA", "formFactor": "Multi-panel", "type": "3D", "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": 6, "frequency_ghz": null, "weight_kg": null, "architecture": "3D ESA (AESA)", "price": "Quote-based · prime-grade", "classification": null, "partners": "Rheinmetall (Skyranger 30 turret); Bundeswehr ASUL", "confidence": "Medium", "summary": "Three-panel Spexer 2000M on the Rheinmetall Skyranger 30 turret detects micro-UAS at ~6 km. Backbone of the German Bundeswehr's ASUL C-UAS system, fused via ELYSION Mission Core. 150+ Spexer-family systems delivered worldwide; not a startup but central to any European procurement reality.", "website": "https://www.hensoldt.net/products/spexer-radars", "note": "https://www.hensoldt.net/products/spexer-radars\nImported from products-radars.csv. ⚠ ~6 km micro-UAS (Spexer 2000M on Skyranger 30). Analyst note: likely on the buyer side of any European tender; matters for fusion-layer interop."}, {"id": "SNS-43", "name": "FIELDctrl 3D MIMO", "company": "Advanced Protection Systems (APS)", "category": "Radar–C-UAS sensor", "subtype": "C-UAS radar", "country": "Poland", "modality": null, "formFactor": null, "type": "FMCW", "band": "X", "coverage": "3D", "use": "Counter-UAS", "detection_km": null, "frequency_ghz": null, "weight_kg": null, "architecture": "3D MIMO FMCW", "price": null, "classification": null, "partners": null, "confidence": "Medium", "summary": "Family of 3D MIMO FMCW radars for detecting, tracking and classifying low-slow-small UAV targets plus larger air/ground threats; the sensor in APS's SKYctrl counter-UAS system. Variants trade field-of-view for range.", "website": "https://apsystems.tech/en/", "note": "https://apsystems.tech/en/ ; https://www.unmannedairspace.info/counter-uas-systems-and-policies/advanced-protection-systems-launches-3d-mimo-family-of-radars-for-drone-detection/\n⚠ REVIEW: detection range LEFT BLANK — highly variant-dependent (~3 km micro-UAV to 'up to 50 km' instrumented). Band X inferred from secondary (~9.7-10 GHz), not manufacturer-confirmed. Verify both on current APS spec sheet."}, {"id": "SNS-44", "name": "KrakenSDR coherent SDR", "company": "KrakenRF", "category": "Radar–C-UAS sensor", "subtype": "SDR platform", "country": "United States", "modality": "Commodity coherent SDR (5-RX)", "formFactor": "5-RX · 24 MHz–1.7 GHz", "type": "Passive", "band": null, "coverage": null, "use": "Counter-UAS", "detection_km": null, "frequency_ghz": 0.024, "weight_kg": null, "architecture": "Coherent 5-RX SDR (DF + PCL)", "price": "~$700 retail (hardware only)", "classification": null, "partners": null, "confidence": "Medium", "summary": "Commodity 5-RX-channel coherent SDR designed explicitly for radio direction-finding and passive radar. 24 MHz to 1766 MHz tuning range, all 5 channels clocked to a single LO with built-in coherence sync. Open-source DAQ/DSP software runs on a Raspberry Pi 4/5. Active community with a documented open-source DVB-T2 passive-radar drone-detection project. Not a turnkey C-UAS product, but the cheapest credible PCL hardware platform on the market.", "website": "https://www.krakenrf.com/", "note": "https://www.krakenrf.com/\nImported from products-radars.csv. ⚠ DIY platform, not turnkey. Analyst note: <$1k per node makes distributed mesh deployments cost-trivial; R&D/hedge platform."}];
+window.SENSOR_FILTERS = {"category": ["Acoustic sensor", "Radar–C-UAS sensor"], "subtype": ["4D imaging radar", "Acoustic sensor", "Active radar", "Air surveillance radar", "C-UAS radar", "Multi-modal C-UAS", "Passive radar", "RF + radar system", "RF detector", "SDR platform"], "band": ["Ku", "X"], "coverage": ["360°", "3D", "Hemispherical"], "country": ["Australia", "Czechia", "France", "Germany", "Israel", "Italy", "Netherlands", "Norway", "Poland", "Sweden", "Ukraine", "United Kingdom", "United States"], "company": ["AReS Technologies", "Aaronia", "Advanced Protection Systems (APS)", "Arbe Robotics", "Blighter Surveillance Systems", "Chaos Industries", "DroneShield", "ERA", "Echodyne", "Fortem Technologies", "Fraunhofer IDMT", "Hall Lidar Inc.", "Hensoldt", "Hertz Systems", "Hidden Level", "Insignito", "KrakenRF", "Kvertus", "Leonardo", "Lockheed Martin", "Magos Systems", "MatrixSpace", "Microflown AVISA", "Monava", "PIT-RADWAR", "Plextek", "RADD", "RISEPORT Europe", "Robin Radar Systems", "Saab", "Silentium Defence", "Sky Fortress", "Spotter Global / SpotterRF", "Squarehead Technology", "Thales", "Uhnder", "Vayyar Imaging", "Welles Acoustics (Quantum Systems)", "Zvook", "smartmicro"]};
+window.SENSOR_MAX = {"detection": 250};
+</script>
+
+<!-- ============ DRONE ART ============ -->
+<script type="text/babel">
+const Schematic = ({ kind, accent }) => {
+  const stroke = accent || "currentColor";
+  const grid = "rgba(255,255,255,0.05)";
+  const dim = "rgba(255,255,255,0.25)";
+  const Grid = () => (
+    <g opacity="0.6">
+      {Array.from({length:16}).map((_,i)=>(<line key={`v${i}`} x1={i*25} y1="0" x2={i*25} y2="280" stroke={grid} strokeWidth="1"/>))}
+      {Array.from({length:12}).map((_,i)=>(<line key={`h${i}`} x1="0" y1={i*25} x2="400" y2={i*25} stroke={grid} strokeWidth="1"/>))}
+    </g>
+  );
+  const Crosshair = () => (
+    <g stroke={dim} strokeWidth="1" fill="none">
+      <circle cx="200" cy="140" r="110" strokeDasharray="2 4"/>
+      <circle cx="200" cy="140" r="70" strokeDasharray="2 4"/>
+      <line x1="40" y1="140" x2="360" y2="140"/>
+      <line x1="200" y1="20" x2="200" y2="260"/>
+    </g>
+  );
+  const Tick = ({x,y,label}) => (
+    <g>
+      <line x1={x} y1={y} x2={x+12} y2={y-12} stroke={dim} strokeWidth="1"/>
+      <line x1={x+12} y1={y-12} x2={x+36} y2={y-12} stroke={dim} strokeWidth="1"/>
+      <text x={x+40} y={y-9} fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="1">{label}</text>
+    </g>
+  );
+  if (kind === "quad") {
+    return (
+      <svg viewBox="0 0 400 280" width="100%" height="100%">
+        <Grid/><Crosshair/>
+        <g stroke={stroke} strokeWidth="1.5" fill="none">
+          <line x1="130" y1="80" x2="270" y2="200"/>
+          <line x1="270" y1="80" x2="130" y2="200"/>
+          <rect x="180" y="120" width="40" height="40" rx="3"/>
+          <rect x="186" y="126" width="28" height="28" rx="2"/>
+          {[[130,80],[270,80],[130,200],[270,200]].map(([cx,cy],i)=>(
+            <g key={i}><circle cx={cx} cy={cy} r="22"/><circle cx={cx} cy={cy} r="14" strokeDasharray="3 3"/><circle cx={cx} cy={cy} r="3" fill={stroke}/></g>
+          ))}
+          <g opacity="0.35">{[[130,80],[270,80],[130,200],[270,200]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="38" strokeDasharray="1 2"/>))}</g>
+          <circle cx="200" cy="170" r="8" fill="rgba(0,0,0,0.6)"/>
+          <circle cx="200" cy="170" r="4" fill={stroke}/>
+          <line x1="200" y1="120" x2="200" y2="100"/>
+          <circle cx="200" cy="98" r="2" fill={stroke}/>
+        </g>
+        <Tick x={270} y={80} label="M-01"/><Tick x={130} y={200} label="M-03"/>
+        <text x="20" y="260" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">MULTIROTOR · LAUNCH/RELAY</text>
+      </svg>
+    );
+  }
+  if (kind === "hex") {
+    const cx=200,cy=140,r=90;
+    const arms=Array.from({length:6}).map((_,i)=>{const a=(i*60-90)*Math.PI/180;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];});
+    return (
+      <svg viewBox="0 0 400 280" width="100%" height="100%">
+        <Grid/><Crosshair/>
+        <g stroke={stroke} strokeWidth="1.5" fill="none">
+          {arms.map(([x,y],i)=>(<line key={i} x1={cx} y1={cy} x2={x} y2={y}/>))}
+          <polygon points={Array.from({length:6}).map((_,i)=>{const a=(i*60)*Math.PI/180;return `${cx+Math.cos(a)*28},${cy+Math.sin(a)*28}`;}).join(" ")}/>
+          <polygon points={Array.from({length:6}).map((_,i)=>{const a=(i*60)*Math.PI/180;return `${cx+Math.cos(a)*18},${cy+Math.sin(a)*18}`;}).join(" ")}/>
+          {arms.map(([x,y],i)=>(<g key={i}><circle cx={x} cy={y} r="18"/><circle cx={x} cy={y} r="11" strokeDasharray="3 3"/><circle cx={x} cy={y} r="2.5" fill={stroke}/></g>))}
+          <g opacity="0.3">{arms.map(([x,y],i)=>(<circle key={i} cx={x} cy={y} r="32" strokeDasharray="1 2"/>))}</g>
+          <rect x={cx-14} y={cy+8} width="28" height="14" rx="2" fill="rgba(0,0,0,0.5)"/>
+        </g>
+        <text x="20" y="260" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">HEXAROTOR · Y6</text>
+      </svg>
+    );
+  }
+  if (kind === "fixed") {
+    return (
+      <svg viewBox="0 0 400 280" width="100%" height="100%">
+        <Grid/><Crosshair/>
+        <g stroke={stroke} strokeWidth="1.5" fill="none">
+          <path d="M 90 140 L 280 140 L 310 145 L 280 150 L 90 150 Q 70 145 90 140 Z"/>
+          <path d="M 170 120 L 230 60 L 260 60 L 220 125 Z"/>
+          <path d="M 170 170 L 230 230 L 260 230 L 220 165 Z"/>
+          <path d="M 280 145 L 320 115 L 330 117 L 295 148 Z"/>
+          <path d="M 280 145 L 320 175 L 330 173 L 295 142 Z"/>
+          <circle cx="100" cy="145" r="8" fill="rgba(0,0,0,0.6)"/>
+          <circle cx="100" cy="145" r="4" fill={stroke}/>
+          <line x1="310" y1="135" x2="310" y2="155" strokeWidth="2.5"/>
+          <g opacity="0.3"><ellipse cx="312" cy="145" rx="3" ry="20" strokeDasharray="1 2"/></g>
+          <line x1="90" y1="145" x2="280" y2="145" strokeDasharray="2 3" opacity="0.5"/>
+          <line x1="195" y1="93" x2="245" y2="93"/>
+          <line x1="195" y1="197" x2="245" y2="197"/>
+        </g>
+        <Tick x={245} y={60} label="WING-L"/><Tick x={310} y={145} label="PUSH"/>
+        <text x="20" y="260" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">FIXED-WING · PUSHER</text>
+      </svg>
+    );
+  }
+  if (kind === "vtol") {
+    return (
+      <svg viewBox="0 0 400 280" width="100%" height="100%">
+        <Grid/><Crosshair/>
+        <g stroke={stroke} strokeWidth="1.5" fill="none">
+          <ellipse cx="200" cy="145" rx="80" ry="14"/>
+          <path d="M 170 132 L 100 90 L 80 92 L 165 138 Z"/>
+          <path d="M 230 132 L 300 90 L 320 92 L 235 138 Z"/>
+          <path d="M 170 158 L 100 200 L 80 198 L 165 152 Z"/>
+          <path d="M 230 158 L 300 200 L 320 198 L 235 152 Z"/>
+          {[[100,90],[300,90],[100,200],[300,200]].map(([cx,cy],i)=>(
+            <g key={i}><circle cx={cx} cy={cy} r="16"/><circle cx={cx} cy={cy} r="9" strokeDasharray="3 3"/><circle cx={cx} cy={cy} r="2" fill={stroke}/><circle cx={cx} cy={cy} r="28" strokeDasharray="1 2" opacity="0.3"/></g>
+          ))}
+          <rect x="170" y="138" width="60" height="14" rx="4" fill="rgba(0,0,0,0.5)"/>
+          <path d="M 280 145 L 290 142 L 290 148 Z" fill={stroke}/>
+        </g>
+        <Tick x={300} y={90} label="T-R1"/><Tick x={100} y={200} label="T-R3"/>
+        <text x="20" y="260" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">VTOL HYBRID · TILT-ROTOR</text>
+      </svg>
+    );
+  }
+  return null;
+};
+
+const Silhouette = ({ kind, accent }) => {
+  const fill = accent || "currentColor";
+  if (kind === "quad") {
+    return (
+      <svg viewBox="0 0 200 200" width="100%" height="100%">
+        <g fill={fill} opacity="0.85">
+          <rect x="60" y="60" width="80" height="80" rx="6" transform="rotate(45 100 100)"/>
+          {[[40,40],[160,40],[40,160],[160,160]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="22"/>))}
+        </g>
+        <g fill="none" stroke={fill} strokeWidth="2" opacity="0.4">
+          {[[40,40],[160,40],[40,160],[160,160]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="32" strokeDasharray="2 3"/>))}
+        </g>
+      </svg>
+    );
+  }
+  if (kind === "fixed") {
+    return (
+      <svg viewBox="0 0 200 200" width="100%" height="100%">
+        <g fill={fill} opacity="0.85">
+          <path d="M 30 100 L 150 96 L 170 100 L 150 104 L 30 100 Z"/>
+          <path d="M 80 90 L 110 50 L 125 50 L 105 95 Z"/>
+          <path d="M 80 110 L 110 150 L 125 150 L 105 105 Z"/>
+          <path d="M 150 100 L 170 80 L 175 82 L 158 102 Z"/>
+          <path d="M 150 100 L 170 120 L 175 118 L 158 98 Z"/>
+          <circle cx="38" cy="100" r="6"/>
+        </g>
+      </svg>
+    );
+  }
+  if (kind === "vtol") {
+    return (
+      <svg viewBox="0 0 200 200" width="100%" height="100%">
+        <g fill={fill} opacity="0.85">
+          <ellipse cx="100" cy="100" rx="60" ry="10"/>
+          <path d="M 80 92 L 30 60 L 25 65 L 78 100 Z"/>
+          <path d="M 120 92 L 170 60 L 175 65 L 122 100 Z"/>
+          <path d="M 80 108 L 30 140 L 25 135 L 78 100 Z"/>
+          <path d="M 120 108 L 170 140 L 175 135 L 122 100 Z"/>
+          {[[30,60],[170,60],[30,140],[170,140]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="13"/>))}
+        </g>
+      </svg>
+    );
+  }
+  return null;
+};
+window.Schematic = Schematic;
+window.Silhouette = Silhouette;
+</script>
+
+<!-- ============ COMPONENTS ============ -->
+<script type="text/babel">
+const Icon = ({ name, size = 14 }) => {
+  const s = size;
+  switch (name) {
+    case "star": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5l1.9 4 4.4.5-3.2 3 0.8 4.3L8 11.3 4.1 13.3l0.8-4.3-3.2-3 4.4-.5z"/></svg>);
+    case "compare": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="5" height="10"/><rect x="9" y="5" width="5" height="8"/></svg>);
+    case "search": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/></svg>);
+    case "x": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>);
+    case "arrow": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="8" x2="12" y2="8"/><polyline points="9,5 12,8 9,11"/></svg>);
+    case "ext": return (<svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 3 H3 V13 H13 V10"/><line x1="8" y1="8" x2="13" y2="3"/><polyline points="9,3 13,3 13,7"/></svg>);
+    default: return null;
+  }
+};
+
+const fmt = (v, unit="") => (v === null || v === undefined) ? "—" : `${v}${unit}`;
+
+const StatRow = ({ label, value, max, unit, accent }) => {
+  const na = value === null || value === undefined;
+  const pct = na ? 0 : Math.max(2, Math.min(100, (value / max) * 100));
+  return (
+    <div className="stat-row">
+      <span className="lbl">{label}</span>
+      <div className="bar"><i style={{ width: `${pct}%`, background: accent }}/></div>
+      <span className={`val ${na ? "na" : ""}`}>{na ? "—" : `${value}${unit}`}</span>
+    </div>
+  );
+};
+
+const Radar = ({ data, accent }) => {
+  const cx=100,cy=100,R=72,n=data.length;
+  const angle = i => (Math.PI*2*i)/n - Math.PI/2;
+  const rings=[0.25,0.5,0.75,1.0];
+  const ringPts = k => Array.from({length:n}).map((_,i)=>{const a=angle(i);return `${cx+Math.cos(a)*R*k},${cy+Math.sin(a)*R*k}`;}).join(" ");
+  const dataPts = data.map((d,i)=>{const k=Math.max(0,d.value)/100;const a=angle(i);return `${cx+Math.cos(a)*R*k},${cy+Math.sin(a)*R*k}`;}).join(" ");
+  return (
+    <svg viewBox="0 0 200 200" width="100%">
+      <g stroke="rgba(255,255,255,0.1)" fill="none">
+        {rings.map((k,i)=><polygon key={i} points={ringPts(k)}/>)}
+        {data.map((_,i)=>{const a=angle(i);return <line key={i} x1={cx} y1={cy} x2={cx+Math.cos(a)*R} y2={cy+Math.sin(a)*R}/>;})}
+      </g>
+      <polygon points={dataPts} fill={accent} fillOpacity="0.18" stroke={accent} strokeWidth="1.5"/>
+      {data.map((d,i)=>{const k=Math.max(0,d.value)/100;const a=angle(i);return <circle key={i} cx={cx+Math.cos(a)*R*k} cy={cy+Math.sin(a)*R*k} r="3" fill={accent}/>;})}
+      {data.map((d,i)=>{const a=angle(i);const lx=cx+Math.cos(a)*(R+16);const ly=cy+Math.sin(a)*(R+16)+3;return (<text key={i} x={lx} y={ly} fill="rgba(255,255,255,0.6)" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" letterSpacing="1">{d.label}</text>);})}
+    </svg>
+  );
+};
+
+const MAX = window.UAV_MAX;
+
+const UAVCard = ({ uav, accent, layout, isFav, isCompare, onFav, onCompare, onOpen }) => {
+  const useSilhouette = (parseInt(uav.id.replace(/\D/g,""),10) % 2) === 0;
+  const ArtComp = useSilhouette ? window.Silhouette : window.Schematic;
+  const prod = uav.production === "In production";
+  return (
+    <div className={`card layout-${layout}`} onClick={()=>onOpen(uav)}>
+      <div className="card-corners"><i className="tl"/><i className="tr"/><i className="bl"/><i className="br"/></div>
+      <div className="card-head">
+        <span className="id">{uav.id}</span>
+        <span className={`tier ${uav.confidence==="High"?"HIGH":uav.confidence==="Low"?"LOW":"MED"}`}>{uav.confidence.toUpperCase()} CONF</span>
+      </div>
+      <div className="card-art" style={{ color: accent }}>
+        <span className={`status-flag ${prod?"PROD":"OTHER"}`}>{prod?"IN PROD":uav.production.toUpperCase()}</span>
+        {useSilhouette ? (
+          <div className="silhouette-mode"><ArtComp kind={uav.schematic} accent={accent}/></div>
+        ) : (
+          <div className="schematic-mode"><ArtComp kind={uav.schematic} accent={accent}/></div>
+        )}
+        <span className="art-tag">CFG-{uav.schematic.toUpperCase()}</span>
+        <span className="art-tag-r">{useSilhouette ? "SIL" : "SCH"}</span>
+      </div>
+      <div className="card-body">
+        <div>
+          <h3 className="card-name">{uav.name}</h3>
+          <div className="card-mfr">{uav.manufacturer} · {uav.country}</div>
+        </div>
+        <div className="card-tags">
+          <span className="tag">{uav.cls}</span>
+          <span className="tag role">{uav.role}</span>
+          <span className="tag">{uav.frame}</span>
+        </div>
+        <div className="stat-bars">
+          <StatRow label="RANGE" value={uav.range_km} max={MAX.range} unit="km" accent={accent}/>
+          <StatRow label="ENDUR" value={uav.flight_min} max={MAX.endurance} unit="min" accent={accent}/>
+          <StatRow label="PAYLD" value={uav.payload_kg} max={MAX.payload} unit="kg" accent={accent}/>
+          <StatRow label="SPEED" value={uav.speed} max={MAX.speed} unit="km/h" accent={accent}/>
+        </div>
+      </div>
+      <div className="card-footer">
+        <div>
+          <div className="price">{fmt(uav.mtow,"kg")}</div>
+          <div className="lt">MTOW · {uav.propulsion ? uav.propulsion.toUpperCase() : "—"}</div>
+        </div>
+        <div className="card-actions" onClick={(e)=>e.stopPropagation()}>
+          <button className={`icon-btn ${isFav?"on":""}`} title="Favorite" onClick={()=>onFav(uav.id)}><Icon name="star"/></button>
+          <button className={`icon-btn ${isCompare?"on":""}`} title="Compare" onClick={()=>onCompare(uav.id)}><Icon name="compare"/></button>
+          <button className="icon-btn" title="Details" onClick={()=>onOpen(uav)}><Icon name="arrow"/></button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ChipGroup = ({ label, options, selected, onToggle, counts }) => (
+  <div className="filter-block">
+    <h5><span>{label}</span>{selected.length>0 && <span className="ix">{selected.length} ON</span>}</h5>
+    <div className="chip-row">
+      {options.map(o=>(
+        <button key={o} className={`chip ${selected.includes(o)?"on":""}`} onClick={()=>onToggle(o)}>
+          {o}<span className="ct">{counts[o]||0}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+const RangeFilter = ({ label, min, max, value, onChange, unit }) => (
+  <div className="filter-block">
+    <h5><span>{label}</span><span className="ix">≥ {value}{unit}</span></h5>
+    <div className="range-input">
+      <input type="range" min={min} max={max} value={value} onChange={e=>onChange(parseInt(e.target.value,10))}/>
+      <div className="vals"><span>{min}{unit}</span><span>{max}{unit}</span></div>
+    </div>
+  </div>
+);
+
+const Sidebar = ({ filters, setFilters, counts, total }) => {
+  const F = window.UAV_FILTERS;
+  const tog = (key,v)=>setFilters(f=>({...f,[key]:f[key].includes(v)?f[key].filter(x=>x!==v):[...f[key],v]}));
+  const reset = ()=>setFilters({cls:[],role:[],frame:[],manufacturer:[],minRange:0,minPayload:0});
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-frame-corner">// FILTER · v1.0</div>
+      <ChipGroup label="CLASS" options={F.cls} selected={filters.cls} onToggle={v=>tog("cls",v)} counts={counts.cls}/>
+      <ChipGroup label="ROLE" options={F.role} selected={filters.role} onToggle={v=>tog("role",v)} counts={counts.role}/>
+      <ChipGroup label="FRAME" options={F.frame} selected={filters.frame} onToggle={v=>tog("frame",v)} counts={counts.frame}/>
+      <ChipGroup label="MANUFACTURER" options={F.manufacturer} selected={filters.manufacturer} onToggle={v=>tog("manufacturer",v)} counts={counts.manufacturer}/>
+      <RangeFilter label="MIN RANGE" min={0} max={200} unit="km" value={filters.minRange} onChange={v=>setFilters(f=>({...f,minRange:v}))}/>
+      <RangeFilter label="MIN PAYLOAD" min={0} max={25} unit="kg" value={filters.minPayload} onChange={v=>setFilters(f=>({...f,minPayload:v}))}/>
+      <div className="reset-row">
+        <button className="btn ghost sm" onClick={reset}>RESET</button>
+        <div style={{flex:1}}/>
+        <span style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--ink-2)",letterSpacing:"0.15em",alignSelf:"center"}}>{total} UNITS</span>
+      </div>
+    </aside>
+  );
+};
+
+const DetailPage = ({ uav, accent, onBack, isCompare, onCompare }) => {
+  const prod = uav.production === "In production";
+  return (
+    <div className="detail">
+      <button className="detail-back" onClick={onBack}>
+        <span style={{transform:"rotate(180deg)",display:"inline-flex"}}><Icon name="arrow" size={12}/></span> BACK TO CATALOGUE
+      </button>
+      <div className="detail-id">{uav.id} · {uav.subtype.toUpperCase()}</div>
+      <h1 className="detail-name">{uav.name}</h1>
+      <div className="detail-mfr">{uav.manufacturer} · {uav.countryFull}</div>
+      <div className="detail-grid">
+        <div>
+          <div className="detail-art" style={{color:accent}}>
+            <span className={`status-flag ${prod?"PROD":"OTHER"}`}>{prod?"IN PROD":uav.production.toUpperCase()}</span>
+            <div className="lbl-tl">DOSSIER · {uav.id}</div>
+            <div style={{position:"absolute",inset:"34px 30px 40px"}}><window.Schematic kind={uav.schematic} accent={accent}/></div>
+            <div className="lbl-bl"><span>SCHEMATIC · REPRESENTATIVE</span><span>CFG-{uav.schematic.toUpperCase()}</span></div>
+          </div>
+          <div className="detail-radar">
+            <h4>PERFORMANCE PROFILE</h4>
+            <Radar accent={accent} data={[
+              {label:"RNG",value:((uav.range_km||0)/MAX.range)*100},
+              {label:"END",value:((uav.flight_min||0)/MAX.endurance)*100},
+              {label:"PLD",value:((uav.payload_kg||0)/MAX.payload)*100},
+              {label:"SPD",value:((uav.speed||0)/MAX.speed)*100},
+              {label:"MTOW",value:((uav.mtow||0)/MAX.mtow)*100},
+            ]}/>
+            <div style={{fontFamily:"var(--mono)",fontSize:9,color:"var(--ink-3)",letterSpacing:"0.15em",textAlign:"center",marginTop:8}}>NORMALISED VS CATALOGUE MAXIMA · BLANK SPEC = 0</div>
+          </div>
+        </div>
+        <div>
+          <div className="detail-tags">
+            <span className="tag">{uav.cls}</span>
+            <span className="tag role">{uav.role}</span>
+            <span className="tag">{uav.frame}</span>
+            <span className="tag">{uav.country}</span>
+          </div>
+          <p className="detail-summary">{uav.summary}</p>
+          <div className="spec-grid">
+            <div><div className="lbl">CLASS</div><div className="val">{uav.cls}</div></div>
+            <div><div className="lbl">ROLE</div><div className="val">{uav.role}</div></div>
+            <div><div className="lbl">FRAME</div><div className="val">{uav.frame}</div></div>
+            <div><div className="lbl">PROPULSION</div><div className={`val ${uav.propulsion?"":"na"}`}>{uav.propulsion?uav.propulsion.toUpperCase():"—"}</div></div>
+            <div><div className="lbl">RANGE</div><div className={`val ${uav.range_km==null?"na":""}`}>{fmt(uav.range_km," km")}</div></div>
+            <div><div className="lbl">ENDURANCE</div><div className={`val ${uav.flight_min==null?"na":""}`}>{fmt(uav.flight_min," min")}</div></div>
+            <div><div className="lbl">MAX PAYLOAD</div><div className={`val ${uav.payload_kg==null?"na":""}`}>{fmt(uav.payload_kg," kg")}</div></div>
+            <div><div className="lbl">MAX SPEED</div><div className={`val ${uav.speed==null?"na":""}`}>{fmt(uav.speed," km/h")}</div></div>
+            <div><div className="lbl">MTOW</div><div className={`val ${uav.mtow==null?"na":""}`}>{fmt(uav.mtow," kg")}</div></div>
+            <div><div className="lbl">COMBAT-PROVEN</div><div className="val">{uav.combat.toUpperCase()}</div></div>
+            <div><div className="lbl">FIRST FIELDED</div><div className={`val ${uav.year==null?"na":""}`}>{fmt(uav.year)}</div></div>
+            <div><div className="lbl">CONFIDENCE</div><div className="val" style={{color:uav.confidence==="Low"?"var(--warn)":uav.confidence==="High"?"var(--good)":"var(--ink-0)"}}>{uav.confidence.toUpperCase()}</div></div>
+          </div>
+          <div className="modal-actions">
+            <a className="btn primary" href={uav.website} target="_blank" rel="noopener noreferrer">VIEW SOURCE <Icon name="ext"/></a>
+            <button className="btn" onClick={()=>onCompare(uav.id)}>{isCompare?"− REMOVE":"+ COMPARE"}</button>
+          </div>
+          <div className="source-note">
+            <b>REVIEW STAGE</b> — specs corroborated from manufacturer + secondary sources, not read off spec sheets. {uav.note}
+            <div style={{marginTop:8}}>SOURCE: <a href={uav.website} target="_blank" rel="noopener noreferrer">{uav.website}</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CompareTray = ({ ids, uavs, onRemove, onClear, onCompare }) => {
+  const slots = [0,1,2].map(i=>ids[i]?uavs.find(u=>u.id===ids[i]):null);
+  const empty = ids.length === 0;
+  return (
+    <div className={`compare-tray ${empty?"empty":""}`}>
+      <div className="compare-tray-head">
+        <div className="ct-title"><Icon name="compare" size={14}/>COMPARE</div>
+        <div className="ct-sub">[{ids.length}/3 SLOTS]</div>
+      </div>
+      <div className="compare-slots">
+        {slots.map((u,i)=>(
+          <div key={i} className={`compare-slot ${u?"filled":""}`}>
+            <span className="num">0{i+1}</span>
+            {u ? (<>
+              <div className="info"><span className="nm">{u.name}</span><span className="id">{u.id} · {u.cls} · {u.role}</span></div>
+              <button className="x" onClick={()=>onRemove(u.id)}><Icon name="x" size={10}/></button>
+            </>) : (<span style={{letterSpacing:"0.2em"}}>// EMPTY SLOT</span>)}
+          </div>
+        ))}
+      </div>
+      <div className="compare-cta">
+        <button className="btn" onClick={onClear} disabled={empty} style={{marginRight:8}}>CLEAR</button>
+        <button className="btn primary" onClick={onCompare} disabled={ids.length<2}>RUN COMPARE</button>
+      </div>
+    </div>
+  );
+};
+
+const CMP_ROWS = [
+  {k:"cls",label:"Class"},{k:"role",label:"Role"},{k:"frame",label:"Frame"},
+  {k:"range_km",label:"Range",unit:" km",num:true,hi:true},
+  {k:"flight_min",label:"Endurance",unit:" min",num:true,hi:true},
+  {k:"payload_kg",label:"Max payload",unit:" kg",num:true,hi:true},
+  {k:"speed",label:"Max speed",unit:" km/h",num:true,hi:true},
+  {k:"mtow",label:"MTOW",unit:" kg",num:true},
+  {k:"propulsion",label:"Propulsion"},{k:"country",label:"Origin"},
+  {k:"combat",label:"Combat-proven"},{k:"confidence",label:"Confidence"},
+];
+const CompareModal = ({ uavs, onClose }) => {
+  const best = {};
+  CMP_ROWS.filter(r=>r.num&&r.hi).forEach(r=>{
+    const vals = uavs.map(u=>u[r.k]).filter(v=>v!=null);
+    best[r.k] = vals.length ? Math.max(...vals) : null;
+  });
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="cmp-modal" onClick={e=>e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}><Icon name="x" size={12}/></button>
+        <h2>// Compare · {uavs.length} units</h2>
+        <table className="cmp-table">
+          <thead><tr><th>SPEC</th>{uavs.map(u=>(<th key={u.id}>{u.name}<div style={{fontFamily:"var(--mono)",fontSize:9,color:"var(--accent)",letterSpacing:"0.2em",marginTop:4}}>{u.id} · {u.manufacturer}</div></th>))}</tr></thead>
+          <tbody>
+            {CMP_ROWS.map(r=>(
+              <tr key={r.k}>
+                <th>{r.label}</th>
+                {uavs.map(u=>{
+                  const v=u[r.k];
+                  const na=v==null;
+                  const isBest=r.hi&&!na&&best[r.k]!=null&&v===best[r.k]&&uavs.length>1;
+                  let disp=na?"—":(r.num?`${v}${r.unit||""}`:String(v).toUpperCase());
+                  return <td key={u.id} className={`${na?"na":""} ${isBest?"best":""}`}>{disp}</td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// ====================== SENSORS ======================
+const SMAX = window.SENSOR_MAX || { detection: 250 };
+const sensorKind = (s) => {
+  const cat = s.category || "", sub = (s.subtype || "").toLowerCase();
+  if (cat.indexOf("Acoustic") >= 0) return "acoustic";
+  if (sub.indexOf("passive") >= 0) return "passive";
+  if (sub.indexOf("rf") >= 0) return "rf";
+  return "radar";
+};
+const catShort = (s) => (s.category && s.category.indexOf("Acoustic") >= 0) ? "ACOUSTIC" : "RADAR / C-UAS";
+
+const SensorArt = ({ kind, accent }) => {
+  const stroke = accent || "currentColor", grid = "rgba(255,255,255,0.05)", dim = "rgba(255,255,255,0.25)";
+  const Grid = () => (<g opacity="0.6">
+    {Array.from({length:16}).map((_,i)=>(<line key={"v"+i} x1={i*25} y1="0" x2={i*25} y2="280" stroke={grid} strokeWidth="1"/>))}
+    {Array.from({length:12}).map((_,i)=>(<line key={"h"+i} x1="0" y1={i*25} x2="400" y2={i*25} stroke={grid} strokeWidth="1"/>))}
+  </g>);
+  if (kind === "acoustic") {
+    return (<svg viewBox="0 0 400 280" width="100%" height="100%"><Grid/>
+      <g stroke={dim} strokeWidth="1" fill="none">{[40,80,120,160].map((r,i)=>(<circle key={i} cx="120" cy="140" r={r} strokeDasharray="2 5" opacity={1-i*0.18}/>))}</g>
+      <g stroke={stroke} strokeWidth="1.5" fill="none"><circle cx="120" cy="140" r="9" fill={stroke}/><circle cx="120" cy="140" r="20"/>
+        {[0,1,2,3].map(i=>(<path key={i} d={`M ${250+i*30} 108 Q ${266+i*30} 140 ${250+i*30} 172`} opacity={0.85-i*0.18}/>))}</g>
+      <text x="20" y="262" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">ACOUSTIC · PASSIVE LISTENING</text></svg>);
+  }
+  if (kind === "passive") {
+    return (<svg viewBox="0 0 400 280" width="100%" height="100%"><Grid/>
+      <g stroke={dim} strokeWidth="1" fill="none"><line x1="40" y1="140" x2="360" y2="140"/><line x1="200" y1="34" x2="200" y2="246"/><circle cx="200" cy="140" r="100" strokeDasharray="2 4"/></g>
+      <g stroke={stroke} strokeWidth="1.5" fill="none"><line x1="200" y1="205" x2="200" y2="95"/><line x1="168" y1="112" x2="232" y2="112"/><line x1="176" y1="132" x2="224" y2="132"/><circle cx="200" cy="205" r="6" fill={stroke}/>
+        {[0,1,2].map(i=>(<path key={i} d={`M ${300+i*16} ${66+i*4} q -34 34 0 70`} opacity={0.75-i*0.2}/>))}</g>
+      <text x="20" y="262" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">PASSIVE · RECEIVE-ONLY</text></svg>);
+  }
+  if (kind === "rf") {
+    return (<svg viewBox="0 0 400 280" width="100%" height="100%"><Grid/>
+      <g stroke={stroke} strokeWidth="1.5" fill="none"><line x1="200" y1="200" x2="200" y2="78"/><line x1="200" y1="78" x2="172" y2="58"/><line x1="200" y1="78" x2="228" y2="58"/><circle cx="200" cy="78" r="4" fill={stroke}/></g>
+      <g>{[30,62,42,92,52,72,36].map((h,i)=>(<rect key={i} x={118+i*28} y={212-h} width="16" height={h} fill={stroke} opacity="0.5"/>))}</g>
+      <line x1="110" y1="212" x2="350" y2="212" stroke={dim} strokeWidth="1"/>
+      <text x="20" y="262" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">RF · SPECTRUM MONITOR</text></svg>);
+  }
+  return (<svg viewBox="0 0 400 280" width="100%" height="100%"><Grid/>
+    <g stroke={dim} strokeWidth="1" fill="none">{[50,90,130].map((r,i)=>(<circle key={i} cx="200" cy="200" r={r} strokeDasharray="2 4"/>))}<line x1="60" y1="200" x2="340" y2="200"/></g>
+    <path d="M 200 200 L 120 110 A 130 130 0 0 1 280 110 Z" fill={accent} fillOpacity="0.10" stroke="none"/>
+    <g stroke={stroke} strokeWidth="1.5" fill="none"><line x1="200" y1="200" x2="200" y2="72"/><line x1="200" y1="200" x2="318" y2="132" strokeDasharray="3 3"/><circle cx="200" cy="200" r="8" fill={stroke}/></g>
+    <g fill={stroke}>{[[150,120],[252,142],[210,96]].map(([x,y],i)=>(<circle key={i} cx={x} cy={y} r="3"/>))}</g>
+    <text x="20" y="262" fill={dim} fontSize="9" fontFamily="ui-monospace, monospace" letterSpacing="2">ACTIVE RADAR · PPI SWEEP</text></svg>);
+};
+
+const GEO = {
+  "United States":["🇺🇸","US"], "Germany":["🇩🇪","DE"], "Israel":["🇮🇱","IL"], "Netherlands":["🇳🇱","NL"],
+  "Sweden":["🇸🇪","SE"], "Italy":["🇮🇹","IT"], "Australia":["🇦🇺","AU"], "Norway":["🇳🇴","NO"],
+  "Poland":["🇵🇱","PL"], "Ukraine":["🇺🇦","UA"], "United Kingdom":["🇬🇧","UK"], "France":["🇫🇷","FR"], "Czechia":["🇨🇿","CZ"]
+};
+const geo = (c) => GEO[c] || ["", (c||"—")];
+const whyText = (s) => { const m = (s.note||"").split(/Analyst note:\s*/i); return m.length>1 ? m[1].trim() : null; };
+const webHost = (u) => (u||"").replace(/^https?:\/\//,"").replace(/\/$/,"");
+const sensorSubtitle = (s) => [s.type||s.subtype, s.formFactor].filter(Boolean).join(" · ");
+const sensorSpecs = (s) => {
+  const out = [];
+  const add = (lbl,val,cls) => { if (val!=null && val!=="") out.push({lbl,val,cls}); };
+  add("PRICE", s.price, "price");
+  add("DETECTION RANGE", s.detection_km!=null ? s.detection_km+" km" : null);
+  add("BAND", s.band);
+  add("COVERAGE", s.coverage);
+  add("FREQUENCY", s.frequency_ghz!=null ? s.frequency_ghz+" GHz" : null);
+  add("ARCHITECTURE", s.architecture);
+  add("FORM FACTOR", s.formFactor);
+  add("PRIMARY USE", s.use);
+  add("NOTABLE PARTNERS", s.partners);
+  add("CLASSIFICATION", s.classification);
+  return out;
+};
+
+const SensorGlyph = ({ kind, size=26 }) => {
+  const c = "currentColor";
+  if (kind==="acoustic") return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.4"><circle cx="7.5" cy="12" r="2.2" fill={c}/><path d="M12 8 Q15 12 12 16"/><path d="M15.5 6 Q20 12 15.5 18"/></svg>);
+  if (kind==="passive") return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.4"><line x1="12" y1="20" x2="12" y2="9"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/><circle cx="12" cy="20" r="1.3" fill={c}/></svg>);
+  if (kind==="rf") return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.4"><line x1="4" y1="18.5" x2="20" y2="18.5"/><rect x="5.5" y="12" width="2.4" height="6.5" fill={c} stroke="none"/><rect x="10" y="8" width="2.4" height="10.5" fill={c} stroke="none"/><rect x="14.5" y="10.5" width="2.4" height="8" fill={c} stroke="none"/></svg>);
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.4"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill={c}/><line x1="12" y1="12" x2="20" y2="6.5"/></svg>);
+};
+
+const SensorCard = ({ s, n, accent, isFav, onFav, onOpen }) => {
+  const [flag, code] = geo(s.country);
+  const w = whyText(s);
+  const specs = sensorSpecs(s).slice(0, 6);
+  return (
+    <div className="sblock" onClick={()=>onOpen(s)}>
+      <div className="sblock-top">
+        <div className="sblock-num"><b>{String(n).padStart(2,"0")}.</b> {catShort(s)} · {(s.subtype||"").toUpperCase()}</div>
+        <div className="sblock-geo">{flag} {code}</div>
+      </div>
+      <div className="sblock-title">
+        <div className="sblock-ic"><SensorGlyph kind={sensorKind(s)}/></div>
+        <div>
+          <h3 className="sblock-name">{s.name}</h3>
+          <div className="sblock-sub">{sensorSubtitle(s)}</div>
+        </div>
+      </div>
+      <p className="sblock-summary clamp">{s.summary}</p>
+      {w && (<div className="why"><h6>WHY IT MATTERS</h6><p>{w}</p></div>)}
+      <div className="sblock-specs">
+        {specs.map((sp,i)=>(<div key={i}><div className="lbl">{sp.lbl}</div><div className={`val ${sp.cls||""}`}>{sp.val}</div></div>))}
+      </div>
+      <div className="sblock-foot" onClick={(e)=>e.stopPropagation()}>
+        <button className={`icon-btn ${isFav?"on":""}`} title="Favorite" onClick={()=>onFav(s.id)}><Icon name="star"/></button>
+        <button className="icon-btn" title="Details" onClick={()=>onOpen(s)}><Icon name="arrow"/></button>
+      </div>
+    </div>
+  );
+};
+
+const SensorSidebar = ({ filters, setFilters, counts, total }) => {
+  const F = window.SENSOR_FILTERS;
+  const tog = (k,v)=>setFilters(f=>({...f,[k]:f[k].includes(v)?f[k].filter(x=>x!==v):[...f[k],v]}));
+  const reset = ()=>setFilters({category:[],subtype:[],country:[],company:[],minDetect:0});
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-frame-corner">// SENSOR FILTER · v1.0</div>
+      <ChipGroup label="CATEGORY" options={F.category} selected={filters.category} onToggle={v=>tog("category",v)} counts={counts.category}/>
+      <ChipGroup label="SUBTYPE" options={F.subtype} selected={filters.subtype} onToggle={v=>tog("subtype",v)} counts={counts.subtype}/>
+      <ChipGroup label="COUNTRY" options={F.country} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country}/>
+      <ChipGroup label="MANUFACTURER" options={F.company} selected={filters.company} onToggle={v=>tog("company",v)} counts={counts.company}/>
+      <RangeFilter label="MIN DETECTION" min={0} max={SMAX.detection} unit="km" value={filters.minDetect} onChange={v=>setFilters(f=>({...f,minDetect:v}))}/>
+      <div className="reset-row">
+        <button className="btn ghost sm" onClick={reset}>RESET</button>
+        <div style={{flex:1}}/>
+        <span style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--ink-2)",letterSpacing:"0.15em",alignSelf:"center"}}>{total} SENSORS</span>
+      </div>
+    </aside>
+  );
+};
+
+const SensorsCatalogue = ({ accent }) => {
+  const data = window.SENSOR_DATA;
+  const [filters,setFilters] = React.useState({category:[],subtype:[],country:[],company:[],minDetect:0});
+  const [favs,setFavs] = React.useState([]);
+  const [search,setSearch] = React.useState("");
+  const [sortBy,setSortBy] = React.useState("default");
+  const filtered = React.useMemo(()=>{
+    let r = data.filter(s=>{
+      if (filters.category.length && !filters.category.includes(s.category)) return false;
+      if (filters.subtype.length && !filters.subtype.includes(s.subtype)) return false;
+      if (filters.country.length && !filters.country.includes(s.country)) return false;
+      if (filters.company.length && !filters.company.includes(s.company)) return false;
+      if ((s.detection_km||0) < filters.minDetect) return false;
+      if (search) { const q=search.toLowerCase(); if (!((s.name||"").toLowerCase().includes(q)||(s.company||"").toLowerCase().includes(q)||(s.id||"").toLowerCase().includes(q)||(s.subtype||"").toLowerCase().includes(q))) return false; }
+      return true;
+    });
+    if (sortBy==="detect") r=[...r].sort((a,b)=>(b.detection_km==null?-1:b.detection_km)-(a.detection_km==null?-1:a.detection_km));
+    if (sortBy==="name") r=[...r].sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    return r;
+  },[data,filters,search,sortBy]);
+  const counts = React.useMemo(()=>{ const c={category:{},subtype:{},country:{},company:{}}; data.forEach(s=>["category","subtype","country","company"].forEach(k=>{ if(s[k]) c[k][s[k]]=(c[k][s[k]]||0)+1; })); return c; },[data]);
+  const toggleFav = id=>setFavs(f=>f.includes(id)?f.filter(x=>x!==id):[...f,id]);
+  const navOpen = s=>{ window.location.hash = "#/sensor/"+encodeURIComponent(s.id); };
+  return (
+    <div className="main-grid">
+      <SensorSidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length}/>
+      <main className="catalogue">
+        <div className="cat-header">
+          <div className="title-block"><h2>// SENSORS/DETECTION</h2><div className="count"><b>{filtered.length}</b> / {data.length} SENSORS · {favs.length} FAVS</div></div>
+          <div className="cat-controls">
+            <div style={{display:"flex",alignItems:"center",gap:6,border:"1px solid var(--line)",background:"var(--bg-2)",padding:"4px 8px"}}>
+              <Icon name="search" size={12}/>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="SEARCH ID, NAME, MFR..." style={{background:"transparent",border:"none",outline:"none",color:"var(--ink-0)",fontFamily:"var(--mono)",fontSize:10,letterSpacing:"0.15em",width:200}}/>
+            </div>
+            <select className="sort-select" value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+              <option value="default">SORT · DEFAULT</option>
+              <option value="detect">SORT · DETECTION</option>
+              <option value="name">SORT · NAME</option>
+            </select>
+          </div>
+        </div>
+        <div className="cat-note"><b>REVIEW-STAGE DATA</b> — {data.length} C-UAS sensors (active radar, passive RF, acoustic) across the global landscape. Many specs (detection range, band) are unpublished or classified and shown as “—”. Open any sensor for its source link and review notes. Not for procurement decisions.</div>
+        {filtered.length>0 ? (
+          <div className="sensor-grid">{filtered.map((s,i)=>(<SensorCard key={s.id} s={s} n={i+1} accent={accent} isFav={favs.includes(s.id)} onFav={toggleFav} onOpen={navOpen}/>))}</div>
+        ) : (
+          <div style={{padding:"60px",textAlign:"center",fontFamily:"var(--mono)",letterSpacing:"0.2em",color:"var(--ink-2)",border:"1px dashed var(--line)"}}>
+            <div style={{fontSize:14,color:accent,marginBottom:8}}>// NO SENSORS MATCH FILTER</div><div style={{fontSize:11}}>RELAX CONSTRAINTS OR RESET</div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+const SensorDetail = ({ s, accent, onBack }) => {
+  const [flag, code] = geo(s.country);
+  const w = whyText(s);
+  const cat = (s.category && s.category.indexOf("Acoustic")>=0) ? "ACOUSTIC SENSOR" : "RADAR / C-UAS SENSOR";
+  const specs = sensorSpecs(s);
+  return (
+    <div className="detail" style={{maxWidth:900}}>
+      <button className="detail-back" onClick={onBack}><span style={{transform:"rotate(180deg)",display:"inline-flex"}}><Icon name="arrow" size={12}/></span> BACK TO SENSORS</button>
+      <div className="sblock-top">
+        <div className="sblock-num"><b>{s.id}.</b> {cat} · {(s.subtype||"").toUpperCase()}</div>
+        <div className="sblock-geo">{flag} {code} · {s.country}</div>
+      </div>
+      <div className="sblock-title" style={{marginTop:18}}>
+        <div className="sblock-ic" style={{width:64,height:64}}><SensorGlyph kind={sensorKind(s)} size={30}/></div>
+        <div>
+          <h1 className="sblock-name" style={{fontSize:42}}>{s.name}</h1>
+          <div className="sblock-sub" style={{fontSize:13}}>{s.company} · {sensorSubtitle(s)}</div>
+        </div>
+      </div>
+      <p className="sblock-summary" style={{marginTop:22,fontSize:15}}>{s.summary}</p>
+      {w && (<div className="why"><h6>WHY IT MATTERS</h6><p>{w}</p></div>)}
+      <div className="sblock-specs" style={{marginTop:20}}>
+        {specs.map((sp,i)=>(<div key={i}><div className="lbl">{sp.lbl}</div><div className={`val ${sp.cls||""}`}>{sp.val}</div></div>))}
+        <div><div className="lbl">CONFIDENCE</div><div className="val" style={{color:s.confidence==="Low"?"var(--warn)":s.confidence==="High"?"var(--good)":"var(--ink-0)"}}>{s.confidence?s.confidence.toUpperCase():"—"}</div></div>
+        <div><div className="lbl">WEBSITE</div><div className="val">{s.website ? <a href={s.website} target="_blank" rel="noopener noreferrer">{webHost(s.website)}</a> : "—"}</div></div>
+      </div>
+      <div className="modal-actions">
+        <a className="btn primary" href={s.website} target="_blank" rel="noopener noreferrer">VIEW SOURCE <Icon name="ext"/></a>
+      </div>
+      <div className="source-note"><b>REVIEW STAGE</b> — mapped from a curated landscape file; many specs are vendor-stated or parsed from prose. {s.note}</div>
+    </div>
+  );
+};
+
+Object.assign(window, { UAVCard, Sidebar, DetailPage, CompareTray, CompareModal, Icon, SensorsCatalogue, SensorDetail });
+</script>
+
+<!-- ============ APP ============ -->
+<script type="text/babel">
+const { useState, useMemo, useEffect } = React;
+
+function App() {
+  const accent = "#ff7a1a";
+  const layout = "stat-heavy";
+  const columns = 4;
+
+  const data = window.UAV_DATA;
+  const [filters, setFilters] = useState({ cls:[], role:[], frame:[], manufacturer:[], minRange:0, minPayload:0 });
+  const [favs, setFavs] = useState([]);
+  const [compare, setCompare] = useState([]);
+  const [showCompare, setShowCompare] = useState(false);
+  const [sortBy, setSortBy] = useState("default");
+  const [search, setSearch] = useState("");
+
+  // Hash routing — each item opens as a full page (shareable URL, browser back/forward)
+  const parseHash = () => {
+    const h = window.location.hash || "";
+    let m;
+    if ((m = h.match(/^#\/uav\/(.+)$/)))    return { view:"uav-detail", id: decodeURIComponent(m[1]) };
+    if ((m = h.match(/^#\/sensor\/(.+)$/))) return { view:"sensor-detail", id: decodeURIComponent(m[1]) };
+    if (h === "#/sensors")                  return { view:"sensors" };
+    return { view:"catalogue" };
+  };
+  const [route, setRoute] = useState(parseHash());
+  useEffect(() => {
+    const f = () => setRoute(parseHash());
+    window.addEventListener("hashchange", f);
+    return () => window.removeEventListener("hashchange", f);
+  }, []);
+  useEffect(() => { if (route.view === "detail") window.scrollTo(0,0); }, [route]);
+  const navOpen = (uav) => { window.location.hash = "#/uav/" + encodeURIComponent(uav.id); };
+  const navHome = () => { window.location.hash = ""; };
+
+  const filtered = useMemo(() => {
+    let r = data.filter(u => {
+      if (filters.cls.length && !filters.cls.includes(u.cls)) return false;
+      if (filters.role.length && !filters.role.includes(u.role)) return false;
+      if (filters.frame.length && !filters.frame.includes(u.frame)) return false;
+      if (filters.manufacturer.length && !filters.manufacturer.includes(u.manufacturer)) return false;
+      if ((u.range_km||0) < filters.minRange) return false;
+      if ((u.payload_kg||0) < filters.minPayload) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        if (!(u.name.toLowerCase().includes(q) || u.codename.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || u.manufacturer.toLowerCase().includes(q))) return false;
+      }
+      return true;
+    });
+    const by = (sel) => (a,b) => (sel(b)??-1) - (sel(a)??-1);
+    if (sortBy==="range") r=[...r].sort(by(u=>u.range_km));
+    if (sortBy==="endurance") r=[...r].sort(by(u=>u.flight_min));
+    if (sortBy==="payload") r=[...r].sort(by(u=>u.payload_kg));
+    if (sortBy==="speed") r=[...r].sort(by(u=>u.speed));
+    return r;
+  }, [data, filters, sortBy, search]);
+
+  const counts = useMemo(() => {
+    const c = { cls:{}, role:{}, frame:{}, manufacturer:{} };
+    data.forEach(u => { ["cls","role","frame","manufacturer"].forEach(k => { c[k][u[k]] = (c[k][u[k]]||0)+1; }); });
+    return c;
+  }, [data]);
+
+  const toggleFav = id => setFavs(f => f.includes(id) ? f.filter(x=>x!==id) : [...f,id]);
+  const toggleCompare = id => setCompare(c => {
+    if (c.includes(id)) return c.filter(x=>x!==id);
+    if (c.length>=3) return [...c.slice(1), id];
+    return [...c, id];
+  });
+
+  const compareUAVs = compare.map(id => data.find(u=>u.id===id)).filter(Boolean);
+  const detailUAV = route.view === "uav-detail" ? data.find(u=>u.id===route.id) : null;
+  const sensor = route.view === "sensor-detail" ? (window.SENSOR_DATA||[]).find(s=>s.id===route.id) : null;
+  const onSensors = route.view === "sensors" || route.view === "sensor-detail";
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-mark">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M8 1 L14 5 L14 11 L8 15 L2 11 L2 5 Z"/>
+              <path d="M8 4 L11 6 L11 10 L8 12 L5 10 L5 6 Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div className="brand-text">
+            <span className="b1">xSonomy</span>
+            <span className="b2">AUTONOMOUS UNMANNED SYSTEMS</span>
+          </div>
+        </div>
+        <nav className="topbar-nav">
+          <a className={onSensors?"":"active"} onClick={()=>{window.location.hash="";}}>UAVs</a>
+          <a className={onSensors?"active":""} onClick={()=>{window.location.hash="#/sensors";}}>SENSORS/DETECTION</a>
+        </nav>
+        <div className="topbar-meta">
+          <span><span className="pulse"/>STAGE 1 · CATALOGUE</span>
+          <span>{onSensors ? (window.SENSOR_DATA||[]).length+" SENSORS · GLOBAL" : data.length+" UAVS · PL + UA"}</span>
+        </div>
+      </header>
+
+      {route.view==="uav-detail" && detailUAV ? (
+        <DetailPage uav={detailUAV} accent={accent} onBack={navHome}
+          isCompare={compare.includes(detailUAV.id)} onCompare={id=>toggleCompare(id)}/>
+      ) : route.view==="sensor-detail" && sensor ? (
+        <SensorDetail s={sensor} accent={accent} onBack={()=>{window.location.hash="#/sensors";}}/>
+      ) : route.view==="sensors" ? (
+        <SensorsCatalogue accent={accent}/>
+      ) : (
+      <>
+      <div className="main-grid">
+        <Sidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length}/>
+        <main className="catalogue">
+          <div className="cat-header">
+            <div className="title-block">
+              <h2>// CATALOGUE</h2>
+              <div className="count"><b>{filtered.length}</b> / {data.length} UNITS · {favs.length} FAVS</div>
+            </div>
+            <div className="cat-controls">
+              <div style={{display:"flex",alignItems:"center",gap:6,border:"1px solid var(--line)",background:"var(--bg-2)",padding:"4px 8px"}}>
+                <Icon name="search" size={12}/>
+                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="SEARCH ID, NAME, MFR..."
+                  style={{background:"transparent",border:"none",outline:"none",color:"var(--ink-0)",fontFamily:"var(--mono)",fontSize:10,letterSpacing:"0.15em",width:200}}/>
+              </div>
+              <select className="sort-select" value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+                <option value="default">SORT · DEFAULT</option>
+                <option value="range">SORT · RANGE</option>
+                <option value="endurance">SORT · ENDURANCE</option>
+                <option value="payload">SORT · PAYLOAD</option>
+                <option value="speed">SORT · SPEED</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="cat-note">
+            <b>REVIEW-STAGE DATA</b> — {data.length} units, Poland + Ukraine wedge. Figures corroborated from manufacturer and secondary sources; values that conflict or were unpublished are shown as “—”. Open any unit to see its source link and review notes. Not for procurement decisions.
+          </div>
+
+          {filtered.length > 0 ? (
+            <div className={`uav-grid cols-${columns}`}>
+              {filtered.map(uav => (
+                <UAVCard key={uav.id} uav={uav} accent={accent} layout={layout}
+                  isFav={favs.includes(uav.id)} isCompare={compare.includes(uav.id)}
+                  onFav={toggleFav} onCompare={toggleCompare} onOpen={navOpen}/>
+              ))}
+            </div>
+          ) : (
+            <div style={{padding:"60px",textAlign:"center",fontFamily:"var(--mono)",letterSpacing:"0.2em",color:"var(--ink-2)",border:"1px dashed var(--line)"}}>
+              <div style={{fontSize:14,color:accent,marginBottom:8}}>// NO UNITS MATCH FILTER</div>
+              <div style={{fontSize:11}}>RELAX CONSTRAINTS OR RESET</div>
+            </div>
+          )}
+        </main>
+      </div>
+
+      <CompareTray ids={compare} uavs={data}
+        onRemove={id=>setCompare(c=>c.filter(x=>x!==id))}
+        onClear={()=>setCompare([])}
+        onCompare={()=>setShowCompare(true)}/>
+      </>
+      )}
+
+      {showCompare && compareUAVs.length>=2 && (
+        <CompareModal uavs={compareUAVs} onClose={()=>setShowCompare(false)}/>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

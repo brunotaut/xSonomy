@@ -1,0 +1,14 @@
+# Allowlist — ignore everything at the repo root by default...
+/*
+
+# ...except the files that make up the published site:
+!/index.html
+!/DEPLOY.md
+!/SETUP-GITHUB.md
+!/.gitignore
+!/build
+!/.github
+
+# Never commit these, even inside allowed folders:
+build/node_modules/
+**/.DS_Store

@@ -1,0 +1,45 @@
+name: Build & publish catalogue
+
+on:
+  schedule:
+    - cron: "0 5 * * *"        # daily at 05:00 UTC — pulls latest Airtable data
+  workflow_dispatch: {}         # lets you trigger a rebuild manually from the Actions tab
+  push:
+    branches: [ main ]
+    paths:                      # rebuild when the template or build logic changes
+      - "build/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: write               # allow the action to commit the regenerated index.html
+
+concurrency:
+  group: build-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build index.html from Airtable
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: node build/build.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "xsonomy-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+          else
+            git commit -m "data: rebuild catalogue ($(date -u +%FT%TZ))"
+            git push
+          fi
