@@ -89,6 +89,8 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .filter-block{margin-bottom:22px;}
 .filter-block h5{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--ink-2);margin:0 0 10px;display:flex;align-items:center;justify-content:space-between;}
 .filter-block h5 .ix{color:var(--accent);font-family:var(--mono);}
+.filter-block h5 .expand-toggle{cursor:pointer;user-select:none;border:1px solid var(--accent-line);background:var(--accent-soft);padding:2px 7px;letter-spacing:0.15em;}
+.filter-block h5 .expand-toggle:hover{filter:brightness(1.15);}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
 .chip{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;padding:5px 9px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink-1);cursor:pointer;transition:all 0.12s;user-select:none;}
 .chip:hover{color:var(--ink-0);border-color:var(--line-2);}
@@ -102,6 +104,7 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .range-input input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--accent);cursor:pointer;border:2px solid var(--bg-0);}
 .reset-row{display:flex;gap:6px;margin-top:20px;border-top:1px dashed var(--line);padding-top:16px;}
 .sidebar-frame-corner{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.2em;text-align:right;margin-bottom:8px;}
+.filter-toggle{display:none;}
 
 /* Catalogue */
 .catalogue{padding:20px 28px 140px;}
@@ -114,6 +117,9 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .sort-select{font-family:var(--mono);font-size:10px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-1);padding:7px 10px;letter-spacing:0.15em;text-transform:uppercase;}
 .cat-note{font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:0.1em;border:1px dashed var(--line);background:var(--bg-1);padding:9px 12px;margin-bottom:16px;line-height:1.6;}
 .cat-note b{color:var(--warn);font-weight:500;}
+.card-price{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.12em;}
+.card-price .cp-label{color:var(--ink-3);}
+.card-price .cp-val{color:var(--ink-0);text-align:right;}
 
 /* Grid */
 .uav-grid{display:grid;gap:14px;}
@@ -122,6 +128,34 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .uav-grid.cols-5{grid-template-columns:repeat(5,1fr);}
 @media (max-width:1400px){.uav-grid.cols-5{grid-template-columns:repeat(4,1fr);}}
 @media (max-width:1100px){.uav-grid.cols-4,.uav-grid.cols-5{grid-template-columns:repeat(3,1fr);}}
+
+/* ---- Mobile: 2-col grid, filter as sticky expandable top block ---- */
+@media (max-width:760px){
+  .main-grid{grid-template-columns:1fr;}
+  /* Two product columns regardless of desktop column setting */
+  .uav-grid.cols-3,.uav-grid.cols-4,.uav-grid.cols-5{grid-template-columns:repeat(2,1fr);}
+  .sensor-grid{grid-template-columns:repeat(2,1fr);}
+  /* Filter sidebar -> sticky top bar, sits directly below the sticky header */
+  .sidebar{
+    border-right:none;border-bottom:1px solid var(--line);padding:0;
+    position:sticky;top:var(--topbar-h,52px);z-index:40;
+    background:var(--bg-1);box-shadow:0 6px 16px rgba(0,0,0,0.35);
+  }
+  .sidebar-frame-corner{display:none;}
+  .filter-toggle{
+    display:flex;align-items:center;justify-content:space-between;width:100%;
+    background:var(--bg-2);border:none;border-bottom:1px solid var(--line);
+    color:var(--ink-0);font-family:var(--mono);font-size:11px;letter-spacing:0.2em;
+    text-transform:uppercase;padding:13px 20px;cursor:pointer;
+  }
+  .filter-toggle .ft-chevron{color:var(--accent);font-size:9px;transition:transform 0.15s;}
+  .sidebar.mobile-open .filter-toggle .ft-chevron{transform:rotate(180deg);}
+  .filter-body{display:none;padding:16px 20px;max-height:62vh;overflow-y:auto;}
+  .sidebar.mobile-open .filter-body{display:block;}
+  /* Tighten catalogue padding on small screens */
+  .catalogue{padding:16px 14px 120px;}
+  .cat-header h2{font-size:18px;}
+}
 
 /* Card */
 .card{position:relative;background:var(--bg-1);border:1px solid var(--line);display:flex;flex-direction:column;cursor:pointer;transition:all 0.18s ease;overflow:hidden;}
@@ -250,6 +284,7 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .sblock-title{display:flex;align-items:center;gap:16px;margin-top:16px;}
 .sblock-ic{width:54px;height:54px;border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;border-radius:50%;flex-shrink:0;}
 .sblock-name{font-family:var(--display);font-size:30px;letter-spacing:0.04em;margin:0;line-height:1;text-transform:none;}
+.sblock-company{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--warn);margin-top:5px;text-transform:uppercase;}
 .sblock-sub{font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--accent);margin-top:7px;}
 .sblock-summary{color:var(--ink-1);font-size:14px;line-height:1.6;margin:18px 0 0;}
 .sblock-summary.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
@@ -539,6 +574,7 @@ const UAVCard = ({ uav, accent, layout, isFav, isCompare, onFav, onCompare, onOp
           <StatRow label="PAYLD" value={uav.payload_kg} max={MAX.payload} unit="kg" accent={accent}/>
           <StatRow label="SPEED" value={uav.speed} max={MAX.speed} unit="km/h" accent={accent}/>
         </div>
+        <div className="card-price"><span className="cp-label">PRICE</span><span className="cp-val">{uav.price || "No info"}</span></div>
       </div>
       <div className="card-footer">
         <div>
@@ -555,9 +591,18 @@ const UAVCard = ({ uav, accent, layout, isFav, isCompare, onFav, onCompare, onOp
   );
 };
 
-const ChipGroup = ({ label, options, selected, onToggle, counts }) => (
+const ChipGroup = ({ label, options, selected, onToggle, counts, collapsible=false }) => {
+  const [open, setOpen] = React.useState(false);
+  const showChips = !collapsible || open;
+  return (
   <div className="filter-block">
-    <h5><span>{label}</span>{selected.length>0 && <span className="ix">{selected.length} ON</span>}</h5>
+    <h5>
+      <span>{label}</span>
+      {collapsible
+        ? <span className="ix expand-toggle" onClick={()=>setOpen(o=>!o)}>{selected.length>0?selected.length+" ON · ":""}{open?"COLLAPSE":"EXPAND"}</span>
+        : (selected.length>0 && <span className="ix">{selected.length} ON</span>)}
+    </h5>
+    {showChips && (
     <div className="chip-row">
       {options.map(o=>(
         <button key={o} className={`chip ${selected.includes(o)?"on":""}`} onClick={()=>onToggle(o)}>
@@ -565,8 +610,10 @@ const ChipGroup = ({ label, options, selected, onToggle, counts }) => (
         </button>
       ))}
     </div>
+    )}
   </div>
-);
+  );
+};
 
 const RangeFilter = ({ label, min, max, value, onChange, unit }) => (
   <div className="filter-block">
@@ -578,23 +625,30 @@ const RangeFilter = ({ label, min, max, value, onChange, unit }) => (
   </div>
 );
 
-const Sidebar = ({ filters, setFilters, counts, total }) => {
+const Sidebar = ({ filters, setFilters, counts, total, open=false, onToggle=()=>{} }) => {
   const F = window.UAV_FILTERS;
   const tog = (key,v)=>setFilters(f=>({...f,[key]:f[key].includes(v)?f[key].filter(x=>x!==v):[...f[key],v]}));
   const reset = ()=>setFilters({cls:[],role:[],frame:[],manufacturer:[],minRange:0,minPayload:0});
+  const activeCount = filters.cls.length+filters.role.length+filters.frame.length+filters.manufacturer.length+(filters.minRange>0?1:0)+(filters.minPayload>0?1:0);
   return (
-    <aside className="sidebar">
+    <aside className={"sidebar"+(open?" mobile-open":"")}>
+      <button className="filter-toggle" onClick={onToggle}>
+        <span>FILTER{activeCount?" · "+activeCount:""}</span>
+        <span className="ft-chevron">▼</span>
+      </button>
+      <div className="filter-body">
       <div className="sidebar-frame-corner">// FILTER · v1.0</div>
       <ChipGroup label="CLASS" options={F.cls} selected={filters.cls} onToggle={v=>tog("cls",v)} counts={counts.cls}/>
       <ChipGroup label="ROLE" options={F.role} selected={filters.role} onToggle={v=>tog("role",v)} counts={counts.role}/>
       <ChipGroup label="FRAME" options={F.frame} selected={filters.frame} onToggle={v=>tog("frame",v)} counts={counts.frame}/>
-      <ChipGroup label="MANUFACTURER" options={F.manufacturer} selected={filters.manufacturer} onToggle={v=>tog("manufacturer",v)} counts={counts.manufacturer}/>
+      <ChipGroup label="MANUFACTURER" options={F.manufacturer} selected={filters.manufacturer} onToggle={v=>tog("manufacturer",v)} counts={counts.manufacturer} collapsible/>
       <RangeFilter label="MIN RANGE" min={0} max={200} unit="km" value={filters.minRange} onChange={v=>setFilters(f=>({...f,minRange:v}))}/>
       <RangeFilter label="MIN PAYLOAD" min={0} max={25} unit="kg" value={filters.minPayload} onChange={v=>setFilters(f=>({...f,minPayload:v}))}/>
       <div className="reset-row">
         <button className="btn ghost sm" onClick={reset}>RESET</button>
         <div style={{flex:1}}/>
         <span style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--ink-2)",letterSpacing:"0.15em",alignSelf:"center"}}>{total} UNITS</span>
+      </div>
       </div>
     </aside>
   );
@@ -831,6 +885,7 @@ const SensorCard = ({ s, n, accent, isFav, onFav, onOpen }) => {
         <div>
           <h3 className="sblock-name">{s.name}</h3>
           <div className="sblock-sub">{sensorSubtitle(s)}</div>
+          <div className="sblock-company">{s.company || "—"}</div>
         </div>
       </div>
       <p className="sblock-summary clamp">{s.summary}</p>
@@ -846,22 +901,29 @@ const SensorCard = ({ s, n, accent, isFav, onFav, onOpen }) => {
   );
 };
 
-const SensorSidebar = ({ filters, setFilters, counts, total }) => {
+const SensorSidebar = ({ filters, setFilters, counts, total, open=false, onToggle=()=>{} }) => {
   const F = window.SENSOR_FILTERS;
   const tog = (k,v)=>setFilters(f=>({...f,[k]:f[k].includes(v)?f[k].filter(x=>x!==v):[...f[k],v]}));
   const reset = ()=>setFilters({category:[],subtype:[],country:[],company:[],minDetect:0});
+  const activeCount = filters.category.length+filters.subtype.length+filters.country.length+filters.company.length+(filters.minDetect>0?1:0);
   return (
-    <aside className="sidebar">
+    <aside className={"sidebar"+(open?" mobile-open":"")}>
+      <button className="filter-toggle" onClick={onToggle}>
+        <span>FILTER{activeCount?" · "+activeCount:""}</span>
+        <span className="ft-chevron">▼</span>
+      </button>
+      <div className="filter-body">
       <div className="sidebar-frame-corner">// SENSOR FILTER · v1.0</div>
       <ChipGroup label="CATEGORY" options={F.category} selected={filters.category} onToggle={v=>tog("category",v)} counts={counts.category}/>
       <ChipGroup label="SUBTYPE" options={F.subtype} selected={filters.subtype} onToggle={v=>tog("subtype",v)} counts={counts.subtype}/>
       <ChipGroup label="COUNTRY" options={F.country} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country}/>
-      <ChipGroup label="MANUFACTURER" options={F.company} selected={filters.company} onToggle={v=>tog("company",v)} counts={counts.company}/>
+      <ChipGroup label="MANUFACTURER" options={F.company} selected={filters.company} onToggle={v=>tog("company",v)} counts={counts.company} collapsible/>
       <RangeFilter label="MIN DETECTION" min={0} max={SMAX.detection} unit="km" value={filters.minDetect} onChange={v=>setFilters(f=>({...f,minDetect:v}))}/>
       <div className="reset-row">
         <button className="btn ghost sm" onClick={reset}>RESET</button>
         <div style={{flex:1}}/>
         <span style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--ink-2)",letterSpacing:"0.15em",alignSelf:"center"}}>{total} SENSORS</span>
+      </div>
       </div>
     </aside>
   );
@@ -873,6 +935,7 @@ const SensorsCatalogue = ({ accent }) => {
   const [favs,setFavs] = React.useState([]);
   const [search,setSearch] = React.useState("");
   const [sortBy,setSortBy] = React.useState("default");
+  const [filtersOpen,setFiltersOpen] = React.useState(false);
   const filtered = React.useMemo(()=>{
     let r = data.filter(s=>{
       if (filters.category.length && !filters.category.includes(s.category)) return false;
@@ -892,7 +955,7 @@ const SensorsCatalogue = ({ accent }) => {
   const navOpen = s=>{ window.location.hash = "#/sensor/"+encodeURIComponent(s.id); };
   return (
     <div className="main-grid">
-      <SensorSidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length}/>
+      <SensorSidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length} open={filtersOpen} onToggle={()=>setFiltersOpen(o=>!o)}/>
       <main className="catalogue">
         <div className="cat-header">
           <div className="title-block"><h2>// SENSORS/DETECTION</h2><div className="count"><b>{filtered.length}</b> / {data.length} SENSORS · {favs.length} FAVS</div></div>
@@ -974,6 +1037,18 @@ function App() {
   const [showCompare, setShowCompare] = useState(false);
   const [sortBy, setSortBy] = useState("default");
   const [search, setSearch] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // Keep the sticky mobile filter bar offset in sync with the header height
+  useEffect(() => {
+    const setH = () => {
+      const tb = document.querySelector(".topbar");
+      if (tb) document.documentElement.style.setProperty("--topbar-h", tb.offsetHeight + "px");
+    };
+    setH();
+    window.addEventListener("resize", setH);
+    return () => window.removeEventListener("resize", setH);
+  });
 
   // Hash routing — each item opens as a full page (shareable URL, browser back/forward)
   const parseHash = () => {
@@ -1069,7 +1144,7 @@ function App() {
       ) : (
       <>
       <div className="main-grid">
-        <Sidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length}/>
+        <Sidebar filters={filters} setFilters={setFilters} counts={counts} total={filtered.length} open={filtersOpen} onToggle={()=>setFiltersOpen(o=>!o)}/>
         <main className="catalogue">
           <div className="cat-header">
             <div className="title-block">
@@ -1090,10 +1165,6 @@ function App() {
                 <option value="speed">SORT · SPEED</option>
               </select>
             </div>
-          </div>
-
-          <div className="cat-note">
-            <b>REVIEW-STAGE DATA</b> — {data.length} units, Poland + Ukraine wedge. Figures corroborated from manufacturer and secondary sources; values that conflict or were unpublished are shown as “—”. Open any unit to see its source link and review notes. Not for procurement decisions.
           </div>
 
           {filtered.length > 0 ? (
