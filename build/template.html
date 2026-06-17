@@ -630,8 +630,8 @@ const RangeFilter = ({ label, min, max, value, onChange, unit }) => (
 const Sidebar = ({ filters, setFilters, counts, total, open=false, onToggle=()=>{} }) => {
   const F = window.UAV_FILTERS;
   const tog = (key,v)=>setFilters(f=>({...f,[key]:f[key].includes(v)?f[key].filter(x=>x!==v):[...f[key],v]}));
-  const reset = ()=>setFilters({cls:[],role:[],frame:[],manufacturer:[],minRange:0,minPayload:0});
-  const activeCount = filters.cls.length+filters.role.length+filters.frame.length+filters.manufacturer.length+(filters.minRange>0?1:0)+(filters.minPayload>0?1:0);
+  const reset = ()=>setFilters({cls:[],role:[],frame:[],manufacturer:[],country:[],minRange:0,minPayload:0});
+  const activeCount = filters.cls.length+filters.role.length+filters.frame.length+filters.manufacturer.length+filters.country.length+(filters.minRange>0?1:0)+(filters.minPayload>0?1:0);
   return (
     <aside className={"sidebar"+(open?" mobile-open":"")}>
       <button className="filter-toggle" onClick={onToggle}>
@@ -643,6 +643,7 @@ const Sidebar = ({ filters, setFilters, counts, total, open=false, onToggle=()=>
       <ChipGroup label="CLASS" options={F.cls} selected={filters.cls} onToggle={v=>tog("cls",v)} counts={counts.cls} collapsible/>
       <ChipGroup label="ROLE" options={F.role} selected={filters.role} onToggle={v=>tog("role",v)} counts={counts.role} collapsible/>
       <ChipGroup label="FRAME" options={F.frame} selected={filters.frame} onToggle={v=>tog("frame",v)} counts={counts.frame} collapsible/>
+      <ChipGroup label="COUNTRY" options={F.country||[]} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country} collapsible/>
       <ChipGroup label="MANUFACTURER" options={F.manufacturer} selected={filters.manufacturer} onToggle={v=>tog("manufacturer",v)} counts={counts.manufacturer} collapsible/>
       <RangeFilter label="MIN RANGE" min={0} max={200} unit="km" value={filters.minRange} onChange={v=>setFilters(f=>({...f,minRange:v}))}/>
       <RangeFilter label="MIN PAYLOAD" min={0} max={25} unit="kg" value={filters.minPayload} onChange={v=>setFilters(f=>({...f,minPayload:v}))}/>
@@ -921,7 +922,7 @@ const SensorSidebar = ({ filters, setFilters, counts, total, open=false, onToggl
       <div className="sidebar-frame-corner">// SENSOR FILTER · v1.0</div>
       <ChipGroup label="CATEGORY" options={F.category} selected={filters.category} onToggle={v=>tog("category",v)} counts={counts.category} collapsible/>
       <ChipGroup label="SUBTYPE" options={F.subtype} selected={filters.subtype} onToggle={v=>tog("subtype",v)} counts={counts.subtype} collapsible/>
-      <ChipGroup label="COUNTRY" options={F.country} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country} collapsible/>
+      <ChipGroup label="COUNTRY" options={F.country||[]} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country} collapsible/>
       <ChipGroup label="MANUFACTURER" options={F.company} selected={filters.company} onToggle={v=>tog("company",v)} counts={counts.company} collapsible/>
       <RangeFilter label="MIN DETECTION" min={0} max={SMAX.detection} unit="km" value={filters.minDetect} onChange={v=>setFilters(f=>({...f,minDetect:v}))}/>
       <div className="reset-row">
@@ -1037,7 +1038,7 @@ function App() {
   const columns = 4;
 
   const data = window.UAV_DATA;
-  const [filters, setFilters] = useState({ cls:[], role:[], frame:[], manufacturer:[], minRange:0, minPayload:0 });
+  const [filters, setFilters] = useState({ cls:[], role:[], frame:[], manufacturer:[], country:[], minRange:0, minPayload:0 });
   const [favs, setFavs] = useState([]);
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
@@ -1081,6 +1082,7 @@ function App() {
       if (filters.role.length && !filters.role.includes(u.role)) return false;
       if (filters.frame.length && !filters.frame.includes(u.frame)) return false;
       if (filters.manufacturer.length && !filters.manufacturer.includes(u.manufacturer)) return false;
+      if (filters.country.length && !filters.country.includes(u.countryFull)) return false;
       if ((u.range_km||0) < filters.minRange) return false;
       if ((u.payload_kg||0) < filters.minPayload) return false;
       if (search) {
@@ -1098,8 +1100,11 @@ function App() {
   }, [data, filters, sortBy, search]);
 
   const counts = useMemo(() => {
-    const c = { cls:{}, role:{}, frame:{}, manufacturer:{} };
-    data.forEach(u => { ["cls","role","frame","manufacturer"].forEach(k => { c[k][u[k]] = (c[k][u[k]]||0)+1; }); });
+    const c = { cls:{}, role:{}, frame:{}, manufacturer:{}, country:{} };
+    data.forEach(u => {
+      ["cls","role","frame","manufacturer"].forEach(k => { c[k][u[k]] = (c[k][u[k]]||0)+1; });
+      if (u.countryFull) c.country[u.countryFull] = (c.country[u.countryFull]||0)+1;
+    });
     return c;
   }, [data]);
 
