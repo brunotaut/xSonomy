@@ -85,7 +85,7 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 .main-grid{display:grid;grid-template-columns:280px 1fr;gap:0;min-height:100vh;}
 
 /* Sidebar */
-.sidebar{border-right:1px solid var(--line);background:var(--bg-1);padding:20px;}
+.sidebar{border-right:1px solid var(--line);background:var(--bg-1);padding:20px;position:sticky;top:var(--topbar-h,57px);align-self:start;max-height:calc(100vh - var(--topbar-h,57px));overflow-y:auto;}
 .filter-block{margin-bottom:22px;}
 .filter-block h5{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--ink-2);margin:0 0 10px;display:flex;align-items:center;justify-content:space-between;}
 .filter-block h5 .ix{color:var(--accent);font-family:var(--mono);}
@@ -140,6 +140,7 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
     border-right:none;border-bottom:1px solid var(--line);padding:0;
     position:sticky;top:var(--topbar-h,52px);z-index:40;
     background:var(--bg-1);box-shadow:0 6px 16px rgba(0,0,0,0.35);
+    max-height:none;overflow:visible;align-self:auto;
   }
   .sidebar-frame-corner{display:none;}
   .filter-toggle{
@@ -561,7 +562,7 @@ const UAVCard = ({ uav, accent, layout, isFav, isCompare, onFav, onCompare, onOp
       <div className="card-body">
         <div>
           <h3 className="card-name">{uav.name}</h3>
-          <div className="card-mfr">{uav.manufacturer} · {uav.country}</div>
+          <div className="card-mfr">{uav.manufacturer} · {geo(uav.countryFull)[0]} {uav.country}</div>
         </div>
         <div className="card-tags">
           <span className="tag">{uav.cls}</span>
@@ -638,9 +639,9 @@ const Sidebar = ({ filters, setFilters, counts, total, open=false, onToggle=()=>
       </button>
       <div className="filter-body">
       <div className="sidebar-frame-corner">// FILTER · v1.0</div>
-      <ChipGroup label="CLASS" options={F.cls} selected={filters.cls} onToggle={v=>tog("cls",v)} counts={counts.cls}/>
-      <ChipGroup label="ROLE" options={F.role} selected={filters.role} onToggle={v=>tog("role",v)} counts={counts.role}/>
-      <ChipGroup label="FRAME" options={F.frame} selected={filters.frame} onToggle={v=>tog("frame",v)} counts={counts.frame}/>
+      <ChipGroup label="CLASS" options={F.cls} selected={filters.cls} onToggle={v=>tog("cls",v)} counts={counts.cls} collapsible/>
+      <ChipGroup label="ROLE" options={F.role} selected={filters.role} onToggle={v=>tog("role",v)} counts={counts.role} collapsible/>
+      <ChipGroup label="FRAME" options={F.frame} selected={filters.frame} onToggle={v=>tog("frame",v)} counts={counts.frame} collapsible/>
       <ChipGroup label="MANUFACTURER" options={F.manufacturer} selected={filters.manufacturer} onToggle={v=>tog("manufacturer",v)} counts={counts.manufacturer} collapsible/>
       <RangeFilter label="MIN RANGE" min={0} max={200} unit="km" value={filters.minRange} onChange={v=>setFilters(f=>({...f,minRange:v}))}/>
       <RangeFilter label="MIN PAYLOAD" min={0} max={25} unit="kg" value={filters.minPayload} onChange={v=>setFilters(f=>({...f,minPayload:v}))}/>
@@ -914,9 +915,9 @@ const SensorSidebar = ({ filters, setFilters, counts, total, open=false, onToggl
       </button>
       <div className="filter-body">
       <div className="sidebar-frame-corner">// SENSOR FILTER · v1.0</div>
-      <ChipGroup label="CATEGORY" options={F.category} selected={filters.category} onToggle={v=>tog("category",v)} counts={counts.category}/>
-      <ChipGroup label="SUBTYPE" options={F.subtype} selected={filters.subtype} onToggle={v=>tog("subtype",v)} counts={counts.subtype}/>
-      <ChipGroup label="COUNTRY" options={F.country} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country}/>
+      <ChipGroup label="CATEGORY" options={F.category} selected={filters.category} onToggle={v=>tog("category",v)} counts={counts.category} collapsible/>
+      <ChipGroup label="SUBTYPE" options={F.subtype} selected={filters.subtype} onToggle={v=>tog("subtype",v)} counts={counts.subtype} collapsible/>
+      <ChipGroup label="COUNTRY" options={F.country} selected={filters.country} onToggle={v=>tog("country",v)} counts={counts.country} collapsible/>
       <ChipGroup label="MANUFACTURER" options={F.company} selected={filters.company} onToggle={v=>tog("company",v)} counts={counts.company} collapsible/>
       <RangeFilter label="MIN DETECTION" min={0} max={SMAX.detection} unit="km" value={filters.minDetect} onChange={v=>setFilters(f=>({...f,minDetect:v}))}/>
       <div className="reset-row">
