@@ -222,6 +222,7 @@ a { color: var(--accent); text-decoration: none; }
 @media (max-width: 860px) { .cmp-tray { flex-direction: column; gap: 10px; } .cmp-slots { flex-wrap: wrap; } }
 
 /* ---------- Compare modal ---------- */
+.cmp-tray[hidden], .cmp-modal-bg[hidden] { display: none; }   /* let the hidden attribute win over display:flex/grid */
 .cmp-modal-bg { position: fixed; inset: 0; z-index: 100; background: rgba(5,8,10,.85); backdrop-filter: blur(4px); display: grid; place-items: center; padding: 40px; }
 .cmp-modal { width: min(960px, 100%); max-height: 88vh; overflow: auto; background: var(--bg-1); border: 1px solid var(--accent-line); padding: 28px; position: relative; }
 .cmp-modal h2 { font-family: var(--display); font-size: 24px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 18px; }
