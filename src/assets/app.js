@@ -1,17 +1,30 @@
 // xSonomy catalogue — client-side search / filter / render over generated JSON.
-// Hangar aesthetic: UAV "loadout" cards + sensor info-blocks. Cards link to static
-// per-product pages (no modal). Data is keyed by Airtable field names.
+// Hangar aesthetic: UAV "loadout" cards + sensor info-blocks, with a compare tray.
+// Cards link to static per-product pages. Data is keyed by Airtable field names.
 
 const CONFIG = {
   uav: {
     search: ["Name", "Company", "Summary", "Subtype"],
     selects: ["Subcategory", "Country", "UAV · Role", "UAV · Class", "UAV · Propulsion", "UAV · Combat-proven"],
     ranges: ["UAV · MTOW (kg)", "UAV · Endurance (min)", "UAV · Range (km)", "UAV · Max speed (km/h)"],
+    compare: [
+      ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
+      ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
+      ["UAV · Max payload (kg)", "Max payload", "num", " kg"], ["UAV · Max speed (km/h)", "Max speed", "num", " km/h"],
+      ["UAV · MTOW (kg)", "MTOW", "num", " kg"], ["UAV · Propulsion", "Propulsion"],
+      ["UAV · Combat-proven", "Combat-proven"], ["Confidence", "Confidence"],
+    ],
   },
   sensors: {
     search: ["Name", "Company", "Summary", "Subtype"],
     selects: ["Subcategory", "Country", "Subtype", "Radar · Band", "Radar · Coverage", "Radar · Use", "Acoustic · Type", "Acoustic · Coverage"],
     ranges: ["Radar · Detection range (km)", "Acoustic · Detection range (km)"],
+    compare: [
+      ["Subcategory", "Subcategory"], ["Subtype", "Subtype"], ["Country", "Country"],
+      ["Radar · Band", "Band"], ["Radar · Detection range (km)", "Detection range", "num", " km"],
+      ["Radar · Coverage", "Coverage"], ["Radar · Frequency (GHz)", "Frequency"],
+      ["Acoustic · Detection range (km)", "Acoustic range", "num", " km"], ["Price", "Price"], ["Confidence", "Confidence"],
+    ],
   },
 };
 
@@ -21,12 +34,11 @@ const els = {
   search: document.getElementById("search"),
   reset: document.getElementById("reset"),
   grid: document.getElementById("grid"),
-  count: document.getElementById("count"),
   empty: document.getElementById("empty"),
   meta: document.getElementById("meta"),
 };
 
-const state = { cat: null, rows: [], cfg: null, filters: null, max: {} };
+const state = { cat: null, rows: [], cfg: null, filters: null, max: {}, compare: [] };
 
 // ---------- helpers ----------
 const asArray = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]);
@@ -34,16 +46,17 @@ const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</
 const num = (v) => (typeof v === "number" ? v : null);
 const up = (s) => String(s || "").toUpperCase();
 const first = (v) => asArray(v)[0];
-const tierClass = (c) => (c === "High" ? "HIGH" : c === "Low" ? "LOW" : "MED");
 const whyText = (row) => { const m = String(row["Source URLs"] || "").split(/Analyst note:\s*/i); return m.length > 1 ? m[1].trim() : null; };
+const rowBySlug = (slug) => state.rows.find((r) => r.slug === slug);
 
 const ISO2 = { "United States":"US","United Kingdom":"GB","Germany":"DE","France":"FR","Israel":"IL","Ukraine":"UA","Poland":"PL","Netherlands":"NL","Sweden":"SE","Italy":"IT","Australia":"AU","Norway":"NO","Czechia":"CZ","Czech Republic":"CZ","China":"CN","Turkey":"TR","Türkiye":"TR","Iran":"IR","Russia":"RU","India":"IN","Japan":"JP","South Korea":"KR","Spain":"ES","Switzerland":"CH","Canada":"CA","Finland":"FI","Estonia":"EE","Latvia":"LV","Lithuania":"LT","Austria":"AT","Belgium":"BE","Denmark":"DK","Portugal":"PT","Greece":"GR","Romania":"RO","Bulgaria":"BG","Slovakia":"SK","Slovenia":"SI","Croatia":"HR","Serbia":"RS","United Arab Emirates":"AE","Saudi Arabia":"SA","South Africa":"ZA","Brazil":"BR","Taiwan":"TW","Singapore":"SG","New Zealand":"NZ","Ireland":"IE" };
-function geo(country) {
+function geoBadge(country) {
   const name = first(country) || "";
   const iso = ISO2[name];
-  if (!iso) return ["", (name || "—").slice(0, 14)];
-  const flag = String.fromCodePoint(...[...iso].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
-  return [flag, iso];
+  const code = iso || (name || "—").slice(0, 14);
+  const flag = iso ? String.fromCodePoint(...[...iso].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : "";
+  const ru = name === "Russia" ? " ru" : "";
+  return `<span class="geo-badge${ru}">${flag} ${esc(code)}</span>`;
 }
 
 // ---------- SVG art ----------
@@ -52,16 +65,10 @@ function schematicSVG(kind) {
   const cross = `<g stroke="rgba(255,255,255,.18)" stroke-width="1" fill="none"><circle cx="200" cy="140" r="108" stroke-dasharray="2 4"/><line x1="50" y1="140" x2="350" y2="140"/><line x1="200" y1="30" x2="200" y2="250"/></g>`;
   const s = 'stroke="currentColor" stroke-width="1.5" fill="none"';
   let body = "";
-  if (kind === "quad") {
-    body = `<g ${s}><line x1="130" y1="80" x2="270" y2="200"/><line x1="270" y1="80" x2="130" y2="200"/><rect x="182" y="122" width="36" height="36" rx="3"/>${[[130,80],[270,80],[130,200],[270,200]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="22"/><circle cx="${x}" cy="${y}" r="34" stroke-dasharray="1 3"/>`).join("")}<circle cx="200" cy="170" r="6" fill="currentColor"/></g>`;
-  } else if (kind === "hex") {
-    const pts = Array.from({length:6},(_,i)=>{const a=(i*60-90)*Math.PI/180;return [200+Math.cos(a)*88,140+Math.sin(a)*88];});
-    body = `<g ${s}>${pts.map(([x,y])=>`<line x1="200" y1="140" x2="${x}" y2="${y}"/><circle cx="${x}" cy="${y}" r="17"/>`).join("")}<polygon points="${Array.from({length:6},(_,i)=>{const a=i*60*Math.PI/180;return `${200+Math.cos(a)*26},${140+Math.sin(a)*26}`;}).join(" ")}"/></g>`;
-  } else if (kind === "vtol") {
-    body = `<g ${s}><ellipse cx="200" cy="145" rx="80" ry="13"/><path d="M170 133 L100 92 L82 94 L165 138 Z"/><path d="M230 133 L300 92 L318 94 L235 138 Z"/><path d="M170 157 L100 198 L82 196 L165 152 Z"/><path d="M230 157 L300 198 L318 196 L235 152 Z"/>${[[100,92],[300,92],[100,198],[300,198]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="15"/><circle cx="${x}" cy="${y}" r="26" stroke-dasharray="1 3"/>`).join("")}<rect x="172" y="138" width="56" height="14" rx="4"/></g>`;
-  } else { // fixed
-    body = `<g ${s}><path d="M90 140 L285 140 L312 145 L285 150 L90 150 Q72 145 90 140 Z"/><path d="M170 122 L232 62 L260 62 L220 126 Z"/><path d="M170 168 L232 228 L260 228 L220 164 Z"/><path d="M285 145 L322 116 L332 118 L298 148 Z"/><path d="M285 145 L322 174 L332 172 L298 142 Z"/><circle cx="100" cy="145" r="6" fill="currentColor"/><line x1="312" y1="135" x2="312" y2="155" stroke-width="2.5"/></g>`;
-  }
+  if (kind === "quad") body = `<g ${s}><line x1="130" y1="80" x2="270" y2="200"/><line x1="270" y1="80" x2="130" y2="200"/><rect x="182" y="122" width="36" height="36" rx="3"/>${[[130,80],[270,80],[130,200],[270,200]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="22"/><circle cx="${x}" cy="${y}" r="34" stroke-dasharray="1 3"/>`).join("")}<circle cx="200" cy="170" r="6" fill="currentColor"/></g>`;
+  else if (kind === "hex") { const pts = Array.from({length:6},(_,i)=>{const a=(i*60-90)*Math.PI/180;return [200+Math.cos(a)*88,140+Math.sin(a)*88];}); body = `<g ${s}>${pts.map(([x,y])=>`<line x1="200" y1="140" x2="${x}" y2="${y}"/><circle cx="${x}" cy="${y}" r="17"/>`).join("")}<polygon points="${Array.from({length:6},(_,i)=>{const a=i*60*Math.PI/180;return `${200+Math.cos(a)*26},${140+Math.sin(a)*26}`;}).join(" ")}"/></g>`; }
+  else if (kind === "vtol") body = `<g ${s}><ellipse cx="200" cy="145" rx="80" ry="13"/><path d="M170 133 L100 92 L82 94 L165 138 Z"/><path d="M230 133 L300 92 L318 94 L235 138 Z"/><path d="M170 157 L100 198 L82 196 L165 152 Z"/><path d="M230 157 L300 198 L318 196 L235 152 Z"/>${[[100,92],[300,92],[100,198],[300,198]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="15"/><circle cx="${x}" cy="${y}" r="26" stroke-dasharray="1 3"/>`).join("")}<rect x="172" y="138" width="56" height="14" rx="4"/></g>`;
+  else body = `<g ${s}><path d="M90 140 L285 140 L312 145 L285 150 L90 150 Q72 145 90 140 Z"/><path d="M170 122 L232 62 L260 62 L220 126 Z"/><path d="M170 168 L232 228 L260 228 L220 164 Z"/><path d="M285 145 L322 116 L332 118 L298 148 Z"/><path d="M285 145 L322 174 L332 172 L298 142 Z"/><circle cx="100" cy="145" r="6" fill="currentColor"/><line x1="312" y1="135" x2="312" y2="155" stroke-width="2.5"/></g>`;
   return `<svg class="art-svg" viewBox="0 0 400 280" width="100%" height="100%">${grid}${cross}${body}</svg>`;
 }
 function frameKind(frame) {
@@ -72,8 +79,7 @@ function frameKind(frame) {
   return "fixed";
 }
 function sensorKind(row) {
-  const sub = String(row.Subtype || "").toLowerCase();
-  const cat = String(row.Subcategory || "").toLowerCase();
+  const sub = String(row.Subtype || "").toLowerCase(), cat = String(row.Subcategory || "").toLowerCase();
   if (cat.includes("acoustic") || sub.includes("acoustic")) return "acoustic";
   if (cat.includes("rf") || sub.includes("rf")) return "rf";
   if (sub.includes("passive")) return "passive";
@@ -88,6 +94,7 @@ function sensorGlyph(kind) {
   if (kind === "eo") return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.4"><path d="M2 12 Q12 4 22 12 Q12 20 2 12 Z"/><circle cx="12" cy="12" r="3"/></svg>`;
   return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="${c}"/><line x1="12" y1="12" x2="20" y2="6.5"/></svg>`;
 }
+const CMP_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="5" height="10"/><rect x="9" y="5" width="5" height="8"/></svg>`;
 
 // ---------- cards ----------
 function statRow(lbl, v, max, unit) {
@@ -95,25 +102,28 @@ function statRow(lbl, v, max, unit) {
   const pct = na || !max ? 0 : Math.max(2, Math.min(100, (v / max) * 100));
   return `<div class="stat-row"><span class="lbl">${lbl}</span><div class="bar"><i style="width:${pct}%"></i></div><span class="val ${na ? "na" : ""}">${na ? "—" : v + unit}</span></div>`;
 }
+function cmpBtn(slug) {
+  const on = state.compare.includes(slug) ? " on" : "";
+  return `<button class="cmp-btn${on}" data-slug="${esc(slug)}" title="Add to compare" aria-label="Add to compare">${CMP_ICON}</button>`;
+}
 function uavCard(row) {
-  const conf = row.Confidence || "Medium";
   const frame = first(row["UAV · Frame type"]);
   const prod = first(row["UAV · Production status"]);
   const isProd = /produc/i.test(prod || "");
   const role = first(row["UAV · Role"]);
   const mtow = num(row["UAV · MTOW (kg)"]);
   const prop = first(row["UAV · Propulsion"]);
-  const [, code] = geo(row.Country);
-  return `<a class="card" href="/uav/${esc(row.slug)}/">
-    <div class="card-head"><span class="id">${esc(up(first(row.Subcategory)) || "UAV")}</span><span class="tier ${tierClass(conf)}">${esc(up(conf))} CONF</span></div>
+  const href = `/uav/${esc(row.slug)}/`;
+  return `<div class="card" data-href="${href}">
     <div class="card-art">
       ${row.Image ? `<img class="card-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : schematicSVG(frameKind(frame))}
       ${prod ? `<span class="status-flag ${isProd ? "PROD" : "OTHER"}">${esc(isProd ? "IN PROD" : up(prod))}</span>` : ""}
       <span class="art-tag">${esc(up(frameKind(frame)))}</span>
     </div>
     <div class="card-body">
-      <h3 class="card-name">${esc(row.Name || "Untitled")}</h3>
-      <div class="card-mfr">${esc(first(row.Company) || "")}${code ? " · " + esc(code) : ""}</div>
+      <div class="card-geo">${geoBadge(row.Country)}</div>
+      <a class="card-name" href="${href}">${esc(row.Name || "Untitled")}</a>
+      <div class="card-mfr">${esc(first(row.Company) || "")}</div>
       <div class="card-tags">${first(row.Subcategory) ? `<span class="tag">${esc(first(row.Subcategory))}</span>` : ""}${role ? `<span class="tag role">${esc(role)}</span>` : ""}${frame ? `<span class="tag">${esc(frame)}</span>` : ""}</div>
       <div class="stat-bars">
         ${statRow("RANGE", num(row["UAV · Range (km)"]), state.max.range, "km")}
@@ -122,8 +132,8 @@ function uavCard(row) {
         ${statRow("SPEED", num(row["UAV · Max speed (km/h)"]), state.max.speed, "k")}
       </div>
     </div>
-    <div class="card-footer"><div><div class="price">${mtow != null ? mtow + "kg" : "—"}</div><div class="lt">MTOW · ${esc(prop ? up(prop) : "—")}</div></div></div>
-  </a>`;
+    <div class="card-footer"><div><div class="price">${mtow != null ? mtow + "kg" : "—"}</div><div class="lt">MTOW · ${esc(prop ? up(prop) : "—")}</div></div>${cmpBtn(row.slug)}</div>
+  </div>`;
 }
 const SENSOR_SPEC_FIELDS = [
   ["Price", "Price", "price"],
@@ -134,15 +144,12 @@ const SENSOR_SPEC_FIELDS = [
   ["Acoustic · Type", "Type"],
   ["Radar · Architecture", "Architecture"],
   ["Form factor", "Form factor"],
-  ["Radar · Frequency (GHz)", "Frequency", "", " GHz"],
-  ["Notable partners", "Notable partners"],
 ];
 function sensorBlock(row, i) {
-  const conf = row.Confidence;
-  const [flag, code] = geo(row.Country);
   const why = whyText(row);
   const kind = sensorKind(row);
   const subtitle = [first(row.Subtype), first(row["Form factor"])].filter(Boolean).join(" · ");
+  const href = `/sensors/${esc(row.slug)}/`;
   const specs = [];
   for (const [field, lbl, cls, unit] of SENSOR_SPEC_FIELDS) {
     const v = row[field];
@@ -151,14 +158,15 @@ function sensorBlock(row, i) {
     specs.push(`<div><div class="lbl">${lbl}</div><div class="val ${cls || ""}">${esc(val)}</div></div>`);
     if (specs.length >= 6) break;
   }
-  return `<a class="sblock" href="/sensors/${esc(row.slug)}/">
-    <div class="sblock-top"><div class="sblock-num"><b>${String(i + 1).padStart(2, "0")}.</b> ${esc(up(first(row.Subcategory)) || "SENSOR")}${row.Subtype ? " · " + esc(up(first(row.Subtype))) : ""}</div><div class="sblock-geo">${flag} ${esc(code)}</div></div>
-    <div class="sblock-title"><div class="sblock-ic">${sensorGlyph(kind)}</div><div><h3 class="sblock-name">${esc(row.Name || "Untitled")}</h3><div class="sblock-sub">${esc(subtitle)}</div></div></div>
+  return `<div class="sblock" data-href="${href}">
+    <div class="sblock-top"><div class="sblock-num"><b>${String(i + 1).padStart(2, "0")}.</b> ${esc(up(first(row.Subcategory)) || "SENSOR")}${row.Subtype ? " · " + esc(up(first(row.Subtype))) : ""}</div>${geoBadge(row.Country)}</div>
+    <div class="sblock-title"><div class="sblock-ic">${sensorGlyph(kind)}</div><div><a class="sblock-name" href="${href}">${esc(row.Name || "Untitled")}</a><div class="sblock-sub">${esc(subtitle)}</div></div></div>
     ${row.Image ? `<img class="sblock-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : ""}
     <p class="sblock-summary clamp">${esc(row.Summary || "")}</p>
     ${why ? `<div class="why"><h6>WHY IT MATTERS</h6><p>${esc(why)}</p></div>` : ""}
     <div class="sblock-specs">${specs.join("")}</div>
-  </a>`;
+    <div class="sblock-foot">${cmpBtn(row.slug)}</div>
+  </div>`;
 }
 function card(row, i) {
   const wrap = document.createElement("div");
@@ -167,8 +175,67 @@ function card(row, i) {
   return wrap.firstElementChild;
 }
 
+// ---------- compare ----------
+let tray, modal;
+function buildCompareUI() {
+  tray = document.createElement("div");
+  tray.className = "cmp-tray";
+  tray.hidden = true;
+  document.body.appendChild(tray);
+  modal = document.createElement("div");
+  modal.className = "cmp-modal-bg";
+  modal.hidden = true;
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.hidden = true; });
+  document.body.appendChild(modal);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.hidden = true; });
+}
+function toggleCompare(slug) {
+  const i = state.compare.indexOf(slug);
+  if (i >= 0) state.compare.splice(i, 1);
+  else { if (state.compare.length >= 3) state.compare.shift(); state.compare.push(slug); }
+  // reflect button states without a full re-render
+  els.grid.querySelectorAll(".cmp-btn").forEach((b) => b.classList.toggle("on", state.compare.includes(b.dataset.slug)));
+  renderTray();
+}
+function renderTray() {
+  if (!state.compare.length) { tray.hidden = true; tray.innerHTML = ""; return; }
+  const slots = [0, 1, 2].map((i) => state.compare[i] ? rowBySlug(state.compare[i]) : null);
+  tray.hidden = false;
+  tray.innerHTML = `
+    <div class="cmp-h">${CMP_ICON} COMPARE <span>[${state.compare.length}/3]</span></div>
+    <div class="cmp-slots">${slots.map((r, i) => r
+      ? `<div class="cmp-slot filled"><span class="num">0${i+1}</span><span class="nm">${esc(r.Name || "")}</span><button class="cmp-x" data-slug="${esc(r.slug)}" aria-label="Remove">×</button></div>`
+      : `<div class="cmp-slot">// EMPTY</div>`).join("")}</div>
+    <div class="cmp-cta"><button class="btn" id="cmp-clear">CLEAR</button><button class="btn primary" id="cmp-run"${state.compare.length < 2 ? " disabled" : ""}>RUN COMPARE</button></div>`;
+  tray.querySelector("#cmp-clear").onclick = () => { state.compare = []; els.grid.querySelectorAll(".cmp-btn.on").forEach((b) => b.classList.remove("on")); renderTray(); };
+  tray.querySelector("#cmp-run").onclick = openCompare;
+  tray.querySelectorAll(".cmp-x").forEach((x) => x.onclick = () => toggleCompare(x.dataset.slug));
+}
+function openCompare() {
+  const rows = state.compare.map(rowBySlug).filter(Boolean);
+  if (rows.length < 2) return;
+  const fields = state.cfg.compare;
+  const best = {};
+  fields.forEach(([f, , type]) => { if (type === "num") { const vals = rows.map((r) => num(r[f])).filter((v) => v != null); best[f] = vals.length ? Math.max(...vals) : null; } });
+  const body = fields.map(([f, label, type, unit]) => {
+    const tds = rows.map((r) => {
+      const v = r[f]; const na = v == null || v === "";
+      const isBest = type === "num" && !na && best[f] != null && num(v) === best[f] && rows.length > 1;
+      const disp = na ? "—" : (type === "num" ? v + (unit || "") : asArray(v).join(", "));
+      return `<td class="${na ? "na" : ""} ${isBest ? "best" : ""}">${esc(disp)}</td>`;
+    }).join("");
+    return `<tr><th>${esc(label)}</th>${tds}</tr>`;
+  }).join("");
+  modal.innerHTML = `<div class="cmp-modal"><button class="cmp-close" aria-label="Close">×</button>
+    <h2>// COMPARE · ${rows.length} ${state.cat === "uav" ? "UNITS" : "SENSORS"}</h2>
+    <table class="cmp-table"><thead><tr><th>SPEC</th>${rows.map((r) => `<th>${esc(r.Name || "")}<span>${esc(first(r.Company) || "")}</span></th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+  modal.querySelector(".cmp-close").onclick = () => { modal.hidden = true; };
+  modal.hidden = false;
+}
+
 // ---------- boot / filters / render ----------
 async function boot() {
+  buildCompareUI();
   const meta = await fetch("data/meta.json").then((r) => r.json());
   if (els.meta) els.meta.textContent = `Updated ${new Date(meta.generatedAt).toLocaleDateString()}`;
   Object.keys(meta.categories).forEach((key, i) => {
@@ -178,6 +245,14 @@ async function boot() {
     b.onclick = () => selectCat(key, c.file, b);
     els.tabs.appendChild(b);
     if (i === 0) b.dataset.first = "1";
+  });
+  // grid click: compare button toggles; native links work; otherwise open the card's page
+  els.grid.addEventListener("click", (e) => {
+    const c = e.target.closest(".cmp-btn");
+    if (c) { e.preventDefault(); toggleCompare(c.dataset.slug); return; }
+    if (e.target.closest("a")) return;
+    const cardEl = e.target.closest("[data-href]");
+    if (cardEl) window.location.href = cardEl.dataset.href;
   });
   const f = els.tabs.querySelector("[data-first]");
   if (f) f.click();
@@ -189,6 +264,8 @@ async function selectCat(key, file, btn) {
   btn.classList.add("active");
   state.cat = key;
   state.cfg = CONFIG[key];
+  state.compare = [];
+  renderTray();
   state.rows = await fetch(file).then((r) => r.json());
   state.max = {
     range: Math.max(1, ...state.rows.map((r) => num(r["UAV · Range (km)"]) || 0)),
@@ -204,7 +281,6 @@ function resetFilters() {
   if (state.cfg) buildFacets();
   render();
 }
-// A collapsed-by-default filter group with an Expand/Hide toggle.
 function makeFacet(label) {
   const box = document.createElement("div");
   box.className = "facet collapsed";
@@ -214,12 +290,8 @@ function makeFacet(label) {
   head.innerHTML = `<span>${esc(label)}</span><span class="exp">Expand</span>`;
   const body = document.createElement("div");
   body.className = "facet-body";
-  head.addEventListener("click", () => {
-    const collapsed = box.classList.toggle("collapsed");
-    head.querySelector(".exp").textContent = collapsed ? "Expand" : "Hide";
-  });
-  box.appendChild(head);
-  box.appendChild(body);
+  head.addEventListener("click", () => { const collapsed = box.classList.toggle("collapsed"); head.querySelector(".exp").textContent = collapsed ? "Expand" : "Hide"; });
+  box.appendChild(head); box.appendChild(body);
   return { box, body };
 }
 function buildFacets() {
@@ -276,7 +348,6 @@ function render() {
   const list = state.rows.filter(matches).sort((a, b) => String(a.Name || "").localeCompare(String(b.Name || "")));
   els.grid.className = "grid " + state.cat;
   els.grid.innerHTML = "";
-  els.count.innerHTML = `<b>${list.length}</b> / ${state.rows.length} ${state.cat === "uav" ? "UNITS" : "SENSORS"}`;
   els.empty.hidden = list.length > 0;
   list.forEach((row, i) => els.grid.appendChild(card(row, i)));
 }
