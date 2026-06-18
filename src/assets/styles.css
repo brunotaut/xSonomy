@@ -63,11 +63,17 @@ a { color: var(--accent); text-decoration: none; }
   font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
 }
 .search-box input::placeholder { color: var(--ink-3); }
-.facet { margin-top: 22px; }
-.facet h4 {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
-  color: var(--ink-2); margin: 0 0 10px;
+.facet { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 14px; }
+.facet:first-of-type { border-top: none; }
+.facet-h {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: transparent; border: none; cursor: pointer; padding: 0;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: var(--ink-2);
 }
+.facet-h:hover { color: var(--ink-0); }
+.facet-h .exp { font-size: 9px; letter-spacing: .12em; color: var(--accent); }
+.facet-body { margin-top: 10px; }
+.facet.collapsed .facet-body { display: none; }
 .facet label {
   display: flex; align-items: center; gap: 8px; padding: 4px 0;
   font-family: var(--mono); font-size: 11px; color: var(--ink-1); cursor: pointer; letter-spacing: .04em;
@@ -99,8 +105,8 @@ a { color: var(--accent); text-decoration: none; }
 /* ---------- Grid ---------- */
 .grid { display: grid; gap: 14px; }
 .grid.uav { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-.grid.sensors { grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); }
-@media (max-width: 1080px) { .grid.sensors { grid-template-columns: 1fr; } }
+.grid.sensors { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) { .grid.sensors { grid-template-columns: 1fr; } }
 
 /* ---------- UAV card (hangar) ---------- */
 .card {

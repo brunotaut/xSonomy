@@ -204,6 +204,24 @@ function resetFilters() {
   if (state.cfg) buildFacets();
   render();
 }
+// A collapsed-by-default filter group with an Expand/Hide toggle.
+function makeFacet(label) {
+  const box = document.createElement("div");
+  box.className = "facet collapsed";
+  const head = document.createElement("button");
+  head.type = "button";
+  head.className = "facet-h";
+  head.innerHTML = `<span>${esc(label)}</span><span class="exp">Expand</span>`;
+  const body = document.createElement("div");
+  body.className = "facet-body";
+  head.addEventListener("click", () => {
+    const collapsed = box.classList.toggle("collapsed");
+    head.querySelector(".exp").textContent = collapsed ? "Expand" : "Hide";
+  });
+  box.appendChild(head);
+  box.appendChild(body);
+  return { box, body };
+}
 function buildFacets() {
   const { selects, ranges } = state.cfg;
   els.facets.innerHTML = "";
@@ -211,9 +229,7 @@ function buildFacets() {
     const counts = new Map();
     for (const row of state.rows) for (const val of asArray(row[field])) counts.set(val, (counts.get(val) || 0) + 1);
     if (counts.size === 0) continue;
-    const box = document.createElement("div");
-    box.className = "facet";
-    box.innerHTML = `<h4>${esc(field.replace(/^.*· /, ""))}</h4>`;
+    const { box, body } = makeFacet(field.replace(/^.*· /, ""));
     [...counts.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0]))).forEach(([val, n]) => {
       const label = document.createElement("label");
       label.innerHTML = `<input type="checkbox" /> <span>${esc(val)}</span><span class="n">${n}</span>`;
@@ -223,7 +239,7 @@ function buildFacets() {
         if (set.size === 0) delete state.filters.selects[field];
         render();
       });
-      box.appendChild(label);
+      body.appendChild(label);
     });
     els.facets.appendChild(box);
   }
@@ -231,11 +247,10 @@ function buildFacets() {
     const nums = state.rows.map((r) => r[field]).filter((v) => typeof v === "number");
     if (nums.length === 0) continue;
     const lo = Math.min(...nums), hi = Math.max(...nums);
-    const box = document.createElement("div");
-    box.className = "facet";
-    box.innerHTML = `<h4>${esc(field.replace(/^.*· /, ""))}</h4><div class="range"><input type="number" placeholder="${lo}" data-b="min"/><span>–</span><input type="number" placeholder="${hi}" data-b="max"/></div>`;
-    box.querySelectorAll("input").forEach((inp) => inp.addEventListener("input", () => {
-      const mn = box.querySelector('[data-b="min"]').value, mx = box.querySelector('[data-b="max"]').value;
+    const { box, body } = makeFacet(field.replace(/^.*· /, ""));
+    body.innerHTML = `<div class="range"><input type="number" placeholder="${lo}" data-b="min"/><span>–</span><input type="number" placeholder="${hi}" data-b="max"/></div>`;
+    body.querySelectorAll("input").forEach((inp) => inp.addEventListener("input", () => {
+      const mn = body.querySelector('[data-b="min"]').value, mx = body.querySelector('[data-b="max"]').value;
       state.filters.ranges[field] = { min: mn === "" ? null : +mn, max: mx === "" ? null : +mx };
       render();
     }));
