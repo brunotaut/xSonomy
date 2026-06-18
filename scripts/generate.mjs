@@ -120,29 +120,70 @@ async function attachImage(rawFields, row) {
 
 // ---- static product page (SEO) ----
 const PAGE_CSS = `
-:root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--text:#e6e8ec;--muted:#9aa3b2;--accent:#5b9dff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#ff7a1a;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Oswald",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.hd{border-bottom:1px solid var(--line);background:var(--panel)}
-.hd .w{max-width:920px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between}
-.hd .brand{font-weight:700;letter-spacing:.5px;color:var(--text)}
-.hd .back{color:var(--muted);font-size:14px}
+.hd{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg))}
+.hd .w{max-width:920px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.hd .brand{font-family:var(--display);font-size:19px;letter-spacing:.22em;color:var(--text)}
+.hd .back{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .wrap{max-width:920px;margin:0 auto;padding:28px 20px 80px}
-.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent)}
-h1{font-size:34px;line-height:1.15;margin:6px 0 4px}
-.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
-.hero{width:100%;max-height:430px;object-fit:cover;border:1px solid var(--line);border-radius:10px;margin-bottom:24px;background:var(--panel2)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-size:42px;line-height:1.02;letter-spacing:.03em;text-transform:uppercase;margin:8px 0 4px}
+.sub{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--muted);margin-bottom:24px}
+.hero{width:100%;max-height:440px;object-fit:cover;border:1px solid var(--line);margin-bottom:24px;background:var(--panel2)}
+.art{position:relative;border:1px solid var(--line);background:radial-gradient(ellipse at center,var(--panel2),var(--panel) 70%);aspect-ratio:16 / 7;margin-bottom:24px;color:var(--accent);display:grid;place-items:center;overflow:hidden}
+.art .art-svg{position:absolute;inset:0}
 .lead{font-size:16px;color:#c4cad4;margin:0 0 22px}
-.why{border-left:3px solid #654;background:var(--panel2);padding:13px 16px;border-radius:4px;color:#c9b27a;font-size:14px;margin:0 0 24px}
-.why b{display:block;color:var(--accent);font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
-th{color:var(--muted);font-weight:500;width:42%}
+.why{border-left:3px solid var(--accent);background:var(--panel2);padding:14px 18px;color:var(--text);font-size:14px;margin:0 0 24px}
+.why b{font-family:var(--mono);display:block;color:var(--accent);font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;border:1px solid var(--line)}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+th{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:400;width:40%}
 .cta{margin:26px 0}
-.btn{display:inline-block;padding:9px 16px;border-radius:8px;font-weight:600}
-.btn.p{background:var(--accent);color:#06101f}.btn.p:hover{text-decoration:none}
-.note{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12px;line-height:1.7}
+.btn{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:11px 16px;border:1px solid var(--line);color:var(--text)}
+.btn:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.btn.p{background:var(--accent);color:#0a0d10;border-color:var(--accent)}.btn.p:hover{color:#0a0d10}
+.note{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.04em;line-height:1.7;border-top:1px solid var(--line);padding-top:16px;margin-top:30px}
+.note a{color:var(--muted)}
+@media(max-width:620px){h1{font-size:32px}}
 `;
+
+// Schematic / glyph art (string SVG) for detail-page hero when there's no photo.
+function dFrameKind(frame) {
+  const f = String(frame || "").toLowerCase();
+  if (f.includes("vtol") || f.includes("tiltrotor") || f.includes("tailsitter") || f.includes("hybrid")) return "vtol";
+  if (f.includes("quad")) return "quad";
+  if (f.includes("hexa") || f.includes("octo") || f.includes("multirotor") || f.includes("helicopter") || f.includes("rotor")) return "hex";
+  return "fixed";
+}
+function dSchematic(kind) {
+  const s = 'stroke="currentColor" stroke-width="1.5" fill="none"';
+  const grid = `<g opacity=".5">${[1,2,3,4,5,6,7].map(i=>`<line x1="${i*50}" y1="0" x2="${i*50}" y2="280" stroke="rgba(255,255,255,.05)"/>`).join("")}</g>`;
+  const cross = `<g stroke="rgba(255,255,255,.18)" fill="none"><circle cx="200" cy="140" r="108" stroke-dasharray="2 4"/><line x1="50" y1="140" x2="350" y2="140"/></g>`;
+  let body;
+  if (kind === "quad") body = `<g ${s}><line x1="130" y1="80" x2="270" y2="200"/><line x1="270" y1="80" x2="130" y2="200"/><rect x="182" y="122" width="36" height="36" rx="3"/>${[[130,80],[270,80],[130,200],[270,200]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="22"/>`).join("")}</g>`;
+  else if (kind === "hex") { const p=Array.from({length:6},(_,i)=>{const a=(i*60-90)*Math.PI/180;return [200+Math.cos(a)*88,140+Math.sin(a)*88];}); body=`<g ${s}>${p.map(([x,y])=>`<line x1="200" y1="140" x2="${x}" y2="${y}"/><circle cx="${x}" cy="${y}" r="17"/>`).join("")}</g>`; }
+  else if (kind === "vtol") body = `<g ${s}><ellipse cx="200" cy="145" rx="80" ry="13"/><path d="M170 133 L100 92 L82 94 L165 138 Z"/><path d="M230 133 L300 92 L318 94 L235 138 Z"/><path d="M170 157 L100 198 L82 196 L165 152 Z"/><path d="M230 157 L300 198 L318 196 L235 152 Z"/>${[[100,92],[300,92],[100,198],[300,198]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="15"/>`).join("")}</g>`;
+  else body = `<g ${s}><path d="M90 140 L285 140 L312 145 L285 150 L90 150 Q72 145 90 140 Z"/><path d="M170 122 L232 62 L260 62 L220 126 Z"/><path d="M170 168 L232 228 L260 228 L220 164 Z"/><path d="M285 145 L322 116 L332 118 L298 148 Z"/><path d="M285 145 L322 174 L332 172 L298 142 Z"/></g>`;
+  return `<svg class="art-svg" viewBox="0 0 400 280" width="100%" height="100%">${grid}${cross}${body}</svg>`;
+}
+function dSensorKind(row) {
+  const sub = String(row.Subtype || "").toLowerCase(), cat = String(row.Subcategory || "").toLowerCase();
+  if (cat.includes("acoustic") || sub.includes("acoustic")) return "acoustic";
+  if (cat.includes("rf") || sub.includes("rf")) return "rf";
+  if (sub.includes("passive")) return "passive";
+  if (cat.includes("eo") || sub.includes("optical") || sub.includes("eo")) return "eo";
+  return "radar";
+}
+function dGlyph(kind) {
+  const c = "currentColor", w = 'width="120" height="120"';
+  if (kind === "acoustic") return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><circle cx="7.5" cy="12" r="2.2" fill="${c}"/><path d="M12 8 Q15 12 12 16"/><path d="M15.5 6 Q20 12 15.5 18"/></svg>`;
+  if (kind === "rf") return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><line x1="4" y1="18.5" x2="20" y2="18.5"/><rect x="5.5" y="12" width="2.4" height="6.5" fill="${c}" stroke="none"/><rect x="10" y="8" width="2.4" height="10.5" fill="${c}" stroke="none"/><rect x="14.5" y="10.5" width="2.4" height="8" fill="${c}" stroke="none"/></svg>`;
+  if (kind === "passive") return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><line x1="12" y1="20" x2="12" y2="9"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/></svg>`;
+  if (kind === "eo") return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><path d="M2 12 Q12 4 22 12 Q12 20 2 12 Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="${c}"/><line x1="12" y1="12" x2="20" y2="6.5"/></svg>`;
+}
 
 function productPage(bucket, row) {
   const slug = row.slug;
@@ -179,6 +220,8 @@ function productPage(bucket, row) {
 <meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${url}">${imgAbs ? `\n<meta property="og:image" content="${imgAbs}">` : ""}
 <meta name="twitter:card" content="${imgAbs ? "summary_large_image" : "summary"}">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}</style>
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
 </head><body>
@@ -187,7 +230,9 @@ function productPage(bucket, row) {
 <div class="kicker">${esc(kicker)}</div>
 <h1>${esc(name)}</h1>
 <div class="sub">${esc([company, country].filter(Boolean).join(" · "))}</div>
-${imgRel ? `<img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">` : ""}
+${imgRel
+  ? `<img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">`
+  : `<div class="art">${bucket === "uav" ? dSchematic(dFrameKind(row["UAV · Frame type"])) : dGlyph(dSensorKind(row))}</div>`}
 ${row.Summary ? `<p class="lead">${esc(row.Summary)}</p>` : ""}
 ${why ? `<div class="why"><b>Why it matters</b>${esc(why)}</div>` : ""}
 <table><tbody>${specRows}</tbody></table>
