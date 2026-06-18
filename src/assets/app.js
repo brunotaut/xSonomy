@@ -276,7 +276,7 @@ async function selectCat(key, file, btn) {
   resetFilters();
 }
 function resetFilters() {
-  state.filters = { search: "", selects: {}, ranges: {} };
+  state.filters = { search: "", selects: {}, ranges: {}, showRussian: false };
   els.search.value = "";
   if (state.cfg) buildFacets();
   render();
@@ -328,9 +328,18 @@ function buildFacets() {
     }));
     els.facets.appendChild(box);
   }
+  // Bottom-of-filters toggle: Russian products are hidden by default.
+  const rb = document.createElement("label");
+  rb.className = "russia-toggle";
+  rb.innerHTML = `<input type="checkbox" /> <span>Russian products</span>`;
+  const cb = rb.querySelector("input");
+  cb.checked = state.filters.showRussian;
+  cb.addEventListener("change", (e) => { state.filters.showRussian = e.target.checked; render(); });
+  els.facets.appendChild(rb);
 }
 function matches(row) {
   const f = state.filters;
+  if (!f.showRussian && first(row.Country) === "Russia") return false;   // Russian products hidden unless opted in
   if (f.search) {
     const hay = state.cfg.search.map((k) => asArray(row[k]).join(" ")).join(" ").toLowerCase();
     if (!hay.includes(f.search)) return false;
