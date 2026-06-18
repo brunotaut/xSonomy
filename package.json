@@ -1,0 +1,13 @@
+{
+  "name": "xsonomy-catalogue",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "xSonomy Stage 1 catalogue — static site generated from Airtable, hosted on GitHub Pages.",
+  "scripts": {
+    "build": "node scripts/generate.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

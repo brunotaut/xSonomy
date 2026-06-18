@@ -1,13 +1,12 @@
-name: Build & publish catalogue
+name: Build & deploy catalogue
 
 on:
+  workflow_dispatch: {}          # run manually from the Actions tab
   schedule:
-    - cron: "0 5 * * *"        # daily at 05:00 UTC — pulls latest Airtable data
-  workflow_dispatch: {}         # manual run from the Actions tab
+    - cron: "0 6 * * *"          # daily at 06:00 UTC — publishes newly-Live rows
   push:
-    branches: [ main ]          # rebuild on any push to main
+    branches: [main]             # rebuild when the site code changes
 
-# Publish to GitHub Pages as an artifact (the site is built here, not committed).
 permissions:
   contents: read
   pages: write
@@ -15,33 +14,24 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Build index.html (+ download images) from Airtable
+      - name: Generate static site from Airtable
+        run: npm run build
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: node build/build.mjs
-
-      - name: Assemble site
-        run: |
-          rm -rf _site && mkdir -p _site
-          cp index.html _site/index.html
-          [ -d images ] && cp -r images _site/images || true
-          echo "xsonomy.com" > _site/CNAME
-
+          AIRTABLE_BASE_ID: appwMCCtt57i8SNbR
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: public
 
   deploy:
     needs: build

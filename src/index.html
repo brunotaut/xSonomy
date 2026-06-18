@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>xSonomy — Autonomous & Counter-UAS Catalogue</title>
+  <meta name="description" content="A searchable catalogue of UAVs and counter-UAS detection sensors — specifications, manufacturers, and sources." />
+  <link rel="canonical" href="https://xsonomy.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="xSonomy" />
+  <meta property="og:title" content="xSonomy — Autonomous & Counter-UAS Catalogue" />
+  <meta property="og:description" content="Searchable catalogue of UAVs and counter-UAS detection sensors — specs, manufacturers, sources." />
+  <meta property="og:url" content="https://xsonomy.com/" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">xSonomy</div>
+      <nav id="tabs" class="tabs" aria-label="Categories"></nav>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <aside class="filters" id="filters" aria-label="Filters">
+      <div class="search-box">
+        <input id="search" type="search" placeholder="Search name, company, summary…" autocomplete="off" />
+      </div>
+      <div id="facets"></div>
+      <button id="reset" class="reset" type="button">Reset filters</button>
+    </aside>
+
+    <section class="results">
+      <div class="results-bar">
+        <span id="count" class="count"></span>
+      </div>
+      <div id="grid" class="grid"></div>
+      <p id="empty" class="empty" hidden>No products match these filters.</p>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <nav class="product-index" aria-label="All products">
+    <div class="wrap">
+      <h2>All products</h2>
+      <div class="links"><!--PRODUCT_INDEX--></div>
+    </div>
+  </nav>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span id="meta"></span>
+      <span>Stage 1 catalogue · data in Airtable · built to GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
