@@ -1,35 +1,68 @@
 // xSonomy catalogue — client-side search / filter / render over generated JSON.
-// Hangar aesthetic: UAV "loadout" cards + sensor info-blocks, with a compare tray.
+// UAV "loadout" cards + sensor info-blocks, compare tray, and (for Sensors) four
+// subcategory sub-tabs in the sidebar, each with its own filters.
 // Cards link to static per-product pages. Data is keyed by Airtable field names.
 
-const CONFIG = {
-  uav: {
-    search: ["Name", "Company", "Summary", "Subtype"],
-    selects: ["Subcategory", "Country", "UAV · Role", "UAV · Class", "UAV · Propulsion", "UAV · Combat-proven"],
-    ranges: ["UAV · MTOW (kg)", "UAV · Endurance (min)", "UAV · Range (km)", "UAV · Max speed (km/h)"],
-    compare: [
-      ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
-      ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
-      ["UAV · Max payload (kg)", "Max payload", "num", " kg"], ["UAV · Max speed (km/h)", "Max speed", "num", " km/h"],
-      ["UAV · MTOW (kg)", "MTOW", "num", " kg"], ["UAV · Propulsion", "Propulsion"],
-      ["UAV · Combat-proven", "Combat-proven"], ["Confidence", "Confidence"],
-    ],
-  },
-  sensors: {
-    search: ["Name", "Company", "Summary", "Subtype"],
-    selects: ["Subcategory", "Country", "Subtype", "Radar · Band", "Radar · Coverage", "Radar · Use", "Acoustic · Type", "Acoustic · Coverage"],
-    ranges: ["Radar · Detection range (km)", "Acoustic · Detection range (km)"],
-    compare: [
-      ["Subcategory", "Subcategory"], ["Subtype", "Subtype"], ["Country", "Country"],
-      ["Radar · Band", "Band"], ["Radar · Detection range (km)", "Detection range", "num", " km"],
-      ["Radar · Coverage", "Coverage"], ["Radar · Frequency (GHz)", "Frequency"],
-      ["Acoustic · Detection range (km)", "Acoustic range", "num", " km"], ["Price", "Price"], ["Confidence", "Confidence"],
-    ],
-  },
+const UAV_CFG = {
+  search: ["Name", "Company", "Summary", "Subtype"],
+  selects: ["Subcategory", "Country", "UAV · Role", "UAV · Class", "UAV · Propulsion", "UAV · Combat-proven"],
+  ranges: ["UAV · MTOW (kg)", "UAV · Endurance (min)", "UAV · Range (km)", "UAV · Max speed (km/h)"],
+  compare: [
+    ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
+    ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
+    ["UAV · Max payload (kg)", "Max payload", "num", " kg"], ["UAV · Max speed (km/h)", "Max speed", "num", " km/h"],
+    ["UAV · MTOW (kg)", "MTOW", "num", " kg"], ["UAV · Propulsion", "Propulsion"],
+    ["UAV · Combat-proven", "Combat-proven"], ["Confidence", "Confidence"],
+  ],
 };
+
+// Sensor subcategory tabs (shown in the sidebar). Each is its own page with its own
+// filters. Only fields that exist in Airtable render — more appear automatically as
+// the schema is filled in.
+// Sensor subcategory tabs — each its own page with shared + category-specific filters,
+// wired to the Airtable field names. Empty fields auto-hide until populated.
+const SENSOR_TABS = [
+  { key: "radar", label: "Radar", match: (s) => first(s.Subcategory) === "Radar",
+    cfg: {
+      search: ["Name", "Company", "Summary", "Subtype"],
+      selects: ["Use class", "Radar · Type", "Radar · Band", "Radar · Coverage", "Radar · Scan type", "Radar · Use", "Radar · Micro-Doppler", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"],
+      ranges: ["Radar · Detection range (km)", "Radar · Min RCS (m²)", "Radar · Min radial velocity (m/s)", "Radar · Track capacity", "Radar · Weight (kg)"],
+      compare: [["Use class", "Class"], ["Country", "Country"], ["Radar · Band", "Band"], ["Radar · Detection range (km)", "Detection range", "num", " km"], ["Radar · Min RCS (m²)", "Min RCS", "num", " m²"], ["Radar · Coverage", "Coverage"], ["Radar · Scan type", "Scan type"], ["Sensor · Active/Passive", "Active/Passive"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
+    },
+    cardFields: [["Radar · Min RCS (m²)", "Min RCS", " m²"], ["Radar · Range vs RCS / target class", "Range vs RCS"], ["Radar · Coverage", "Coverage"], ["Radar · Band", "Band"]],
+  },
+  { key: "thermal", label: "Thermal / EO-IR", match: (s) => ["EO/IR cameras", "Thermal"].includes(first(s.Subcategory)),
+    cfg: {
+      search: ["Name", "Company", "Summary", "Subtype"],
+      selects: ["Use class", "EO/IR · Spectral band", "EO/IR · Cooled/uncooled", "EO/IR · Stabilisation", "EO/IR · AI classification / TWS", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Price band", "Country", "Subtype"],
+      ranges: ["Sensor · Detection range (km)"],
+      compare: [["Use class", "Class"], ["Country", "Country"], ["EO/IR · Spectral band", "Spectral band"], ["EO/IR · DRI ranges", "DRI ranges"], ["EO/IR · Cooled/uncooled", "Cooled/uncooled"], ["EO/IR · Resolution (px)", "Resolution"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
+    },
+    cardFields: [["EO/IR · DRI ranges", "DRI ranges"], ["EO/IR · Spectral band", "Spectral band"], ["EO/IR · Resolution (px)", "Resolution"], ["EO/IR · FoV / focal length", "FoV / focal length"]],
+  },
+  { key: "acoustic", label: "Acoustic", match: (s) => first(s.Subcategory) === "Acoustic",
+    cfg: {
+      search: ["Name", "Company", "Summary", "Subtype"],
+      selects: ["Use class", "Acoustic · Type", "Acoustic · Coverage", "Acoustic · Localisation mode", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Price band", "Country", "Subtype"],
+      ranges: ["Acoustic · Detection range (km)"],
+      compare: [["Use class", "Class"], ["Country", "Country"], ["Acoustic · Type", "Type"], ["Acoustic · Detection range (km)", "Detection range", "num", " km"], ["Acoustic · Coverage", "Coverage"], ["Acoustic · Localisation mode", "Localisation"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
+    },
+    cardFields: [["Acoustic · Detection range (km)", "Detection range", " km"], ["Acoustic · Array config", "Array config"], ["Acoustic · DoA accuracy", "DoA accuracy"], ["Acoustic · Localisation mode", "Localisation"]],
+  },
+  { key: "rf", label: "RF", match: (s) => first(s.Subcategory) === "RF detection",
+    cfg: {
+      search: ["Name", "Company", "Summary", "Subtype"],
+      selects: ["Use class", "RF · Detection mode", "RF · Blind to RF-silent / autonomous", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"],
+      ranges: ["RF · Simultaneous tracks", "Sensor · Detection range (km)"],
+      compare: [["Use class", "Class"], ["Country", "Country"], ["RF · Frequency coverage", "Frequency coverage"], ["RF · Detection mode", "Detection mode"], ["RF · Simultaneous tracks", "Simultaneous tracks", "num"], ["RF · Sensitivity (dBm)", "Sensitivity"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
+    },
+    cardFields: [["RF · Frequency coverage", "Frequency coverage"], ["RF · Detection mode", "Detection mode"], ["RF · Protocol/signal library", "Protocol / library"], ["Sensor · Detection range (km)", "Detection range", " km"]],
+  },
+];
 
 const els = {
   tabs: document.getElementById("tabs"),
+  subtabs: document.getElementById("subtabs"),
   facets: document.getElementById("facets"),
   search: document.getElementById("search"),
   reset: document.getElementById("reset"),
@@ -38,7 +71,7 @@ const els = {
   meta: document.getElementById("meta"),
 };
 
-const state = { cat: null, rows: [], cfg: null, filters: null, max: {}, compare: [] };
+const state = { cat: null, subKey: null, rows: [], allSensors: [], cfg: null, cardFields: null, filters: null, max: {}, compare: [] };
 
 // ---------- helpers ----------
 const asArray = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]);
@@ -83,7 +116,7 @@ function sensorKind(row) {
   if (cat.includes("acoustic") || sub.includes("acoustic")) return "acoustic";
   if (cat.includes("rf") || sub.includes("rf")) return "rf";
   if (sub.includes("passive")) return "passive";
-  if (cat.includes("eo") || sub.includes("optical") || sub.includes("eo")) return "eo";
+  if (cat.includes("eo") || cat.includes("thermal") || sub.includes("optical") || sub.includes("eo") || sub.includes("thermal")) return "eo";
   return "radar";
 }
 function sensorGlyph(kind) {
@@ -135,28 +168,25 @@ function uavCard(row) {
     <div class="card-footer"><div><div class="price">${mtow != null ? mtow + "kg" : "—"}</div><div class="lt">MTOW · ${esc(prop ? up(prop) : "—")}</div></div>${cmpBtn(row.slug)}</div>
   </div>`;
 }
-const SENSOR_SPEC_FIELDS = [
-  ["Price", "Price", "price"],
-  ["Radar · Detection range (km)", "Detection range", "", "km"],
-  ["Radar · Band", "Band"],
-  ["Radar · Coverage", "Coverage"],
-  ["Acoustic · Detection range (km)", "Detection range", "", "km"],
-  ["Acoustic · Type", "Type"],
-  ["Radar · Architecture", "Architecture"],
-  ["Form factor", "Form factor"],
-];
 function sensorBlock(row, i) {
   const why = whyText(row);
   const kind = sensorKind(row);
   const subtitle = [first(row.Subtype), first(row["Form factor"])].filter(Boolean).join(" · ");
   const href = `/sensors/${esc(row.slug)}/`;
-  const specs = [];
-  for (const [field, lbl, cls, unit] of SENSOR_SPEC_FIELDS) {
+  // Card shows: Sensor class, Price band, + first 4 category fields (that exist).
+  const cls = first(row["Use class"]) || first(row.Subcategory) || "—";
+  const priceBand = first(row["Sensor · Price band"]) || row.Price || "";
+  const specs = [
+    `<div><div class="lbl">Class</div><div class="val">${esc(cls)}</div></div>`,
+    `<div><div class="lbl">Price band</div><div class="val ${priceBand ? "price" : "na"}">${esc(priceBand || "—")}</div></div>`,
+  ];
+  let added = 0;
+  for (const [field, label, unit] of (state.cardFields || [])) {
     const v = row[field];
     if (v == null || v === "") continue;
     const val = unit ? v + unit : asArray(v).join(", ");
-    specs.push(`<div><div class="lbl">${lbl}</div><div class="val ${cls || ""}">${esc(val)}</div></div>`);
-    if (specs.length >= 6) break;
+    specs.push(`<div><div class="lbl">${esc(label)}</div><div class="val">${esc(val)}</div></div>`);
+    if (++added >= 4) break;
   }
   return `<div class="sblock" data-href="${href}">
     <div class="sblock-top"><div class="sblock-num"><b>${String(i + 1).padStart(2, "0")}.</b> ${esc(up(first(row.Subcategory)) || "SENSOR")}${row.Subtype ? " · " + esc(up(first(row.Subtype))) : ""}</div>${geoBadge(row.Country)}</div>
@@ -178,13 +208,8 @@ function card(row, i) {
 // ---------- compare ----------
 let tray, modal;
 function buildCompareUI() {
-  tray = document.createElement("div");
-  tray.className = "cmp-tray";
-  tray.hidden = true;
-  document.body.appendChild(tray);
-  modal = document.createElement("div");
-  modal.className = "cmp-modal-bg";
-  modal.hidden = true;
+  tray = document.createElement("div"); tray.className = "cmp-tray"; tray.hidden = true; document.body.appendChild(tray);
+  modal = document.createElement("div"); modal.className = "cmp-modal-bg"; modal.hidden = true;
   modal.addEventListener("click", (e) => { if (e.target === modal) modal.hidden = true; });
   document.body.appendChild(modal);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.hidden = true; });
@@ -193,7 +218,6 @@ function toggleCompare(slug) {
   const i = state.compare.indexOf(slug);
   if (i >= 0) state.compare.splice(i, 1);
   else { if (state.compare.length >= 3) state.compare.shift(); state.compare.push(slug); }
-  // reflect button states without a full re-render
   els.grid.querySelectorAll(".cmp-btn").forEach((b) => b.classList.toggle("on", state.compare.includes(b.dataset.slug)));
   renderTray();
 }
@@ -233,7 +257,7 @@ function openCompare() {
   modal.hidden = false;
 }
 
-// ---------- boot / filters / render ----------
+// ---------- boot / tabs / filters / render ----------
 async function boot() {
   buildCompareUI();
   const meta = await fetch("data/meta.json").then((r) => r.json());
@@ -246,7 +270,6 @@ async function boot() {
     els.tabs.appendChild(b);
     if (i === 0) b.dataset.first = "1";
   });
-  // grid click: compare button toggles; native links work; otherwise open the card's page
   els.grid.addEventListener("click", (e) => {
     const c = e.target.closest(".cmp-btn");
     if (c) { e.preventDefault(); toggleCompare(c.dataset.slug); return; }
@@ -263,16 +286,47 @@ async function selectCat(key, file, btn) {
   [...els.tabs.children].forEach((c) => c.classList.remove("active"));
   btn.classList.add("active");
   state.cat = key;
-  state.cfg = CONFIG[key];
-  state.compare = [];
-  renderTray();
-  state.rows = await fetch(file).then((r) => r.json());
-  state.max = {
-    range: Math.max(1, ...state.rows.map((r) => num(r["UAV · Range (km)"]) || 0)),
-    endurance: Math.max(1, ...state.rows.map((r) => num(r["UAV · Endurance (min)"]) || 0)),
-    payload: Math.max(1, ...state.rows.map((r) => num(r["UAV · Max payload (kg)"]) || 0)),
-    speed: Math.max(1, ...state.rows.map((r) => num(r["UAV · Max speed (km/h)"]) || 0)),
-  };
+  state.compare = []; renderTray();
+  const data = await fetch(file).then((r) => r.json());
+  if (key === "sensors") {
+    state.allSensors = data;
+    state.subKey = "radar";
+    buildSubtabs();
+    selectSub("radar");
+  } else {
+    els.subtabs.innerHTML = "";
+    state.cfg = UAV_CFG;
+    state.cardFields = null;
+    state.rows = data;
+    state.max = {
+      range: Math.max(1, ...data.map((r) => num(r["UAV · Range (km)"]) || 0)),
+      endurance: Math.max(1, ...data.map((r) => num(r["UAV · Endurance (min)"]) || 0)),
+      payload: Math.max(1, ...data.map((r) => num(r["UAV · Max payload (kg)"]) || 0)),
+      speed: Math.max(1, ...data.map((r) => num(r["UAV · Max speed (km/h)"]) || 0)),
+    };
+    resetFilters();
+  }
+}
+function buildSubtabs() {
+  els.subtabs.innerHTML = "";
+  if (state.cat !== "sensors") return;
+  SENSOR_TABS.forEach((t) => {
+    const n = state.allSensors.filter(t.match).length;
+    const b = document.createElement("button");
+    b.innerHTML = `${t.label}<span class="n">${n}</span>`;
+    b.classList.toggle("active", t.key === state.subKey);
+    b.onclick = () => selectSub(t.key);
+    els.subtabs.appendChild(b);
+  });
+}
+function selectSub(key) {
+  state.subKey = key;
+  const t = SENSOR_TABS.find((x) => x.key === key) || SENSOR_TABS[0];
+  state.cfg = t.cfg;
+  state.cardFields = t.cardFields;
+  state.rows = state.allSensors.filter(t.match);
+  state.compare = []; renderTray();
+  buildSubtabs();
   resetFilters();
 }
 function resetFilters() {
@@ -285,11 +339,9 @@ function makeFacet(label) {
   const box = document.createElement("div");
   box.className = "facet collapsed";
   const head = document.createElement("button");
-  head.type = "button";
-  head.className = "facet-h";
+  head.type = "button"; head.className = "facet-h";
   head.innerHTML = `<span>${esc(label)}</span><span class="exp">Expand</span>`;
-  const body = document.createElement("div");
-  body.className = "facet-body";
+  const body = document.createElement("div"); body.className = "facet-body";
   head.addEventListener("click", () => { const collapsed = box.classList.toggle("collapsed"); head.querySelector(".exp").textContent = collapsed ? "Expand" : "Hide"; });
   box.appendChild(head); box.appendChild(body);
   return { box, body };
@@ -328,18 +380,16 @@ function buildFacets() {
     }));
     els.facets.appendChild(box);
   }
-  // Bottom-of-filters toggle: Russian products are hidden by default.
   const rb = document.createElement("label");
   rb.className = "russia-toggle";
   rb.innerHTML = `<input type="checkbox" /> <span>Russian products</span>`;
-  const cb = rb.querySelector("input");
-  cb.checked = state.filters.showRussian;
-  cb.addEventListener("change", (e) => { state.filters.showRussian = e.target.checked; render(); });
+  rb.querySelector("input").checked = state.filters.showRussian;
+  rb.querySelector("input").addEventListener("change", (e) => { state.filters.showRussian = e.target.checked; render(); });
   els.facets.appendChild(rb);
 }
 function matches(row) {
   const f = state.filters;
-  if (!f.showRussian && first(row.Country) === "Russia") return false;   // Russian products hidden unless opted in
+  if (!f.showRussian && first(row.Country) === "Russia") return false;
   if (f.search) {
     const hay = state.cfg.search.map((k) => asArray(row[k]).join(" ")).join(" ").toLowerCase();
     if (!hay.includes(f.search)) return false;

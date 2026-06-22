@@ -120,7 +120,7 @@ async function attachImage(rawFields, row) {
 
 // ---- static product page (SEO) ----
 const PAGE_CSS = `
-:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#ff7a1a;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Oswald",sans-serif}
+:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#66be69;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Oswald",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .hd{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg))}

@@ -5,7 +5,7 @@
   --bg-0:#0a0d10; --bg-1:#0f1418; --bg-2:#141a1f; --bg-3:#1a2128;
   --line:rgba(255,255,255,0.08); --line-2:rgba(255,255,255,0.14);
   --ink-0:#e7ecef; --ink-1:#b8c2c8; --ink-2:#6b7780; --ink-3:#44505a;
-  --accent:#ff7a1a; --accent-soft:rgba(255,122,26,0.12); --accent-line:rgba(255,122,26,0.45);
+  --accent:#66be69; --accent-soft:rgba(102,190,105,0.12); --accent-line:rgba(102,190,105,0.45);
   --warn:#ffcc33; --bad:#ff3b3b; --good:#6be675;
   --mono:ui-monospace,"JetBrains Mono","IBM Plex Mono",Menlo,Consolas,monospace;
   --sans:"Inter Tight","Helvetica Neue",system-ui,sans-serif;
@@ -14,7 +14,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  background: #bfc3cb; color: var(--ink-0);   /* grey canvas; header/sidebar/cards stay dark */
+  background: #101417; color: var(--ink-0);
   font-family: var(--sans); font-size: 14px; line-height: 1.45;
   -webkit-font-smoothing: antialiased; min-height: 100vh;
 }
@@ -52,6 +52,14 @@ a { color: var(--accent); text-decoration: none; }
 .filters::-webkit-scrollbar { width: 8px; }
 .filters::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
 @media (max-width: 860px) { .filters { position: static; max-height: none; overflow: visible; } }
+.subtabs { display: flex; flex-direction: column; gap: 5px; margin-bottom: 18px; }
+.subtabs:empty { display: none; }
+.subtabs button { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-1); background: transparent; border: 1px solid var(--line); padding: 10px 12px; cursor: pointer; }
+.subtabs button:hover { color: var(--ink-0); border-color: var(--line-2); }
+.subtabs button.active { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+.subtabs button .n { float: right; color: var(--ink-3); }
+.subtabs button.active .n { color: var(--accent); opacity: .7; }
+
 .search-box input {
   width: 100%; padding: 9px 12px; background: var(--bg-2); color: var(--ink-0);
   border: 1px solid #ffffff; border-radius: 0; outline: none;
@@ -97,15 +105,16 @@ a { color: var(--accent); text-decoration: none; }
 .count { font-family: var(--mono); font-size: 11px; color: var(--ink-2); letter-spacing: .15em; }
 .count b { color: var(--accent); font-weight: 500; }
 .empty {
-  font-family: var(--mono); letter-spacing: .2em; color: #555c64;
-  padding: 60px; text-align: center; border: 1px dashed rgba(0,0,0,.2); background: rgba(255,255,255,.35);
+  font-family: var(--mono); letter-spacing: .2em; color: var(--ink-2);
+  padding: 60px; text-align: center; border: 1px dashed var(--line);
 }
 
 /* ---------- Grid ---------- */
 .grid { display: grid; gap: 14px; }
 .grid.uav { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-.grid.sensors { grid-template-columns: repeat(2, 1fr); }
-@media (max-width: 900px) { .grid.sensors { grid-template-columns: 1fr; } }
+.grid.sensors { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1200px) { .grid.sensors { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px) { .grid.sensors { grid-template-columns: 1fr; } }
 
 /* ---------- UAV card (hangar) ---------- */
 .card {
@@ -194,8 +203,8 @@ a { color: var(--accent); text-decoration: none; }
 .site-index .links a { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--ink-2); }
 .site-index .links a:hover { color: var(--accent); }
 
-.site-footer { border-top: 1px solid rgba(0,0,0,.12); }
-.site-footer .wrap { display: flex; justify-content: space-between; gap: 16px; height: 54px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-size: 10px; color: #4a525b; letter-spacing: .12em; }
+.site-footer { border-top: 1px solid var(--line); }
+.site-footer .wrap { display: flex; justify-content: space-between; gap: 16px; height: 54px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: .12em; }
 
 /* ---------- Country badge (shared) ---------- */
 .geo-badge { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-1); border: 1px solid var(--line); padding: 4px 9px; display: inline-flex; gap: 7px; align-items: center; white-space: nowrap; }
