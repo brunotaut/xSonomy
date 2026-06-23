@@ -189,7 +189,7 @@ function sensorBlock(row, i) {
     if (++added >= 4) break;
   }
   return `<div class="sblock" data-href="${href}">
-    <div class="sblock-top"><div class="sblock-num"><b>${String(i + 1).padStart(2, "0")}.</b> ${esc(up(first(row.Subcategory)) || "SENSOR")}${row.Subtype ? " · " + esc(up(first(row.Subtype))) : ""}</div>${geoBadge(row.Country)}</div>
+    <div class="sblock-top"><div class="sblock-num">${esc(first(row.Company) || "")}</div>${geoBadge(row.Country)}</div>
     <div class="sblock-title"><div class="sblock-ic">${sensorGlyph(kind)}</div><div><a class="sblock-name" href="${href}">${esc(row.Name || "Untitled")}</a><div class="sblock-sub">${esc(subtitle)}</div></div></div>
     ${row.Image ? `<img class="sblock-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : ""}
     <p class="sblock-summary clamp">${esc(row.Summary || "")}</p>
