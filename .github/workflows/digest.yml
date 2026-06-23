@@ -1,0 +1,45 @@
+name: Email digest
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Digest period"
+        type: choice
+        options: ["day", "week"]
+        default: "day"
+        required: true
+  schedule:
+    - cron: "0 7 * * 2-5"    # Tue–Fri 07:00 UTC — daily digest
+    - cron: "0 7 * * 1"      # Monday 07:00 UTC — weekly roundup (no daily on Mon; none on weekends)
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Decide period
+        id: p
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "period=${{ github.event.inputs.period }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "0 7 * * 1" ]; then
+            echo "period=week" >> "$GITHUB_OUTPUT"
+          else
+            echo "period=day" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Send digest
+        run: node scripts/digest.mjs --period ${{ steps.p.outputs.period }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DIGEST_TO: ${{ vars.DIGEST_TO }}
+          DIGEST_FROM: ${{ vars.DIGEST_FROM }}
+          SITE_URL: ${{ vars.SITE_URL }}
