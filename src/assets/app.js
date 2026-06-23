@@ -21,43 +21,32 @@ const UAV_CFG = {
 // the schema is filled in.
 // Sensor subcategory tabs — each its own page with shared + category-specific filters,
 // wired to the Airtable field names. Empty fields auto-hide until populated.
+const SHARED_SEL = ["Use class", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"];
+const RADAR_CFG = { search:["Name","Company","Summary","Subtype"], selects:["Use class","Radar · Type","Radar · Band","Radar · Coverage","Radar · Scan type","Radar · Micro-Doppler","Sensor · Active/Passive","Sensor · All-weather / day-night","Sensor · Mounting","Sensor · Price band","Country"], ranges:["Radar · Detection range (km)","Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["Radar · Band","Band"],["Radar · Detection range (km)","Detection range","num"," km"],["Radar · Coverage","Coverage"],["Radar · Scan type","Scan type"],["Sensor · Active/Passive","Active/Passive"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
+const RADAR_CARDS = [["Radar · Detection range (km)","Detection range"," km"],["Radar · Band","Band"],["Radar · Coverage","Coverage"],["Radar · Scan type","Scan type"]];
+const EOIR_CFG = { search:["Name","Company","Summary","Subtype"], selects:["Use class","EO/IR · Spectral band","EO/IR · Cooled/uncooled","EO/IR · Stabilisation","EO/IR · AI classification / TWS","Sensor · Active/Passive","Sensor · All-weather / day-night","Sensor · Mounting","Sensor · Price band","Country"], ranges:["Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["EO/IR · Spectral band","Spectral band"],["EO/IR · DRI ranges","DRI ranges"],["EO/IR · Cooled/uncooled","Cooled/uncooled"],["EO/IR · Resolution (px)","Resolution"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
+const EOIR_CARDS = [["EO/IR · DRI ranges","DRI ranges"],["EO/IR · Spectral band","Spectral band"],["EO/IR · Resolution (px)","Resolution"],["EO/IR · FoV / focal length","FoV / focal length"]];
+const ACOUSTIC_CFG = { search:["Name","Company","Summary","Subtype"], selects:["Use class","Acoustic · Type","Acoustic · Coverage","Acoustic · Localisation mode","Sensor · Active/Passive","Sensor · All-weather / day-night","Sensor · Mounting","Sensor · Price band","Country"], ranges:["Acoustic · Detection range (km)","Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["Acoustic · Type","Type"],["Acoustic · Detection range (km)","Detection range","num"," km"],["Acoustic · Coverage","Coverage"],["Acoustic · Localisation mode","Localisation"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
+const ACOUSTIC_CARDS = [["Acoustic · Detection range (km)","Detection range"," km"],["Acoustic · Type","Type"],["Acoustic · Coverage","Coverage"],["Acoustic · DoA accuracy","DoA accuracy"]];
+const RF_CFG = { search:["Name","Company","Summary","Subtype"], selects:["Use class","RF · Detection mode","RF · Blind to RF-silent / autonomous","Sensor · Active/Passive","Sensor · All-weather / day-night","Sensor · Mounting","Sensor · Output data","Sensor · Price band","Country"], ranges:["RF · Simultaneous tracks","Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["RF · Frequency coverage","Frequency coverage"],["RF · Detection mode","Detection mode"],["RF · Simultaneous tracks","Simultaneous tracks","num"],["RF · Sensitivity (dBm)","Sensitivity"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
+const RF_CARDS = [["RF · Frequency coverage","Frequency coverage"],["RF · Detection mode","Detection mode"],["RF · Protocol/signal library","Protocol / library"],["Sensor · Detection range (km)","Detection range"," km"]];
+const GEN_CFG = { search:["Name","Company","Summary","Subtype"], selects:SHARED_SEL, ranges:["Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["Sensor · Detection range (km)","Detection range","num"," km"],["EO/IR · Spectral band","Spectral band"],["EO/IR · Resolution (px)","Resolution"],["Sensor · Active/Passive","Active/Passive"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
+const GEN_CARDS = [["EO/IR · Spectral band","Spectral band"],["EO/IR · Resolution (px)","Resolution"],["Sensor · Detection range (km)","Detection range"," km"]];
+
+// Top level = Active vs Passive (sensing principle). Subtabs = modality (Airtable Subcategory).
 const SENSOR_TABS = [
-  { key: "radar", label: "Radar", match: (s) => first(s.Subcategory) === "Radar",
-    cfg: {
-      search: ["Name", "Company", "Summary", "Subtype"],
-      selects: ["Use class", "Radar · Type", "Radar · Band", "Radar · Coverage", "Radar · Scan type", "Radar · Use", "Radar · Micro-Doppler", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"],
-      ranges: ["Radar · Detection range (km)", "Radar · Min RCS (m²)", "Radar · Min radial velocity (m/s)", "Radar · Track capacity", "Radar · Weight (kg)"],
-      compare: [["Use class", "Class"], ["Country", "Country"], ["Radar · Band", "Band"], ["Radar · Detection range (km)", "Detection range", "num", " km"], ["Radar · Min RCS (m²)", "Min RCS", "num", " m²"], ["Radar · Coverage", "Coverage"], ["Radar · Scan type", "Scan type"], ["Sensor · Active/Passive", "Active/Passive"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
-    },
-    cardFields: [["Radar · Min RCS (m²)", "Min RCS", " m²"], ["Radar · Range vs RCS / target class", "Range vs RCS"], ["Radar · Coverage", "Coverage"], ["Radar · Band", "Band"]],
-  },
-  { key: "thermal", label: "Thermal / EO-IR", match: (s) => ["EO/IR cameras", "Thermal"].includes(first(s.Subcategory)),
-    cfg: {
-      search: ["Name", "Company", "Summary", "Subtype"],
-      selects: ["Use class", "EO/IR · Spectral band", "EO/IR · Cooled/uncooled", "EO/IR · Stabilisation", "EO/IR · AI classification / TWS", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Price band", "Country", "Subtype"],
-      ranges: ["Sensor · Detection range (km)"],
-      compare: [["Use class", "Class"], ["Country", "Country"], ["EO/IR · Spectral band", "Spectral band"], ["EO/IR · DRI ranges", "DRI ranges"], ["EO/IR · Cooled/uncooled", "Cooled/uncooled"], ["EO/IR · Resolution (px)", "Resolution"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
-    },
-    cardFields: [["EO/IR · DRI ranges", "DRI ranges"], ["EO/IR · Spectral band", "Spectral band"], ["EO/IR · Resolution (px)", "Resolution"], ["EO/IR · FoV / focal length", "FoV / focal length"]],
-  },
-  { key: "acoustic", label: "Acoustic", match: (s) => first(s.Subcategory) === "Acoustic",
-    cfg: {
-      search: ["Name", "Company", "Summary", "Subtype"],
-      selects: ["Use class", "Acoustic · Type", "Acoustic · Coverage", "Acoustic · Localisation mode", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Price band", "Country", "Subtype"],
-      ranges: ["Acoustic · Detection range (km)"],
-      compare: [["Use class", "Class"], ["Country", "Country"], ["Acoustic · Type", "Type"], ["Acoustic · Detection range (km)", "Detection range", "num", " km"], ["Acoustic · Coverage", "Coverage"], ["Acoustic · Localisation mode", "Localisation"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
-    },
-    cardFields: [["Acoustic · Detection range (km)", "Detection range", " km"], ["Acoustic · Array config", "Array config"], ["Acoustic · DoA accuracy", "DoA accuracy"], ["Acoustic · Localisation mode", "Localisation"]],
-  },
-  { key: "rf", label: "RF", match: (s) => first(s.Subcategory) === "RF detection",
-    cfg: {
-      search: ["Name", "Company", "Summary", "Subtype"],
-      selects: ["Use class", "RF · Detection mode", "RF · Blind to RF-silent / autonomous", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"],
-      ranges: ["RF · Simultaneous tracks", "Sensor · Detection range (km)"],
-      compare: [["Use class", "Class"], ["Country", "Country"], ["RF · Frequency coverage", "Frequency coverage"], ["RF · Detection mode", "Detection mode"], ["RF · Simultaneous tracks", "Simultaneous tracks", "num"], ["RF · Sensitivity (dBm)", "Sensitivity"], ["Sensor · Price band", "Price band"], ["Confidence", "Confidence"]],
-    },
-    cardFields: [["RF · Frequency coverage", "Frequency coverage"], ["RF · Detection mode", "Detection mode"], ["RF · Protocol/signal library", "Protocol / library"], ["Sensor · Detection range (km)", "Detection range", " km"]],
-  },
+  { key:"radar",     group:"Active sensors",  label:"Radar",     match:(s)=>first(s.Subcategory)==="Radar",                         cfg:RADAR_CFG,    cardFields:RADAR_CARDS },
+  { key:"lidar",     group:"Active sensors",  label:"LiDAR",     match:(s)=>first(s.Subcategory)==="LiDAR",                         cfg:GEN_CFG,      cardFields:GEN_CARDS },
+  { key:"sonar",     group:"Active sensors",  label:"Sonar",     match:(s)=>first(s.Subcategory)==="Sonar",                         cfg:ACOUSTIC_CFG, cardFields:ACOUSTIC_CARDS },
+  { key:"ultrasonic",group:"Active sensors",  label:"Ultrasonic Sensors", match:(s)=>first(s.Subcategory)==="Ultrasonic Sensors",  cfg:GEN_CFG,      cardFields:GEN_CARDS },
+  { key:"scatero",   group:"Active sensors",  label:"Scatterometers & Altimeters", match:(s)=>first(s.Subcategory)==="Scatterometers and Altimeters", cfg:GEN_CFG, cardFields:GEN_CARDS },
+  { key:"tof",       group:"Active sensors",  label:"ToF & 3D Cameras", match:(s)=>first(s.Subcategory)==="Time-of-Flight (ToF) and 3D Cameras", cfg:GEN_CFG, cardFields:GEN_CARDS },
+  { key:"eoir",      group:"Passive sensors", label:"EO/IR cameras",   match:(s)=>first(s.Subcategory)==="EO/IR cameras",            cfg:EOIR_CFG,     cardFields:EOIR_CARDS },
+  { key:"thermal",   group:"Passive sensors", label:"Thermal imagers", match:(s)=>first(s.Subcategory)==="Thermal imagers",          cfg:EOIR_CFG,     cardFields:EOIR_CARDS },
+  { key:"mshs",      group:"Passive sensors", label:"Multispectral / Hyperspectral", match:(s)=>first(s.Subcategory)==="Multispectral / Hyperspectral", cfg:GEN_CFG, cardFields:GEN_CARDS },
+  { key:"rfsigint",  group:"Passive sensors", label:"RF / SIGINT detection", match:(s)=>first(s.Subcategory)==="RF / SIGINT detection", cfg:RF_CFG,    cardFields:RF_CARDS },
+  { key:"pacoustic", group:"Passive sensors", label:"Passive acoustic", match:(s)=>first(s.Subcategory)==="Passive acoustic",        cfg:ACOUSTIC_CFG, cardFields:ACOUSTIC_CARDS },
+  { key:"ew",        group:"Passive sensors", label:"Signals / EW",    match:(s)=>first(s.Subcategory)==="Signals / EW",             cfg:RF_CFG,       cardFields:RF_CARDS },
 ];
 
 const els = {
@@ -310,13 +299,22 @@ async function selectCat(key, file, btn) {
 function buildSubtabs() {
   els.subtabs.innerHTML = "";
   if (state.cat !== "sensors") return;
-  SENSOR_TABS.forEach((t) => {
-    const n = state.allSensors.filter(t.match).length;
-    const b = document.createElement("button");
-    b.innerHTML = `${t.label}<span class="n">${n}</span>`;
-    b.classList.toggle("active", t.key === state.subKey);
-    b.onclick = () => selectSub(t.key);
-    els.subtabs.appendChild(b);
+  ["Active sensors", "Passive sensors"].forEach((g) => {
+    const inGroup = SENSOR_TABS.filter((t) => t.group === g);
+    const counts = inGroup.map((t) => state.allSensors.filter(t.match).length);
+    if (!counts.some((n) => n > 0)) return;
+    const h = document.createElement("div");
+    h.className = "subtab-group";
+    h.textContent = g;
+    els.subtabs.appendChild(h);
+    inGroup.forEach((t, i) => {
+      if (counts[i] === 0) return;
+      const b = document.createElement("button");
+      b.innerHTML = `${t.label}<span class="n">${counts[i]}</span>`;
+      b.classList.toggle("active", t.key === state.subKey);
+      b.onclick = () => selectSub(t.key);
+      els.subtabs.appendChild(b);
+    });
   });
 }
 function selectSub(key) {
