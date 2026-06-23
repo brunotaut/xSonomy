@@ -241,6 +241,29 @@ ${row.Website ? `<div class="cta"><a class="btn p" href="${esc(row.Website)}" ta
 </div></body></html>`;
 }
 
+// Standalone News page (placeholder until content lands).
+function newsPage() {
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>News — xSonomy</title>
+<meta name="description" content="News and updates from the xSonomy autonomous & counter-UAS catalogue.">
+<link rel="canonical" href="${SITE}/news/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="News — xSonomy"><meta property="og:url" content="${SITE}/news/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>${PAGE_CSS}
+.news-empty{border:1px dashed var(--line);padding:52px;text-align:center;color:var(--muted);font-family:var(--mono);letter-spacing:.12em;margin-top:26px}</style>
+</head><body>
+<header class="hd"><div class="w"><a class="brand" href="/">xSonomy</a><a class="back" href="/uav/">← Catalogue</a></div></header>
+<div class="wrap">
+<div class="kicker">Updates</div>
+<h1>News</h1>
+<div class="sub">Product updates · market intelligence · catalogue additions</div>
+<div class="news-empty">Coming soon.</div>
+</div></body></html>`;
+}
+
 async function main() {
   await loadDotenv();
   if (!process.env.AIRTABLE_TOKEN) {
@@ -286,24 +309,40 @@ async function main() {
     }
   }
 
+  // Top-level chapter URLs (each section is its own page) + standalone pages.
+  const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
+  const extraUrls = [`${SITE}/news/`];
+
   // sitemap.xml + robots.txt
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    [`${SITE}/`, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
+    [`${SITE}/`, ...sectionUrls, ...extraUrls, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
   await writeFile(join(OUT, "sitemap.xml"), sitemap);
   await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
   await writeFile(join(OUT, "CNAME"), "xsonomy.com\n"); // keep the custom domain on every deploy
 
-  // Crawlable product index injected into the homepage.
-  const links = Object.entries(buckets)
-    .flatMap(([bucket, rows]) => rows.map((r) => `<a href="/${bucket}/${r.slug}/">${esc(r.Name || "Untitled")}</a>`))
-    .join("");
+  // Per-chapter section pages: real URLs (/uav/, /sensors/) so each header tab has its
+  // own address and direct links / refresh work. Each is a copy of the SPA shell with
+  // its own canonical + title; the app reads the path and opens that section.
+  const SECTION_TITLE = { uav: "UAVs — xSonomy Catalogue", sensors: "Sensors — xSonomy Counter-UAS Catalogue" };
   const indexPath = join(OUT, "index.html");
-  let html = await readFile(indexPath, "utf8");
-  html = html.replace("<!--PRODUCT_INDEX-->", links);
-  await writeFile(indexPath, html);
+  const shell = (await readFile(indexPath, "utf8")).replace("<!--PRODUCT_INDEX-->", "");
+  await writeFile(indexPath, shell);
+  for (const key of Object.keys(CATEGORIES)) {
+    const url = `${SITE}/${key}/`;
+    let page = shell
+      .replace('href="https://xsonomy.com/"', `href="${url}"`)
+      .replace('content="https://xsonomy.com/"', `content="${url}"`);
+    if (SECTION_TITLE[key]) page = page.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(SECTION_TITLE[key])}</title>`);
+    await mkdir(join(OUT, key), { recursive: true });
+    await writeFile(join(OUT, key, "index.html"), page);
+  }
 
-  console.log(`\nBuilt static site -> ${OUT} (${urls.length} product pages, sitemap, robots).`);
+  // Standalone News page.
+  await mkdir(join(OUT, "news"), { recursive: true });
+  await writeFile(join(OUT, "news", "index.html"), newsPage());
+
+  console.log(`\nBuilt static site -> ${OUT} (${urls.length} product pages, ${sectionUrls.length} sections + news, sitemap, robots).`);
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
