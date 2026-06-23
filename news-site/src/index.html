@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UAV &amp; Counter-Drone News — xSonomy</title>
+  <meta name="description" content="Curated headlines on UAVs, drones and counter-UAS from proven defence and industry media. Updated daily. Each item links to its original source." />
+  <meta property="og:title" content="UAV &amp; Counter-Drone News — xSonomy" />
+  <meta property="og:description" content="Curated UAV / C-UAS headlines from proven media, updated daily." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="__SITEURL__/" />
+  <link rel="canonical" href="__SITEURL__/" />
+  <link rel="alternate" type="application/rss+xml" title="xSonomy UAV News" href="feed.xml" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script>__CONFIG__</script>
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap">
+      <a class="brand" href="__HOMEURL__">xSonomy</a>
+      <nav><a href="__HOMEURL__">Catalogue</a><a href="./" aria-current="page">News</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1>UAV &amp; Counter-Drone News</h1>
+      <p>Headlines aggregated from <strong>__SOURCECOUNT__</strong> proven defence and drone-industry outlets, refreshed daily.
+         Every card links to the original source. <span class="muted">__COUNT__ items archived · built __BUILT__</span></p>
+    </section>
+
+    <section class="controls" aria-label="Filters">
+      <input id="q" type="search" placeholder="Search headlines…" autocomplete="off" />
+      <div id="tagbar" class="tagbar"></div>
+    </section>
+
+    <section id="feed" class="grid">__CARDS__</section>
+
+    <div id="status" class="status"></div>
+    <button id="more" class="more" hidden>Load more</button>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <p>xSonomy aggregates publicly published headlines with links back to the original publishers. All trademarks and copyright belong to their respective owners.</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js" type="module"></script>
+</body>
+</html>

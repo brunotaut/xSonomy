@@ -1,0 +1,15 @@
+{
+  "name": "xsonomy-news",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "xSonomy UAV/C-UAS news feed — daily RSS ingest into Supabase, static site on GitHub Pages.",
+  "scripts": {
+    "ingest": "node scripts/ingest.mjs",
+    "ingest:dry": "node scripts/ingest.mjs --dry",
+    "backfill": "node scripts/backfill.mjs --days 300",
+    "build": "node scripts/generate.mjs",
+    "test": "node scripts/test-parser.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
