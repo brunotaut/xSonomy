@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: "20"
       - name: Generate static site from Supabase
-        run: npm run build:supabase
+        run: node scripts/generate-supabase.mjs
         env:
           SUPABASE_URL: https://uobidcahmrmfdmfbrtkt.supabase.co
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
