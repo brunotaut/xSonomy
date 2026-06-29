@@ -163,7 +163,13 @@ async function main() {
   }
 
   console.log(`Upserting ${productRows.length} products…`);
-  const inserted = await sbUpsert("products", productRows, "slug", true);
+  // PostgREST bulk insert requires every object to have the SAME keys -> normalize.
+  const COLS = ["slug", "company_id", "name", "category", "subcategory", "use_class",
+    "country", "summary", "description", "website", "image_url", "price", "specs",
+    "publication_status"];
+  const normalized = productRows.map((r) =>
+    Object.fromEntries(COLS.map((c) => [c, c === "specs" ? (r.specs || {}) : (r[c] ?? null)])));
+  const inserted = await sbUpsert("products", normalized, "slug", true);
 
   // manufacturer links + sector tags
   const pc = inserted.filter((p) => p.company_id).map((p) => ({ product_id: p.id, company_id: p.company_id, role: "manufacturer" }));
