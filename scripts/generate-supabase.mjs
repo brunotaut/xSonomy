@@ -53,7 +53,7 @@ const slugify = (name) => {
 };
 
 const PAGE_CSS = `
-:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#66be69;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Oswald",sans-serif}
+:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#5fd0e0;--mono:"Share Tech Mono",ui-monospace,Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Chakra Petch",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .hd{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg))}
@@ -153,7 +153,7 @@ function productPage(bucket, row) {
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${url}">${imgAbs ? `\n<meta property="og:image" content="${imgAbs}">` : ""}
 <meta name="twitter:card" content="${imgAbs ? "summary_large_image" : "summary"}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}</style>
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
 </head><body>
@@ -426,6 +426,45 @@ ${pager(page, totalPages)}
 </div></body></html>`;
 }
 
+function companiesShell(total) {
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Companies · xSonomy</title>
+<meta name="description" content="Directory of ${total} UAV and counter-UAS companies — type, HQ country, headcount, revenue and valuation. Filter by type and region.">
+<link rel="canonical" href="${SITE}/companies/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="Companies · xSonomy"><meta property="og:url" content="${SITE}/companies/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/companies.css">
+</head><body>
+<header class="site-header"><div class="wrap">
+  <div class="brand">xSonomy</div>
+  <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
+  <a class="news-link active" href="/companies/">Companies</a>
+  <a class="news-link" href="https://news.xsonomy.com">News</a>
+</div></header>
+<main class="wrap layout">
+  <aside class="filters" aria-label="Filters">
+    <div class="search-box"><input id="cosearch" type="search" placeholder="Search company or country…" autocomplete="off"></div>
+    <div class="cofacet-h">Company type</div><div id="cofacet-type"></div>
+    <div class="cofacet-h">Region</div><div id="cofacet-region"></div>
+    <label class="cotoggle"><input id="cosanc" type="checkbox"> Sanctioned only</label>
+    <button id="coreset" class="reset" type="button">Reset filters</button>
+  </aside>
+  <section class="results">
+    <div class="cokick">// Company Registry</div>
+    <h1 class="coh1">Companies</h1>
+    <div id="cocount" class="cocount"></div>
+    <div id="cogrid"></div>
+    <div id="copager" class="copager"></div>
+  </section>
+</main>
+<script type="module" src="/assets/companies.js"></script>
+</body></html>`;
+}
+
 async function main() {
   await loadDotenv();
   sbConfig();
@@ -463,19 +502,12 @@ async function main() {
     }
   }
 
-  // Companies catalogue — paginated registry (100 per page)
+  // Companies catalogue — client-filtered registry (data JSON + single shell)
   const companies = await fetchCompanies();
-  MAXREV = Math.max(1, ...companies.map((c) => Number(c.revenue_amount) || 0));
-  MAXVAL = Math.max(1, ...companies.map((c) => Number(c.valuation) || 0));
-  const PER = 100;
-  const totalPages = Math.max(1, Math.ceil(companies.length / PER));
-  for (let pg = 1; pg <= totalPages; pg++) {
-    const slice = companies.slice((pg - 1) * PER, pg * PER);
-    const dir = pg === 1 ? join(OUT, "companies") : join(OUT, "companies", String(pg));
-    await mkdir(dir, { recursive: true });
-    await writeFile(join(dir, "index.html"), companyRegistryPage(slice, pg, totalPages, companies.length));
-  }
-  console.log(`  Companies: ${companies.length} rows -> ${totalPages} page(s)`);
+  await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(companies));
+  await mkdir(join(OUT, "companies"), { recursive: true });
+  await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length));
+  console.log(`  Companies: ${companies.length} rows -> /companies/ (client-filtered)`);
 
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
