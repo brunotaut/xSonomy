@@ -230,6 +230,202 @@ async function attachImage(row) {
   } catch (e) { console.error(`image ${row.slug}: ${e.message}`); }
 }
 
+// ---- Companies catalogue ----
+async function fetchCompanies() {
+  const { url, key } = sbConfig();
+  const q = new URL(`${url}/rest/v1/companies`);
+  q.searchParams.set("select",
+    "name,slug,company_type,hq_country,website,linkedin_url,employee_range,revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency,is_sanctioned");
+  if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
+  q.searchParams.set("order", "name.asc");
+  q.searchParams.set("limit", "5000");
+  const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+  if (!res.ok) throw new Error(`Supabase companies ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+const TYPE_LABEL = { prime: "Prime", tier1: "Tier 1", tier2: "Tier 2", sme: "SME",
+  startup: "Startup", state_owned: "State-owned", research_institute: "Research institute",
+  university: "University", jv: "Joint venture", division: "Division", distributor: "Distributor", other: "Other" };
+const fmtType = (t) => t ? (TYPE_LABEL[t] || t) : "";
+// type accent palette (from the registry template)
+const TYPE_COLOR = { prime: "#5fd0e0", tier1: "#8fd94a", tier2: "#8fd94a", sme: "#5fd0e0",
+  startup: "#c95fff", state_owned: "#ffc24d", research_institute: "#9aa6ad", university: "#9aa6ad",
+  jv: "#ff7a4f", division: "#6b7780", distributor: "#ffc24d", other: "#6b7780" };
+
+// --- registry row helpers ---
+let MAXREV = 1, MAXVAL = 1; // set in main() to scale the bars
+const initials = (name) => (String(name || "").replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "—");
+function moneyShort(amount, currency) {
+  if (amount == null || amount === "") return "";
+  const n = Number(amount); if (!isFinite(n)) return "";
+  const sym = ({ USD: "$", EUR: "€", GBP: "£", JPY: "¥" }[currency]) || (currency ? currency + " " : "$");
+  if (n >= 1e9) return sym + (n / 1e9).toFixed(n >= 1e10 ? 0 : 2).replace(/\.?0+$/, "") + "B";
+  if (n >= 1e6) return sym + Math.round(n / 1e6) + "M";
+  if (n >= 1e3) return sym + Math.round(n / 1e3) + "K";
+  return sym + n;
+}
+const EMP_SHORT = { "1-10": "1–10", "11-50": "11–50", "51-200": "51–200", "201-500": "201–500",
+  "501-1000": "501–1K", "1001-5000": "1K–5K", "5001-10000": "5K–10K", "10000+": "10K+" };
+const empShort = (r) => (r ? (EMP_SHORT[r] || r) : "");
+function countryMeta(name) {
+  const M = {
+    "United States":["US","NORTH AM"],"USA":["US","NORTH AM"],"Canada":["CA","NORTH AM"],
+    "United Kingdom":["GB","EUROPE"],"France":["FR","EUROPE"],"Germany":["DE","EUROPE"],"Germany/USA":["DE","EUROPE"],
+    "Italy":["IT","EUROPE"],"Spain":["ES","EUROPE"],"Netherlands":["NL","EUROPE"],"Sweden":["SE","EUROPE"],
+    "Norway":["NO","EUROPE"],"Finland":["FI","EUROPE"],"Denmark":["DK","EUROPE"],"Poland":["PL","EUROPE"],
+    "Czech Republic":["CZ","EUROPE"],"Czechia":["CZ","EUROPE"],"Estonia":["EE","EUROPE"],"Latvia":["LV","EUROPE"],
+    "Lithuania":["LT","EUROPE"],"Bulgaria":["BG","EUROPE"],"Romania":["RO","EUROPE"],"Switzerland":["CH","EUROPE"],
+    "Austria":["AT","EUROPE"],"Belgium":["BE","EUROPE"],"Slovenia":["SI","EUROPE"],"Ukraine":["UA","EUROPE"],"Turkey":["TR","EUROPE"],
+    "Israel":["IL","MIDEAST"],"United Arab Emirates":["AE","MIDEAST"],"Iran":["IR","MIDEAST"],
+    "China":["CN","APAC"],"Japan":["JP","APAC"],"South Korea":["KR","APAC"],"Singapore":["SG","APAC"],
+    "India":["IN","APAC"],"Australia":["AU","APAC"],"Pakistan":["PK","APAC"],
+    "Russia":["RU","EURASIA"],"Belarus":["BY","EURASIA"],"South Africa":["ZA","AFRICA"],
+  };
+  const e = M[name]; if (!e) return { flag: "", region: "" };
+  const flag = String.fromCodePoint(...[...e[0]].map((ch) => 0x1F1E6 + ch.charCodeAt(0) - 65));
+  return { flag, region: e[1] };
+}
+function bar(value, max, cls, color) {
+  const v = Number(value); if (!value || !isFinite(v) || max <= 0) return "";
+  const pct = Math.max(4, Math.min(100, Math.round((v / max) * 100)));
+  const style = color ? `background:${color};width:${pct}%` : `width:${pct}%`;
+  return `<div class="bartrack"><div class="bar ${cls}" style="${style}"></div></div>`;
+}
+function money(amount, currency, year) {
+  if (amount == null || amount === "") return "";
+  const n = Number(amount); if (!isFinite(n)) return "";
+  const sym = ({ USD: "$", EUR: "€", GBP: "£", JPY: "¥" }[currency]) || (currency ? currency + " " : "$");
+  let s;
+  if (n >= 1e9) s = (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + "B";
+  else if (n >= 1e6) s = (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M";
+  else if (n >= 1e3) s = Math.round(n / 1e3) + "K";
+  else s = String(n);
+  return sym + s + (year ? ` <span class="yr">'${String(year).slice(-2)}</span>` : "");
+}
+
+const COMPANIES_CSS = `
+:root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--panel3:#1a2128;--line:rgba(255,255,255,.09);--text:#e7ecef;--muted:#6b7780;--ink3:#56636d;--accent:#5fd0e0;--red:#ff6a5f;--display:"Chakra Petch",sans-serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#0a0d10}::-webkit-scrollbar-thumb{background:#1f2932;border:2px solid #0a0d10}::-webkit-scrollbar-thumb:hover{background:#2c3a45}
+.hd{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg))}
+.hd .w{max-width:1180px;margin:0 auto;padding:0 22px;height:62px;display:flex;align-items:center;gap:22px}
+.hd .brand{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.18em;color:var(--text)}
+.hd .brand b{color:var(--accent);font-weight:700}
+.hd nav{display:flex;gap:20px;margin-left:auto}
+.hd nav a{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.hd nav a:hover{color:var(--text);text-decoration:none}
+.hd nav a.on{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 84px}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+h1{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:.07em;text-transform:uppercase;margin:0 0 6px}
+.count{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);margin-bottom:22px;text-transform:uppercase}
+.tablewrap{border:1px solid var(--line);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:880px}
+thead th{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:400;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+tbody td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;vertical-align:middle}
+tbody tr:hover{background:var(--panel2)}
+.co{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.02em}
+.co a{color:var(--text)}.co a:hover{color:var(--accent)}
+.badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.flag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--red);border:1px solid var(--red);padding:1px 6px;margin-left:7px;border-radius:2px;text-transform:uppercase}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:#cfd8de}
+.yr{color:var(--ink3)}
+.lnk{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:12px}
+.lnk:hover{color:var(--accent);text-decoration:none}
+.mut{color:var(--ink3)}
+.pager{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:26px;font-family:var(--mono);font-size:12px}
+.pager a,.pager span{padding:7px 12px;border:1px solid var(--line);color:var(--muted)}
+.pager a:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.pager .cur{background:var(--accent);color:#0a0d10;border-color:var(--accent)}
+.pager .dis{opacity:.3}
+.corow{display:flex;align-items:center;gap:14px}
+.mono-sq{position:relative;display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;flex:0 0 auto;border:1px solid var(--c);color:var(--c);background:#0e141a;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.06em}
+.mono-sq .br{position:absolute;top:3px;left:3px;width:8px;height:8px;border-top:1px solid var(--c);border-left:1px solid var(--c)}
+.cn{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.cn a{color:var(--text)}.cn a:hover{color:var(--accent)}
+.cc{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.cc .fl{margin-right:6px}
+.emp .v{font-family:var(--display);font-weight:500;font-size:17px}
+.emp .l{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-top:3px}
+.money .v{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:.02em}
+.money .fy{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ink3);margin-left:7px}
+.bartrack{height:3px;background:rgba(255,255,255,.07);width:170px;max-width:100%;margin-top:9px}
+.bar{height:3px}
+.bar.rev{background:repeating-linear-gradient(90deg,var(--accent) 0 6px,transparent 6px 9px)}
+@media(max-width:620px){h1{font-size:24px}}
+`;
+
+function companyRow(c) {
+  const dash = '<span class="mut">—</span>';
+  const tcol = TYPE_COLOR[c.company_type] || "#9aa6ad";
+  const nm = esc(c.name);
+  const nameInner = c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener">${nm}</a>` : nm;
+  const { flag, region } = countryMeta(c.hq_country);
+  const countryLine = c.hq_country
+    ? `<div class="cc">${flag ? `<span class="fl">${flag}</span>` : ""}${esc(c.hq_country)}${region ? ` · ${region}` : ""}</div>`
+    : "";
+  const typeCell = c.company_type
+    ? `<span class="badge" style="color:${tcol}">${esc(fmtType(c.company_type))}</span>` : dash;
+  const emp = empShort(c.employee_range);
+  const rev = moneyShort(c.revenue_amount, c.revenue_currency);
+  const val = moneyShort(c.valuation, c.valuation_currency);
+  const fy = c.revenue_year ? `<span class="fy">FY${String(c.revenue_year).slice(-2)}</span>` : "";
+  return `<tr>
+    <td class="co"><div class="corow">
+      <span class="mono-sq" style="--c:${tcol}"><i class="br"></i>${initials(c.name)}</span>
+      <div><div class="cn">${nameInner}${c.is_sanctioned ? ' <span class="flag">Sanctioned</span>' : ""}</div>${countryLine}</div>
+    </div></td>
+    <td>${typeCell}</td>
+    <td class="emp">${emp ? `<div class="v">${esc(emp)}</div><div class="l">Employees</div>` : dash}</td>
+    <td class="money">${rev ? `<div class="v">${rev}${fy}</div>${bar(c.revenue_amount, MAXREV, "rev")}` : dash}</td>
+    <td class="money">${val ? `<div class="v" style="color:${tcol}">${val}</div>${bar(c.valuation, MAXVAL, "val", tcol)}` : dash}</td>
+  </tr>`;
+}
+
+function pager(page, totalPages) {
+  const href = (p) => (p === 1 ? "/companies/" : `/companies/${p}/`);
+  const out = [];
+  out.push(page > 1 ? `<a href="${href(page - 1)}">← Prev</a>` : `<span class="dis">← Prev</span>`);
+  for (let p = 1; p <= totalPages; p++) {
+    out.push(p === page ? `<span class="cur">${p}</span>` : `<a href="${href(p)}">${p}</a>`);
+  }
+  out.push(page < totalPages ? `<a href="${href(page + 1)}">Next →</a>` : `<span class="dis">Next →</span>`);
+  return `<div class="pager">${out.join("")}</div>`;
+}
+
+function companyRegistryPage(rows, page, totalPages, total) {
+  const canonical = page === 1 ? `${SITE}/companies/` : `${SITE}/companies/${page}/`;
+  const from = (page - 1) * 100 + 1, to = (page - 1) * 100 + rows.length;
+  const title = `Companies${page > 1 ? ` — page ${page}` : ""} · xSonomy`;
+  const nav = `<nav><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a><a class="on" href="/companies/">Companies</a><a href="https://news.xsonomy.com">News</a></nav>`;
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="Directory of UAV and counter-UAS companies — type, HQ country, headcount, revenue and funding. ${total} companies in the xSonomy registry.">
+<link rel="canonical" href="${canonical}">
+${page > 1 ? `<meta name="robots" content="noindex,follow">` : ""}
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="${esc(title)}"><meta property="og:url" content="${canonical}">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>${COMPANIES_CSS}</style>
+</head><body>
+<header class="hd"><div class="w"><a class="brand" href="/">x<b>Sonomy</b></a>${nav}</div></header>
+<div class="wrap">
+<div class="kicker">// Company Registry</div>
+<h1>Companies</h1>
+<div class="count">Showing ${from}–${to} of ${total} · page ${page} of ${totalPages}</div>
+<div class="tablewrap"><table>
+<thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th></tr></thead>
+<tbody>${rows.map(companyRow).join("")}</tbody>
+</table></div>
+${pager(page, totalPages)}
+</div></body></html>`;
+}
+
 async function main() {
   await loadDotenv();
   sbConfig();
@@ -267,10 +463,24 @@ async function main() {
     }
   }
 
+  // Companies catalogue — paginated registry (100 per page)
+  const companies = await fetchCompanies();
+  MAXREV = Math.max(1, ...companies.map((c) => Number(c.revenue_amount) || 0));
+  MAXVAL = Math.max(1, ...companies.map((c) => Number(c.valuation) || 0));
+  const PER = 100;
+  const totalPages = Math.max(1, Math.ceil(companies.length / PER));
+  for (let pg = 1; pg <= totalPages; pg++) {
+    const slice = companies.slice((pg - 1) * PER, pg * PER);
+    const dir = pg === 1 ? join(OUT, "companies") : join(OUT, "companies", String(pg));
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, "index.html"), companyRegistryPage(slice, pg, totalPages, companies.length));
+  }
+  console.log(`  Companies: ${companies.length} rows -> ${totalPages} page(s)`);
+
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    [`${SITE}/`, ...sectionUrls, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
+    [`${SITE}/`, ...sectionUrls, `${SITE}/companies/`, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
   await writeFile(join(OUT, "sitemap.xml"), sitemap);
   await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
   await writeFile(join(OUT, "CNAME"), "xsonomy.com\n");
