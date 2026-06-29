@@ -192,7 +192,7 @@ async function fetchProducts() {
   const { url, key } = sbConfig();
   const q = new URL(`${url}/rest/v1/products`);
   q.searchParams.set("select",
-    "name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies(name)");
+    "name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)");
   q.searchParams.set("category", "in.(UAV,Sensor)");
   if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
   q.searchParams.set("limit", "5000");
