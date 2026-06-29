@@ -44,6 +44,9 @@ function bar(v, max, cls, color) {
   return `<div class="bartrack"><div class="bar ${cls}" style="${color?`background:${color};`:""}width:${pct}%"></div></div>`;
 }
 
+const ICON_WEB = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>`;
+const ICON_IN = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM3.4 9h3.16v11H3.4V9zM9.3 9h3.03v1.5h.04c.42-.8 1.45-1.64 2.98-1.64 3.19 0 3.78 2.1 3.78 4.83V20h-3.16v-4.6c0-1.1-.02-2.5-1.53-2.5-1.53 0-1.77 1.2-1.77 2.43V20H9.3V9z"/></svg>`;
+
 const PER = 100;
 let DATA = [], MAXREV = 1, MAXVAL = 1;
 const state = { q:"", types:new Set(), regions:new Set(), sanctioned:false, page:1 };
@@ -69,6 +72,10 @@ function row(c) {
     <td class="emp">${emp?`<div class="v">${esc(emp)}</div><div class="l">Employees</div>`:dash}</td>
     <td class="money">${rev?`<div class="v">${rev}${fy}</div>${bar(c.revenue_amount,MAXREV,"rev")}`:dash}</td>
     <td class="money">${val?`<div class="v" style="color:${tcol}">${val}</div>${bar(c.valuation,MAXVAL,"val",tcol)}`:dash}</td>
+    <td class="links">${[
+      c.website ? `<a class="ico" href="${esc(c.website)}" target="_blank" rel="noopener" title="Website" aria-label="Website">${ICON_WEB}</a>` : "",
+      c.linkedin_url ? `<a class="ico" href="${esc(c.linkedin_url)}" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">${ICON_IN}</a>` : "",
+    ].join("") || dash}</td>
   </tr>`;
 }
 
@@ -93,7 +100,7 @@ function render() {
     ? `Showing ${from+1}–${from+slice.length} of <b>${filtered.length}</b> · page ${state.page} of ${pages}`
     : "No companies match these filters.";
   el("cogrid").innerHTML = slice.length
-    ? `<div class="cowrap"><table class="cotable"><thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th></tr></thead><tbody>${slice.map(row).join("")}</tbody></table></div>`
+    ? `<div class="cowrap"><table class="cotable"><thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th><th>Links</th></tr></thead><tbody>${slice.map(row).join("")}</tbody></table></div>`
     : "";
   // pager
   const btn = (label, p, opt = {}) =>
