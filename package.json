@@ -1,22 +1,15 @@
 {
-  "name": "xsonomy-news",
+  "name": "xsonomy-catalogue",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "xSonomy UAV/C-UAS news feed — daily RSS ingest into Supabase, static site on GitHub Pages.",
+  "description": "xSonomy Stage 1 catalogue — static site generated from Airtable, hosted on GitHub Pages.",
   "scripts": {
-    "ingest": "node scripts/ingest.mjs",
-    "ingest:dry": "node scripts/ingest.mjs --dry",
-    "backfill": "node scripts/backfill.mjs --days 300",
-    "analyze:backfill": "node scripts/analyze-backfill.mjs",
-    "analyze:backfill:dry": "node scripts/analyze-backfill.mjs --dry",
-    "enrich:companies": "node scripts/enrich-companies.mjs",
-    "enrich:companies:dry": "node scripts/enrich-companies.mjs --dry --max 10",
     "build": "node scripts/generate.mjs",
-    "digest": "node scripts/digest.mjs --period day",
-    "digest:week": "node scripts/digest.mjs --period week",
-    "digest:dry": "node scripts/digest.mjs --period day --dry",
-    "test": "node scripts/test-parser.mjs && node scripts/test-digest.mjs"
+    "build:supabase": "node scripts/generate-supabase.mjs",
+    "migrate:products": "node scripts/migrate-products-to-supabase.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }
