@@ -15,12 +15,11 @@ export { hasApiKey };
 const THIS_YEAR = new Date().getFullYear();
 
 // column -> validation kind
-// NOTE: company_type is intentionally NOT enriched — its DB enum is structural
-// (prime/tier1/sme/…) and the LLM can't reliably infer it; it's set deterministically.
-// ownership and employee_range have DB CHECK constraints, so they use enum coercers.
+// company_type, ownership and employee_range have DB CHECK constraints, so they
+// use enum coercers (invalid values -> null, never a failed write).
 const FIELD_SPEC = {
   description: "text", overview: "text", history: "text",
-  ownership: "ownership",
+  company_type: "ctype", ownership: "ownership",
   founded_year: "year", defunct_year: "year",
   is_public: "bool", stock_ticker: "text", stock_exchange: "text",
   hq_region: "text", hq_city: "text", hq_address: "text",
@@ -51,6 +50,10 @@ const SYSTEM = [
   "  - amounts: plain numbers in the stated currency's main unit (e.g. 1500000000,",
   "    not '1.5B'). employee_count: integer; employee_range: a band like '1001-5000'.",
   "  - export_regime / risk_flags: short string arrays, or [].",
+  "  - company_type: EXACTLY one of prime, tier1, tier2, sme, startup, state_owned,",
+  "    research_institute, university, jv, division, distributor, other (best classification; null if unsure).",
+  "  - ownership: EXACTLY one of private, public, state_owned, subsidiary, joint_venture, academic, nonprofit (or null).",
+  "  - employee_range: EXACTLY one of 1-10, 11-50, 51-200, 201-500, 501-1000, 1001-5000, 5001-10000, 10000+ (or null).",
   "  - Keep description <= 1 sentence, overview <= 2 short paragraphs, history <= 1 paragraph.",
   "",
   "Fields (all optional, null when unknown):",
@@ -91,6 +94,18 @@ const OWNERSHIP_MAP = {
 };
 // companies.employee_range allowed bands
 const EMP_RANGES = new Set(["1-10","11-50","51-200","201-500","501-1000","1001-5000","5001-10000","10000+"]);
+// companies.company_type enum + synonym map
+const CTYPE_SET = new Set(["prime","tier1","tier2","sme","startup","state_owned","research_institute","university","jv","division","distributor","other"]);
+const CTYPE_MAP = {
+  "prime contractor":"prime","defense prime":"prime","defence prime":"prime",
+  "tier 1":"tier1","tier-1":"tier1","tier 2":"tier2","tier-2":"tier2",
+  "oem":"tier1","integrator":"tier1","systems integrator":"tier1",
+  "manufacturer":"tier2","component manufacturer":"tier2","supplier":"tier2",
+  "small business":"sme","small enterprise":"sme","start-up":"startup",
+  "government":"state_owned","government-owned":"state_owned","state owned enterprise":"state_owned",
+  "subsidiary":"division","research institute":"research_institute","institute":"research_institute",
+  "academic":"university","joint venture":"jv","reseller":"distributor",
+};
 function coerce(kind, v, key) {
   if (v == null) return null;
   switch (kind) {
@@ -119,6 +134,14 @@ function coerce(kind, v, key) {
     case "lat": { const n = Number(v); return isNum(n) && n >= -90 && n <= 90 ? n : null; }
     case "lon": { const n = Number(v); return isNum(n) && n >= -180 && n <= 180 ? n : null; }
     case "bool": return typeof v === "boolean" ? v : null;
+    case "ctype": {
+      if (typeof v !== "string") return null;
+      const s = v.trim().toLowerCase();
+      if (CTYPE_SET.has(s)) return s;
+      const u = s.replace(/[\s-]+/g, "_");
+      if (CTYPE_SET.has(u)) return u;
+      return CTYPE_MAP[s] || null;
+    }
     case "ownership": {
       if (typeof v !== "string") return null;
       return OWNERSHIP_MAP[v.trim().toLowerCase()] || null;
