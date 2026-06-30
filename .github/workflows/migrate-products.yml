@@ -1,0 +1,22 @@
+name: Migrate products (Airtable -> Supabase)
+
+# One-off / on-demand. Reads Airtable Sensors+UAVs and upserts them into the
+# Supabase `products` table (full specs in JSONB). Safe to re-run.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Migrate products to Supabase
+        run: node scripts/migrate-products-to-supabase.mjs
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_BASE_ID: appwMCCtt57i8SNbR
+          SUPABASE_URL: https://uobidcahmrmfdmfbrtkt.supabase.co
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

@@ -5,11 +5,11 @@
   --bg-0:#0a0d10; --bg-1:#0f1418; --bg-2:#141a1f; --bg-3:#1a2128;
   --line:rgba(255,255,255,0.08); --line-2:rgba(255,255,255,0.14);
   --ink-0:#e7ecef; --ink-1:#b8c2c8; --ink-2:#6b7780; --ink-3:#44505a;
-  --accent:#66be69; --accent-soft:rgba(102,190,105,0.12); --accent-line:rgba(102,190,105,0.45);
-  --warn:#ffcc33; --bad:#ff3b3b; --good:#6be675;
-  --mono:ui-monospace,"JetBrains Mono","IBM Plex Mono",Menlo,Consolas,monospace;
+  --accent:#5fd0e0; --accent-soft:rgba(95,208,224,0.12); --accent-line:rgba(95,208,224,0.45);
+  --warn:#ffcc33; --bad:#ff6a5f; --good:#8fd94a;
+  --mono:"Share Tech Mono",ui-monospace,"IBM Plex Mono",Menlo,Consolas,monospace;
   --sans:"Inter Tight","Helvetica Neue",system-ui,sans-serif;
-  --display:"Oswald","Bebas Neue","Inter Tight",sans-serif;
+  --display:"Chakra Petch","Oswald",sans-serif;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }

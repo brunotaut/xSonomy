@@ -24,11 +24,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Generate static site from Airtable
-        run: npm run build
+      - name: Generate static site from Supabase
+        run: node scripts/generate-supabase.mjs
         env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-          AIRTABLE_BASE_ID: appwMCCtt57i8SNbR
+          SUPABASE_URL: https://uobidcahmrmfdmfbrtkt.supabase.co
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
