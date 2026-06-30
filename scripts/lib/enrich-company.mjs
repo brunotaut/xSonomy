@@ -15,15 +15,18 @@ export { hasApiKey };
 const THIS_YEAR = new Date().getFullYear();
 
 // column -> validation kind
+// NOTE: company_type is intentionally NOT enriched — its DB enum is structural
+// (prime/tier1/sme/…) and the LLM can't reliably infer it; it's set deterministically.
+// ownership and employee_range have DB CHECK constraints, so they use enum coercers.
 const FIELD_SPEC = {
   description: "text", overview: "text", history: "text",
-  company_type: "text", ownership: "text",
+  ownership: "ownership",
   founded_year: "year", defunct_year: "year",
   is_public: "bool", stock_ticker: "text", stock_exchange: "text",
   hq_region: "text", hq_city: "text", hq_address: "text",
   latitude: "lat", longitude: "lon",
   linkedin_url: "url", twitter_url: "url", wikipedia_url: "url", crunchbase_url: "url",
-  employee_count: "int", employee_range: "text",
+  employee_count: "int", employee_range: "emp",
   revenue_amount: "num", revenue_currency: "ccy", revenue_year: "year", revenue_is_estimate: "bool",
   total_funding: "num", funding_currency: "ccy",
   valuation: "num", valuation_currency: "ccy",
@@ -75,6 +78,19 @@ function buildUser(c) {
 
 // --- validation/coercion ---------------------------------------------------
 const isNum = (v) => typeof v === "number" && Number.isFinite(v);
+// map free-text ownership -> companies.ownership enum
+const OWNERSHIP_MAP = {
+  "private":"private","privately held":"private","private company":"private",
+  "public":"public","publicly traded":"public","public company":"public","listed":"public",
+  "state owned":"state_owned","state-owned":"state_owned","state_owned":"state_owned",
+  "government":"state_owned","government owned":"state_owned","government-owned":"state_owned","state":"state_owned",
+  "subsidiary":"subsidiary","division":"subsidiary","wholly owned subsidiary":"subsidiary",
+  "joint venture":"joint_venture","joint-venture":"joint_venture","jv":"joint_venture",
+  "academic":"academic","university":"academic","research institute":"academic","research":"academic",
+  "nonprofit":"nonprofit","non-profit":"nonprofit","not-for-profit":"nonprofit","ngo":"nonprofit",
+};
+// companies.employee_range allowed bands
+const EMP_RANGES = new Set(["1-10","11-50","51-200","201-500","501-1000","1001-5000","5001-10000","10000+"]);
 function coerce(kind, v, key) {
   if (v == null) return null;
   switch (kind) {
@@ -103,6 +119,15 @@ function coerce(kind, v, key) {
     case "lat": { const n = Number(v); return isNum(n) && n >= -90 && n <= 90 ? n : null; }
     case "lon": { const n = Number(v); return isNum(n) && n >= -180 && n <= 180 ? n : null; }
     case "bool": return typeof v === "boolean" ? v : null;
+    case "ownership": {
+      if (typeof v !== "string") return null;
+      return OWNERSHIP_MAP[v.trim().toLowerCase()] || null;
+    }
+    case "emp": {
+      if (typeof v !== "string") return null;
+      const s = v.replace(/[, ]/g, "");
+      return EMP_RANGES.has(s) ? s : null;
+    }
     case "ccy": {
       if (typeof v !== "string") return null;
       const s = v.trim().toUpperCase();
