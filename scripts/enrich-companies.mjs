@@ -80,11 +80,19 @@ async function main() {
   const stats = { processed: 0, ok: 0, filled: 0, high: 0, med: 0, low: 0, llmErr: 0, writeErr: 0 };
   const t0 = Date.now();
 
+  const seen = new Set();   // hard guard: never process the same company twice in a run
   while (stats.processed < MAX) {
     const want = Math.min(BATCH, MAX - stats.processed);
     const rows = await fetchUnenrichedCompanies(want);
     if (!rows.length) break;
-    await pool(rows, CONCURRENCY, (row) => runOne(row, stats));
+    const fresh = rows.filter((r) => !seen.has(r.id));
+    if (!fresh.length) {
+      console.error("Stopping: re-fetched only already-processed rows — writes aren't clearing the queue. " +
+        "Refusing to loop (this is the runaway-cost guard). Check the last write errors above.");
+      break;
+    }
+    fresh.forEach((r) => seen.add(r.id));
+    await pool(fresh, CONCURRENCY, (row) => runOne(row, stats));
     const secs = ((Date.now() - t0) / 1000).toFixed(0);
     console.log(`  …${stats.processed} done | ${stats.ok} written | ${stats.filled} fields filled | conf H/M/L ${stats.high}/${stats.med}/${stats.low} | ${stats.llmErr} llm err | ${stats.writeErr} write err | ${secs}s`);
     if (DRY) break;
