@@ -12,7 +12,7 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDotenv } from "./lib/http.mjs";
-import { fetchSince } from "./lib/supabase.mjs";
+import { fetchSince, fetchSubscribers } from "./lib/supabase.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -29,17 +29,34 @@ const UNSUB_ADDR = process.env.DIGEST_UNSUBSCRIBE || "news@xsonomy.com";
 // Recipients with optional per-person tag filters.
 // Priority: recipients.json  >  DIGEST_RECIPIENTS env (JSON)  >  DIGEST_TO env (all tags).
 async function loadRecipients() {
+  let base = [];
   const file = join(ROOT, "recipients.json");
   if (existsSync(file)) {
     const j = JSON.parse(await readFile(file, "utf8"));
-    return normaliseRecipients(j.recipients || j);
-  }
-  if (process.env.DIGEST_RECIPIENTS) {
+    base = normaliseRecipients(j.recipients || j);
+  } else if (process.env.DIGEST_RECIPIENTS) {
     const j = JSON.parse(process.env.DIGEST_RECIPIENTS);
-    return normaliseRecipients(j.recipients || j);
+    base = normaliseRecipients(j.recipients || j);
+  } else {
+    const list = (process.env.DIGEST_TO || "brntaut@gmail.com").split(",").map((s) => s.trim()).filter(Boolean);
+    base = list.map((email) => ({ email, tags: [] }));
   }
-  const list = (process.env.DIGEST_TO || "brntaut@gmail.com").split(",").map((s) => s.trim()).filter(Boolean);
-  return list.map((email) => ({ email, tags: [] }));
+  // Merge website sign-ups from the Supabase `subscribers` table. They have no
+  // tag filter, so they receive every theme. Deduped against base (base wins).
+  let subs = [];
+  try {
+    subs = normaliseRecipients(await fetchSubscribers());
+  } catch (e) {
+    console.error(`Could not load Supabase subscribers (${e.message}); using base recipients only.`);
+  }
+  const seen = new Set(base.map((r) => r.email.toLowerCase()));
+  const merged = [...base];
+  for (const s of subs) {
+    const k = (s.email || "").toLowerCase();
+    if (k && !seen.has(k)) { seen.add(k); merged.push(s); }
+  }
+  console.log(`Recipients: ${base.length} base + ${merged.length - base.length} subscriber(s) = ${merged.length}.`);
+  return merged;
 }
 function normaliseRecipients(arr) {
   return (arr || [])

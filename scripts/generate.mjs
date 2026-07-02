@@ -25,6 +25,7 @@ const esc = (s) => String(s == null ? "" : s)
 const fmtDate = (s) => { if (!s) return ""; const d = new Date(s); return isNaN(d) ? "" : d.toISOString().slice(0, 10); };
 
 function cardHtml(a) {
+  const cos = (a.companies || []).slice(0, 4).map((c) => `<span class="company">${esc(c)}</span>`).join("");
   const tags = (a.tags || []).slice(0, 3).map((t) => `<span>${esc(t)}</span>`).join("");
   const thumb = a.image_url
     ? `<div class="thumb" style="background-image:url('${esc(a.image_url)}')"></div>`
@@ -32,7 +33,7 @@ function cardHtml(a) {
   return `<a class="card" href="${esc(a.url)}" target="_blank" rel="noopener nofollow">${thumb}<div class="body">` +
     `<div class="meta"><span class="src">${esc(a.source)}</span><span>${fmtDate(a.published_at)}</span></div>` +
     `<h3>${esc(a.title)}</h3>${a.summary ? `<p>${esc(a.summary)}</p>` : ""}` +
-    `<div class="tags">${tags}</div></div></a>`;
+    `<div class="tags">${cos}${tags}</div></div></a>`;
 }
 
 function rssXml(items) {
