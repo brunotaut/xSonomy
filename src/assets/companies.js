@@ -1,5 +1,7 @@
 // xSonomy Companies registry — client-side filter + 100/page pagination.
 // Loads /data/companies.json (written by the build) and renders the card rows.
+// Sanctioned companies are hidden by default; the "Sanctioned companies"
+// toggle switches the view to ONLY them.
 
 const TYPE_LABEL = { prime:"Prime", tier1:"Tier 1", tier2:"Tier 2", sme:"SME", startup:"Startup",
   state_owned:"State-owned", research_institute:"Research institute", university:"University",
@@ -17,10 +19,12 @@ const CMETA = {
   "Czech Republic":["CZ","EUROPE"],"Czechia":["CZ","EUROPE"],"Estonia":["EE","EUROPE"],"Latvia":["LV","EUROPE"],
   "Lithuania":["LT","EUROPE"],"Bulgaria":["BG","EUROPE"],"Romania":["RO","EUROPE"],"Switzerland":["CH","EUROPE"],
   "Austria":["AT","EUROPE"],"Belgium":["BE","EUROPE"],"Slovenia":["SI","EUROPE"],"Ukraine":["UA","EUROPE"],"Turkey":["TR","EUROPE"],
+  "Hungary":["HU","EUROPE"],"Portugal":["PT","EUROPE"],"Ireland":["IE","EUROPE"],"Iceland":["IS","EUROPE"],"Greece":["GR","EUROPE"],
   "Israel":["IL","MIDEAST"],"United Arab Emirates":["AE","MIDEAST"],"Iran":["IR","MIDEAST"],
   "China":["CN","APAC"],"Japan":["JP","APAC"],"South Korea":["KR","APAC"],"Singapore":["SG","APAC"],
-  "India":["IN","APAC"],"Australia":["AU","APAC"],"Pakistan":["PK","APAC"],
+  "India":["IN","APAC"],"Australia":["AU","APAC"],"Pakistan":["PK","APAC"],"Malaysia":["MY","APAC"],"New Zealand":["NZ","APAC"],
   "Russia":["RU","EURASIA"],"Belarus":["BY","EURASIA"],"South Africa":["ZA","AFRICA"],
+  "Uruguay":["UY","LATAM"],"Brazil":["BR","LATAM"],"Mexico":["MX","LATAM"],
 };
 function countryMeta(name) {
   const e = CMETA[name]; if (!e) return { flag:"", region:"" };
@@ -47,9 +51,17 @@ function bar(v, max, cls, color) {
 const ICON_WEB = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>`;
 const ICON_IN = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM3.4 9h3.16v11H3.4V9zM9.3 9h3.03v1.5h.04c.42-.8 1.45-1.64 2.98-1.64 3.19 0 3.78 2.1 3.78 4.83V20h-3.16v-4.6c0-1.1-.02-2.5-1.53-2.5-1.53 0-1.77 1.2-1.77 2.43V20H9.3V9z"/></svg>`;
 
+// Valuation bands (values are stored in main currency units, mostly USD).
+const VAL_BANDS = [
+  { id:"lt100m",  label:"Under $100M", test:(v) => v > 0    && v < 1e8  },
+  { id:"100m-1b", label:"$100M – $1B", test:(v) => v >= 1e8 && v < 1e9  },
+  { id:"1b-10b",  label:"$1B – $10B",  test:(v) => v >= 1e9 && v < 1e10 },
+  { id:"10b+",    label:"$10B+",       test:(v) => v >= 1e10            },
+];
+
 const PER = 100;
 let DATA = [], MAXREV = 1, MAXVAL = 1;
-const state = { q:"", types:new Set(), regions:new Set(), sanctioned:false, page:1 };
+const state = { q:"", types:new Set(), regions:new Set(), countries:new Set(), vals:new Set(), sanctioned:false, page:1 };
 
 const el = (id) => document.getElementById(id);
 
@@ -82,9 +94,16 @@ function row(c) {
 function applyFilters() {
   const q = state.q.trim().toLowerCase();
   return DATA.filter((c) => {
-    if (state.sanctioned && !c.is_sanctioned) return false;
+    // Default view hides sanctioned; the toggle shows ONLY sanctioned.
+    if (state.sanctioned ? !c.is_sanctioned : c.is_sanctioned) return false;
     if (state.types.size && !state.types.has(c.company_type)) return false;
     if (state.regions.size && !state.regions.has(countryMeta(c.hq_country).region)) return false;
+    if (state.countries.size && !state.countries.has(c.hq_country)) return false;
+    if (state.vals.size) {
+      const v = Number(c.valuation);
+      if (!isFinite(v) || v <= 0) return false;
+      if (![...state.vals].some((id) => { const b = VAL_BANDS.find((x) => x.id === id); return b && b.test(v); })) return false;
+    }
     if (q && !(`${c.name} ${c.hq_country||""}`.toLowerCase().includes(q))) return false;
     return true;
   });
@@ -114,43 +133,91 @@ function render() {
   });
 }
 
-function chip(container, label, active, onclick, color) {
+function chip(container, label, active, onclick, color, count) {
   const b = document.createElement("button");
   b.className = "cochip" + (active ? " on" : "");
-  b.textContent = label;
+  b.innerHTML = `${esc(label)}${count != null ? `<span class="n">${count}</span>` : ""}`;
   if (color && active) b.style.color = color;
   b.onclick = onclick;
   container.appendChild(b);
 }
 
+// Collapsible facet group (same look & behaviour as the product pages).
+// All groups start collapsed with an "Expand" affordance.
+function facetBox(container, label) {
+  const box = document.createElement("div");
+  box.className = "facet collapsed";
+  const head = document.createElement("button");
+  head.type = "button"; head.className = "facet-h";
+  head.innerHTML = `<span>${esc(label)}</span><span class="exp">Expand</span>`;
+  const body = document.createElement("div"); body.className = "facet-body";
+  head.addEventListener("click", () => {
+    const collapsed = box.classList.toggle("collapsed");
+    head.querySelector(".exp").textContent = collapsed ? "Expand" : "Hide";
+  });
+  box.appendChild(head); box.appendChild(body);
+  container.appendChild(box);
+  return body;
+}
+
+let redrawAll = () => {};
+
 function buildFilters() {
-  // Company type facet
+  const wrap = el("cofacets");
+  wrap.innerHTML = "";
+  const countBy = (fn) => DATA.reduce((n, c) => n + (fn(c) ? 1 : 0), 0);
+
+  // Company type
   const types = [...new Set(DATA.map((c) => c.company_type).filter(Boolean))]
     .sort((a,b) => fmtType(a).localeCompare(fmtType(b)));
-  const tWrap = el("cofacet-type");
-  const drawTypes = () => { tWrap.innerHTML = "";
-    types.forEach((t) => chip(tWrap, fmtType(t), state.types.has(t), () => {
+  const tBody = facetBox(wrap, "Company type");
+  const drawTypes = () => { tBody.innerHTML = "";
+    types.forEach((t) => chip(tBody, fmtType(t), state.types.has(t), () => {
       state.types.has(t) ? state.types.delete(t) : state.types.add(t); state.page=1; drawTypes(); render();
-    }, TYPE_COLOR[t]));
+    }, TYPE_COLOR[t], countBy((c) => c.company_type === t)));
   };
-  drawTypes();
-  // Region facet
+
+  // Region
   const regions = [...new Set(DATA.map((c) => countryMeta(c.hq_country).region).filter(Boolean))].sort();
-  const rWrap = el("cofacet-region");
-  const drawRegions = () => { rWrap.innerHTML = "";
-    regions.forEach((r) => chip(rWrap, r, state.regions.has(r), () => {
+  const rBody = facetBox(wrap, "Region");
+  const drawRegions = () => { rBody.innerHTML = "";
+    regions.forEach((r) => chip(rBody, r, state.regions.has(r), () => {
       state.regions.has(r) ? state.regions.delete(r) : state.regions.add(r); state.page=1; drawRegions(); render();
-    }));
+    }, null, countBy((c) => countryMeta(c.hq_country).region === r)));
   };
-  drawRegions();
+
+  // Country
+  const countries = [...new Set(DATA.map((c) => c.hq_country).filter(Boolean))].sort((a,b) => a.localeCompare(b));
+  const cBody = facetBox(wrap, "Country");
+  const drawCountries = () => { cBody.innerHTML = "";
+    countries.forEach((n) => {
+      const { flag } = countryMeta(n);
+      chip(cBody, `${flag ? flag + " " : ""}${n}`, state.countries.has(n), () => {
+        state.countries.has(n) ? state.countries.delete(n) : state.countries.add(n); state.page=1; drawCountries(); render();
+      }, null, countBy((c) => c.hq_country === n));
+    });
+  };
+
+  // Valuation
+  const vBody = facetBox(wrap, "Valuation");
+  const drawVals = () => { vBody.innerHTML = "";
+    VAL_BANDS.forEach((b) => chip(vBody, b.label, state.vals.has(b.id), () => {
+      state.vals.has(b.id) ? state.vals.delete(b.id) : state.vals.add(b.id); state.page=1; drawVals(); render();
+    }, null, countBy((c) => { const v = Number(c.valuation); return isFinite(v) && b.test(v); })));
+  };
+
+  redrawAll = () => { drawTypes(); drawRegions(); drawCountries(); drawVals(); };
+  redrawAll();
+
   // search
   el("cosearch").oninput = (e) => { state.q = e.target.value; state.page=1; render(); };
-  // sanctioned toggle
+  // sanctioned-only view toggle
   el("cosanc").onchange = (e) => { state.sanctioned = e.target.checked; state.page=1; render(); };
   // reset
   el("coreset").onclick = () => {
-    state.q=""; state.types.clear(); state.regions.clear(); state.sanctioned=false; state.page=1;
-    el("cosearch").value=""; el("cosanc").checked=false; drawTypes(); drawRegions(); render();
+    state.q=""; state.types.clear(); state.regions.clear(); state.countries.clear(); state.vals.clear();
+    state.sanctioned=false; state.page=1;
+    el("cosearch").value=""; el("cosanc").checked=false; redrawAll(); render();
   };
 }
 

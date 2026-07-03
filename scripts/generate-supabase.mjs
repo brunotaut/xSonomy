@@ -448,9 +448,8 @@ function companiesShell(total) {
 <main class="wrap layout">
   <aside class="filters" aria-label="Filters">
     <div class="search-box"><input id="cosearch" type="search" placeholder="Search company or country…" autocomplete="off"></div>
-    <div class="cofacet-h">Company type</div><div id="cofacet-type"></div>
-    <div class="cofacet-h">Region</div><div id="cofacet-region"></div>
-    <label class="cotoggle"><input id="cosanc" type="checkbox"> Sanctioned only</label>
+    <div id="cofacets"></div>
+    <label class="cotoggle"><input id="cosanc" type="checkbox"> Sanctioned companies</label>
     <button id="coreset" class="reset" type="button">Reset filters</button>
   </aside>
   <section class="results">
