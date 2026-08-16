@@ -2,6 +2,9 @@
 .cokick{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-3);margin:4px 0 10px}
 .coh1{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
 .colead{max-width:70ch;color:var(--ink-2);font-size:14px;line-height:1.6;margin:0 0 16px}
+.cotable td.cap{white-space:normal}
+.captag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-1);border:1px solid var(--line);padding:3px 7px;margin:2px 4px 2px 0;white-space:nowrap}
 .cocount{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-2);text-transform:uppercase;margin-bottom:18px}
 .cocount b{color:var(--accent);font-weight:500}
 

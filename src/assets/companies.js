@@ -63,7 +63,18 @@ const VAL_BANDS = [
 
 const PER = 100;
 let DATA = [], MAXREV = 1, MAXVAL = 1;
-const state = { q:"", types:new Set(), regions:new Set(), countries:new Set(), vals:new Set(), sanctioned:false, page:1 };
+// HAS_CAP: rows carry a `cuas` capability array (the /cuas-systems/ view only),
+// which turns on the capability facet and the extra table column.
+// HAS_SANC: this view has a sanctioned toggle. Views without one show every
+// row inline (the name cell still carries a "Sanctioned" badge) rather than
+// silently hiding companies with no control to reveal them.
+let HAS_CAP = false, HAS_SANC = false;
+// Display order for capability chips/columns; anything unknown sorts last.
+const CAP_ORDER = ["Integrated", "Detection", "Mitigation", "Command & Control"];
+const capSort = (a, b) =>
+  ((CAP_ORDER.indexOf(a) + 1 || 99) - (CAP_ORDER.indexOf(b) + 1 || 99)) || a.localeCompare(b);
+
+const state = { q:"", types:new Set(), regions:new Set(), countries:new Set(), vals:new Set(), caps:new Set(), sanctioned:false, page:1 };
 
 const el = (id) => document.getElementById(id);
 
@@ -80,9 +91,13 @@ function row(c) {
   const rev = moneyShort(c.revenue_amount, c.revenue_currency);
   const val = moneyShort(c.valuation, c.valuation_currency);
   const fy = c.revenue_year ? `<span class="fy">FY${String(c.revenue_year).slice(-2)}</span>` : "";
+  const capCell = HAS_CAP
+    ? `<td class="cap">${(c.cuas || []).slice().sort(capSort).map((k) => `<span class="captag">${esc(k)}</span>`).join("") || dash}</td>`
+    : "";
   return `<tr>
     <td><div class="corow"><span class="mono-sq" style="--c:${tcol}"><i class="br"></i>${initials(c.name)}</span>
       <div><div class="cn">${nameInner}${c.is_sanctioned?' <span class="flag">Sanctioned</span>':""}</div>${cc}</div></div></td>
+    ${capCell}
     <td>${typeCell}</td>
     <td class="emp">${emp?`<div class="v">${esc(emp)}</div><div class="l">Employees</div>`:dash}</td>
     <td class="money">${rev?`<div class="v">${rev}${fy}</div>${bar(c.revenue_amount,MAXREV,"rev")}`:dash}</td>
@@ -97,8 +112,10 @@ function row(c) {
 function applyFilters() {
   const q = state.q.trim().toLowerCase();
   return DATA.filter((c) => {
-    // Default view hides sanctioned; the toggle shows ONLY sanctioned.
-    if (state.sanctioned ? !c.is_sanctioned : c.is_sanctioned) return false;
+    // Where a toggle exists: default hides sanctioned, toggle shows ONLY those.
+    // Where it doesn't, every row is listed and the badge does the flagging.
+    if (HAS_SANC && (state.sanctioned ? !c.is_sanctioned : c.is_sanctioned)) return false;
+    if (state.caps.size && !(c.cuas || []).some((k) => state.caps.has(k))) return false;
     if (state.types.size && !state.types.has(c.company_type)) return false;
     if (state.regions.size && !state.regions.has(countryMeta(c.hq_country).region)) return false;
     if (state.countries.size && !state.countries.has(c.hq_country)) return false;
@@ -122,7 +139,7 @@ function render() {
     ? `Showing ${from+1}–${from+slice.length} of <b>${filtered.length}</b> · page ${state.page} of ${pages}`
     : "No companies match these filters.";
   el("cogrid").innerHTML = slice.length
-    ? `<div class="cowrap"><table class="cotable"><thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th><th>Links</th></tr></thead><tbody>${slice.map(row).join("")}</tbody></table></div>`
+    ? `<div class="cowrap"><table class="cotable"><thead><tr><th>Company</th>${HAS_CAP?"<th>Capability</th>":""}<th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th><th>Links</th></tr></thead><tbody>${slice.map(row).join("")}</tbody></table></div>`
     : "";
   // pager
   const btn = (label, p, opt = {}) =>
@@ -170,6 +187,18 @@ function buildFilters() {
   wrap.innerHTML = "";
   const countBy = (fn) => DATA.reduce((n, c) => n + (fn(c) ? 1 : 0), 0);
 
+  // C-UAS capability — first facet, and only on the /cuas-systems/ view
+  const caps = [...new Set(DATA.flatMap((c) => c.cuas || []))].sort(capSort);
+  let drawCaps = () => {};
+  if (caps.length) {
+    const capBody = facetBox(wrap, "C-UAS capability");
+    drawCaps = () => { capBody.innerHTML = "";
+      caps.forEach((k) => chip(capBody, k, state.caps.has(k), () => {
+        state.caps.has(k) ? state.caps.delete(k) : state.caps.add(k); state.page=1; drawCaps(); render();
+      }, null, countBy((c) => (c.cuas || []).includes(k))));
+    };
+  }
+
   // Company type
   const types = [...new Set(DATA.map((c) => c.company_type).filter(Boolean))]
     .sort((a,b) => fmtType(a).localeCompare(fmtType(b)));
@@ -209,7 +238,7 @@ function buildFilters() {
     }, null, countBy((c) => { const v = Number(c.valuation); return isFinite(v) && b.test(v); })));
   };
 
-  redrawAll = () => { drawTypes(); drawRegions(); drawCountries(); drawVals(); };
+  redrawAll = () => { drawCaps(); drawTypes(); drawRegions(); drawCountries(); drawVals(); };
   redrawAll();
 
   // search
@@ -220,7 +249,7 @@ function buildFilters() {
   // reset
   el("coreset").onclick = () => {
     state.q=""; state.types.clear(); state.regions.clear(); state.countries.clear(); state.vals.clear();
-    state.sanctioned=false; state.page=1;
+    state.caps.clear(); state.sanctioned=false; state.page=1;
     el("cosearch").value=""; if (sanc) sanc.checked=false; redrawAll(); render();
   };
 }
@@ -230,6 +259,8 @@ function buildFilters() {
     const res = await fetch(document.body.dataset.src || "/data/companies.json");
     DATA = await res.json();
   } catch (e) { el("cocount").textContent = "Failed to load companies."; return; }
+  HAS_CAP = DATA.some((c) => (c.cuas || []).length);
+  HAS_SANC = !!el("cosanc");
   MAXREV = Math.max(1, ...DATA.map((c) => Number(c.revenue_amount) || 0));
   MAXVAL = Math.max(1, ...DATA.map((c) => Number(c.valuation) || 0));
   buildFilters();
