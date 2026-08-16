@@ -265,23 +265,40 @@ async function fetchCompanies() {
   }, "companies");
 }
 
-// ---- Integrated C-UAS subset ----
-// The `cuas-integrated` sector marks vendors selling complex, multi-layer
-// counter-UAS systems (detection + tracking + defeat in one product), as
-// opposed to single-capability detection / mitigation / C2 suppliers.
-// Two plain queries — sector id, then its company ids — so we avoid relying on
-// PostgREST embedded-resource filtering.
-const CUAS_SECTOR_SLUG = "cuas-integrated";
+// ---- C-UAS capability sectors ----
+// Every counter-UAS company sits in exactly one capability sector under the
+// `counter-uas` domain. The /cuas-systems/ page lists all of them and lets the
+// visitor filter by capability. Short labels keep chips and table cells legible.
+const CUAS_PREFIX = "cuas-";
+const CUAS_LABEL = {
+  "cuas-integrated": "Integrated",
+  "cuas-detection": "Detection",
+  "cuas-mitigation": "Mitigation",
+  "cuas-c2": "Command & Control",
+};
 
-async function fetchSectorCompanyIds(slug) {
-  const sectors = await sbFetchAll("sectors", { select: "id", slug: `eq.${slug}`, order: "id.asc" }, "sectors");
-  if (!sectors.length) throw new Error(`Sector "${slug}" not found in Supabase.`);
-  const links = await sbFetchAll("company_sectors", {
-    select: "company_id",
-    sector_id: `eq.${sectors[0].id}`,
-    order: "company_id.asc",
-  }, "company_sectors");
-  return new Set(links.map((r) => r.company_id));
+// -> Map(company_id -> ["Integrated", …]). Two plain queries, so we don't rely
+// on PostgREST embedded-resource filtering.
+async function fetchCuasCapabilities() {
+  const sectors = (await sbFetchAll("sectors", { select: "id,slug,name", order: "slug.asc" }, "sectors"))
+    .filter((s) => s.slug.startsWith(CUAS_PREFIX));
+  if (!sectors.length) throw new Error(`No "${CUAS_PREFIX}*" sectors found in Supabase.`);
+
+  const byCompany = new Map();
+  for (const s of sectors) {
+    const label = CUAS_LABEL[s.slug] || s.name;
+    const links = await sbFetchAll("company_sectors", {
+      select: "company_id",
+      sector_id: `eq.${s.id}`,
+      order: "company_id.asc",
+    }, `company_sectors(${s.slug})`);
+    for (const { company_id } of links) {
+      const arr = byCompany.get(company_id) || [];
+      if (!arr.includes(label)) arr.push(label);
+      byCompany.set(company_id, arr);
+    }
+  }
+  return byCompany;
 }
 
 // ALL products (every category) with maker id — used to list a company's
@@ -632,11 +649,11 @@ function cuasShell(total) {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>C-UAS Systems · xSonomy</title>
-<meta name="description" content="${total} companies supplying integrated counter-UAS systems — detection, tracking and defeat in one solution. Filter by type, region and country.">
+<meta name="description" content="${total} counter-UAS companies — integrated systems, detection, mitigation and command &amp; control. Filter by capability, type, region and country.">
 <link rel="canonical" href="${SITE}/cuas-systems/">
 <meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
 <meta property="og:title" content="C-UAS Systems · xSonomy"><meta property="og:url" content="${SITE}/cuas-systems/">
-<meta property="og:description" content="${total} suppliers of integrated, multi-layer counter-UAS systems.">
+<meta property="og:description" content="${total} counter-UAS companies, filterable by capability: integrated systems, detection, mitigation, command &amp; control.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
@@ -656,9 +673,9 @@ function cuasShell(total) {
     <button id="coreset" class="reset" type="button">Reset filters</button>
   </aside>
   <section class="results">
-    <div class="cokick">// Integrated Counter-UAS</div>
+    <div class="cokick">// Counter-UAS</div>
     <h1 class="coh1">C-UAS Systems</h1>
-    <p class="colead">Vendors whose counter-UAS offering is a complete system — detection, tracking, classification and defeat combined — rather than a single sensor or effector.</p>
+    <p class="colead">Companies working in counter-unmanned aircraft systems, grouped by what they supply: <b>Integrated</b> end-to-end systems, <b>Detection</b> sensors, <b>Mitigation</b> effectors, and <b>Command &amp; Control</b> software. Filter by capability on the left.</p>
     <div id="cocount" class="cocount"></div>
     <div id="cogrid"></div>
     <div id="copager" class="copager"></div>
@@ -738,19 +755,24 @@ async function main() {
   }
   console.log(`  Companies: ${companies.length} rows -> /companies/ + ${coPages} detail pages`);
 
-  // Integrated C-UAS view — same registry UI over the cuas-integrated subset.
+  // C-UAS view — same registry UI over every company in a cuas-* sector, with
+  // the capability carried through as `cuas` for the on-page filter and column.
   // Detail pages are shared with /companies/, so nothing extra is generated.
-  const cuasIds = await fetchSectorCompanyIds(CUAS_SECTOR_SLUG);
-  const cuasRegistry = companies.filter((c) => cuasIds.has(c.id))
-    .map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);
+  const cuasCaps = await fetchCuasCapabilities();
+  const cuasRegistry = companies.filter((c) => cuasCaps.has(c.id))
+    .map(({ id, description, overview, history, source_urls, legal_name, ...rest }) =>
+      ({ ...rest, cuas: cuasCaps.get(id) }));
   await writeFile(join(OUT, "data", "cuas-systems.json"), JSON.stringify(cuasRegistry));
   await mkdir(join(OUT, "cuas-systems"), { recursive: true });
   await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length));
-  console.log(`  C-UAS Systems: ${cuasRegistry.length} rows -> /cuas-systems/`);
+  const byCap = {};
+  for (const c of cuasRegistry) for (const k of c.cuas) byCap[k] = (byCap[k] || 0) + 1;
+  console.log(`  C-UAS Systems: ${cuasRegistry.length} rows -> /cuas-systems/ ` +
+    `(${Object.entries(byCap).map(([k, n]) => `${k} ${n}`).join(", ")})`);
   // Tagged in Supabase but absent from the companies fetch = a truncated or
   // gated read. Loud, because it fails silently as a short list otherwise.
-  if (cuasRegistry.length !== cuasIds.size)
-    console.warn(`  WARNING: ${cuasIds.size} companies tagged '${CUAS_SECTOR_SLUG}' but only ${cuasRegistry.length} present in the companies fetch.`);
+  if (cuasRegistry.length !== cuasCaps.size)
+    console.warn(`  WARNING: ${cuasCaps.size} companies tagged cuas-* but only ${cuasRegistry.length} present in the companies fetch.`);
 
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
