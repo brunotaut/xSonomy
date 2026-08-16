@@ -188,17 +188,39 @@ function sbConfig() {
   if (!url || !key) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_KEY must be set (.env or CI secrets).");
   return { url, key };
 }
-async function fetchProducts() {
+// PostgREST enforces a server-side row ceiling (db-max-rows, 1000 on this
+// project) that silently truncates any bigger request — a plain `limit=5000`
+// comes back with 1000 rows and no error. Every read below therefore pages
+// with offset until it gets a short page.
+//
+// `order` MUST end in a unique tiebreaker (id) or rows can repeat/vanish
+// across page boundaries when the sort key has duplicates.
+const PAGE = 1000;
+
+async function sbFetchAll(path, params, label = path) {
   const { url, key } = sbConfig();
-  const q = new URL(`${url}/rest/v1/products`);
-  q.searchParams.set("select",
-    "name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)");
-  q.searchParams.set("category", "in.(UAV,Sensor)");
-  if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
-  q.searchParams.set("limit", "5000");
-  const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
-  if (!res.ok) throw new Error(`Supabase products ${res.status}: ${await res.text()}`);
-  return res.json();
+  const headers = { apikey: key, Authorization: `Bearer ${key}` };
+  const out = [];
+  for (let offset = 0; ; offset += PAGE) {
+    const q = new URL(`${url}/rest/v1/${path}`);
+    for (const [k, v] of Object.entries(params)) q.searchParams.set(k, v);
+    q.searchParams.set("limit", String(PAGE));
+    q.searchParams.set("offset", String(offset));
+    const res = await fetch(q, { headers });
+    if (!res.ok) throw new Error(`Supabase ${label} ${res.status}: ${await res.text()}`);
+    const rows = await res.json();
+    out.push(...rows);
+    if (rows.length < PAGE) return out;
+  }
+}
+
+async function fetchProducts() {
+  return sbFetchAll("products", {
+    select: "name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
+    category: "in.(UAV,Sensor)",
+    order: "name.asc,id.asc",
+    ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
+  }, "products");
 }
 function reshape(p) {
   const row = {};
@@ -232,19 +254,15 @@ async function attachImage(row) {
 
 // ---- Companies catalogue ----
 async function fetchCompanies() {
-  const { url, key } = sbConfig();
-  const q = new URL(`${url}/rest/v1/companies`);
-  q.searchParams.set("select",
-    "id,name,slug,legal_name,description,overview,history,company_type,ownership,status,founded_year,defunct_year," +
-    "hq_country,hq_city,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
-    "revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency," +
-    "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls");
-  if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
-  q.searchParams.set("order", "name.asc");
-  q.searchParams.set("limit", "5000");
-  const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
-  if (!res.ok) throw new Error(`Supabase companies ${res.status}: ${await res.text()}`);
-  return res.json();
+  return sbFetchAll("companies", {
+    select:
+      "id,name,slug,legal_name,description,overview,history,company_type,ownership,status,founded_year,defunct_year," +
+      "hq_country,hq_city,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
+      "revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency," +
+      "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls",
+    order: "name.asc,id.asc",
+    ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
+  }, "companies");
 }
 
 // ---- Integrated C-UAS subset ----
@@ -256,38 +274,24 @@ async function fetchCompanies() {
 const CUAS_SECTOR_SLUG = "cuas-integrated";
 
 async function fetchSectorCompanyIds(slug) {
-  const { url, key } = sbConfig();
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
-
-  const sq = new URL(`${url}/rest/v1/sectors`);
-  sq.searchParams.set("select", "id");
-  sq.searchParams.set("slug", `eq.${slug}`);
-  const sres = await fetch(sq, { headers });
-  if (!sres.ok) throw new Error(`Supabase sectors ${sres.status}: ${await sres.text()}`);
-  const sectors = await sres.json();
+  const sectors = await sbFetchAll("sectors", { select: "id", slug: `eq.${slug}`, order: "id.asc" }, "sectors");
   if (!sectors.length) throw new Error(`Sector "${slug}" not found in Supabase.`);
-
-  const cq = new URL(`${url}/rest/v1/company_sectors`);
-  cq.searchParams.set("select", "company_id");
-  cq.searchParams.set("sector_id", `eq.${sectors[0].id}`);
-  cq.searchParams.set("limit", "5000");
-  const cres = await fetch(cq, { headers });
-  if (!cres.ok) throw new Error(`Supabase company_sectors ${cres.status}: ${await cres.text()}`);
-  return new Set((await cres.json()).map((r) => r.company_id));
+  const links = await sbFetchAll("company_sectors", {
+    select: "company_id",
+    sector_id: `eq.${sectors[0].id}`,
+    order: "company_id.asc",
+  }, "company_sectors");
+  return new Set(links.map((r) => r.company_id));
 }
 
 // ALL products (every category) with maker id — used to list a company's
 // products on its detail page. Light: three columns only.
 async function fetchCompanyProducts() {
-  const { url, key } = sbConfig();
-  const q = new URL(`${url}/rest/v1/products`);
-  q.searchParams.set("select", "name,category,company_id");
-  if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
-  q.searchParams.set("order", "name.asc");
-  q.searchParams.set("limit", "5000");
-  const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
-  if (!res.ok) throw new Error(`Supabase products(light) ${res.status}: ${await res.text()}`);
-  return res.json();
+  return sbFetchAll("products", {
+    select: "name,category,company_id",
+    order: "name.asc,id.asc",
+    ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
+  }, "products(light)");
 }
 
 const TYPE_LABEL = { prime: "Prime", tier1: "Tier 1", tier2: "Tier 2", sme: "SME",
@@ -743,6 +747,10 @@ async function main() {
   await mkdir(join(OUT, "cuas-systems"), { recursive: true });
   await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length));
   console.log(`  C-UAS Systems: ${cuasRegistry.length} rows -> /cuas-systems/`);
+  // Tagged in Supabase but absent from the companies fetch = a truncated or
+  // gated read. Loud, because it fails silently as a short list otherwise.
+  if (cuasRegistry.length !== cuasIds.size)
+    console.warn(`  WARNING: ${cuasIds.size} companies tagged '${CUAS_SECTOR_SLUG}' but only ${cuasRegistry.length} present in the companies fetch.`);
 
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
