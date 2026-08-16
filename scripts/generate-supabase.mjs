@@ -235,12 +235,58 @@ async function fetchCompanies() {
   const { url, key } = sbConfig();
   const q = new URL(`${url}/rest/v1/companies`);
   q.searchParams.set("select",
-    "name,slug,company_type,hq_country,website,linkedin_url,employee_range,revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency,is_sanctioned");
+    "id,name,slug,legal_name,description,overview,history,company_type,ownership,status,founded_year,defunct_year," +
+    "hq_country,hq_city,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
+    "revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency," +
+    "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls");
   if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
   q.searchParams.set("order", "name.asc");
   q.searchParams.set("limit", "5000");
   const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
   if (!res.ok) throw new Error(`Supabase companies ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+// ---- Integrated C-UAS subset ----
+// The `cuas-integrated` sector marks vendors selling complex, multi-layer
+// counter-UAS systems (detection + tracking + defeat in one product), as
+// opposed to single-capability detection / mitigation / C2 suppliers.
+// Two plain queries — sector id, then its company ids — so we avoid relying on
+// PostgREST embedded-resource filtering.
+const CUAS_SECTOR_SLUG = "cuas-integrated";
+
+async function fetchSectorCompanyIds(slug) {
+  const { url, key } = sbConfig();
+  const headers = { apikey: key, Authorization: `Bearer ${key}` };
+
+  const sq = new URL(`${url}/rest/v1/sectors`);
+  sq.searchParams.set("select", "id");
+  sq.searchParams.set("slug", `eq.${slug}`);
+  const sres = await fetch(sq, { headers });
+  if (!sres.ok) throw new Error(`Supabase sectors ${sres.status}: ${await sres.text()}`);
+  const sectors = await sres.json();
+  if (!sectors.length) throw new Error(`Sector "${slug}" not found in Supabase.`);
+
+  const cq = new URL(`${url}/rest/v1/company_sectors`);
+  cq.searchParams.set("select", "company_id");
+  cq.searchParams.set("sector_id", `eq.${sectors[0].id}`);
+  cq.searchParams.set("limit", "5000");
+  const cres = await fetch(cq, { headers });
+  if (!cres.ok) throw new Error(`Supabase company_sectors ${cres.status}: ${await cres.text()}`);
+  return new Set((await cres.json()).map((r) => r.company_id));
+}
+
+// ALL products (every category) with maker id — used to list a company's
+// products on its detail page. Light: three columns only.
+async function fetchCompanyProducts() {
+  const { url, key } = sbConfig();
+  const q = new URL(`${url}/rest/v1/products`);
+  q.searchParams.set("select", "name,category,company_id");
+  if (PUBLISH_STATUS) q.searchParams.set("publication_status", `eq.${PUBLISH_STATUS}`);
+  q.searchParams.set("order", "name.asc");
+  q.searchParams.set("limit", "5000");
+  const res = await fetch(q, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+  if (!res.ok) throw new Error(`Supabase products(light) ${res.status}: ${await res.text()}`);
   return res.json();
 }
 
@@ -426,6 +472,117 @@ ${pager(page, totalPages)}
 </div></body></html>`;
 }
 
+// ---- Per-company detail page ----
+const CO_PAGE_EXTRA_CSS = `
+.co-head{display:flex;align-items:flex-start;gap:18px;margin:10px 0 6px}
+.mono-sq{position:relative;display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;flex:0 0 auto;border:1px solid var(--c);color:var(--c);background:#0e141a;font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:.06em}
+.mono-sq .br{position:absolute;top:4px;left:4px;width:10px;height:10px;border-top:1px solid var(--c);border-left:1px solid var(--c)}
+.badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px;vertical-align:middle}
+.flagb{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#ff6a5f;border:1px solid #ff6a5f;padding:2px 8px;margin-left:10px;border-radius:2px;text-transform:uppercase;vertical-align:middle}
+.statusb{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#ffc24d;border:1px solid #ffc24d;padding:2px 8px;margin-left:10px;border-radius:2px;text-transform:uppercase;vertical-align:middle}
+.sect{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin:30px 0 12px}
+.prose p{margin:0 0 14px;color:#c4cad4}
+.prods{display:flex;flex-wrap:wrap;gap:8px}
+.prods a,.prods span{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:6px 10px;color:var(--text)}
+.prods a:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.prods .pc{color:var(--ink3);margin-left:6px;font-size:9px}
+`;
+
+const OWN_LABEL = { private:"Private", public:"Public", state_owned:"State-owned", subsidiary:"Subsidiary",
+  joint_venture:"Joint venture", academic:"Academic", nonprofit:"Non-profit", unknown:"Unknown" };
+const STATUS_LABEL = { acquired:"Acquired", defunct:"Defunct", dormant:"Dormant", unknown:"Status unknown" };
+const paras = (s) => String(s || "").split(/\n{2,}|\r\n\r\n/).map((p) => p.trim()).filter(Boolean)
+  .map((p) => `<p>${esc(p)}</p>`).join("");
+
+function companyPage(c, prods) {
+  const url = `${SITE}/companies/${c.slug}/`;
+  const tcol = TYPE_COLOR[c.company_type] || "#9aa6ad";
+  const { flag, region } = countryMeta(c.hq_country);
+  const title = `${c.name} · xSonomy`;
+  const metaDesc = clip(c.description) ||
+    `${c.name} — company profile in the xSonomy defence-tech registry: type, HQ, financials and products.`;
+  const hq = [c.hq_city, c.hq_country].filter(Boolean).join(", ");
+  const emp = empShort(c.employee_range) || (c.employee_count ? String(c.employee_count) : "");
+  const rev = moneyShort(c.revenue_amount, c.revenue_currency);
+  const val = moneyShort(c.valuation, c.valuation_currency);
+  const fund = moneyShort(c.total_funding, c.funding_currency);
+  const founded = [c.founded_year, c.defunct_year ? `– ${c.defunct_year}` : ""].filter(Boolean).join(" ");
+  const listed = c.stock_ticker ? `${esc(c.stock_ticker)}${c.stock_exchange ? " · " + esc(c.stock_exchange) : ""}` : "";
+  const statusB = STATUS_LABEL[c.status] ? `<span class="statusb">${STATUS_LABEL[c.status]}</span>` : "";
+
+  const facts = [
+    ["Type", c.company_type ? `<span class="badge" style="color:${tcol}">${esc(TYPE_LABEL[c.company_type] || c.company_type)}</span>` : ""],
+    ["Ownership", esc(OWN_LABEL[c.ownership] || "")],
+    ["Legal name", c.legal_name && c.legal_name !== c.name ? esc(c.legal_name) : ""],
+    ["Founded", esc(founded)],
+    ["Headquarters", hq ? `${flag ? flag + " " : ""}${esc(hq)}` : ""],
+    ["Region", esc(region || "")],
+    ["Employees", esc(emp)],
+    ["Revenue", rev ? `${rev}${c.revenue_year ? ` <span style="color:var(--ink3)">FY${String(c.revenue_year).slice(-2)}</span>` : ""}` : ""],
+    ["Valuation", val],
+    ["Total funding", fund],
+    ["Listed", listed],
+    ["NATO CAGE", esc(c.nato_cage_code || "")],
+  ].filter(([, v]) => v);
+  const factRows = facts.map(([l, v]) => `<tr><th>${esc(l)}</th><td>${v}</td></tr>`).join("");
+
+  const prodChips = (prods || []).map((p) =>
+    p.url
+      ? `<a href="${p.url}">${esc(p.name)}<span class="pc">${esc(p.category)}</span></a>`
+      : `<span>${esc(p.name)}<span class="pc">${esc(p.category)}</span></span>`).join("");
+
+  const ctas = [
+    c.website ? `<a class="btn p" href="${esc(c.website)}" target="_blank" rel="noopener nofollow">Website ↗</a>` : "",
+    c.linkedin_url ? `<a class="btn" href="${esc(c.linkedin_url)}" target="_blank" rel="noopener nofollow">LinkedIn ↗</a>` : "",
+    c.wikipedia_url ? `<a class="btn" href="${esc(c.wikipedia_url)}" target="_blank" rel="noopener nofollow">Wikipedia ↗</a>` : "",
+    c.twitter_url ? `<a class="btn" href="${esc(c.twitter_url)}" target="_blank" rel="noopener nofollow">X / Twitter ↗</a>` : "",
+  ].filter(Boolean).join(" ");
+
+  const sources = asArray(c.source_urls).filter((u) => /^https?:\/\//.test(u)).slice(0, 5)
+    .map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener nofollow">${esc(u.replace(/^https?:\/\/(www\.)?/, "").split("/")[0])}</a>`).join(" · ");
+
+  const jsonld = {
+    "@context": "https://schema.org", "@type": "Organization", "name": c.name, "url": url,
+    ...(c.website ? { "sameAs": [c.website, c.linkedin_url, c.wikipedia_url].filter(Boolean) } : {}),
+    ...(c.description ? { "description": clip(c.description, 300) } : {}),
+    ...(c.founded_year ? { "foundingDate": String(c.founded_year) } : {}),
+    ...(hq ? { "address": { "@type": "PostalAddress", ...(c.hq_city ? { "addressLocality": c.hq_city } : {}), ...(c.hq_country ? { "addressCountry": c.hq_country } : {}) } } : {}),
+  };
+
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(metaDesc)}">
+<link rel="canonical" href="${url}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(metaDesc)}"><meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>${PAGE_CSS}${CO_PAGE_EXTRA_CSS}</style>
+<script type="application/ld+json">${JSON.stringify(jsonld)}</script>
+</head><body>
+<header class="hd"><div class="w"><a class="brand" href="/">xSonomy</a><a class="back" href="/companies/">← Companies</a></div></header>
+<div class="wrap">
+<div class="kicker">// Company${c.company_type ? " · " + esc(TYPE_LABEL[c.company_type] || c.company_type) : ""}</div>
+<div class="co-head">
+  <span class="mono-sq" style="--c:${tcol}"><i class="br"></i>${initials(c.name)}</span>
+  <div>
+    <h1 style="margin:0">${esc(c.name)}${c.is_sanctioned ? '<span class="flagb">Sanctioned</span>' : ""}${statusB}</h1>
+    <div class="sub" style="margin-bottom:0">${esc([hq ? `${flag ? flag + " " : ""}${hq}` : "", region].filter(Boolean).join(" · "))}</div>
+  </div>
+</div>
+${c.description ? `<p class="lead" style="margin-top:18px">${esc(c.description)}</p>` : ""}
+<div class="sect">// Facts</div>
+<table><tbody>${factRows}</tbody></table>
+${prodChips ? `<div class="sect">// Products in the catalogue (${prods.length})</div><div class="prods">${prodChips}</div>` : ""}
+${c.overview ? `<div class="sect">// Overview</div><div class="prose">${paras(c.overview)}</div>` : ""}
+${c.history ? `<div class="sect">// History</div><div class="prose">${paras(c.history)}</div>` : ""}
+${ctas ? `<div class="cta">${ctas}</div>` : ""}
+<div class="note">Review-stage registry data — profile compiled from public sources; not for procurement or investment decisions.${sources ? ` Sources: ${sources}` : ""}</div>
+</div></body></html>`;
+}
+
 function companiesShell(total) {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -442,6 +599,7 @@ function companiesShell(total) {
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
+  <a class="news-link" href="/cuas-systems/">C-UAS Systems</a>
   <a class="news-link active" href="/companies/">Companies</a>
   <a class="news-link" href="https://news.xsonomy.com">News</a>
 </div></header>
@@ -455,6 +613,48 @@ function companiesShell(total) {
   <section class="results">
     <div class="cokick">// Company Registry</div>
     <h1 class="coh1">Companies</h1>
+    <div id="cocount" class="cocount"></div>
+    <div id="cogrid"></div>
+    <div id="copager" class="copager"></div>
+  </section>
+</main>
+<script type="module" src="/assets/companies.js"></script>
+</body></html>`;
+}
+
+// Integrated C-UAS registry page. Same shell, filters and table as /companies/,
+// pointed at the cuas-integrated subset via <body data-src>.
+function cuasShell(total) {
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C-UAS Systems · xSonomy</title>
+<meta name="description" content="${total} companies supplying integrated counter-UAS systems — detection, tracking and defeat in one solution. Filter by type, region and country.">
+<link rel="canonical" href="${SITE}/cuas-systems/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="C-UAS Systems · xSonomy"><meta property="og:url" content="${SITE}/cuas-systems/">
+<meta property="og:description" content="${total} suppliers of integrated, multi-layer counter-UAS systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/companies.css">
+</head><body data-src="/data/cuas-systems.json">
+<header class="site-header"><div class="wrap">
+  <div class="brand">xSonomy</div>
+  <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
+  <a class="news-link active" href="/cuas-systems/">C-UAS Systems</a>
+  <a class="news-link" href="/companies/">Companies</a>
+  <a class="news-link" href="https://news.xsonomy.com">News</a>
+</div></header>
+<main class="wrap layout">
+  <aside class="filters" aria-label="Filters">
+    <div class="search-box"><input id="cosearch" type="search" placeholder="Search company or country…" autocomplete="off"></div>
+    <div id="cofacets"></div>
+    <button id="coreset" class="reset" type="button">Reset filters</button>
+  </aside>
+  <section class="results">
+    <div class="cokick">// Integrated Counter-UAS</div>
+    <h1 class="coh1">C-UAS Systems</h1>
+    <p class="colead">Vendors whose counter-UAS offering is a complete system — detection, tracking, classification and defeat combined — rather than a single sensor or effector.</p>
     <div id="cocount" class="cocount"></div>
     <div id="cogrid"></div>
     <div id="copager" class="copager"></div>
@@ -501,17 +701,53 @@ async function main() {
     }
   }
 
-  // Companies catalogue — client-filtered registry (data JSON + single shell)
+  // Companies catalogue — client-filtered registry + per-company detail pages
   const companies = await fetchCompanies();
-  await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(companies));
+  const lightProducts = await fetchCompanyProducts();
+
+  // product-name → built page URL (only UAV/Sensor products have pages)
+  const pageUrlByProduct = new Map();
+  for (const [bucket, rows] of Object.entries(buckets))
+    for (const row of rows) pageUrlByProduct.set(row.Name, `/${bucket}/${row.slug}/`);
+  const prodsByCompany = new Map();
+  for (const p of lightProducts) {
+    if (!p.company_id) continue;
+    const arr = prodsByCompany.get(p.company_id) || [];
+    arr.push({ name: p.name, category: p.category, url: pageUrlByProduct.get(p.name) || null });
+    prodsByCompany.set(p.company_id, arr);
+  }
+
+  // registry JSON stays lean: strip long-text/detail-only fields
+  const registry = companies.map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);
+  await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(registry));
   await mkdir(join(OUT, "companies"), { recursive: true });
   await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length));
-  console.log(`  Companies: ${companies.length} rows -> /companies/ (client-filtered)`);
+
+  let coPages = 0;
+  for (const c of companies) {
+    if (!c.slug) continue;
+    const dir = join(OUT, "companies", String(c.slug));
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, "index.html"), companyPage(c, prodsByCompany.get(c.id) || []));
+    urls.push(`${SITE}/companies/${c.slug}/`);
+    coPages++;
+  }
+  console.log(`  Companies: ${companies.length} rows -> /companies/ + ${coPages} detail pages`);
+
+  // Integrated C-UAS view — same registry UI over the cuas-integrated subset.
+  // Detail pages are shared with /companies/, so nothing extra is generated.
+  const cuasIds = await fetchSectorCompanyIds(CUAS_SECTOR_SLUG);
+  const cuasRegistry = companies.filter((c) => cuasIds.has(c.id))
+    .map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);
+  await writeFile(join(OUT, "data", "cuas-systems.json"), JSON.stringify(cuasRegistry));
+  await mkdir(join(OUT, "cuas-systems"), { recursive: true });
+  await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length));
+  console.log(`  C-UAS Systems: ${cuasRegistry.length} rows -> /cuas-systems/`);
 
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    [`${SITE}/`, ...sectionUrls, `${SITE}/companies/`, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
+    [`${SITE}/`, ...sectionUrls, `${SITE}/cuas-systems/`, `${SITE}/companies/`, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
   await writeFile(join(OUT, "sitemap.xml"), sitemap);
   await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
   await writeFile(join(OUT, "CNAME"), "xsonomy.com\n");
