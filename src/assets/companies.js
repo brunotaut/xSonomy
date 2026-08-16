@@ -1,5 +1,7 @@
 // xSonomy Companies registry — client-side filter + 100/page pagination.
-// Loads /data/companies.json (written by the build) and renders the card rows.
+// Loads the dataset named by <body data-src="…"> (default /data/companies.json,
+// written by the build) and renders the card rows. Re-used as-is by the
+// /cuas-systems/ view, which points data-src at the integrated C-UAS subset.
 // Sanctioned companies are hidden by default; the "Sanctioned companies"
 // toggle switches the view to ONLY them.
 
@@ -69,7 +71,8 @@ function row(c) {
   const dash = '<span class="mut">—</span>';
   const tcol = TYPE_COLOR[c.company_type] || "#9aa6ad";
   const nm = esc(c.name);
-  const nameInner = c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener">${nm}</a>` : nm;
+  // Company name links to the per-company profile page; website stays in Links.
+  const nameInner = c.slug ? `<a href="/companies/${esc(c.slug)}/">${nm}</a>` : nm;
   const { flag, region } = countryMeta(c.hq_country);
   const cc = c.hq_country ? `<div class="cc">${flag?`<span class="fl">${flag}</span>`:""}${esc(c.hq_country)}${region?` · ${region}`:""}</div>` : "";
   const typeCell = c.company_type ? `<span class="badge" style="color:${tcol}">${esc(fmtType(c.company_type))}</span>` : dash;
@@ -211,19 +214,20 @@ function buildFilters() {
 
   // search
   el("cosearch").oninput = (e) => { state.q = e.target.value; state.page=1; render(); };
-  // sanctioned-only view toggle
-  el("cosanc").onchange = (e) => { state.sanctioned = e.target.checked; state.page=1; render(); };
+  // sanctioned-only view toggle — omitted on views with no sanctioned rows
+  const sanc = el("cosanc");
+  if (sanc) sanc.onchange = (e) => { state.sanctioned = e.target.checked; state.page=1; render(); };
   // reset
   el("coreset").onclick = () => {
     state.q=""; state.types.clear(); state.regions.clear(); state.countries.clear(); state.vals.clear();
     state.sanctioned=false; state.page=1;
-    el("cosearch").value=""; el("cosanc").checked=false; redrawAll(); render();
+    el("cosearch").value=""; if (sanc) sanc.checked=false; redrawAll(); render();
   };
 }
 
 (async function init() {
   try {
-    const res = await fetch("/data/companies.json");
+    const res = await fetch(document.body.dataset.src || "/data/companies.json");
     DATA = await res.json();
   } catch (e) { el("cocount").textContent = "Failed to load companies."; return; }
   MAXREV = Math.max(1, ...DATA.map((c) => Number(c.revenue_amount) || 0));
