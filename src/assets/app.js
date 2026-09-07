@@ -3,10 +3,31 @@
 // subcategory sub-tabs in the sidebar, each with its own filters.
 // Cards link to static per-product pages. Data is keyed by Airtable field names.
 
+// UAV filters come from the shared taxonomy (taxonomy_facets / taxonomy_options in
+// Supabase), attached to each row by the generator. Ordered by how much of the
+// catalogue each facet actually covers. Domain is deliberately absent — it is ~98%
+// "Aerial" on this page, so it filters nothing; it still shows on product pages.
+// Dual-use is a single toggle at the foot of the sidebar, not a group (35 products).
 const UAV_CFG = {
   search: ["Name", "Company", "Summary", "Subtype"],
-  selects: ["Subcategory", "Country", "UAV · Role", "UAV · Class", "UAV · Propulsion", "UAV · Combat-proven"],
-  ranges: ["UAV · MTOW (kg)", "UAV · Endurance (min)", "UAV · Range (km)", "UAV · Max speed (km/h)"],
+  selects: [
+    "Country",
+    "Taxonomy · Airframe / lift type",
+    "Taxonomy · Propulsion type",
+    "Taxonomy · Origin / supply chain",
+    "Taxonomy · Control / autonomy",
+    "Taxonomy · Weight class",
+    "Taxonomy · Regulatory class",
+    "Taxonomy · Signature / detectability",
+    "Taxonomy · Range / endurance",
+    "Taxonomy · Mission – military",
+    "Taxonomy · Threat vector",
+    "Taxonomy · Speed regime",
+    "Taxonomy · Mission – civil",
+    "Taxonomy · Strike depth",
+  ],
+  ranges: [],
+  dualUseField: "Taxonomy · Dual-use",
   compare: [
     ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
     ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
@@ -343,7 +364,7 @@ function selectSub(key) {
   resetFilters();
 }
 function resetFilters() {
-  state.filters = { search: "", selects: {}, ranges: {}, showRussian: false };
+  state.filters = { search: "", selects: {}, ranges: {}, showRussian: false, dualUse: false };
   els.search.value = "";
   if (state.cfg) buildFacets();
   render();
@@ -378,6 +399,15 @@ function buildFacets() {
       });
       body.appendChild(label);
     });
+    // Nothing selected in a group is not the same as "no such products": a group only
+    // covers the rows that have been classified for it. Say how many it cannot speak for.
+    const unclassified = state.rows.filter((r) => asArray(r[field]).length === 0).length;
+    if (unclassified > 0) {
+      const note = document.createElement("div");
+      note.className = "facet-unclassified";
+      note.textContent = `${unclassified} not yet classified`;
+      body.appendChild(note);
+    }
     els.facets.appendChild(box);
   }
   for (const field of ranges) {
@@ -393,6 +423,17 @@ function buildFacets() {
     }));
     els.facets.appendChild(box);
   }
+  const duField = state.cfg.dualUseField;
+  if (duField && state.rows.some((r) => asArray(r[duField]).length > 0)) {
+    const n = state.rows.filter((r) => asArray(r[duField]).length > 0).length;
+    const du = document.createElement("label");
+    du.className = "russia-toggle dual-use-toggle";
+    du.innerHTML = `<input type="checkbox" /> <span>Dual-use / improvised only</span><span class="n">${n}</span>`;
+    du.querySelector("input").checked = state.filters.dualUse;
+    du.querySelector("input").addEventListener("change", (e) => { state.filters.dualUse = e.target.checked; render(); });
+    els.facets.appendChild(du);
+  }
+
   const rb = document.createElement("label");
   rb.className = "russia-toggle";
   rb.innerHTML = `<input type="checkbox" /> <span>Russian products</span>`;
@@ -403,6 +444,7 @@ function buildFacets() {
 function matches(row) {
   const f = state.filters;
   if (!f.showRussian && first(row.Country) === "Russia") return false;
+  if (f.dualUse && asArray(row[state.cfg.dualUseField]).length === 0) return false;
   if (f.search) {
     const hay = state.cfg.search.map((k) => asArray(row[k]).join(" ")).join(" ").toLowerCase();
     if (!hay.includes(f.search)) return false;

@@ -216,11 +216,56 @@ async function sbFetchAll(path, params, label = path) {
 
 async function fetchProducts() {
   return sbFetchAll("products", {
-    select: "name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
+    select: "id,name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
     category: "in.(UAV,Sensor)",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "products");
+}
+
+// ---------- taxonomy (product_taxonomy_view) ----------
+// One row per (product, option). Keyed on product_id — NOT product_slug, because the
+// slug written into the site is generated here from the product name (see slugify),
+// not read from products.slug, so the two do not reliably match.
+const TAXONOMY_FIELD = {
+  airframe:         "Taxonomy · Airframe / lift type",
+  propulsion:       "Taxonomy · Propulsion type",
+  origin:           "Taxonomy · Origin / supply chain",
+  control:          "Taxonomy · Control / autonomy",
+  signature:        "Taxonomy · Signature / detectability",
+  range_class:      "Taxonomy · Range / endurance",
+  mission_military: "Taxonomy · Mission – military",
+  mission_civil:    "Taxonomy · Mission – civil",
+  mission_dual_use: "Taxonomy · Dual-use",
+  threat_vector:    "Taxonomy · Threat vector",
+  speed_regime:     "Taxonomy · Speed regime",
+  strike_depth:     "Taxonomy · Strike depth",
+  domain:           "Taxonomy · Domain",
+};
+// `weight_class` holds two different schemes: NATO size classes and civil regulatory
+// marks. They are not mutually exclusive, so they are split into two filter groups.
+const REGULATORY_OPTIONS = new Set([
+  "uk-eu-c0-c6-class-marks", "faa-250-g", "faa-25-kg-part-107", "faa-25-kg-part-137-waiver",
+]);
+const WEIGHT_FIELD = "Taxonomy · Weight class";
+const REGULATORY_FIELD = "Taxonomy · Regulatory class";
+
+async function fetchTaxonomy() {
+  const rows = await sbFetchAll("product_taxonomy_view", {
+    select: "product_id,facet,option,option_name",
+    order: "product_id.asc,facet.asc,option.asc",
+  }, "taxonomy");
+  const byProduct = new Map();
+  for (const r of rows) {
+    const field = r.facet === "weight_class"
+      ? (REGULATORY_OPTIONS.has(r.option) ? REGULATORY_FIELD : WEIGHT_FIELD)
+      : TAXONOMY_FIELD[r.facet];
+    if (!field || !r.option_name) continue;
+    let rec = byProduct.get(r.product_id);
+    if (!rec) byProduct.set(r.product_id, (rec = {}));
+    (rec[field] || (rec[field] = [])).push(r.option_name);
+  }
+  return byProduct;
 }
 function reshape(p) {
   const row = {};
@@ -690,6 +735,9 @@ async function main() {
   sbConfig();
   console.log(`Fetching products from Supabase (gate: ${PUBLISH_STATUS || "all"})…`);
   const products = await fetchProducts();
+  console.log("Fetching taxonomy from Supabase…");
+  const taxonomy = await fetchTaxonomy();
+  console.log(`  taxonomy: ${taxonomy.size} products classified`);
 
   await rm(OUT, { recursive: true, force: true });
   await mkdir(join(OUT, "data"), { recursive: true });
@@ -700,6 +748,7 @@ async function main() {
     const bucket = p.category === "UAV" ? "uav" : "sensors";
     const row = reshape(p);
     row.slug = slugify(row.Name || "item");
+    Object.assign(row, taxonomy.get(p.id) || {});
     await attachImage(row);
     buckets[bucket].push(row);
   }

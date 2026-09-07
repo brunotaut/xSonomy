@@ -89,6 +89,9 @@ a { color: var(--accent); text-decoration: none; }
 }
 .facet label:hover { color: var(--ink-0); }
 .facet label .n { margin-left: auto; color: var(--ink-3); font-size: 10px; }
+.facet-unclassified { margin-top: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--ink-3); }
+.dual-use-toggle input { accent-color: var(--accent); }
+.dual-use-toggle .n { margin-left: auto; color: var(--ink-3); font-size: 10px; }
 .facet input[type=checkbox] { accent-color: var(--accent); }
 .facet .range { display: flex; align-items: center; gap: 8px; }
 .facet .range input {
