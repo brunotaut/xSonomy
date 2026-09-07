@@ -24,6 +24,28 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-09-07 (later still) — data-completeness % on cards, default sort by it
+Each UAV card now carries a small bar + percentage, and the grid leads with the
+best-documented products (name is the tie-break; sensors keep alphabetical).
+
+**Definition** — `completeness()` in `app.js`, a fixed **19-item checklist** so the number is
+comparable across the catalogue:
+- identity (4): Company, Country, Summary, Website
+- specs (5): MTOW, Range, Endurance, Max speed, Max payload
+- classification (9): Domain, Airframe, Weight class, Propulsion, Control, Range band,
+  Speed regime, Origin, Signature
+- mission (1): satisfied by any of military / civil / dual-use
+
+Deliberately **excluded**: strike depth, threat vector, regulatory class and dual-use, which are
+role-dependent — counting them would penalise a survey drone for not being a weapon. `Image` is
+excluded too: no product has one (the generator's `attachImage` never populates it, so every card
+falls back to the schematic SVG — worth investigating separately).
+
+Distribution across 1,082 UAVs: mean 57%, median 63%, 56 products at 100%, 21 at or below 9%.
+The bottom of the list is the queue's junk — Bandit, C20, C26, Vadris, VEX AIR all score 5%.
+Colour: green >=75%, grey 40-74%, amber <40%.
+
+
 ### 2026-09-07 (later) — Role restored, Status filter added
 - **Role** (`UAV · Role`) put back on /uav/ as requested, with every option. Caveat recorded:
   it is free text — **235 distinct values across 425 products, 179 of which match exactly one

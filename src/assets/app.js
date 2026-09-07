@@ -76,6 +76,32 @@ const SENSOR_TABS = [
   { key:"ew",        group:"Passive sensors", label:"Signals / EW",    match:(s)=>first(s.Subcategory)==="Signals / EW",             cfg:RF_CFG,       cardFields:RF_CARDS },
 ];
 
+// ---------- data completeness ----------
+// Share of a fixed 19-item checklist we actually hold for a product, so the figure is
+// comparable across the whole catalogue. Deliberately leaves out the role-dependent
+// facets (strike depth, threat vector, regulatory class, dual-use) — counting those
+// would penalise a survey drone for not being a weapon. Mission is one item, satisfied
+// by any of military / civil / dual-use. `Image` is not counted: no product has one yet.
+const PCT_IDENTITY = ["Company", "Country", "Summary", "Website"];
+const PCT_SPECS = ["UAV · MTOW (kg)", "UAV · Range (km)", "UAV · Endurance (min)",
+                   "UAV · Max speed (km/h)", "UAV · Max payload (kg)"];
+const PCT_CLASS = ["Taxonomy · Domain", "Taxonomy · Airframe / lift type", "Taxonomy · Weight class",
+                   "Taxonomy · Propulsion type", "Taxonomy · Control / autonomy",
+                   "Taxonomy · Range / endurance", "Taxonomy · Speed regime",
+                   "Taxonomy · Origin / supply chain", "Taxonomy · Signature / detectability"];
+const PCT_MISSION = ["Taxonomy · Mission – military", "Taxonomy · Mission – civil", "Taxonomy · Dual-use"];
+const PCT_TOTAL = PCT_IDENTITY.length + PCT_SPECS.length + PCT_CLASS.length + 1;
+const hasVal = (v) => v != null && v !== "" && !(Array.isArray(v) && v.length === 0);
+function completeness(row) {
+  if (row.__pct != null) return row.__pct;
+  let n = 0;
+  for (const k of PCT_IDENTITY) if (hasVal(row[k])) n++;
+  for (const k of PCT_SPECS) if (hasVal(row[k])) n++;
+  for (const k of PCT_CLASS) if (hasVal(row[k])) n++;
+  if (PCT_MISSION.some((k) => hasVal(row[k]))) n++;
+  return (row.__pct = Math.round((100 * n) / PCT_TOTAL));
+}
+
 const els = {
   tabs: document.getElementById("tabs"),
   subtabs: document.getElementById("subtabs"),
@@ -155,6 +181,11 @@ function cmpBtn(slug) {
   const on = state.compare.includes(slug) ? " on" : "";
   return `<button class="cmp-btn${on}" data-slug="${esc(slug)}" title="Add to compare" aria-label="Add to compare">${CMP_ICON}</button>`;
 }
+function pctBadge(pct) {
+  const tone = pct >= 75 ? "hi" : pct >= 40 ? "mid" : "low";
+  return `<span class="data-pct ${tone}" title="${pct}% of the ${PCT_TOTAL} fields we track for a UAV are filled in for this product">`
+    + `<span class="data-bar"><i style="width:${pct}%"></i></span>${pct}%</span>`;
+}
 function uavCard(row) {
   const frame = first(row["UAV · Frame type"]);
   const prod = first(row["UAV · Production status"]);
@@ -170,7 +201,7 @@ function uavCard(row) {
       <span class="art-tag">${esc(up(frameKind(frame)))}</span>
     </div>
     <div class="card-body">
-      <div class="card-geo">${geoBadge(row.Country)}</div>
+      <div class="card-geo">${geoBadge(row.Country)}${pctBadge(completeness(row))}</div>
       <a class="card-name" href="${href}">${esc(row.Name || "Untitled")}</a>
       <div class="card-mfr">${esc(first(row.Company) || "")}</div>
       <div class="card-tags">${first(row.Subcategory) ? `<span class="tag">${esc(first(row.Subcategory))}</span>` : ""}${role ? `<span class="tag role">${esc(role)}</span>` : ""}${frame ? `<span class="tag">${esc(frame)}</span>` : ""}</div>
@@ -479,7 +510,12 @@ function matches(row) {
   return true;
 }
 function render() {
-  const list = state.rows.filter(matches).sort((a, b) => String(a.Name || "").localeCompare(String(b.Name || "")));
+  // UAVs lead with the best-documented products; name is the tie-break so equal scores
+  // stay in a stable, predictable order. Sensors keep plain alphabetical — the
+  // completeness checklist is UAV-specific and would score them all at zero.
+  const byName = (a, b) => String(a.Name || "").localeCompare(String(b.Name || ""));
+  const list = state.rows.filter(matches).sort(
+    state.cat === "uav" ? (a, b) => completeness(b) - completeness(a) || byName(a, b) : byName);
   els.grid.className = "grid " + state.cat;
   els.grid.innerHTML = "";
   els.empty.hidden = list.length > 0;

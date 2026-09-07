@@ -150,7 +150,14 @@ a { color: var(--accent); text-decoration: none; }
 .status-flag.PROD { color: var(--good); border: 1px solid rgba(107,230,117,.4); background: rgba(107,230,117,.08); }
 .status-flag.OTHER { color: var(--warn); border: 1px solid rgba(255,204,51,.4); background: rgba(255,204,51,.08); }
 .card-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.card-geo { margin-bottom: 2px; }
+.card-geo { margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+.data-pct { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: var(--ink-3); white-space: nowrap; }
+.data-bar { width: 34px; height: 3px; background: rgba(255,255,255,.10); position: relative; overflow: hidden; flex: none; }
+.data-bar i { position: absolute; top: 0; bottom: 0; left: 0; background: var(--ink-3); }
+.data-pct.hi { color: var(--good); }
+.data-pct.hi .data-bar i { background: var(--good); }
+.data-pct.low { color: var(--warn); }
+.data-pct.low .data-bar i { background: var(--warn); }
 .card-name { display: block; font-family: var(--display); font-size: 18px; letter-spacing: .06em; text-transform: uppercase; margin: 0; line-height: 1; color: var(--ink-0); text-decoration: none; }
 .card:hover .card-name, .card-name:hover { color: var(--accent); }
 .card-mfr { font-family: var(--mono); font-size: 9.5px; color: var(--ink-2); letter-spacing: .16em; margin-top: 3px; }
