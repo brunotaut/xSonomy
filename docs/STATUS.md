@@ -24,6 +24,22 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-09-07 (later) — Role restored, Status filter added
+- **Role** (`UAV · Role`) put back on /uav/ as requested, with every option. Caveat recorded:
+  it is free text — **235 distinct values across 425 products, 179 of which match exactly one
+  product**. Usable, but the list is long and full of near-duplicates ("ISR", "ISR /
+  reconnaissance", "Tactical ISR", "reconnaissance"). Normalising it into buckets is an open
+  offer, not done.
+- **Status** added, normalised at build time by `normaliseStatus()` from the same kind of free
+  text (155 spellings) into six buckets: In Production 207, Discontinued 84, Development 57,
+  Prototype 48, Cancelled 9, N/A 677. N/A is always emitted, so it is a real bucket rather than
+  a gap. The raw `UAV · Production status` still shows on product pages; the normalised `Status`
+  is kept off them by `HIDDEN`.
+- **Discontinued is off by default** (`UAV_CFG.hideStatus`): those 84 products are excluded until
+  the Discontinued box is ticked. Ticking it then behaves like any other facet option — it shows
+  *only* discontinued, not "everything plus discontinued".
+
+
 ### 2026-09-07 — UAV filters rebuilt on the shared taxonomy
 Replaced the /uav/ sidebar filters with the 14-facet taxonomy (`taxonomy_facets` /
 `taxonomy_options` / `product_taxonomy` in Supabase, classified in the news repo).

@@ -12,6 +12,8 @@ const UAV_CFG = {
   search: ["Name", "Company", "Summary", "Subtype"],
   selects: [
     "Country",
+    "Status",
+    "UAV · Role",
     "Taxonomy · Airframe / lift type",
     "Taxonomy · Propulsion type",
     "Taxonomy · Origin / supply chain",
@@ -28,6 +30,8 @@ const UAV_CFG = {
   ],
   ranges: [],
   dualUseField: "Taxonomy · Dual-use",
+  // Discontinued products are hidden until the Status filter explicitly asks for them.
+  hideStatus: "Discontinued",
   compare: [
     ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
     ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
@@ -445,6 +449,9 @@ function matches(row) {
   const f = state.filters;
   if (!f.showRussian && first(row.Country) === "Russia") return false;
   if (f.dualUse && asArray(row[state.cfg.dualUseField]).length === 0) return false;
+  // "Discontinued" is off by default: excluded unless the user ticks it in Status.
+  const hide = state.cfg.hideStatus;
+  if (hide && asArray(row.Status).includes(hide) && !(f.selects.Status || new Set()).has(hide)) return false;
   if (f.search) {
     const hay = state.cfg.search.map((k) => asArray(row[k]).join(" ")).join(" ").toLowerCase();
     if (!hay.includes(f.search)) return false;

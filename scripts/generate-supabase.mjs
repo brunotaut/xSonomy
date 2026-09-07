@@ -223,6 +223,42 @@ async function fetchProducts() {
   }, "products");
 }
 
+// ---------- production status ----------
+// `UAV · Production status` is free text — 155 distinct spellings across ~400 rows
+// ("In production", "in service", "Discontinued/legacy", "Cancelled (2012)"…). Collapse
+// it to six buckets for the filter. Longest/most specific prefixes are tried first, then
+// a substring pass; anything unrecognised — and anything missing — becomes "N/A".
+// "Cancelled" and the no-longer-current markers win wherever they appear, because a
+// trailing qualifier negates the head of the phrase — "Consumer (legacy)" and
+// "Produced (legacy)" are discontinued, not in production. Everything else is matched
+// on the leading word first, so "Development/limited production" reads as Development
+// while "In production / development" reads as In Production; a substring pass catches
+// the rest.
+const STATUS_OVERRIDE = [
+  ["Cancelled",    ["cancel"]],
+  ["Discontinued", ["discontinu", "out of production", "retired", "superseded", "predecessor model", "legacy"]],
+];
+const STATUS_BUCKETS = [
+  ["In Production", ["in production", "in service", "production", "produced", "serial", "active", "operational",
+                     "commercial", "consumer", "catalogue", "marketed", "available", "fielded", "in use",
+                     "in operation", "mature", "export offering", "limited production"]],
+  ["Prototype",     ["prototype", "demonstrator", "experimental", "research"]],
+  ["Development",   ["development", "in development", "concept", "project", "testing", "test", "trials",
+                     "flight", "announced", "export development", "limited", "tested"]],
+];
+// Matched only as a substring, never as a prefix, so "Developed / in use" stays In
+// Production while a bare "Developed" lands in Development rather than N/A.
+const STATUS_WEAK = [["Development", ["developed"]]];
+function normaliseStatus(raw) {
+  const s = String(asArray(raw)[0] || "").trim().toLowerCase();
+  if (!s) return "N/A";
+  for (const [bucket, keys] of STATUS_OVERRIDE) for (const k of keys) if (s.includes(k)) return bucket;
+  for (const [bucket, keys] of STATUS_BUCKETS) for (const k of keys) if (s.startsWith(k)) return bucket;
+  for (const [bucket, keys] of STATUS_BUCKETS) for (const k of keys) if (s.includes(k)) return bucket;
+  for (const [bucket, keys] of STATUS_WEAK) for (const k of keys) if (s.includes(k)) return bucket;
+  return "N/A";
+}
+
 // ---------- taxonomy (product_taxonomy_view) ----------
 // One row per (product, option). Keyed on product_id — NOT product_slug, because the
 // slug written into the site is generated here from the product name (see slugify),
@@ -749,6 +785,10 @@ async function main() {
     const row = reshape(p);
     row.slug = slugify(row.Name || "item");
     Object.assign(row, taxonomy.get(p.id) || {});
+    // Normalised status is UAV-only and always present, so "N/A" is a real bucket
+    // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
+    // pages show the richer raw `UAV · Production status` instead.
+    if (bucket === "uav") row.Status = normaliseStatus(row["UAV · Production status"]);
     await attachImage(row);
     buckets[bucket].push(row);
   }
