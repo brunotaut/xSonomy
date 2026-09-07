@@ -30,8 +30,10 @@ const UAV_CFG = {
   ],
   ranges: [],
   dualUseField: "Taxonomy · Dual-use",
-  // Discontinued products are hidden until the Status filter explicitly asks for them.
-  hideStatus: "Discontinued",
+  // Status is the one opt-OUT group: every bucket starts ticked and unticking one hides
+  // those products, so the boxes read as "what is on the page". These two start unticked.
+  statusField: "Status",
+  statusOffByDefault: ["Cancelled", "Discontinued"],
   compare: [
     ["Subcategory", "Subcategory"], ["UAV · Role", "Role"], ["Country", "Country"],
     ["UAV · Range (km)", "Range", "num", " km"], ["UAV · Endurance (min)", "Endurance", "num", " min"],
@@ -369,6 +371,16 @@ function selectSub(key) {
 }
 function resetFilters() {
   state.filters = { search: "", selects: {}, ranges: {}, showRussian: false, dualUse: false };
+  // Seed the opt-out group with every value except the ones that start unticked. Because
+  // the set is non-empty from the outset it acts as a real constraint, so Cancelled and
+  // Discontinued are excluded until their boxes are ticked.
+  const sf = state.cfg && state.cfg.statusField;
+  if (sf) {
+    const off = new Set(state.cfg.statusOffByDefault || []);
+    const on = new Set();
+    for (const row of state.rows) for (const v of asArray(row[sf])) if (!off.has(v)) on.add(v);
+    state.filters.selects[sf] = on;
+  }
   els.search.value = "";
   if (state.cfg) buildFacets();
   render();
@@ -395,10 +407,14 @@ function buildFacets() {
     [...counts.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0]))).forEach(([val, n]) => {
       const label = document.createElement("label");
       label.innerHTML = `<input type="checkbox" /> <span>${esc(val)}</span><span class="n">${n}</span>`;
-      label.querySelector("input").addEventListener("change", (e) => {
+      const input = label.querySelector("input");
+      input.checked = !!(state.filters.selects[field] || new Set()).has(val);
+      input.addEventListener("change", (e) => {
         const set = state.filters.selects[field] || (state.filters.selects[field] = new Set());
         e.target.checked ? set.add(val) : set.delete(val);
-        if (set.size === 0) delete state.filters.selects[field];
+        // For opt-in groups an empty set means "no constraint"; for the opt-out group it
+        // means the user unticked everything, which really should show nothing.
+        if (set.size === 0 && field !== state.cfg.statusField) delete state.filters.selects[field];
         render();
       });
       body.appendChild(label);
@@ -449,9 +465,6 @@ function matches(row) {
   const f = state.filters;
   if (!f.showRussian && first(row.Country) === "Russia") return false;
   if (f.dualUse && asArray(row[state.cfg.dualUseField]).length === 0) return false;
-  // "Discontinued" is off by default: excluded unless the user ticks it in Status.
-  const hide = state.cfg.hideStatus;
-  if (hide && asArray(row.Status).includes(hide) && !(f.selects.Status || new Set()).has(hide)) return false;
   if (f.search) {
     const hay = state.cfg.search.map((k) => asArray(row[k]).join(" ")).join(" ").toLowerCase();
     if (!hay.includes(f.search)) return false;

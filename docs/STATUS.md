@@ -35,9 +35,13 @@ _(newest first; `/wrap-up` appends here)_
   Prototype 48, Cancelled 9, N/A 677. N/A is always emitted, so it is a real bucket rather than
   a gap. The raw `UAV · Production status` still shows on product pages; the normalised `Status`
   is kept off them by `HIDDEN`.
-- **Discontinued is off by default** (`UAV_CFG.hideStatus`): those 84 products are excluded until
-  the Discontinued box is ticked. Ticking it then behaves like any other facet option — it shows
-  *only* discontinued, not "everything plus discontinued".
+- **Status is the one opt-OUT group.** Every bucket starts ticked except **Cancelled** and
+  **Discontinued**, and unticking a box hides those products — so the boxes read as "what is on
+  the page" rather than "narrow to this". `UAV_CFG.statusField` / `statusOffByDefault` drive it;
+  `resetFilters()` seeds the set and `buildFacets()` reflects it in the checkbox state.
+  Every other group stays opt-in (nothing ticked = no constraint), so `matches()` keeps its
+  empty-set shortcut for them and skips it for Status — untick all six and you correctly get zero
+  results. Default view: 989 of 1,082 (93 hidden: 84 discontinued + 9 cancelled).
 
 
 ### 2026-09-07 — UAV filters rebuilt on the shared taxonomy
