@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "xSonomy Stage 1 catalogue \u2014 static site generated from Airtable, hosted on GitHub Pages.",
+  "description": "xSonomy Stage 1 catalogue \u2014 static site generated from Supabase, hosted on GitHub Pages.",
   "scripts": {
-    "build": "node scripts/generate.mjs",
     "build:supabase": "node scripts/generate-supabase.mjs",
-    "migrate:products": "node scripts/migrate-products-to-supabase.mjs",
     "images:find": "node scripts/find-images.mjs",
     "images:accept": "node scripts/accept-images.mjs"
   },

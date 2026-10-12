@@ -1,59 +1,69 @@
-# xSonomy catalogue (static site)
+# xSonomy — catalogue site
 
-Stage 1 catalogue frontend. **Airtable is the database**; this repo builds a static
-site from it and hosts it free on **GitHub Pages**. Search and filtering run entirely
-client-side — nothing hits Airtable when a visitor loads the page.
+The public catalogue at **[xsonomy.com](https://xsonomy.com)**: companies and products across
+unmanned systems — UAVs, counter-UAS, sensors, software. A static site on GitHub Pages, built
+from a shared Supabase database.
 
-## How it works
+**This repo only reads the database.** Collection, entity extraction and enrichment all happen in
+the sister repo [`brunotaut/xsonomy-news`](https://github.com/brunotaut/xsonomy-news), which also
+publishes the news feed at [uav360.xyz](http://uav360.xyz/).
 
-1. `scripts/generate.mjs` fetches rows from the two Airtable tables (`Listings` →
-   `radar` / `acoustic`, `UAVs` → `uav`) and, for each:
-   - writes per-category JSON for the client-side grid,
-   - **downloads its image** into `public/images/` (Airtable URLs expire, so we never
-     link to them directly),
-   - generates a **real, crawlable HTML page** at `/<category>/<slug>/` with its own
-     `<title>`, meta description, OpenGraph image, and Product JSON-LD (SEO).
-2. It also writes `sitemap.xml`, `robots.txt`, and a crawlable product index on the
-   homepage, then copies the front-end (`src/`) into `public/`.
-3. `src/assets/app.js` loads the JSON and renders the searchable/filterable grid.
-   Cards link to the static per-product pages (no pop-up). The only outbound action
-   is the product's **Website** link.
-4. GitHub Actions builds and deploys `public/` to GitHub Pages — daily, on manual
-   trigger, and on push. `public/CNAME` keeps the `xsonomy.com` custom domain.
+## How a product becomes a page
 
-## Publish gate
-`PUBLISH_STATUS` at the top of `scripts/generate.mjs`:
-- `null` (default) — publish every row (review-stage; matches the current live site).
-- `"Live"` — publish only rows whose Airtable **Status = Live** (the human gate).
+1. `scripts/generate-supabase.mjs` reads `products` (with its `specs` JSONB), the taxonomy
+   (`product_taxonomy_view`) and the news links (`article_products` + `articles`).
+2. It writes `public/`: one JSON file per category for the client-side grid, an SEO page per
+   product at `/<category>/<slug>/`, company pages, a sitemap and `robots.txt`.
+3. `.github/workflows/deploy.yml` runs that build daily at 06:00 UTC, on every push to `main`,
+   and on demand — then deploys `public/` to GitHub Pages.
 
-Flip it to `"Live"` once you're approving rows in Airtable.
+The browser never talks to Supabase. The service key is used at build time only.
 
-## One-time setup
-1. **Airtable token** → repo *Settings → Secrets and variables → Actions → New
-   repository secret*, named `AIRTABLE_TOKEN` (scoped to this base, `data.records:read`).
-2. **Pages** → *Settings → Pages → Build and deployment → Source = GitHub Actions*.
-3. **Custom domain** → *Settings → Pages → Custom domain* = `xsonomy.com`.
-4. Push to `main`; the workflow builds and deploys.
+## Commands
 
-## Switching the live site to this build (cutover)
-The site currently runs the older React build. To replace it with this one **in the
-same repo** (keeps your domain, DNS, and `AIRTABLE_TOKEN`):
-1. In your repo clone, delete the old files (`build/`, `index.html`, `template.html`,
-   `DEPLOY.md`, `SETUP-GITHUB.md`, the old `.github/workflows/deploy.yml`, `.gitignore`).
-2. Copy **everything from this `catalogue-site/` folder** into the repo root
-   (`scripts/`, `src/`, `package.json`, `.github/workflows/deploy.yml`, `.gitignore`,
-   `.env.example`, `README.md`).
-3. Commit & push. `AIRTABLE_TOKEN` and Pages settings already exist, so the workflow
-   runs, builds, and republishes `xsonomy.com` from this build.
-
-## Local build
 ```bash
-cp .env.example .env      # paste your token into .env
-npm run build             # writes ./public  (index.html, /uav, /radar, /acoustic, images, sitemap.xml)
-npx serve public          # open the printed URL
+npm run build:supabase     # build public/ from Supabase
+npx serve public           # preview the built site
+npm run images:find        # look for photos for products that lack one
+npm run images:accept -- 0 3 7   # publish reviewed candidates (see below)
 ```
 
-## Configuration
-- Base/table IDs + publish gate: top of `scripts/generate.mjs`.
-- Filters, search, card tags per category: `CONFIG` in `src/assets/app.js`.
-- Fields hidden from the public detail page: `HIDDEN` in `scripts/generate.mjs`.
+Local builds need a `.env` with `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` (copy `.env.example`).
+In CI both come from repository secrets.
+
+## Product images
+
+Photos come from a curated manifest, `data/product-images.json`, not from the database —
+`products.image_url` only ever held expired links. Each entry carries its licence and author,
+and product pages render that credit, which CC BY / CC BY-SA require.
+
+Images are **not** added automatically. The weekly `find-images` workflow proposes candidates
+and writes a contact sheet; a person has to look at them before anything is published, because
+roughly half of automatic name matches are a different thing with the same name — an F/A-18 for
+"Hornet", a Pentax camera for "K1000". See `docs/STATUS.md` for the measured numbers.
+
+| File | Meaning |
+|---|---|
+| `data/product-images.json` | published photos, with licence and author |
+| `data/image-candidates.json` | awaiting review — not on the site |
+| `data/image-rejected.json` | reviewed and refused; never proposed again |
+| `data/image-searched.json` | searched, no article found; retried after 180 days |
+
+## Layout
+
+```
+scripts/generate-supabase.mjs   the build
+scripts/find-images.mjs         weekly image search (proposes only)
+scripts/accept-images.mjs       promote reviewed images
+src/                            static assets + the catalogue shell, copied into public/
+data/                           curated data this repo owns
+docs/STATUS.md                  running log — read this before picking up work
+public/                         build output, never edited by hand
+```
+
+## Conventions
+
+- Never write to Supabase from here. Data fixes belong in `xsonomy-news` or the SQL editor.
+- `public/` is a build artefact — change `src/` or the generator instead.
+- Product and company URLs are derived from `slug` and are indexed by Google; keep them stable.
+- Update `docs/STATUS.md` at the end of a session.

@@ -12,15 +12,14 @@ collection, entity extraction and enrichment happen in `brunotaut/xsonomy-news`.
 - DB: Supabase project `uobidcahmrmfdmfbrtkt`. Build uses `SUPABASE_SERVICE_KEY` server-side only; no key reaches the browser.
 
 ## How it builds
-- `scripts/generate-supabase.mjs` — **the live generator.** Reads `products` (with `specs` JSONB, category `uav` / `sensors`), writes per-category JSON, SEO product pages at `/<category>/<slug>/`, sitemap, robots, copies `src/` → `public/`. `PUBLISH_STATUS` at top: `null` = all rows, `"live"` = only `publication_status='live'`.
+- `scripts/generate-supabase.mjs` — **the live generator.** Reads `products` (with `specs` JSONB), the taxonomy and the news links, writes per-category JSON, SEO product pages at `/<category>/<slug>/`, sitemap, robots, copies `src/` → `public/`. `PUBLISH_STATUS` at top: `null` = all rows, `"live"` = only `publication_status='live'`.
 - `.github/workflows/deploy.yml` — daily 06:00 UTC + on push + manual → builds with `generate-supabase.mjs` → deploys `public/` to Pages.
 - `src/assets/app.js` (+ `companies.js`, `companies.css`) — client-side search/filter grid. `CONFIG` in `app.js` controls filters/tags per category.
 
-## Legacy (Airtable era — safe to delete once confirmed unused)
-- `scripts/generate.mjs` (Airtable generator), `scripts/migrate-products-to-supabase.mjs` + `migrate-products.yml` (one-off Airtable→Supabase), `src/assets/app.js.bak`, `AIRTABLE_TOKEN` secret. README still says "Airtable is the database" — it is not.
-
 ## Env / secrets
 `SUPABASE_URL` (hard-coded in workflow), `SUPABASE_SERVICE_KEY` (secret). Local: `.env`. Never commit keys.
+The Airtable era is over — its scripts, workflow and `.bak` are deleted. The `AIRTABLE_TOKEN`
+repository secret is now unused and can be deleted in GitHub settings.
 
 ## Working rules
 1. Never write to Supabase from this repo. If a data fix is needed, do it in `xsonomy-news` or via the Supabase SQL editor and log it there.

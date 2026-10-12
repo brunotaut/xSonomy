@@ -1,7 +1,8 @@
 // xSonomy catalogue — client-side search / filter / render over generated JSON.
 // UAV "loadout" cards + sensor info-blocks, compare tray, and (for Sensors) four
 // subcategory sub-tabs in the sidebar, each with its own filters.
-// Cards link to static per-product pages. Data is keyed by Airtable field names.
+// Cards link to static per-product pages. Row keys come from the Supabase `specs` JSONB
+// plus the taxonomy fields the generator attaches.
 
 // UAV filters come from the shared taxonomy (taxonomy_facets / taxonomy_options in
 // Supabase), attached to each row by the generator. Ordered by how much of the
@@ -48,10 +49,10 @@ const UAV_CFG = {
 };
 
 // Sensor subcategory tabs (shown in the sidebar). Each is its own page with its own
-// filters. Only fields that exist in Airtable render — more appear automatically as
+// filters. Only fields that exist in the data render — more appear automatically as
 // the schema is filled in.
 // Sensor subcategory tabs — each its own page with shared + category-specific filters,
-// wired to the Airtable field names. Empty fields auto-hide until populated.
+// wired to the spec field names. Empty fields auto-hide until populated.
 const SHARED_SEL = ["Use class", "Sensor · Active/Passive", "Sensor · All-weather / day-night", "Sensor · Mounting", "Sensor · Output data", "Sensor · Price band", "Country", "Subtype"];
 const RADAR_CFG = { search:["Name","Company","Summary","Subtype"], selects:["Use class","Radar · Type","Radar · Band","Radar · Coverage","Radar · Scan type","Radar · Micro-Doppler","Sensor · Active/Passive","Sensor · All-weather / day-night","Sensor · Mounting","Sensor · Price band","Country"], ranges:["Radar · Detection range (km)","Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["Radar · Band","Band"],["Radar · Detection range (km)","Detection range","num"," km"],["Radar · Coverage","Coverage"],["Radar · Scan type","Scan type"],["Sensor · Active/Passive","Active/Passive"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
 const RADAR_CARDS = [["Radar · Detection range (km)","Detection range"," km"],["Radar · Band","Band"],["Radar · Coverage","Coverage"],["Radar · Scan type","Scan type"]];
@@ -64,7 +65,7 @@ const RF_CARDS = [["RF · Frequency coverage","Frequency coverage"],["RF · Dete
 const GEN_CFG = { search:["Name","Company","Summary","Subtype"], selects:SHARED_SEL, ranges:["Sensor · Detection range (km)"], compare:[["Use class","Class"],["Country","Country"],["Sensor · Detection range (km)","Detection range","num"," km"],["EO/IR · Spectral band","Spectral band"],["EO/IR · Resolution (px)","Resolution"],["Sensor · Active/Passive","Active/Passive"],["Sensor · Price band","Price band"],["Confidence","Confidence"]] };
 const GEN_CARDS = [["EO/IR · Spectral band","Spectral band"],["EO/IR · Resolution (px)","Resolution"],["Sensor · Detection range (km)","Detection range"," km"]];
 
-// Top level = Active vs Passive (sensing principle). Subtabs = modality (Airtable Subcategory).
+// Top level = Active vs Passive (sensing principle). Subtabs = modality (Subcategory).
 const SENSOR_TABS = [
   { key:"radar",     group:"Active sensors",  label:"Radar",     match:(s)=>first(s.Subcategory)==="Radar",                         cfg:RADAR_CFG,    cardFields:RADAR_CARDS },
   { key:"lidar",     group:"Active sensors",  label:"LiDAR",     match:(s)=>first(s.Subcategory)==="LiDAR",                         cfg:GEN_CFG,      cardFields:GEN_CARDS },

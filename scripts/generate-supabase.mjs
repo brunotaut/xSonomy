@@ -1,8 +1,6 @@
-// xSonomy catalogue generator — SUPABASE edition (self-contained).
-// Same output as generate.mjs (per-category JSON + SEO product pages + sitemap),
-// but reads the `products` table from Supabase instead of Airtable. Has NO
-// dependency on generate.mjs — the page renderer is inlined here so it builds
-// regardless of the Airtable generator's state.
+// xSonomy catalogue generator.
+// Reads Supabase and writes the whole static site: per-category JSON for the
+// client-side grid, an SEO page per product, company pages, sitemap and robots.
 //
 // Build-time only: fetches server-side with the SERVICE key (bypasses RLS) and
 // writes STATIC json/html — no Supabase key reaches the browser.
