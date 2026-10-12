@@ -24,6 +24,35 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 — image pass 2: 140 products now have photos
+Ran the strict matcher over all 1,328 remaining UAVs in one sweep (`generator=search` +
+`pageimages`, one API call per product), giving **220 candidates**, then reviewed every one on
+a contact sheet in five batches. **116 accepted, 104 rejected** — on top of the first 25, that
+is **140 products with a verified photo** (~10% of the catalogue), 24.3 MB, average 174 KB.
+
+**Accept rate falls sharply with obscurity**, which is why batching matters:
+batch 1 23/45 · batch 2 23/45 · batch 3 13/45 · batch 4 19/45 · batch 5 38/40.
+The last batch scored highest because those rows are real, well-documented airframes
+(Camcopter S-100, Orion, Leleka-100, Searcher, X-47A); the middle batches are short ambiguous
+names that collide with everything.
+
+**What the eye caught that the matcher did not** — all exact title matches, all wrong:
+`Hornet` → an F/A-18 *and* a wasp · `LUCAS` → George Lucas · `Vampire` → Buffy the Vampire
+Slayer · `Patroller` → HMS Patroller · `Anadolu` → a Turkish warship · `Palianytsia` → bread ·
+`K1000` → a Pentax camera · `Halo` → a Filipino dessert · `C20`/`C31` → Sauber F1 cars ·
+`C6` → a Citroën · `Mk4` → a VW Polo · `LUMINA-M` → a Chevrolet · `MAUL` → an axe ·
+`Orbiter 4` → the Moon · `Thunderhead` → a roller coaster · `Dire WOLF` → a skeleton ·
+`Behemoth` → a metal band · `Orlan` → a fashion portrait · `L-Series` → an Audi V8.
+**Roughly half of all exact-title matches were wrong.** Never ship this pass unreviewed.
+
+Also dropped `MQM-170 Outlaw`: its Commons file is a PNG that Wikimedia would not re-render
+below 966 KB at any width.
+
+**Remaining ~1,213 UAVs have no freely-licensed image** and the well is now dry — the matcher
+has seen every product once. Further coverage needs licensed stock or manufacturer press-kit
+permission, not more searching.
+
+
 ### 2026-10-12 (later still) — product photos: 25 verified images for the top-100 UAVs
 "Images for all products" is not achievable and the measurement is worth keeping.
 

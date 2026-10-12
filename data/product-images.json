@@ -173,5 +173,810 @@
     "author": "Secretary of the Air Force Public Affairs",
     "source": "https://commons.wikimedia.org/wiki/File:YFQ-44A_-_Collaborative_Combat_Aircraft_(CCA)_program_(cropped).jpg",
     "article": "Anduril FQ-44 Fury"
+  },
+  "MQ-1C Gray Eagle": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/MQ-1C_Warrior_%282005-08-11%29.jpg/1280px-MQ-1C_Warrior_%282005-08-11%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Photo Courtesy of U.S. Army",
+    "source": "https://commons.wikimedia.org/wiki/File:MQ-1C_Warrior_(2005-08-11).jpg",
+    "article": "General Atomics MQ-1C Gray Eagle"
+  },
+  "Raybird": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/RB_production.jpg/1280px-RB_production.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Raybird 3",
+    "source": "https://commons.wikimedia.org/wiki/File:RB_production.jpg",
+    "article": "Skyeton Raybird-3"
+  },
+  "Shahed-131": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Shahed-131-draw.svg/1280px-Shahed-131-draw.svg.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 4.0",
+    "author": "Alexpl",
+    "source": "https://commons.wikimedia.org/wiki/File:Shahed-131-draw.svg",
+    "article": "Shahed 131"
+  },
+  "Chaparral": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/4/49/Elroy_Drone.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "Elroy Air",
+    "source": "https://commons.wikimedia.org/wiki/File:Elroy_Drone.png",
+    "article": "Elroy Air Chaparral"
+  },
+  "Warmate": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/MSPO23_Warmate.jpg/1280px-MSPO23_Warmate.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Michał Derela",
+    "source": "https://commons.wikimedia.org/wiki/File:MSPO23_Warmate.jpg",
+    "article": "WB Electronics Warmate"
+  },
+  "Aksungur": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/TAI_Aksungur_%283%29.jpg/1280px-TAI_Aksungur_%283%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "CeeGee",
+    "source": "https://commons.wikimedia.org/wiki/File:TAI_Aksungur_(3).jpg",
+    "article": "TAI Aksungur"
+  },
+  "FQ-42": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/A_YFQ-42A_lifts_off_during_a_flight_test_at_a_range_in_California_250827-F-AF000-9001_%28cropped%29.jpg/1280px-A_YFQ-42A_lifts_off_during_a_flight_test_at_a_range_in_California_250827-F-AF000-9001_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Courtesy photo",
+    "source": "https://commons.wikimedia.org/wiki/File:A_YFQ-42A_lifts_off_during_a_flight_test_at_a_range_in_California_250827-F-AF000-9001_(cropped).jpg",
+    "article": "General Atomics FQ-42 Vengeance"
+  },
+  "Orlan-10": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Orlan-10_UAV_Army-2022_2022-08-20_2475.jpg/1280px-Orlan-10_UAV_Army-2022_2022-08-20_2475.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Mike1979 Russia",
+    "source": "https://commons.wikimedia.org/wiki/File:Orlan-10_UAV_Army-2022_2022-08-20_2475.jpg",
+    "article": "STC Orlan-10"
+  },
+  "ScanEagle": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_%28UAV%29.jpg/1280px-US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_%28UAV%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Navy photo /Released",
+    "source": "https://commons.wikimedia.org/wiki/File:US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_(UAV).jpg",
+    "article": "Boeing Insitu MQ-27 ScanEagle"
+  },
+  "Shahed 129": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Shahed_129_%284%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY 4.0",
+    "author": "Mehdi Bakhtiari",
+    "source": "https://commons.wikimedia.org/wiki/File:Shahed_129_(4).jpg",
+    "article": "Shahed 129"
+  },
+  "XQ-67A": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/XQ-67A_Off_Board_Sensing_Station_maiden_flight_over_Palmdale_California.jpg/1280px-XQ-67A_Off_Board_Sensing_Station_maiden_flight_over_Palmdale_California.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Unknown authorUnknown author",
+    "source": "https://commons.wikimedia.org/wiki/File:XQ-67A_Off_Board_Sensing_Station_maiden_flight_over_Palmdale_California.jpg",
+    "article": "General Atomics XQ-67A"
+  },
+  "Black Hornet": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Black_Hornet_Nano_Helicopter_UAV.jpg/1280px-Black_Hornet_Nano_Helicopter_UAV.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "OGL v1.0",
+    "author": "Richard Watt",
+    "source": "https://commons.wikimedia.org/wiki/File:Black_Hornet_Nano_Helicopter_UAV.jpg",
+    "article": "Teledyne FLIR Black Hornet"
+  },
+  "EuroDrone": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/EuroMALE_ILA_2018_%2801%29_%28cropped%29.jpg/1280px-EuroMALE_ILA_2018_%2801%29_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "DeffiSK",
+    "source": "https://commons.wikimedia.org/wiki/File:EuroMALE_ILA_2018_(01)_(cropped).jpg",
+    "article": "Eurodrone"
+  },
+  "Hermes 900": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/Elbit_Systems_900_take_off.jpg/1280px-Elbit_Systems_900_take_off.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Ronite",
+    "source": "https://commons.wikimedia.org/wiki/File:Elbit_Systems_900_take_off.jpg",
+    "article": "Elbit Hermes 900"
+  },
+  "Heron": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/IAI_Heron%28_framed%29.jpg/1280px-IAI_Heron%28_framed%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "SSGT REYNALDO RAMON",
+    "source": "https://commons.wikimedia.org/wiki/File:IAI_Heron(_framed).jpg",
+    "article": "IAI Heron"
+  },
+  "Phantom": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Spying_quadcopter_%28cropped%29.jpg/1280px-Spying_quadcopter_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC0",
+    "author": "succo",
+    "source": "https://commons.wikimedia.org/wiki/File:Spying_quadcopter_(cropped).jpg",
+    "article": "DJI Phantom"
+  },
+  "RQ-11 Raven": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/RQ-11B_Raven_Blackfoot_Company%2C_1st_Battalion%2C_501st_Parachute_Infantry_Regiment%2C_4th_Infantry_Brigade_Combat_Team_%28Airborne%29%2C_25th_Infantry_Division_Base_Elmendorf-Richardson%2C_Alaska_%28cropped%29.jpg/1280px-thumbnail.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Public Affairs Alejandro Peña",
+    "source": "https://commons.wikimedia.org/wiki/File:RQ-11B_Raven_Blackfoot_Company,_1st_Battalion,_501st_Parachute_Infantry_Regiment,_4th_Infantry_Brigade_Combat_Team_(Airborne),_25th_Infantry_Division_Base_Elmendorf-Richardson,_Alaska_(cropped).jpg",
+    "article": "AeroVironment RQ-11 Raven"
+  },
+  "RQ-170 Sentinel": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/RQ-170_art_impression.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "FOX 52",
+    "source": "https://commons.wikimedia.org/wiki/File:RQ-170_art_impression.jpg",
+    "article": "Lockheed Martin RQ-170 Sentinel"
+  },
+  "RQ-7 Shadow": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/USMC-01522.jpg/1280px-USMC-01522.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": null,
+    "source": "https://commons.wikimedia.org/wiki/File:USMC-01522.jpg",
+    "article": "AAI RQ-7 Shadow"
+  },
+  "Saildrone": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/SD_1021_cutout.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY 4.0",
+    "author": "Jennvirskus",
+    "source": "https://commons.wikimedia.org/wiki/File:SD_1021_cutout.jpg",
+    "article": "Saildrone (company)"
+  },
+  "Sea Baby": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Sea_Baby_unmanned_surface_vehicle_undertaking_sea_trials.webm/1280px--Sea_Baby_unmanned_surface_vehicle_undertaking_sea_trials.webm.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo",
+    "licence": "CC BY 4.0",
+    "author": "Security Service of Ukraine (SBU)",
+    "source": "https://commons.wikimedia.org/wiki/File:Sea_Baby_unmanned_surface_vehicle_undertaking_sea_trials.webm",
+    "article": "Sea Baby"
+  },
+  "Wing Loong II": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Wing_Loong_II_side_view.jpg/1280px-Wing_Loong_II_side_view.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Mztourist",
+    "source": "https://commons.wikimedia.org/wiki/File:Wing_Loong_II_side_view.jpg",
+    "article": "CAIG Wing Loong II"
+  },
+  "XQ-58 Valkyrie": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/XQ-58A_Valkyrie_demonstrator_first_flight.jpg/1280px-XQ-58A_Valkyrie_demonstrator_first_flight.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "88 Air Base Wing Public Affairs",
+    "source": "https://commons.wikimedia.org/wiki/File:XQ-58A_Valkyrie_demonstrator_first_flight.jpg",
+    "article": "Kratos XQ-58 Valkyrie"
+  },
+  "Anka": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/TAI_Anka.jpg/1280px-TAI_Anka.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Mustafa.KarabasTUSAS",
+    "source": "https://commons.wikimedia.org/wiki/File:TAI_Anka.jpg",
+    "article": "TAI Anka"
+  },
+  "Bayraktar Akinci": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Bayraktar_Ak%C4%B1nc%C4%B1_of_the_Azerbaijani_Air_Force.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "Press Service of the President of the Republic of Azerbaijan",
+    "source": "https://commons.wikimedia.org/wiki/File:Bayraktar_Ak%C4%B1nc%C4%B1_of_the_Azerbaijani_Air_Force.jpg",
+    "article": "Baykar Bayraktar Akinci"
+  },
+  "FP-5": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Ukrainian_FP-5_Flamingo_long-range_cruise_missile_by_Fire_Point_at_MSPO_2026_in_Kielce.jpg/1280px-Ukrainian_FP-5_Flamingo_long-range_cruise_missile_by_Fire_Point_at_MSPO_2026_in_Kielce.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 4.0",
+    "author": "Krzysztof Popławski",
+    "source": "https://commons.wikimedia.org/wiki/File:Ukrainian_FP-5_Flamingo_long-range_cruise_missile_by_Fire_Point_at_MSPO_2026_in_Kielce.jpg",
+    "article": "FP-5 Flamingo"
+  },
+  "Gremlin-X": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/GremlinsFlightTestNovember2019.jpg/1280px-GremlinsFlightTestNovember2019.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "DARPA",
+    "source": "https://commons.wikimedia.org/wiki/File:GremlinsFlightTestNovember2019.jpg",
+    "article": "Dynetics X-61 Gremlins"
+  },
+  "Harpy": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Paris_Air_Show_2007-06-24_n25.jpg/1280px-Paris_Air_Show_2007-06-24_n25.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Jastrow",
+    "source": "https://commons.wikimedia.org/wiki/File:Paris_Air_Show_2007-06-24_n25.jpg",
+    "article": "IAI Harpy"
+  },
+  "Skydio X2": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Skydio_drone_flies_during_Dynamic_Front_25_in_Sm%C3%A2rdan%2C_Romania_%28cropped%29.jpg/1280px-Skydio_drone_flies_during_Dynamic_Front_25_in_Sm%C3%A2rdan%2C_Romania_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Sgt. Austin Steinborn",
+    "source": "https://commons.wikimedia.org/wiki/File:Skydio_drone_flies_during_Dynamic_Front_25_in_Sm%C3%A2rdan,_Romania_(cropped).jpg",
+    "article": "Skydio X2"
+  },
+  "Taranis": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/BAE_Systems_Taranis_art.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "FOX 52",
+    "source": "https://commons.wikimedia.org/wiki/File:BAE_Systems_Taranis_art.jpg",
+    "article": "BAE Systems Taranis"
+  },
+  "VoloCity": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Mercedes-Benz_Volocity_at_IAA_2019_IMG_0510.jpg/1280px-Mercedes-Benz_Volocity_at_IAA_2019_IMG_0510.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Alexander Migl",
+    "source": "https://commons.wikimedia.org/wiki/File:Mercedes-Benz_Volocity_at_IAA_2019_IMG_0510.jpg",
+    "article": "Volocopter Volocity"
+  },
+  "X-47B": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/X-47B_operating_in_the_Atlantic_Test_Range_%28modified%29.jpg/1280px-X-47B_operating_in_the_Atlantic_Test_Range_%28modified%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "US Navy",
+    "source": "https://commons.wikimedia.org/wiki/File:X-47B_operating_in_the_Atlantic_Test_Range_(modified).jpg",
+    "article": "Northrop Grumman X-47B"
+  },
+  "X10": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Skydio_X10_in_flight.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "Alexander Kubitza",
+    "source": "https://commons.wikimedia.org/wiki/File:Skydio_X10_in_flight.jpg",
+    "article": "Skydio X10"
+  },
+  "Agras": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Dronak_nekazaritzan_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "Sergio Merino Dominguez",
+    "source": "https://commons.wikimedia.org/wiki/File:Dronak_nekazaritzan_(cropped).jpg",
+    "article": "DJI Agras"
+  },
+  "AVENGER": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale%2C_Calif.%2C_Aug._8%2C_2012_120808-N-WL435-054.jpg/1280px-A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale%2C_Calif.%2C_Aug._8%2C_2012_120808-N-WL435-054.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "MC1 Peter D. Lawlor",
+    "source": "https://commons.wikimedia.org/wiki/File:A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale,_Calif.,_Aug._8,_2012_120808-N-WL435-054.jpg",
+    "article": "General Atomics MQ-20 Avenger"
+  },
+  "BQM-167": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Composite_Engineering_BQM-167_Skeeter.jpg/1280px-Composite_Engineering_BQM-167_Skeeter.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Lestocq",
+    "source": "https://commons.wikimedia.org/wiki/File:Composite_Engineering_BQM-167_Skeeter.jpg",
+    "article": "Composite Engineering BQM-167 Skeeter"
+  },
+  "BQM-177": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Kratos_BQM-177_launch_2022_121013-M-GC438-375.jpg/1280px-Kratos_BQM-177_launch_2022_121013-M-GC438-375.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Ryan Harty",
+    "source": "https://commons.wikimedia.org/wiki/File:Kratos_BQM-177_launch_2022_121013-M-GC438-375.jpg",
+    "article": "Kratos BQM-177"
+  },
+  "Celera 500L": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Celera_500L.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC0",
+    "author": "Swayne Martin",
+    "source": "https://commons.wikimedia.org/wiki/File:Celera_500L.jpg",
+    "article": "Otto Celera 500L"
+  },
+  "Fire Point": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/FP1-2_MSPO2026_1.jpg/1280px-FP1-2_MSPO2026_1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Michał Derela",
+    "source": "https://commons.wikimedia.org/wiki/File:FP1-2_MSPO2026_1.jpg",
+    "article": "Fire Point FP-1"
+  },
+  "FlyCart": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/DJI_Agriculture%2C_Agritechnica_2023%2C_Hanover_%28P1160331%29.jpg/1280px-DJI_Agriculture%2C_Agritechnica_2023%2C_Hanover_%28P1160331%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "MB-one",
+    "source": "https://commons.wikimedia.org/wiki/File:DJI_Agriculture,_Agritechnica_2023,_Hanover_(P1160331).jpg",
+    "article": "DJI FlyCart"
+  },
+  "Harop": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/IAI_Harop_PAS_2013_01.jpg/1280px-IAI_Harop_PAS_2013_01.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 4.0",
+    "author": "Julian Herzog (Website)",
+    "source": "https://commons.wikimedia.org/wiki/File:IAI_Harop_PAS_2013_01.jpg",
+    "article": "IAI Harop"
+  },
+  "Hermes 450": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Zik_Squadron_%28Hermes_450%29%2C_%28cropped%29.jpg/1280px-Zik_Squadron_%28Hermes_450%29%2C_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "Amit Agronov",
+    "source": "https://commons.wikimedia.org/wiki/File:Zik_Squadron_(Hermes_450),_(cropped).jpg",
+    "article": "Elbit Hermes 450"
+  },
+  "Mwari": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/AHRLAC_Take-off.jpg/1280px-AHRLAC_Take-off.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "Warbirdsfly",
+    "source": "https://commons.wikimedia.org/wiki/File:AHRLAC_Take-off.jpg",
+    "article": "Paramount Mwari"
+  },
+  "Puma": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Paratroopers_launch_packable_drone_DVIDS615590.jpg/1280px-Paratroopers_launch_packable_drone_DVIDS615590.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Sgt. Mike MacLeod",
+    "source": "https://commons.wikimedia.org/wiki/File:Paratroopers_launch_packable_drone_DVIDS615590.jpg",
+    "article": "AeroVironment RQ-20 Puma"
+  },
+  "Puma AE": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Paratroopers_launch_packable_drone_DVIDS615590.jpg/1280px-Paratroopers_launch_packable_drone_DVIDS615590.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Sgt. Mike MacLeod",
+    "source": "https://commons.wikimedia.org/wiki/File:Paratroopers_launch_packable_drone_DVIDS615590.jpg",
+    "article": "AeroVironment RQ-20 Puma"
+  },
+  "Shark": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/BPLA_Shark.jpg/1280px-BPLA_Shark.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Nazar Korovai",
+    "source": "https://commons.wikimedia.org/wiki/File:BPLA_Shark.jpg",
+    "article": "Ukrspecsystems Shark"
+  },
+  "Skylark": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Skylark_I_Launched.jpg/1280px-Skylark_I_Launched.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "Nehemia Gershuni-Aylho",
+    "source": "https://commons.wikimedia.org/wiki/File:Skylark_I_Launched.jpg",
+    "article": "Elbit Skylark"
+  },
+  "TB2": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Bayraktar_TB2_Runway.jpg/1280px-Bayraktar_TB2_Runway.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Bayhaluk",
+    "source": "https://commons.wikimedia.org/wiki/File:Bayraktar_TB2_Runway.jpg",
+    "article": "Baykar Bayraktar TB2"
+  },
+  "TB3": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Bayraktar_TB3_on_the_runway_of_TCG_Anadolu_-_2.jpg/1280px-Bayraktar_TB3_on_the_runway_of_TCG_Anadolu_-_2.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Ata Barış",
+    "source": "https://commons.wikimedia.org/wiki/File:Bayraktar_TB3_on_the_runway_of_TCG_Anadolu_-_2.jpg",
+    "article": "Baykar Bayraktar TB3"
+  },
+  "VSR700": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Hubschrauberdrohne_Airbus_VSR700.jpg/1280px-Hubschrauberdrohne_Airbus_VSR700.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Henning Rolapp",
+    "source": "https://commons.wikimedia.org/wiki/File:Hubschrauberdrohne_Airbus_VSR700.jpg",
+    "article": "Airbus Helicopters VSR700"
+  },
+  "YFQ-48 Talon Blue": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/YFQ-48.png/1280px-YFQ-48.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Northrop Grumman",
+    "source": "https://commons.wikimedia.org/wiki/File:YFQ-48.png",
+    "article": "Northrop Grumman YFQ-48 Talon Blue"
+  },
+  "A3": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Saab_A3-001.jpg/1280px-Saab_A3-001.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC0",
+    "author": "Walle83",
+    "source": "https://commons.wikimedia.org/wiki/File:Saab_A3-001.jpg",
+    "article": "Saab A3"
+  },
+  "Aerosonde": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Fly00462_-_Flickr_-_NOAA_Photo_Library.jpg/1280px-Fly00462_-_Flickr_-_NOAA_Photo_Library.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "NOAA Photo Library",
+    "source": "https://commons.wikimedia.org/wiki/File:Fly00462_-_Flickr_-_NOAA_Photo_Library.jpg",
+    "article": "AAI Aerosonde"
+  },
+  "Bell MV-75": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bell_V-280_Valor_high_speed_cruise_demo%2C_2019_Alliance_Air_Show.jpg/1280px-Bell_V-280_Valor_high_speed_cruise_demo%2C_2019_Alliance_Air_Show.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Danazar",
+    "source": "https://commons.wikimedia.org/wiki/File:Bell_V-280_Valor_high_speed_cruise_demo,_2019_Alliance_Air_Show.jpg",
+    "article": "Bell MV-75 Cheyenne II"
+  },
+  "BQM-167 Skeeter": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Composite_Engineering_BQM-167_Skeeter.jpg/1280px-Composite_Engineering_BQM-167_Skeeter.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Lestocq",
+    "source": "https://commons.wikimedia.org/wiki/File:Composite_Engineering_BQM-167_Skeeter.jpg",
+    "article": "Composite Engineering BQM-167 Skeeter"
+  },
+  "D-21": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/The_Lockheed_D-21.jpg/1280px-The_Lockheed_D-21.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Air Force",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Lockheed_D-21.jpg",
+    "article": "Lockheed D-21"
+  },
+  "Gnat": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/General_Atomics_I-GNAT_ER.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "U.S. Air Force",
+    "source": "https://commons.wikimedia.org/wiki/File:General_Atomics_I-GNAT_ER.jpg",
+    "article": "General Atomics Gnat"
+  },
+  "GoPro Karma": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Gopro_5_Karma_Drohne_%2829798464706%29_%28cropped%29.jpg/1280px-Gopro_5_Karma_Drohne_%2829798464706%29_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 2.0",
+    "author": "dronepicr",
+    "source": "https://commons.wikimedia.org/wiki/File:Gopro_5_Karma_Drohne_(29798464706)_(cropped).jpg",
+    "article": "GoPro Karma"
+  },
+  "I-Gnat": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/General_Atomics_I-GNAT_ER.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "U.S. Air Force",
+    "source": "https://commons.wikimedia.org/wiki/File:General_Atomics_I-GNAT_ER.jpg",
+    "article": "General Atomics Gnat"
+  },
+  "Kızılelma": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Teknofest_%C4%B0stanbul_2023_%28cropped%29.jpg/1280px-Teknofest_%C4%B0stanbul_2023_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Erişim",
+    "source": "https://commons.wikimedia.org/wiki/File:Teknofest_%C4%B0stanbul_2023_(cropped).jpg",
+    "article": "Bayraktar Kızılelma"
+  },
+  "Lancet-E": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/ZALA_Lancet_1.jpg/1280px-ZALA_Lancet_1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC0",
+    "author": "Nickel nitride",
+    "source": "https://commons.wikimedia.org/wiki/File:ZALA_Lancet_1.jpg",
+    "article": "ZALA Lancet"
+  },
+  "Mantis": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fc/BAE_Systems_Mantis_UAS_Concept_Demonstrator_%288350538095%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "GFDL",
+    "author": "Robert Frola",
+    "source": "https://commons.wikimedia.org/wiki/File:BAE_Systems_Mantis_UAS_Concept_Demonstrator_(8350538095).jpg",
+    "article": "BAE Systems Mantis"
+  },
+  "MQ-28": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/MQ-28_Ghost_Bat_prepares_to_conduct_a_taxi_test_during_Exercise_Valiant_Shield_2026_at_Rota.jpg/1280px-MQ-28_Ghost_Bat_prepares_to_conduct_a_taxi_test_during_Exercise_Valiant_Shield_2026_at_Rota.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Air Force photo by Senior Airman Adrien Tran",
+    "source": "https://commons.wikimedia.org/wiki/File:MQ-28_Ghost_Bat_prepares_to_conduct_a_taxi_test_during_Exercise_Valiant_Shield_2026_at_Rota.jpg",
+    "article": "Boeing MQ-28 Ghost Bat"
+  },
+  "MV-75": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bell_V-280_Valor_high_speed_cruise_demo%2C_2019_Alliance_Air_Show.jpg/1280px-Bell_V-280_Valor_high_speed_cruise_demo%2C_2019_Alliance_Air_Show.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Danazar",
+    "source": "https://commons.wikimedia.org/wiki/File:Bell_V-280_Valor_high_speed_cruise_demo,_2019_Alliance_Air_Show.jpg",
+    "article": "Bell MV-75 Cheyenne II"
+  },
+  "Okhotnik (S-70 Okhotnik-B)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5_%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE_%D0%BE_%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D1%85_%D0%B8%D1%81%D0%BF%D1%8B%D1%82%D0%B0%D0%BD%D0%B8%D1%8F%D1%85_%D0%B1%D0%BE%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B1%D0%B5%D1%81%D0%BF%D0%B8%D0%BB%D0%BE%D1%82%D0%BD%D0%BE%D0%B3%D0%BE_%D0%B0%D0%B2%D0%B8%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%B0_%C2%AB%D0%9E%D1%85%D0%BE%D1%82%D0%BD%D0%B8%D0%BA%C2%BB.webm/1280px--thumbnail.webm.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo",
+    "licence": "CC BY 4.0",
+    "author": "Ministerstwo Obrony Rossijskoj Federazii (Министерство обороны Российской Федера",
+    "source": "https://commons.wikimedia.org/wiki/File:%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5_%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE_%D0%BE_%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D1%85_%D0%B8%D1%81%D0%BF%D1%8B%D1%82%D0%B0%D0%BD%D0%B8%D1%8F%D1%85_%D0%B1%D0%BE%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B1%D0%B5%D1%81%D0%BF%D0%B8%D0%BB%D0%BE%D1%82%D0%BD%D0%BE%D0%B3%D0%BE_%D0%B0%D0%B2%D0%B8%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%B0_%C2%AB%D0%9E%D1%85%D0%BE%D1%82%D0%BD%D0%B8%D0%BA%C2%BB.webm",
+    "article": "Sukhoi S-70 Okhotnik-B"
+  },
+  "Perdix": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Perdix-drone.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "DOD",
+    "source": "https://commons.wikimedia.org/wiki/File:Perdix-drone.jpg",
+    "article": "Perdix (drone)"
+  },
+  "Phantom Eye": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Boeing%27s_Phantom_Eye_lift_off.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "Bob Ferguson",
+    "source": "https://commons.wikimedia.org/wiki/File:Boeing%27s_Phantom_Eye_lift_off.jpg",
+    "article": "Boeing Phantom Eye"
+  },
+  "Puma 2 (RQ-20)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Paratroopers_launch_packable_drone_DVIDS615590.jpg/1280px-Paratroopers_launch_packable_drone_DVIDS615590.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Sgt. Mike MacLeod",
+    "source": "https://commons.wikimedia.org/wiki/File:Paratroopers_launch_packable_drone_DVIDS615590.jpg",
+    "article": "AeroVironment RQ-20 Puma"
+  },
+  "RQ-180": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/White_bat_UAV_artist%27s_rendering.jpg/1280px-White_bat_UAV_artist%27s_rendering.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Billy Barth, USAF",
+    "source": "https://commons.wikimedia.org/wiki/File:White_bat_UAV_artist%27s_rendering.jpg",
+    "article": "Northrop Grumman RQ-180"
+  },
+  "SA 60L Aurora": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Sunward_SA_60L_Aurora_-_Guangdong_Xiangfei_General_Aviation_-_B-12VM.jpg/1280px-Sunward_SA_60L_Aurora_-_Guangdong_Xiangfei_General_Aviation_-_B-12VM.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "NickJ 1972",
+    "source": "https://commons.wikimedia.org/wiki/File:Sunward_SA_60L_Aurora_-_Guangdong_Xiangfei_General_Aviation_-_B-12VM.jpg",
+    "article": "Sunward SA 60L Aurora"
+  },
+  "Saetbyol-4": {
+    "url": "https://upload.wikimedia.org/wikipedia/en/6/6a/Saebyeol-4.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC-BY-SA-4.0",
+    "author": null,
+    "source": "https://en.wikipedia.org/wiki/File:Saebyeol-4.jpg",
+    "article": "Saetbyol-4"
+  },
+  "Saetbyol-9": {
+    "url": "https://upload.wikimedia.org/wikipedia/en/8/8a/Saetbyol-9.webp?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC-BY-SA-4.0",
+    "author": "Dilip kabiraj",
+    "source": "https://en.wikipedia.org/wiki/File:Saetbyol-9.webp",
+    "article": "Saetbyol-9"
+  },
+  "SHARK-M": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/BPLA_Shark.jpg/1280px-BPLA_Shark.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Nazar Korovai",
+    "source": "https://commons.wikimedia.org/wiki/File:BPLA_Shark.jpg",
+    "article": "Ukrspecsystems Shark"
+  },
+  "Talarion": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/EADS_Talarion.JPG/1280px-EADS_Talarion.JPG?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "Tangopaso",
+    "source": "https://commons.wikimedia.org/wiki/File:EADS_Talarion.JPG",
+    "article": "EADS Talarion"
+  },
+  "TB-001": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Tengden_TB-001.jpg/1280px-Tengden_TB-001.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Infinty 0",
+    "source": "https://commons.wikimedia.org/wiki/File:Tengden_TB-001.jpg",
+    "article": "Tengden TB-001"
+  },
+  "Teng Yun": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/NCSIST_ASRD_MALE_UAV_Display_at_Hsinchu_Air_Force_Base_20151121c.jpg/1280px-NCSIST_ASRD_MALE_UAV_Display_at_Hsinchu_Air_Force_Base_20151121c.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "JW19335762743",
+    "source": "https://commons.wikimedia.org/wiki/File:NCSIST_ASRD_MALE_UAV_Display_at_Hsinchu_Air_Force_Base_20151121c.jpg",
+    "article": "NCSIST Teng Yun"
+  },
+  "Wing Loong": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Wing_Loong.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 3.0",
+    "author": "Baiweiflight",
+    "source": "https://commons.wikimedia.org/wiki/File:Wing_Loong.jpg",
+    "article": "CAIG Wing Loong"
+  },
+  "WingtraOne": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/WingtraOne_in_use.jpg/1280px-WingtraOne_in_use.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Adyasha Dash",
+    "source": "https://commons.wikimedia.org/wiki/File:WingtraOne_in_use.jpg",
+    "article": "Wingtra WingtraOne"
+  },
+  "WZ-7": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/WZ-7_at_Airshow_China_Zhuhai_2022.jpg/1280px-WZ-7_at_Airshow_China_Zhuhai_2022.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Infinty 0",
+    "source": "https://commons.wikimedia.org/wiki/File:WZ-7_at_Airshow_China_Zhuhai_2022.jpg",
+    "article": "Guizhou WZ-7 Soaring Dragon"
+  },
+  "X-65": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/50/X-65_by_DARPA.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "DARPA",
+    "source": "https://commons.wikimedia.org/wiki/File:X-65_by_DARPA.jpg",
+    "article": "Aurora X-65 CRANE"
+  },
+  "YIHA-III": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Byker_YIHA-III.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC0",
+    "author": "Killerdani12",
+    "source": "https://commons.wikimedia.org/wiki/File:Byker_YIHA-III.jpg",
+    "article": "YIHA-III"
+  },
+  "Zipline": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Zipline_Drone_Launch.jpg/1280px-Zipline_Drone_Launch.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Roksenhorn",
+    "source": "https://commons.wikimedia.org/wiki/File:Zipline_Drone_Launch.jpg",
+    "article": "Zipline (drone delivery company)"
+  },
+  "A1-CM Furia": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/%D0%A4%D1%83%D1%80%D1%96%D1%8F_%D0%90%D0%A1%D0%9C130103.jpg/1280px-%D0%A4%D1%83%D1%80%D1%96%D1%8F_%D0%90%D0%A1%D0%9C130103.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "DoroshenkoE",
+    "source": "https://commons.wikimedia.org/wiki/File:%D0%A4%D1%83%D1%80%D1%96%D1%8F_%D0%90%D0%A1%D0%9C130103.jpg",
+    "article": "Athlon Avia A1-CM Furia"
+  },
+  "A160 Hummingbird": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Boeing_A160_Hummingbird_VTOL-UAS.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "US Army",
+    "source": "https://commons.wikimedia.org/wiki/File:Boeing_A160_Hummingbird_VTOL-UAS.jpg",
+    "article": "Boeing A160 Hummingbird"
+  },
+  "Altius (Altair)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Altair-5.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC0",
+    "author": "Роман Барский",
+    "source": "https://commons.wikimedia.org/wiki/File:Altair-5.jpg",
+    "article": "Sokol Altius"
+  },
+  "Avenger (Predator-C)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale%2C_Calif.%2C_Aug._8%2C_2012_120808-N-WL435-054.jpg/1280px-A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale%2C_Calif.%2C_Aug._8%2C_2012_120808-N-WL435-054.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "MC1 Peter D. Lawlor",
+    "source": "https://commons.wikimedia.org/wiki/File:A_Predator_C_Avenger_unmanned_aircraft_system_and_inert_ordnance_sit_on_display_on_a_tarmac_at_Palmdale,_Calif.,_Aug._8,_2012_120808-N-WL435-054.jpg",
+    "article": "General Atomics MQ-20 Avenger"
+  },
+  "Bayraktar Kızılelma": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Teknofest_%C4%B0stanbul_2023_%28cropped%29.jpg/1280px-Teknofest_%C4%B0stanbul_2023_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Erişim",
+    "source": "https://commons.wikimedia.org/wiki/File:Teknofest_%C4%B0stanbul_2023_(cropped).jpg",
+    "article": "Bayraktar Kızılelma"
+  },
+  "Black Hornet (PD-100 / Black Hornet 4)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Black_Hornet_Nano_Helicopter_UAV.jpg/1280px-Black_Hornet_Nano_Helicopter_UAV.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "OGL v1.0",
+    "author": "Richard Watt",
+    "source": "https://commons.wikimedia.org/wiki/File:Black_Hornet_Nano_Helicopter_UAV.jpg",
+    "article": "Teledyne FLIR Black Hornet"
+  },
+  "Boeing X-45": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/X-45_AV1_sixth_flight_from_Edwards_AFB_%28EC02-0295-05%29.jpg/1280px-X-45_AV1_sixth_flight_from_Edwards_AFB_%28EC02-0295-05%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "NASA/Dryden Flight Research Center/Jim Ross",
+    "source": "https://commons.wikimedia.org/wiki/File:X-45_AV1_sixth_flight_from_Edwards_AFB_(EC02-0295-05).jpg",
+    "article": "Boeing X-45"
+  },
+  "Camcopter S-100": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Camcopter_S-100_im_Einsatz_f%C3%BCr_die_EMSA_%282021%29.jpg/1280px-Camcopter_S-100_im_Einsatz_f%C3%BCr_die_EMSA_%282021%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Schiebel Group",
+    "source": "https://commons.wikimedia.org/wiki/File:Camcopter_S-100_im_Einsatz_f%C3%BCr_die_EMSA_(2021).jpg",
+    "article": "Schiebel Camcopter S-100"
+  },
+  "Eleron-10": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Interpolitex_2011_%28406-4%29.jpg/1280px-Interpolitex_2011_%28406-4%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Vitaly V. Kuzmin",
+    "source": "https://commons.wikimedia.org/wiki/File:Interpolitex_2011_(406-4).jpg",
+    "article": "ENICS Eleron-10"
+  },
+  "Eleron-3": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Eleron-3_-_IDELF-2008-197.jpg/1280px-Eleron-3_-_IDELF-2008-197.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Vitaly V. Kuzmin",
+    "source": "https://commons.wikimedia.org/wiki/File:Eleron-3_-_IDELF-2008-197.jpg",
+    "article": "ENICS Eleron-3"
+  },
+  "Falco (Falco EVO / Falco Xplorer)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Paris_Air_Show_2019_-_Le_Bourget_%2848113963116%29.jpg/1280px-Paris_Air_Show_2019_-_Le_Bourget_%2848113963116%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 2.0",
+    "author": "Olivier CABARET from PARIS, FRANCE",
+    "source": "https://commons.wikimedia.org/wiki/File:Paris_Air_Show_2019_-_Le_Bourget_(48113963116).jpg",
+    "article": "Leonardo Falco Xplorer"
+  },
+  "Falcon 8+ (AscTec / Intel Falcon 8+)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/AsctecFalcon8.jpg/1280px-AsctecFalcon8.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Eugehal",
+    "source": "https://commons.wikimedia.org/wiki/File:AsctecFalcon8.jpg",
+    "article": "Intel Falcon 8"
+  },
+  "Grom (Kronshtadt)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Reconnaissance_and_combat_drone_%22Grom%22_during_the_%22Armiya_2021%22_exhibition.jpg/1280px-Reconnaissance_and_combat_drone_%22Grom%22_during_the_%22Armiya_2021%22_exhibition.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Kirill Borisenko",
+    "source": "https://commons.wikimedia.org/wiki/File:Reconnaissance_and_combat_drone_%22Grom%22_during_the_%22Armiya_2021%22_exhibition.jpg",
+    "article": "Kronshtadt Grom"
+  },
+  "Insitu ScanEagle": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_%28UAV%29.jpg/1280px-US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_%28UAV%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Navy photo /Released",
+    "source": "https://commons.wikimedia.org/wiki/File:US_Navy_1005268-N-RC844-159_A_Scan_Eagle_Unmanned_Aerial_Vehicle_(UAV).jpg",
+    "article": "Boeing Insitu MQ-27 ScanEagle"
+  },
+  "K-MAX (unmanned)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Kaman_K-1200_Rotex.jpg/1280px-Kaman_K-1200_Rotex.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "André Völzke",
+    "source": "https://commons.wikimedia.org/wiki/File:Kaman_K-1200_Rotex.jpg",
+    "article": "Kaman K-MAX"
+  },
+  "Leleka-100": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/Leleka-100_UAV%2C_Kyiv_2021%2C_20.jpg/1280px-Leleka-100_UAV%2C_Kyiv_2021%2C_20.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "VoidWanderer",
+    "source": "https://commons.wikimedia.org/wiki/File:Leleka-100_UAV,_Kyiv_2021,_20.jpg",
+    "article": "DeViRo Leleka-100"
+  },
+  "MQ-8C Fire Scout": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/MQ-8C_Fire_Scout_prepares_to_land_on_RWY_27_at_Naval_Air_Warfare_Center%27s_Sea_Test_Range_at_Point_Mugu.jpg/1280px-MQ-8C_Fire_Scout_prepares_to_land_on_RWY_27_at_Naval_Air_Warfare_Center%27s_Sea_Test_Range_at_Point_Mugu.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Navy",
+    "source": "https://commons.wikimedia.org/wiki/File:MQ-8C_Fire_Scout_prepares_to_land_on_RWY_27_at_Naval_Air_Warfare_Center%27s_Sea_Test_Range_at_Point_Mugu.jpg",
+    "article": "Northrop Grumman MQ-8C Fire Scout"
+  },
+  "MQM-178 Firejet": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/A_Kratos_Defense_Firejet_Drone_Launches_%287275159%29.jpg/1280px-A_Kratos_Defense_Firejet_Drone_Launches_%287275159%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "U.S. Army 94AAMDC by Maj. Nicholas Chopp",
+    "source": "https://commons.wikimedia.org/wiki/File:A_Kratos_Defense_Firejet_Drone_Launches_(7275159).jpg",
+    "article": "Kratos MQM-178 Firejet"
+  },
+  "Nano Hummingbird": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Nano_Hummingbird.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "DARPA",
+    "source": "https://commons.wikimedia.org/wiki/File:Nano_Hummingbird.jpg",
+    "article": "AeroVironment Nano Hummingbird"
+  },
+  "Nixie": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Nixie-Drone-Prototype2014.jpg/1280px-Nixie-Drone-Prototype2014.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 3.0",
+    "author": "Stefan Niedermayr",
+    "source": "https://commons.wikimedia.org/wiki/File:Nixie-Drone-Prototype2014.jpg",
+    "article": "Nixie Labs Nixie"
+  },
+  "Orion (Inokhodets)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Army-2020-209.JPG/1280px-Army-2020-209.JPG?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC0",
+    "author": "Nickel nitride",
+    "source": "https://commons.wikimedia.org/wiki/File:Army-2020-209.JPG",
+    "article": "Kronshtadt Orion"
+  },
+  "Parrot Bebop": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/VZ6D0113_%2815403706754%29.jpg/1280px-VZ6D0113_%2815403706754%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY 2.0",
+    "author": "WEi WEi from 桃園縣, 台灣",
+    "source": "https://commons.wikimedia.org/wiki/File:VZ6D0113_(15403706754).jpg",
+    "article": "Parrot Bebop"
+  },
+  "PD-2": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/UKRSPECSYSTEMS_PD-2_photo_1.jpg/1280px-UKRSPECSYSTEMS_PD-2_photo_1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "DoroshenkoE",
+    "source": "https://commons.wikimedia.org/wiki/File:UKRSPECSYSTEMS_PD-2_photo_1.jpg",
+    "article": "Ukrspecsystems PD-2"
+  },
+  "Raybird-3 (ACS-3)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/RB_production.jpg/1280px-RB_production.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Raybird 3",
+    "source": "https://commons.wikimedia.org/wiki/File:RB_production.jpg",
+    "article": "Skyeton Raybird-3"
+  },
+  "RQ-16 T-Hawk": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/MicroAirVehicle.jpg/1280px-MicroAirVehicle.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "w:United States Navy photo by Mass Communication Specialist 3rd Class Kenneth G.",
+    "source": "https://commons.wikimedia.org/wiki/File:MicroAirVehicle.jpg",
+    "article": "Honeywell RQ-16 T-Hawk"
+  },
+  "RQ-5 Hunter": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/B-Hunter_Landing_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "Seb5340",
+    "source": "https://commons.wikimedia.org/wiki/File:B-Hunter_Landing_(cropped).jpg",
+    "article": "IAI RQ-5 Hunter"
+  },
+  "Searcher": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/IAI-Searcher1.jpg/1280px-IAI-Searcher1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "Itayba",
+    "source": "https://commons.wikimedia.org/wiki/File:IAI-Searcher1.jpg",
+    "article": "IAI Searcher"
+  },
+  "Sirius (Kronshtadt)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/99/Sirius_drone.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "Jin | Источник: aex",
+    "source": "https://commons.wikimedia.org/wiki/File:Sirius_drone.jpg",
+    "article": "Kronshtadt Sirius"
+  },
+  "Wasp III (RQ-12A)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Wasp_III_aircraft.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "US Air Force",
+    "source": "https://commons.wikimedia.org/wiki/File:Wasp_III_aircraft.jpg",
+    "article": "AeroVironment Wasp III"
+  },
+  "Wing Loong I": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Wing_Loong.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 3.0",
+    "author": "Baiweiflight",
+    "source": "https://commons.wikimedia.org/wiki/File:Wing_Loong.jpg",
+    "article": "CAIG Wing Loong"
+  },
+  "X-47A Pegasus": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/X-47A_rollout.jpg/1280px-X-47A_rollout.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "Public domain",
+    "author": "DARPA",
+    "source": "https://commons.wikimedia.org/wiki/File:X-47A_rollout.jpg",
+    "article": "Northrop Grumman X-47A Pegasus"
+  },
+  "Yabhon United 40": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/MAKS_Airshow_2013_%28Ramenskoye_Airport%2C_Russia%29_%28522-25%29.jpg/1280px-MAKS_Airshow_2013_%28Ramenskoye_Airport%2C_Russia%29_%28522-25%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "Vitaly V. Kuzmin",
+    "source": "https://commons.wikimedia.org/wiki/File:MAKS_Airshow_2013_(Ramenskoye_Airport,_Russia)_(522-25).jpg",
+    "article": "Yabhon United 40"
+  },
+  "Yuneec Typhoon H": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Yuneec_Typhoon_H.jpg/1280px-Yuneec_Typhoon_H.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "licence": "CC BY-SA 4.0",
+    "author": "SkylarkCoder",
+    "source": "https://commons.wikimedia.org/wiki/File:Yuneec_Typhoon_H.jpg",
+    "article": "Yuneec International Typhoon H"
   }
 }
