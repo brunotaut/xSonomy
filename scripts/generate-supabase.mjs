@@ -32,7 +32,7 @@ const SECTION_TITLE = {
   sensors: "Sensors — xSonomy Counter-UAS Catalogue",
 };
 const BUCKET_KICKER = { uav: "UAV", sensors: "Sensor" };
-const HIDDEN = new Set(["Name", "Company", "Summary", "Website", "Image", "Status", "Enrichment status", "Source URLs", "Category", "Confidence", "slug"]);
+const HIDDEN = new Set(["Name", "Company", "Summary", "Website", "Image", "Status", "Enrichment status", "Source URLs", "Category", "Confidence", "slug", "Mentions"]);
 
 const PUBLISH_STATUS = null; // null = all rows; "live" = only publication_status='live'
 
@@ -80,6 +80,17 @@ th{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:upp
 .note{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.04em;line-height:1.7;border-top:1px solid var(--line);padding-top:16px;margin-top:30px}
 .note a{color:var(--muted)}
 @media(max-width:620px){h1{font-size:32px}}
+.news-sec{margin:34px 0 10px;border-top:1px solid var(--line);padding-top:22px}
+.sec-h{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;display:flex;align-items:center;gap:9px}
+.sec-n{font-family:var(--mono);font-size:11px;color:var(--ink3);border:1px solid var(--line);padding:1px 6px}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.news-card{display:flex;flex-direction:column;gap:6px;padding:12px;background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.news-card:hover{border-color:var(--accent);text-decoration:none}
+.news-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase}
+.news-title{font-size:13.5px;line-height:1.45}
+.news-card:hover .news-title{color:var(--accent)}
+.news-more,.news-src{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink3);margin-top:10px}
+
 `;
 
 function dFrameKind(frame) {
@@ -117,7 +128,7 @@ function dGlyph(kind) {
   return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="${c}"/><line x1="12" y1="12" x2="20" y2="6.5"/></svg>`;
 }
 
-function productPage(bucket, row) {
+function productPage(bucket, row, news = []) {
   const slug = row.slug;
   const name = row.Name || "Untitled";
   const company = row.Company || "";
@@ -162,13 +173,14 @@ function productPage(bucket, row) {
 <div class="kicker">${esc(kicker)}</div>
 <h1>${esc(name)}</h1>
 <div class="sub">${esc([company, country].filter(Boolean).join(" · "))}</div>
-${imgRel
-  ? `<img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">`
-  : `<div class="art">${bucket === "uav" ? dSchematic(dFrameKind(row["UAV · Frame type"])) : dGlyph(dSensorKind(row))}</div>`}
 ${row.Summary ? `<p class="lead">${esc(row.Summary)}</p>` : ""}
 ${why ? `<div class="why"><b>Why it matters</b>${esc(why)}</div>` : ""}
 <table><tbody>${specRows}</tbody></table>
 ${row.Website ? `<div class="cta"><a class="btn p" href="${esc(row.Website)}" target="_blank" rel="noopener nofollow">Visit manufacturer ↗</a></div>` : ""}
+${newsSection(news, row.Mentions || news.length)}
+${imgRel
+  ? `<img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">`
+  : `<div class="art">${bucket === "uav" ? dSchematic(dFrameKind(row["UAV · Frame type"])) : dGlyph(dSensorKind(row))}</div>`}
 <div class="note">Review-stage catalogue data — specs corroborated from manufacturer and secondary sources; not for procurement decisions.${row.Website ? ` Source: <a href="${esc(row.Website)}" target="_blank" rel="noopener nofollow">${esc(String(row.Website).replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a>` : ""}</div>
 </div></body></html>`;
 }
@@ -282,6 +294,55 @@ async function fetchTaxonomy() {
   }
   return byProduct;
 }
+
+// ---------- news (articles <-> article_products) ----------
+// The same articles that power the news site at uav360.xyz, which links straight out to
+// the original publishers rather than hosting article pages of its own — so these cards
+// do the same. Fetched as two paged reads and joined here instead of with a PostgREST
+// embed, so it does not depend on the foreign key being exposed. `article_products` has
+// no id column, but (article_id, product_id) is unique, which is the stable tiebreaker
+// the paging needs.
+const NEWS_ON_PAGE = 12;   // average product has 4.3 mentions; the busiest has ~200
+async function fetchNews() {
+  const [links, articles] = await Promise.all([
+    sbFetchAll("article_products", { select: "product_id,article_id", order: "article_id.asc,product_id.asc" }, "article_products"),
+    sbFetchAll("articles", { select: "id,title,url,source,published_at", order: "id.asc" }, "articles"),
+  ]);
+  const byId = new Map(articles.map((a) => [a.id, a]));
+  const byProduct = new Map();
+  for (const l of links) {
+    const a = byId.get(l.article_id);
+    if (!a || !a.url || !a.title) continue;
+    let list = byProduct.get(l.product_id);
+    if (!list) byProduct.set(l.product_id, (list = []));
+    list.push(a);
+  }
+  // Newest first. 373 articles have no published_at; an empty string sorts last here,
+  // so undated items settle at the bottom instead of jumping to the top.
+  for (const list of byProduct.values()) {
+    list.sort((x, y) => String(y.published_at || "").localeCompare(String(x.published_at || "")));
+  }
+  return byProduct;
+}
+function newsSection(items, total) {
+  if (!items.length) return "";
+  const cards = items.map((a) => {
+    const when = a.published_at ? String(a.published_at).slice(0, 10) : "";
+    const meta = [a.source, when].filter(Boolean).join(" · ");
+    return `<a class="news-card" href="${esc(a.url)}" target="_blank" rel="noopener nofollow">`
+      + `${meta ? `<span class="news-meta">${esc(meta)}</span>` : ""}`
+      + `<span class="news-title">${esc(a.title)}</span></a>`;
+  }).join("");
+  const more = total > items.length
+    ? `<div class="news-more">Showing the ${items.length} most recent of ${total} mentions.</div>` : "";
+  return `<section class="news-sec">
+<h2 class="sec-h">In the news <span class="sec-n">${total}</span></h2>
+<div class="news-grid">${cards}</div>
+${more}
+<div class="news-src">From <a href="http://uav360.xyz/" target="_blank" rel="noopener">uav360.xyz</a>, the xSonomy news feed. Headlines link to the original publisher.</div>
+</section>`;
+}
+
 function reshape(p) {
   const row = {};
   if (p.name) row.Name = p.name;
@@ -753,12 +814,16 @@ async function main() {
   console.log("Fetching taxonomy from Supabase…");
   const taxonomy = await fetchTaxonomy();
   console.log(`  taxonomy: ${taxonomy.size} products classified`);
+  console.log("Fetching news from Supabase…");
+  const news = await fetchNews();
+  console.log(`  news: ${news.size} products with mentions`);
 
   await rm(OUT, { recursive: true, force: true });
   await mkdir(join(OUT, "data"), { recursive: true });
   await cp(SRC, OUT, { recursive: true });
 
   const buckets = { uav: [], sensors: [] };
+  const newsBySlug = new Map();
   for (const p of products) {
     const bucket = p.category === "UAV" ? "uav" : "sensors";
     const row = reshape(p);
@@ -768,6 +833,13 @@ async function main() {
     // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
     // pages show the richer raw `UAV · Production status` instead.
     if (bucket === "uav") row.Status = normaliseStatus(row["UAV · Production status"]);
+    // The count rides along in the JSON for the catalogue cards; the articles themselves
+    // stay out of it (they would add megabytes) and are handed to productPage by slug.
+    const items = news.get(p.id) || [];
+    if (items.length) {
+      row.Mentions = items.length;
+      newsBySlug.set(row.slug, items.slice(0, NEWS_ON_PAGE));
+    }
     await attachImage(row);
     buckets[bucket].push(row);
   }
@@ -785,7 +857,7 @@ async function main() {
     for (const row of rows) {
       const dir = join(OUT, bucket, row.slug);
       await mkdir(dir, { recursive: true });
-      await writeFile(join(dir, "index.html"), productPage(bucket, row));
+      await writeFile(join(dir, "index.html"), productPage(bucket, row, newsBySlug.get(row.slug) || []));
       urls.push(`${SITE}/${bucket}/${row.slug}/`);
     }
   }

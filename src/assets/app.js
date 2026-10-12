@@ -186,6 +186,15 @@ function cmpBtn(slug) {
   const on = state.compare.includes(slug) ? " on" : "";
   return `<button class="cmp-btn${on}" data-slug="${esc(slug)}" title="Add to compare" aria-label="Add to compare">${CMP_ICON}</button>`;
 }
+// Count of news articles that mention this product, from the same feed as uav360.xyz.
+// Hidden at zero rather than shown as "0 mentions" — 383 UAVs have none, and the empty
+// line on every one of them would be noise.
+function mentionsBadge(n) {
+  const count = Number(n) || 0;
+  if (count < 1) return "";
+  return `<span class="mentions" title="Mentioned in ${count} news article${count === 1 ? "" : "s"} — see the product page">`
+    + `${count} mention${count === 1 ? "" : "s"}</span>`;
+}
 function pctBadge(pct) {
   const tone = pct >= 75 ? "hi" : pct >= 40 ? "mid" : "low";
   return `<span class="data-pct ${tone}" title="${pct}% of the ${PCT_TOTAL} fields we track for a UAV are filled in for this product">`
@@ -206,7 +215,7 @@ function uavCard(row) {
       <span class="art-tag">${esc(up(frameKind(frame)))}</span>
     </div>
     <div class="card-body">
-      <div class="card-geo">${geoBadge(row.Country)}${pctBadge(completeness(row))}</div>
+      <div class="card-geo">${geoBadge(row.Country)}<span class="card-meta">${pctBadge(completeness(row))}${mentionsBadge(row.Mentions)}</span></div>
       <a class="card-name" href="${href}">${esc(row.Name || "Untitled")}</a>
       <div class="card-mfr">${esc(first(row.Company) || "")}</div>
       <div class="card-tags">${first(row.Subcategory) ? `<span class="tag">${esc(first(row.Subcategory))}</span>` : ""}${role ? `<span class="tag role">${esc(role)}</span>` : ""}${frame ? `<span class="tag">${esc(frame)}</span>` : ""}</div>

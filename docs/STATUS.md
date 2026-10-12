@@ -24,6 +24,29 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 (later) — news on product pages, mentions on cards
+Wires the catalogue to the news side of the DB (`articles` + `article_products`) — the same
+feed that powers **uav360.xyz**. 970 of 1,353 UAV products have at least one mention
+(7,770 links over 6,119 articles; average 4.3 per product, busiest has 197).
+
+- `fetchNews()` does two paged reads and joins them in JS rather than using a PostgREST
+  embed, so it does not depend on the FK being exposed. `article_products` has no id
+  column, but (article_id, product_id) is unique — verified — which is the stable
+  tiebreaker `sbFetchAll` needs. 373 articles have no `published_at`; they sort last.
+- **Product pages** gain an "In the news" section after the spec table: up to 12 cards
+  (`NEWS_ON_PAGE`), newest first, each linking to the **original publisher**. uav360.xyz
+  has no per-article pages of its own — only a homepage and monthly digests that link out
+  the same way — so there is nothing else to link to. A footer line credits uav360.xyz.
+- **The image/schematic container moved to the end**, below the news section; the
+  review-stage disclaimer stays last.
+- **Catalogue cards** show the mention count under the completeness %, hidden at zero
+  (383 UAVs have none, and an empty line on each would be noise). The count travels in
+  `uav.json` as `Mentions`; the articles themselves deliberately do NOT — they would add
+  megabytes to a file the browser loads up front, so `productPage()` receives them
+  separately via a slug-keyed map. `Mentions` is in `HIDDEN`, so it does not also appear
+  as a spec-table row.
+
+
 ### 2026-10-12 — filters reordered to the sheet, Regulatory class removed
 - Taxonomy field names are now derived from `taxonomy_facets.name` in `fetchTaxonomy()` instead of
   a hand-written map, so sidebar labels and product-page spec rows always match the source sheet.
