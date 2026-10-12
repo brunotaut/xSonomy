@@ -24,6 +24,39 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-13 — enrichment of thin pages, batch 1
+**2,320 products have no summary — and every single one already has news articles linked.**
+So this is synthesis from material already in the database, not web research. 958 of them have
+a `primary` mention (an article principally about that product), which is the best source.
+
+Batch 1: 10 products reviewed, **8 written, 2 refused** — the same ~20% error rate as the image
+work, and for the same reason: the extraction that linked article to product is sometimes wrong.
+- **ARCHER AI** — none of its linked articles mention it; they are about Neros and Perennial in
+  the Pentagon drone competition. Looks like a bad entity extraction. Left empty, needs review.
+- **AS21 Redback** — Hanwha's infantry fighting vehicle, filed under Counter-UAS. Its one
+  "primary" article is a generic air-defence roundup. Wrong category, no usable evidence.
+
+Written (summary + `source_urls` + `enrichment_status='news-derived'`, `confidence` left at
+`low` because these are press-derived, not manufacturer-confirmed): Alexa Spatium, Apollo,
+Archer, Bullfrog M240, Chaparral, Compact Laser Weapon System, DJI SDR Transmission 2, DragonFire.
+
+Every sentence comes from the linked articles; nothing was inferred or recalled.
+
+**Corrections spotted, not applied**
+- **Archer** has no company in the DB; the articles are unambiguous that it is **Neros
+  Technologies**.
+- **DJI SDR Transmission 2** is filed under Software but is a hardware video transmitter.
+- **AS21 Redback** is miscategorised as Counter-UAS.
+
+⚠ **Outstanding:** `CLAUDE.md` rule 1 says DB changes made from here must be logged in
+`xsonomy-news`. This session could not reach that repo (blocked as a shared resource), so this
+entry is the only record. It needs copying across.
+
+**Rate.** Judging each product means reading its articles, so this runs ~10 per batch. At 958
+primary-mention products that is ~95 batches — work for many sessions, or for a scheduled job
+that does a batch a day. Worth deciding before grinding through it by hand.
+
+
 ### 2026-10-12 — every category published; Airtable removed
 **Nazar: the `live` tag means nothing, publish everything, pick the sections yourself.**
 
