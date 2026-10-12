@@ -548,7 +548,7 @@ function companyRegistryPage(rows, page, totalPages, total) {
   const canonical = page === 1 ? `${SITE}/companies/` : `${SITE}/companies/${page}/`;
   const from = (page - 1) * 100 + 1, to = (page - 1) * 100 + rows.length;
   const title = `Companies${page > 1 ? ` — page ${page}` : ""} · xSonomy`;
-  const nav = `<nav><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a><a class="on" href="/companies/">Companies</a><a href="https://news.xsonomy.com">News</a></nav>`;
+  const nav = `<nav><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a><a class="on" href="/companies/">Companies</a><a href="http://uav360.xyz/" target="_blank" rel="noopener">News</a></nav>`;
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
@@ -703,7 +703,7 @@ function companiesShell(total) {
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
   <a class="news-link" href="/cuas-systems/">C-UAS Systems</a>
   <a class="news-link active" href="/companies/">Companies</a>
-  <a class="news-link" href="https://news.xsonomy.com">News</a>
+  <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
 </div></header>
 <main class="wrap layout">
   <aside class="filters" aria-label="Filters">
@@ -745,7 +745,7 @@ function cuasShell(total) {
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
   <a class="news-link active" href="/cuas-systems/">C-UAS Systems</a>
   <a class="news-link" href="/companies/">Companies</a>
-  <a class="news-link" href="https://news.xsonomy.com">News</a>
+  <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
 </div></header>
 <main class="wrap layout">
   <aside class="filters" aria-label="Filters">
