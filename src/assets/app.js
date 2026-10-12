@@ -148,6 +148,11 @@ const state = { cat: null, subKey: null, rows: [], allSensors: [], cfg: null, ca
 // ---------- helpers ----------
 const asArray = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]);
 const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// Product names here are often several things joined with slashes — "Airborne/space/ground
+// SAR sensors", "X/C/L/Ku/Ka". A browser treats each of those as one unbreakable word, so a
+// single name was forcing its whole grid column wider than the other two. A zero-width space
+// after each separator lets the line break at the slash instead of mid-word.
+const softBreak = (s) => String(s == null ? "" : s).replace(/([\/\u00b7])/g, "$1\u200b");
 const num = (v) => (typeof v === "number" ? v : null);
 const up = (s) => String(s || "").toUpperCase();
 const first = (v) => asArray(v)[0];
@@ -276,7 +281,7 @@ function sensorBlock(row, i) {
   }
   return `<div class="sblock" data-href="${href}">
     <div class="sblock-top"><div class="sblock-num">${esc(first(row.Company) || "")}</div>${geoBadge(row.Country)}</div>
-    <div class="sblock-title"><div class="sblock-ic">${sensorGlyph(kind)}</div><div><a class="sblock-name" href="${href}">${esc(row.Name || "Untitled")}</a><div class="sblock-sub">${esc(subtitle)}</div></div></div>
+    <div class="sblock-title"><div class="sblock-ic">${sensorGlyph(kind)}</div><div><a class="sblock-name" href="${href}">${esc(softBreak(row.Name) || "Untitled")}</a><div class="sblock-sub">${esc(softBreak(subtitle))}</div></div></div>
     ${row.Image ? `<img class="sblock-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : ""}
     <p class="sblock-summary clamp">${esc(row.Summary || "")}</p>
     ${why ? `<div class="why"><h6>WHY IT MATTERS</h6><p>${esc(why)}</p></div>` : ""}
@@ -292,8 +297,8 @@ function leanCard(row) {
   const summary = String(row.Summary || "").trim();
   return `<div class="sblock lean" data-href="${href}">
     <div class="sblock-top"><div class="sblock-num">${esc(first(row.Company) || "")}</div>${geoBadge(row.Country)}</div>
-    <div class="sblock-title"><div><a class="sblock-name" href="${href}">${esc(row.Name || "Untitled")}</a>
-      ${kind ? `<div class="sblock-sub">${esc(kind)}</div>` : ""}</div></div>
+    <div class="sblock-title"><div><a class="sblock-name" href="${href}">${esc(softBreak(row.Name) || "Untitled")}</a>
+      ${kind ? `<div class="sblock-sub">${esc(softBreak(kind))}</div>` : ""}</div></div>
     ${row.Image ? `<img class="sblock-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : ""}
     ${summary ? `<p class="sblock-summary clamp">${esc(summary)}</p>` : `<p class="sblock-summary na">No description yet.</p>`}
     <div class="sblock-foot">${mentionsBadge(row.Mentions)}${cmpBtn(row.slug)}</div>

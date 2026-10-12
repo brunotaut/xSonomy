@@ -120,7 +120,10 @@ a { color: var(--accent); text-decoration: none; }
 /* ---------- Grid ---------- */
 .grid { display: grid; gap: 14px; }
 .grid.uav { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-.grid.sensors, .grid.cuas, .grid.software, .grid.other { grid-template-columns: repeat(3, 1fr); }
+/* minmax(0, 1fr) rather than a bare 1fr: 1fr will not shrink a track below its widest
+   unbreakable word, and one product named "Airborne/space/ground SAR sensors" was
+   stretching the whole first column to 466px while the others sat at ~310px. */
+.grid.sensors, .grid.cuas, .grid.software, .grid.other { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 1200px) { .grid.sensors, .grid.cuas, .grid.software, .grid.other { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 760px) { .grid.sensors, .grid.cuas, .grid.software, .grid.other { grid-template-columns: 1fr; } }
 
@@ -197,11 +200,11 @@ a { color: var(--accent); text-decoration: none; }
 .sblock-geo { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-1); border: 1px solid var(--line); padding: 5px 10px; display: inline-flex; gap: 8px; align-items: center; white-space: nowrap; }
 .sblock-title { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
 .sblock-ic { width: 54px; height: 54px; border: 1px solid var(--accent-line); background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; border-radius: 50%; flex-shrink: 0; }
-.sblock-name { display: block; font-family: var(--display); font-size: 30px; letter-spacing: .04em; margin: 0; line-height: 1; color: var(--ink-0); text-decoration: none; }
+.sblock-name { display: block; overflow-wrap: anywhere; font-family: var(--display); font-size: 30px; letter-spacing: .04em; margin: 0; line-height: 1; color: var(--ink-0); text-decoration: none; }
 .sblock:hover .sblock-name, .sblock-name:hover { color: var(--accent); }
-.sblock-sub { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--warn); margin-top: 7px; }
+.sblock-sub { overflow-wrap: anywhere; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--warn); margin-top: 7px; }
 .sblock-photo { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--line); margin-top: 16px; background: var(--bg-2); }
-.sblock-summary { color: var(--ink-1); font-size: 14px; line-height: 1.6; margin: 18px 0 0; }
+.sblock-summary { overflow-wrap: anywhere; color: var(--ink-1); font-size: 14px; line-height: 1.6; margin: 18px 0 0; }
 .sblock-summary.clamp { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .why { border-left: 3px solid var(--accent); background: var(--bg-2); padding: 14px 18px; margin-top: 18px; }
 .why h6 { font-family: var(--mono); font-size: 10px; letter-spacing: .25em; color: var(--accent); margin: 0 0 6px; }
