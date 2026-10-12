@@ -24,22 +24,35 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
-### 2026-10-13 — Google Analytics added
-GA4 (`G-8WL3V0JVBR`) on every page. Two insertion points, which together cover the site:
-- `src/index.html` — the catalogue shell, which is also the source of the five section
-  pages (`/uav/`, `/cuas/`, `/sensors/`, `/software/`, `/other/`), so one copy covers six pages.
-- `GA_TAG` in the generator, interpolated into all five generated templates: product pages,
-  company registry, company pages, companies shell and the C-UAS vendors page.
+### 2026-10-13 — Google Analytics with Consent Mode v2
+GA4 (`G-8WL3V0JVBR`) on ~5,300 pages, with storage denied until the visitor opts in.
 
-That is ~5,300 pages. The measurement ID is a public identifier, not a secret, so it lives
-in the source rather than a repository secret.
+Two insertion points cover the whole site: `src/index.html` (the catalogue shell, which is
+also the source of the five section pages) and `GA_TAG` in the generator, interpolated into
+all five generated templates — product, company registry, company, companies shell and the
+C-UAS vendors page.
 
-⚠ **Consent not implemented.** GA4 sets cookies, and for UK/EU visitors analytics cookies
-normally require opt-in consent under GDPR/PECR — the site has no cookie banner and the tag
-fires on load. Nazar was told; the decision is his. If it needs addressing later, the options
-are a consent banner gating `gtag('config', …)`, or switching to a cookieless analytics
-product, or GA4 consent mode with analytics storage denied until consent.
+**Ordering is the part that matters.** `gtag('consent','default', …)` with everything denied
+runs *inline in the head, before* `gtag.js` loads. If it ran after, GA would set its cookies
+first and the consent state would arrive too late. A stored "granted" choice is restored in
+the same inline block so returning visitors are measured from the first hit.
 
+The banner lives in `src/assets/consent.js`, loaded `defer` — it only draws UI and records the
+choice, so it cannot affect whether cookies are set. Choice is kept in `localStorage`
+(`xs-consent`), wrapped in try/catch for private mode. Decline is as prominent as Accept.
+
+Verified in a browser, all four paths:
+| | cookies | banner |
+|---|---|---|
+| first visit, no choice | **none at all** | shown |
+| accepts | `_ga`, `_ga_8WL3V0JVBR` appear | dismissed |
+| returns having accepted | present, consent restored before first hit | not shown |
+| declines | **none** | not shown again |
+
+The measurement ID is a public identifier, so it stays in source rather than a secret.
+
+**Not built:** a way to change the decision later. If that is wanted, expose a link that clears
+`xs-consent` and reloads. Also note consent is per-browser via localStorage, not per-person.
 
 ### 2026-10-13 — Actions runtime bumped to clear the Node 20 deprecation
 `actions/checkout@v4` and `actions/setup-node@v4` run on Node 20, which GitHub now forces

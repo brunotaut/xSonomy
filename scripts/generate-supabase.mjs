@@ -67,14 +67,30 @@ const slugify = (name, section = "_") => {
 // Google Analytics 4. Injected into every generated page; the catalogue shell in
 // src/index.html carries its own copy, which also covers the section pages built
 // from it. The measurement ID is a public identifier, not a secret.
-const GA_TAG = `<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WL3V0JVBR"></script>
+const GA_TAG = `<!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Storage denied until the visitor opts in. This MUST run before gtag.js loads,
+  // otherwise GA sets its cookies first and the consent state arrives too late.
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500
+  });
+  // Restore a previous "accept" before the first hit, so returning visitors are measured.
+  try {
+    if (localStorage.getItem('xs-consent') === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+    }
+  } catch (e) {}
   gtag('js', new Date());
   gtag('config', 'G-8WL3V0JVBR');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WL3V0JVBR"></script>
+<script defer src="/assets/consent.js"></script>
 `;
 
 const PAGE_CSS = `

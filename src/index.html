@@ -16,14 +16,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WL3V0JVBR"></script>
+<!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Storage denied until the visitor opts in. This MUST run before gtag.js loads,
+  // otherwise GA sets its cookies first and the consent state arrives too late.
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500
+  });
+  // Restore a previous "accept" before the first hit, so returning visitors are measured.
+  try {
+    if (localStorage.getItem('xs-consent') === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+    }
+  } catch (e) {}
   gtag('js', new Date());
   gtag('config', 'G-8WL3V0JVBR');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WL3V0JVBR"></script>
+<script defer src="/assets/consent.js"></script>
 </head>
 <body>
   <header class="site-header">
