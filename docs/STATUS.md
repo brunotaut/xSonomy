@@ -24,6 +24,17 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-13 — Actions runtime bumped to clear the Node 20 deprecation
+`actions/checkout@v4` and `actions/setup-node@v4` run on Node 20, which GitHub now forces
+onto Node 24 with a warning. Both moved to `@v5` (node24 runtime, verified against each
+action's `action.yml`) in `deploy.yml` and `find-images.yml`. The same bump was applied to
+all nine workflows in `xsonomy-news`, since the warning affected every workflow in both repos.
+
+`node-version` also went 20 -> 22, Node 20 having reached end of life in April 2026. That
+changes the runtime the generator itself runs on, so the first build after this is worth a
+glance — though the generator is plain ESM using built-in `fetch`.
+
+
 ### 2026-10-13 — enrichment of thin pages, batch 1
 **2,320 products have no summary — and every single one already has news articles linked.**
 So this is synthesis from material already in the database, not web research. 958 of them have
