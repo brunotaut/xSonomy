@@ -24,6 +24,29 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 — filters reordered to the sheet, Regulatory class removed
+- Taxonomy field names are now derived from `taxonomy_facets.name` in `fetchTaxonomy()` instead of
+  a hand-written map, so sidebar labels and product-page spec rows always match the source sheet.
+- **`weight_class` is no longer split.** The NATO classes and the FAA / UK-EU regulatory marks are
+  one 11-option **Weight / class** group again, as in the sheet; the separate **Regulatory class**
+  group is gone. (Reverses the split made on 2026-09-07.)
+- **Domain is back** on /uav/, in sheet position 3.
+- Sidebar order is now: Country, Role (neither is a taxonomy facet, so they sit above the block),
+  then the sheet's facet order 1-14 with dual-use lifted out to the bottom toggle, then Status last.
+- All 14 typed facet names were checked against the DB with a SQL join before shipping — the
+  en-dashes in "Mission / use case – civil/military" are easy to get wrong by hand.
+
+**Two groups show fewer options than the sheet lists, by design.** `buildFacets()` hides any option
+that matches zero products, because a checkbox that filters to nothing is dead UI:
+- Signature / detectability — 10 of 13 (Acoustic, Thermal and Visual profile are unassigned; the
+  2026-09 classification brief states they were deliberately never used).
+- Threat vector — 8 of 10 (EW/cyber spoofing and EW/cyber network intrusion have no products).
+They will appear on their own once any product is tagged with them.
+
+**Domain has 5 options in the DB, not 6** (Aerial, Ground, Surface, Underwater, Space) — flagged to
+Nazar; if the sheet really has a sixth it has not been imported.
+
+
 ### 2026-09-07 (later still) — data-completeness % on cards, default sort by it
 Each UAV card now carries a small bar + percentage, and the grid leads with the
 best-documented products (name is the tie-break; sensors keep alphabetical).

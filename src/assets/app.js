@@ -10,26 +10,30 @@
 // Dual-use is a single toggle at the foot of the sidebar, not a group (35 products).
 const UAV_CFG = {
   search: ["Name", "Company", "Summary", "Subtype"],
+  // Country and Role are not taxonomy facets, so they sit above the block. Everything
+  // from Weight / class down follows the taxonomy sheet's own facet order, with Status
+  // last. Regulatory marks are not a group of their own — they are 4 of the 11 options
+  // inside Weight / class, as in the sheet.
   selects: [
     "Country",
-    "Status",
     "UAV · Role",
+    "Taxonomy · Weight / class",
     "Taxonomy · Airframe / lift type",
-    "Taxonomy · Propulsion type",
-    "Taxonomy · Origin / supply chain",
-    "Taxonomy · Control / autonomy",
-    "Taxonomy · Weight class",
-    "Taxonomy · Regulatory class",
-    "Taxonomy · Signature / detectability",
+    "Taxonomy · Domain",
+    "Taxonomy · Control / autonomy level",
     "Taxonomy · Range / endurance",
-    "Taxonomy · Mission – military",
-    "Taxonomy · Threat vector",
+    "Taxonomy · Mission / use case – civil",
+    "Taxonomy · Mission / use case – military",
+    "Taxonomy · Propulsion",
     "Taxonomy · Speed regime",
-    "Taxonomy · Mission – civil",
-    "Taxonomy · Strike depth",
+    "Taxonomy · Signature / detectability",
+    "Taxonomy · Threat vector",
+    "Taxonomy · Origin / supply chain",
+    "Taxonomy · Strike depth / operational role",
+    "Status",
   ],
   ranges: [],
-  dualUseField: "Taxonomy · Dual-use",
+  dualUseField: "Taxonomy · Mission / use case – dual-use / improvised",
   // Status is the one opt-OUT group: every bucket starts ticked and unticking one hides
   // those products, so the boxes read as "what is on the page". These two start unticked.
   statusField: "Status",
@@ -85,11 +89,12 @@ const SENSOR_TABS = [
 const PCT_IDENTITY = ["Company", "Country", "Summary", "Website"];
 const PCT_SPECS = ["UAV · MTOW (kg)", "UAV · Range (km)", "UAV · Endurance (min)",
                    "UAV · Max speed (km/h)", "UAV · Max payload (kg)"];
-const PCT_CLASS = ["Taxonomy · Domain", "Taxonomy · Airframe / lift type", "Taxonomy · Weight class",
-                   "Taxonomy · Propulsion type", "Taxonomy · Control / autonomy",
+const PCT_CLASS = ["Taxonomy · Domain", "Taxonomy · Airframe / lift type", "Taxonomy · Weight / class",
+                   "Taxonomy · Propulsion", "Taxonomy · Control / autonomy level",
                    "Taxonomy · Range / endurance", "Taxonomy · Speed regime",
                    "Taxonomy · Origin / supply chain", "Taxonomy · Signature / detectability"];
-const PCT_MISSION = ["Taxonomy · Mission – military", "Taxonomy · Mission – civil", "Taxonomy · Dual-use"];
+const PCT_MISSION = ["Taxonomy · Mission / use case – military", "Taxonomy · Mission / use case – civil",
+                     "Taxonomy · Mission / use case – dual-use / improvised"];
 const PCT_TOTAL = PCT_IDENTITY.length + PCT_SPECS.length + PCT_CLASS.length + 1;
 const hasVal = (v) => v != null && v !== "" && !(Array.isArray(v) && v.length === 0);
 function completeness(row) {
