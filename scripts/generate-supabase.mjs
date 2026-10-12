@@ -390,10 +390,23 @@ async function attachImage(row) {
   if (!url) return;
   try {
     // Wikimedia asks for an identifying User-Agent and refuses some anonymous clients;
-    // without it the build would quietly fall back to schematics.
-    const res = await fetch(url, { headers: { "User-Agent": "xSonomy-catalogue/1.0 (https://xsonomy.com)" } });
-    if (!res.ok) { console.error(`image ${row.slug}: HTTP ${res.status}`); return; }
+    // without it the build would quietly fall back to schematics. It also throttles a
+    // burst of 140 downloads, which silently cost ~6 images per build before the retry
+    // and the pause between downloads were added.
+    const headers = { "User-Agent": "xSonomy-catalogue/1.0 (https://xsonomy.com)" };
+    let res = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await fetch(url, { headers });
+        if (res.ok) break;
+        if (res.status !== 429 && res.status < 500) { console.error(`image ${row.slug}: HTTP ${res.status}`); return; }
+      } catch (e) { if (attempt === 3) throw e; }
+      await new Promise((r) => setTimeout(r, attempt * 1500));
+      res = null;
+    }
+    if (!res || !res.ok) { console.error(`image ${row.slug}: gave up after 3 attempts`); return; }
     const buf = Buffer.from(await res.arrayBuffer());
+    await new Promise((r) => setTimeout(r, 120));   // stay polite across 140 downloads
     const ext = (extname(new URL(url).pathname).slice(1) || "jpg").toLowerCase().replace("jpeg", "jpg");
     const rel = `images/${row.slug}.${ext}`;
     await mkdir(join(OUT, "images"), { recursive: true });
