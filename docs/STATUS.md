@@ -24,6 +24,36 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 (later still) — product photos: 25 verified images for the top-100 UAVs
+"Images for all products" is not achievable and the measurement is worth keeping.
+
+**The old images were never real.** `products.image_url` holds 8 rows, all expired Airtable
+signed URLs that 404. That is why every card has always shown a schematic.
+
+**Measured coverage.** Against Wikipedia/Wikimedia Commons — the only source that is licensed
+for reuse — a random 100-product sample gave **21 strict-match hits, of which ~18 were correct**.
+The other 79 have no freely-licensed photo. Manufacturer and defence-press photos are almost all
+all-rights-reserved, so re-hosting them is not an option.
+
+**Fuzzy matching is dangerous, not merely imprecise.** Of 51 rejected matches in the sample:
+`DROGEN` → *List of equipment of the French Army*, `Formula A` → *Kow Otani* (a composer),
+`T-3` → *Jean Alesi*, `Inspektor-201` → *Peugeot 403*, `Charger` → *List of Danger Force episodes*.
+Even after strict name matching, 6 of 31 top-100 candidates were wrong **and had to be caught by
+eye**: Gerbera (flowers), Hornet (a wasp), LOCUST (a grasshopper), Spirit (a hot-air balloon),
+Bullet (ammunition), Prime Air (the Amazon wordmark).
+
+**Shipped:** `data/product-images.json`, 25 hand-checked images for the most-mentioned products,
+each with author, licence and Commons source. Licences: 13 public domain, 8 CC BY-SA, 4 CC BY,
+plus OGL/CC0. The generator prefers the manifest over `products.image_url`, `attachImage`
+downloads into `public/images/`, and product pages render a `figcaption` credit — required by
+CC BY / BY-SA. Curation lives in this repo because the catalogue must not write to Supabase;
+moving it into the DB later is a straight copy.
+
+**To extend:** rerun the matcher on the next tranche, but the eyeball step is not optional — it
+caught 19% of candidates. Scripts kept out of the repo (scratchpad only); the method is the
+strict all-tokens-in-title test plus a contact sheet.
+
+
 ### 2026-10-12 (later) — news on product pages, mentions on cards
 Wires the catalogue to the news side of the DB (`articles` + `article_products`) — the same
 feed that powers **uav360.xyz**. 970 of 1,353 UAV products have at least one mention

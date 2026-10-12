@@ -91,6 +91,10 @@ th{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:upp
 .news-card:hover .news-title{color:var(--accent)}
 .news-more,.news-src{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink3);margin-top:10px}
 
+.hero-fig{margin:0 0 4px}
+.img-credit{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);margin-top:7px}
+.img-credit a{color:var(--ink3);text-decoration:underline}
+
 `;
 
 function dFrameKind(frame) {
@@ -128,7 +132,7 @@ function dGlyph(kind) {
   return `<svg ${w} viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="${c}"/><line x1="12" y1="12" x2="20" y2="6.5"/></svg>`;
 }
 
-function productPage(bucket, row, news = []) {
+function productPage(bucket, row, news = [], credit = null) {
   const slug = row.slug;
   const name = row.Name || "Untitled";
   const company = row.Company || "";
@@ -179,7 +183,7 @@ ${why ? `<div class="why"><b>Why it matters</b>${esc(why)}</div>` : ""}
 ${row.Website ? `<div class="cta"><a class="btn p" href="${esc(row.Website)}" target="_blank" rel="noopener nofollow">Visit manufacturer ↗</a></div>` : ""}
 ${newsSection(news, row.Mentions || news.length)}
 ${imgRel
-  ? `<img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">`
+  ? `<figure class="hero-fig"><img class="hero" src="${imgRel}" alt="${esc(name)}" width="900">${imageCredit(credit)}</figure>`
   : `<div class="art">${bucket === "uav" ? dSchematic(dFrameKind(row["UAV · Frame type"])) : dGlyph(dSensorKind(row))}</div>`}
 <div class="note">Review-stage catalogue data — specs corroborated from manufacturer and secondary sources; not for procurement decisions.${row.Website ? ` Source: <a href="${esc(row.Website)}" target="_blank" rel="noopener nofollow">${esc(String(row.Website).replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a>` : ""}</div>
 </div></body></html>`;
@@ -295,6 +299,29 @@ async function fetchTaxonomy() {
   return byProduct;
 }
 
+// ---------- curated product images ----------
+// `products.image_url` holds 8 expired Airtable signed URLs and nothing else, so images
+// come from a manifest kept in this repo instead: Wikimedia Commons / Wikipedia pictures,
+// each one matched on a strict name test and then checked by eye (the loose version put
+// flowers on "Gerbera", a wasp on "Hornet" and ammunition on "Bullet"). Every entry is
+// reusable and carries the attribution its licence requires. Curation lives here rather
+// than in the database because this repo must not write to Supabase.
+const IMAGE_MANIFEST = join(ROOT, "data", "product-images.json");
+async function loadCuratedImages() {
+  if (!existsSync(IMAGE_MANIFEST)) return {};
+  try { return JSON.parse(await readFile(IMAGE_MANIFEST, "utf8")); }
+  catch (e) { console.error(`product-images.json: ${e.message}`); return {}; }
+}
+function imageCredit(c) {
+  if (!c) return "";
+  const who = c.author ? esc(c.author) : "Unknown author";
+  const lic = c.licence ? esc(c.licence) : "";
+  const via = c.source
+    ? `<a href="${esc(c.source)}" target="_blank" rel="noopener nofollow">Wikimedia Commons</a>`
+    : "Wikimedia Commons";
+  return `<figcaption class="img-credit">${who}${lic ? ` &middot; ${lic}` : ""} &middot; via ${via}</figcaption>`;
+}
+
 // ---------- news (articles <-> article_products) ----------
 // The same articles that power the news site at uav360.xyz, which links straight out to
 // the original publishers rather than hosting article pages of its own — so these cards
@@ -362,7 +389,9 @@ async function attachImage(row) {
   const url = row.__image_url; delete row.__image_url;
   if (!url) return;
   try {
-    const res = await fetch(url);
+    // Wikimedia asks for an identifying User-Agent and refuses some anonymous clients;
+    // without it the build would quietly fall back to schematics.
+    const res = await fetch(url, { headers: { "User-Agent": "xSonomy-catalogue/1.0 (https://xsonomy.com)" } });
     if (!res.ok) { console.error(`image ${row.slug}: HTTP ${res.status}`); return; }
     const buf = Buffer.from(await res.arrayBuffer());
     const ext = (extname(new URL(url).pathname).slice(1) || "jpg").toLowerCase().replace("jpeg", "jpg");
@@ -817,6 +846,8 @@ async function main() {
   console.log("Fetching news from Supabase…");
   const news = await fetchNews();
   console.log(`  news: ${news.size} products with mentions`);
+  const curated = await loadCuratedImages();
+  console.log(`  curated images: ${Object.keys(curated).length} products`);
 
   await rm(OUT, { recursive: true, force: true });
   await mkdir(join(OUT, "data"), { recursive: true });
@@ -824,6 +855,7 @@ async function main() {
 
   const buckets = { uav: [], sensors: [] };
   const newsBySlug = new Map();
+  const creditBySlug = new Map();
   for (const p of products) {
     const bucket = p.category === "UAV" ? "uav" : "sensors";
     const row = reshape(p);
@@ -840,6 +872,8 @@ async function main() {
       row.Mentions = items.length;
       newsBySlug.set(row.slug, items.slice(0, NEWS_ON_PAGE));
     }
+    const pic = bucket === "uav" ? curated[row.Name] : null;
+    if (pic && pic.url) { row.__image_url = pic.url; creditBySlug.set(row.slug, pic); }
     await attachImage(row);
     buckets[bucket].push(row);
   }
@@ -857,7 +891,7 @@ async function main() {
     for (const row of rows) {
       const dir = join(OUT, bucket, row.slug);
       await mkdir(dir, { recursive: true });
-      await writeFile(join(dir, "index.html"), productPage(bucket, row, newsBySlug.get(row.slug) || []));
+      await writeFile(join(dir, "index.html"), productPage(bucket, row, newsBySlug.get(row.slug) || [], creditBySlug.get(row.slug) || null));
       urls.push(`${SITE}/${bucket}/${row.slug}/`);
     }
   }
