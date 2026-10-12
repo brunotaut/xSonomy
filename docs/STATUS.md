@@ -24,6 +24,39 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 — weekly image search, with a review gate
+New products now get an image search automatically. **It does not publish.**
+
+**Why there is a human step.** Measured on the 220 candidates reviewed by hand: 116 right,
+104 wrong. The best text-only auto-accept rule tested (company name present in the article
+title) reached **90% precision on that labelled set** — one wrong photo in ten — and several
+of its failures were articles that were *correct* while the image was a logo, an airshow shot
+or the wrong variant, which no rule on text can detect. 90% is not good enough to publish
+unseen on a reference catalogue, so the pipeline stops at a contact sheet.
+
+**Moving parts**
+- `.github/workflows/find-images.yml` — Mondays 07:00 UTC + manual. Runs the search, writes
+  the Actions run summary (GitHub renders the thumbnails there), commits candidates.
+- `scripts/find-images.mjs` — `npm run images:find`. Same strict matcher as the manual pass:
+  every significant word of the product name must appear in the article title.
+- `scripts/accept-images.mjs` — `npm run images:accept -- 0 3 7` (or `all` / `none`).
+  Promotes to the manifest; everything not promoted goes to the rejected list.
+- `scripts/image-summary.mjs` — renders the review table.
+
+**State files, which together account for all 1,353 UAVs**
+- `data/product-images.json` — 140 published, with licence and author.
+- `data/image-rejected.json` — 105 reviewed and refused; never proposed again.
+- `data/image-searched.json` — 1,108 searched with no article found. Retried after
+  `IMAGE_RECHECK_DAYS` (180) because Wikipedia grows.
+- `data/image-candidates.json` — the pending batch, normally empty.
+
+Without the searched list the weekly job would re-search ~1,100 misses every Monday and
+never get to genuinely new rows; with it, a normal week looks at only what is new.
+`IMAGE_MAX_LOOKUPS` (400) caps any single run.
+
+**Not automated on purpose:** promotion. Someone has to look at the pictures.
+
+
 ### 2026-10-12 — image pass 2: 140 products now have photos
 Ran the strict matcher over all 1,328 remaining UAVs in one sweep (`generator=search` +
 `pageimages`, one API call per product), giving **220 candidates**, then reviewed every one on

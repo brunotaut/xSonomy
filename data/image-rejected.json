@@ -1,0 +1,422 @@
+{
+  "Prime Air": {
+    "article": null,
+    "reason": "reviewed: Amazon wordmark, not an aircraft"
+  },
+  "Gerbera": {
+    "article": null,
+    "reason": "reviewed: matched the flower"
+  },
+  "Hornet": {
+    "article": null,
+    "reason": "reviewed: matched the insect / an F-18"
+  },
+  "LUCAS": {
+    "article": "George Lucas",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "LOCUST": {
+    "article": null,
+    "reason": "reviewed: matched the insect"
+  },
+  "Vampire": {
+    "article": "Buffy the Vampire Slayer",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Spirit": {
+    "article": null,
+    "reason": "reviewed: matched a hot-air balloon"
+  },
+  "Strike": {
+    "article": "Strike action",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Bullet": {
+    "article": null,
+    "reason": "reviewed: matched ammunition"
+  },
+  "Protector": {
+    "article": "Lord Protector",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Molniya": {
+    "article": "Molniya (satellite)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "FP-2": {
+    "article": "Zmaj Fizir FP-2",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Lightfish": {
+    "article": "Stareye lightfish",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Archer": {
+    "article": "Archery",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Dot": {
+    "article": "Dots and Dashes",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Orlan": {
+    "article": "Orlan",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Patroller": {
+    "article": "HMS Patroller",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Anvil": {
+    "article": "Anvil",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "CORVUS": {
+    "article": "List of Corvus species",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "KITE": {
+    "article": "Rigid kite (airborne wind energy)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "L-Series": {
+    "article": "Volkswagen-Audi V8 engine",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Ranger": {
+    "article": "Lone Ranger",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Apollo R": {
+    "article": "Apollo program",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Bandit": {
+    "article": "Banditry",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Lyutyi": {
+    "article": "Volodymyr Lyutyi",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Mistral": {
+    "article": "Gabriela Mistral",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Palianytsia": {
+    "article": "Palianytsia",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Reliant": {
+    "article": "Reliant Motors",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "S-Series": {
+    "article": "Kim Shillinglaw",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Storm Fire": {
+    "article": "Firestorm",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Unit4": {
+    "article": "Unit4",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Zip": {
+    "article": "Zip line",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Anadolu": {
+    "article": "TCG Anadolu",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Corvo": {
+    "article": "Sypaq Corvo Precision Payload Delivery System",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "EL-2": {
+    "article": "Lockheed Model 12 Electra Junior",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "FULMAR": {
+    "article": "Fulmar",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "GOR": {
+    "article": "Pooja Gor",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Halo": {
+    "article": "Halo-halo",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "HERA": {
+    "article": "Hera",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "K1000": {
+    "article": "Pentax K1000",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Laila": {
+    "article": "Laila Ali",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "NAMIB": {
+    "article": "Namib",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Peklo": {
+    "article": "Peklo",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Pendragon": {
+    "article": "Uther Pendragon",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Sargan": {
+    "article": "Sargans",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Serval": {
+    "article": "Serval",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Shmel": {
+    "article": "RPO-A Shmel",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "TSAM": {
+    "article": "Herzel Yankel Tsam",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "U-HAWK": {
+    "article": "USS Kitty Hawk (CV-63)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "WASP": {
+    "article": "Wasp",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "WZ-X": {
+    "article": "CWL WZ.X",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Aero Spirit": {
+    "article": "Aero Ae 270 Spirit",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "ANGLER": {
+    "article": "The Compleat Angler",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Anka-3": {
+    "article": "TAI Anka-3",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Beast+": {
+    "article": "The Beast (Revelation)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Behemoth": {
+    "article": "Behemoth (band)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Bober": {
+    "article": "Chris Bober",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "C20": {
+    "article": "Sauber C20",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "C26": {
+    "article": "C26 road (Namibia)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "C31": {
+    "article": "Sauber C31",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "C40": {
+    "article": "C40 Cities Climate Leadership Group",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "C6": {
+    "article": "Citroën C6",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "CA-1": {
+    "article": "Caproni Ca.1 (1914)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Caïman": {
+    "article": "Black caiman",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "CAMP": {
+    "article": "Camp David",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "D-STORM": {
+    "article": "Thunderstorm",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Dan-T": {
+    "article": "T. Dan Smith",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "DANAE": {
+    "article": "Taningia danae",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Dire WOLF": {
+    "article": "Dire wolf",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "DRAGON": {
+    "article": "Dragon",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "FENRIR": {
+    "article": "Fenrir",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Gavia": {
+    "article": "Gavia Pass",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Gazelle": {
+    "article": "Aérospatiale Gazelle",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Generation 6": {
+    "article": "Generation 6 (NASCAR)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Hive": {
+    "article": "Apache Hive",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Hugin": {
+    "article": "Huginn and Muninn",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Huilong": {
+    "article": "Huilong metro station",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "JERNAS-M": {
+    "article": "MV Jernas",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "K-Lucas": {
+    "article": "Ken Lucas (politician)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "KAMA": {
+    "article": "Kama Sutra",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Kolibri": {
+    "article": "2mm Kolibri",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Kotyhoroshko": {
+    "article": "Kotyhoroshko",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "LUMINA-M": {
+    "article": "Chevrolet Lumina",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Mariner": {
+    "article": "Mariner program",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Matador": {
+    "article": "MATADOR",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "MAUL": {
+    "article": "Splitting maul",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "MICH+": {
+    "article": "Leck mich im Arsch",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Mk4": {
+    "article": "Volkswagen Polo Mk4",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Orbiter 4": {
+    "article": "Lunar Orbiter 4",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Primus": {
+    "article": "Primus (band)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "PZL M28": {
+    "article": "PZL M28 Skytruck",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Roem": {
+    "article": "Mohammad Roem",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "S-71K": {
+    "article": "Public School 71K",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Sahara": {
+    "article": "Western Sahara",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Shahid": {
+    "article": "Shahid Kapoor",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "SIGURD": {
+    "article": "Sigurd Ring",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Skif": {
+    "article": "Skif (anti-tank guided missile)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Skydio 2": {
+    "article": "Skydio X2",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Susanin": {
+    "article": "Ivan Susanin-class patrol ship",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Thunderhead": {
+    "article": "Thunderhead (roller coaster)",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "VOLT": {
+    "article": "Volt",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Whai": {
+    "article": "WHAI",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Drozd (Дрозд)": {
+    "article": "Drozd",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "Wing (Google Project Wing)": {
+    "article": "Wing Aviation",
+    "reason": "reviewed: image did not depict the product"
+  },
+  "MQM-170 Outlaw": {
+    "article": "Griffon Aerospace MQM-170 Outlaw",
+    "reason": "correct image, but the Commons file is a PNG Wikimedia will not render below 966 KB"
+  }
+}
