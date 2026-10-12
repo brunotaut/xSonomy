@@ -64,6 +64,19 @@ const slugify = (name, section = "_") => {
   return s;
 };
 
+// Google Analytics 4. Injected into every generated page; the catalogue shell in
+// src/index.html carries its own copy, which also covers the section pages built
+// from it. The measurement ID is a public identifier, not a secret.
+const GA_TAG = `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WL3V0JVBR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8WL3V0JVBR');
+</script>
+`;
+
 const PAGE_CSS = `
 :root{--bg:#0a0d10;--panel:#0f1418;--panel2:#141a1f;--line:rgba(255,255,255,.1);--text:#e7ecef;--muted:#8b96a0;--ink3:#44505a;--accent:#5fd0e0;--mono:"Share Tech Mono",ui-monospace,Menlo,monospace;--sans:"Inter Tight",system-ui,sans-serif;--display:"Chakra Petch",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -183,7 +196,7 @@ function productPage(bucket, row, news = [], credit = null) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}</style>
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-</head><body>
+${GA_TAG}</head><body>
 <header class="hd"><div class="w"><a class="brand" href="/">xSonomy</a><a class="back" href="/">← Catalogue</a></div></header>
 <div class="wrap">
 <div class="kicker">${esc(kicker)}</div>
@@ -654,7 +667,7 @@ ${page > 1 ? `<meta name="robots" content="noindex,follow">` : ""}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>${COMPANIES_CSS}</style>
-</head><body>
+${GA_TAG}</head><body>
 <header class="hd"><div class="w"><a class="brand" href="/">x<b>Sonomy</b></a>${nav}</div></header>
 <div class="wrap">
 <div class="kicker">// Company Registry</div>
@@ -757,7 +770,7 @@ function companyPage(c, prods) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}${CO_PAGE_EXTRA_CSS}</style>
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-</head><body>
+${GA_TAG}</head><body>
 <header class="hd"><div class="w"><a class="brand" href="/">xSonomy</a><a class="back" href="/companies/">← Companies</a></div></header>
 <div class="wrap">
 <div class="kicker">// Company${c.company_type ? " · " + esc(TYPE_LABEL[c.company_type] || c.company_type) : ""}</div>
@@ -791,7 +804,7 @@ function companiesShell(total) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/assets/companies.css">
-</head><body>
+${GA_TAG}</head><body>
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
@@ -833,7 +846,7 @@ function cuasShell(total) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/assets/companies.css">
-</head><body data-src="/data/cuas-systems.json">
+${GA_TAG}</head><body data-src="/data/cuas-systems.json">
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>

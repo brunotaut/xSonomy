@@ -24,6 +24,23 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-13 — Google Analytics added
+GA4 (`G-8WL3V0JVBR`) on every page. Two insertion points, which together cover the site:
+- `src/index.html` — the catalogue shell, which is also the source of the five section
+  pages (`/uav/`, `/cuas/`, `/sensors/`, `/software/`, `/other/`), so one copy covers six pages.
+- `GA_TAG` in the generator, interpolated into all five generated templates: product pages,
+  company registry, company pages, companies shell and the C-UAS vendors page.
+
+That is ~5,300 pages. The measurement ID is a public identifier, not a secret, so it lives
+in the source rather than a repository secret.
+
+⚠ **Consent not implemented.** GA4 sets cookies, and for UK/EU visitors analytics cookies
+normally require opt-in consent under GDPR/PECR — the site has no cookie banner and the tag
+fires on load. Nazar was told; the decision is his. If it needs addressing later, the options
+are a consent banner gating `gtag('config', …)`, or switching to a cookieless analytics
+product, or GA4 consent mode with analytics storage denied until consent.
+
+
 ### 2026-10-13 — Actions runtime bumped to clear the Node 20 deprecation
 `actions/checkout@v4` and `actions/setup-node@v4` run on Node 20, which GitHub now forces
 onto Node 24 with a warning. Both moved to `@v5` (node24 runtime, verified against each
