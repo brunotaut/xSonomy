@@ -684,13 +684,13 @@ ${GA_TAG}</head><body>
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> ${page === 1 ? "Companies" : `<a href="/companies/">Companies</a> <span>/</span> page ${page}`}</nav>
 <div class="kicker">// Company Registry</div>
 <h1>Companies${page > 1 ? ` — page ${page}` : ""}</h1>
-<div class="count">Showing ${from}–${to} of ${total} · page ${page} of ${totalPages}</div>
+<div class="count">Showing ${num(from)}–${num(to)} of ${num(total)} · page ${page} of ${totalPages}</div>
 <div class="tablewrap"><table>
 <thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th></tr></thead>
 <tbody>${rows.map(companyRow).join("")}</tbody>
 </table></div>
 ${listPager("/companies/", page, totalPages)}
-<p class="backlink"><a href="/companies/">Search and filter all ${total} companies &rarr;</a></p>
+<p class="backlink"><a href="/companies/">Search and filter all ${num(total)} companies &rarr;</a></p>
 </div></body></html>`;
 }
 
@@ -701,6 +701,7 @@ ${listPager("/companies/", page, totalPages)}
 // so every hub now ships a heading, an honest intro, a first page of real anchors and
 // links to further pages. The app replaces the entries on boot; the heading stays.
 const LIST_PAGE_SIZE = 48;
+const num = (n) => Number(n).toLocaleString("en");
 
 // Per-section copy. Also fixes the six hubs previously sharing one meta description.
 const SECTION_COPY = {
@@ -745,7 +746,7 @@ filter from here.</p>`;
 
 function homeIndex(buckets, companyCount, cuasVendorCount) {
   const card = (href, label, count, unit, blurb) =>
-    `<li><a href="${href}">${esc(label)}</a><span class="m">${count.toLocaleString("en")} ${unit}</span><p>${esc(blurb)}</p></li>`;
+    `<li><a href="${href}">${esc(label)}</a><span class="m">${num(count)} ${unit}</span><p>${esc(blurb)}</p></li>`;
   const sections = Object.keys(CATEGORIES)
     .map((k) => card(`/${k}/`, SECTION_COPY[k].h1, buckets[k].length, "records", SECTION_COPY[k].lede))
     .join("");
@@ -804,7 +805,7 @@ function listEntry(bucket, row) {
 function listBlock(bucket, rows, page, totalPages, total) {
   const from = (page - 1) * LIST_PAGE_SIZE + 1, to = from + rows.length - 1;
   return `<div class="static-index">
-<p class="count">Showing ${from}&ndash;${to} of ${total}${totalPages > 1 ? ` · page ${page} of ${totalPages}` : ""}</p>
+<p class="count">Showing ${num(from)}&ndash;${num(to)} of ${num(total)}${totalPages > 1 ? ` · page ${page} of ${totalPages}` : ""}</p>
 <ul>${rows.map((r) => listEntry(bucket, r)).join("")}</ul>
 ${listPager(`/${bucket}/`, page, totalPages)}
 </div>`;
@@ -821,7 +822,7 @@ function listingPage(bucket, rows, page, totalPages, total) {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
-<meta name="description" content="${esc(copy.desc(total))} Page ${page} of ${totalPages}.">
+<meta name="description" content="${esc(copy.desc(num(total)))} Page ${page} of ${totalPages}.">
 <link rel="canonical" href="${canonical}">
 ${page > 1 ? `<link rel="prev" href="${page === 2 ? `${SITE}/${bucket}/` : `${SITE}/${bucket}/${page - 1}/`}">` : ""}
 ${page < totalPages ? `<link rel="next" href="${SITE}/${bucket}/${page + 1}/">` : ""}
@@ -837,7 +838,7 @@ ${GA_TAG}</head><body>
 <h1>${esc(copy.h1)}</h1>
 <p class="lede">${esc(copy.lede)}</p>
 ${listBlock(bucket, rows, page, totalPages, total)}
-<p class="backlink"><a href="/${bucket}/">Search and filter all ${total} records &rarr;</a></p>
+<p class="backlink"><a href="/${bucket}/">Search and filter all ${num(total)} records &rarr;</a></p>
 </div></body></html>`;
 }
 
@@ -1173,7 +1174,7 @@ async function main() {
   const coPageUrls = [];
   await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length,
     companyEntries(withSlug.slice(0, CO_PER_PAGE), listPager("/companies/", 1, coTotalPages),
-      `Showing 1–${Math.min(CO_PER_PAGE, withSlug.length)} of ${withSlug.length}` +
+      `Showing 1–${num(Math.min(CO_PER_PAGE, withSlug.length))} of ${num(withSlug.length)}` +
       (coTotalPages > 1 ? ` · page 1 of ${coTotalPages}` : ""))));
 
   // Pages 2+ are the static table view: every company past the first hundred is now
@@ -1210,7 +1211,7 @@ async function main() {
   // static block — no pagination needed and nothing left reachable only via JavaScript.
   const cuasWithSlug = cuasRegistry.filter((c) => c.slug);
   await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length,
-    companyEntries(cuasWithSlug, "", `${cuasWithSlug.length} vendors`)));
+    companyEntries(cuasWithSlug, "", `${num(cuasWithSlug.length)} vendors`)));
   const byCap = {};
   for (const c of cuasRegistry) for (const k of c.cuas) byCap[k] = (byCap[k] || 0) + 1;
   console.log(`  C-UAS Vendors: ${cuasRegistry.length} rows -> /cuas-systems/ ` +
@@ -1239,8 +1240,8 @@ async function main() {
     let page = rawShell
       .replace('href="https://xsonomy.com/"', `href="${url}"`)
       .replace('content="https://xsonomy.com/"', `content="${url}"`)
-      .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(copy.desc(total))}"`)
-      .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(copy.desc(total))}"`)
+      .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(copy.desc(num(total)))}"`)
+      .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(copy.desc(num(total)))}"`)
       .replace("<!--SECTION_INTRO-->",
         `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> ${esc(CATEGORIES[key].label)}</nav>` +
         `<h1>${esc(copy.h1)}</h1><p class="lede">${esc(copy.lede)}</p>`)
