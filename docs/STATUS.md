@@ -24,6 +24,47 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-12 — every category published; Airtable removed
+**Nazar: the `live` tag means nothing, publish everything, pick the sections yourself.**
+
+**1,350 products were invisible.** The generator fetched `category: "in.(UAV,Sensor)"`, so
+Counter-UAS (423), Effector (284), Software (357) and Other (286) never reached the site —
+and they were the fastest-growing categories (+490 in the last 45 days). Now every category
+publishes, and an unrecognised one falls into `other` rather than disappearing.
+
+**Sections chosen** (`CATEGORIES` + `BUCKET_OF` drive everything, including the tabs):
+| Section | DB categories | Rows |
+|---|---|---|
+| UAVs | UAV | 1,353 |
+| Counter-UAS | Counter-UAS + Effector | 707 |
+| Sensors | Sensor | 478 |
+| Software | Software | 357 |
+| Other | Other | 286 |
+
+Counter-UAS and Effector share a section because they are two halves of one kill chain —
+detect/C2 and defeat — and `Category` is a filter inside it so they can still be separated.
+
+**Lean cards for the thin sections.** Those rows arrive from news extraction: country is filled
+on ~80%, company ~60%, summary under 20%, specs ~3%. A sensor-style spec grid would be mostly
+dashes, so `leanCard()` shows name, company, country, type, summary-if-present and the news
+count. Filters are limited to what exists: Country, Category, Subcategory.
+
+**Slugs are now deduped per section** rather than globally, so a name shared across sections
+can never shift an existing URL. Verified there are no slug collisions across all 3,181
+products today, so no current URL changed.
+
+**Renamed the nav item "C-UAS Systems" to "C-UAS Vendors"** — that page is a company
+directory, and the name collided with the new Counter-UAS products section. URL unchanged.
+
+**`PUBLISH_STATUS` is moot** — `publication_status` is `'live'` on all 1,353 UAV rows, so the
+gate never filtered anything. Left in place as a no-op; everything publishes.
+
+**Airtable removed**: `scripts/generate.mjs`, `migrate-products-to-supabase.mjs`,
+`migrate-products.yml`, `app.js.bak` deleted; footer line, npm scripts, `.env.example` and
+stale comments cleaned; README rewritten around the real build.
+⚠ The `AIRTABLE_TOKEN` repository secret is now unused — delete it in GitHub settings.
+
+
 ### 2026-10-12 — weekly image search, with a review gate
 New products now get an image search automatically. **It does not publish.**
 

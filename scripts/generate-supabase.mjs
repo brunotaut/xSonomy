@@ -21,15 +21,27 @@ const SRC = join(ROOT, "src");
 const OUT = join(ROOT, "public");
 const SITE = "https://xsonomy.com";
 
+// Every product category in the database gets published. `db` lists the
+// `products.category` values that feed each section; anything unrecognised falls into
+// "other" rather than silently disappearing, which is what used to happen to the 1,350
+// Counter-UAS / Effector / Software / Other rows.
 const CATEGORIES = {
-  uav: { label: "UAVs", file: "uav.json" },
-  sensors: { label: "Sensors", file: "sensors.json" },
+  uav:      { label: "UAVs",        file: "uav.json",      db: ["UAV"] },
+  cuas:     { label: "Counter-UAS", file: "cuas.json",     db: ["Counter-UAS", "Effector"] },
+  sensors:  { label: "Sensors",     file: "sensors.json",  db: ["Sensor"] },
+  software: { label: "Software",    file: "software.json", db: ["Software"] },
+  other:    { label: "Other",       file: "other.json",    db: ["Other"] },
 };
+const BUCKET_OF = Object.fromEntries(
+  Object.entries(CATEGORIES).flatMap(([key, c]) => c.db.map((d) => [d, key])));
 const SECTION_TITLE = {
   uav: "UAVs — xSonomy Catalogue",
+  cuas: "Counter-UAS systems & effectors — xSonomy Catalogue",
   sensors: "Sensors — xSonomy Counter-UAS Catalogue",
+  software: "Software & autonomy — xSonomy Catalogue",
+  other: "Components & other — xSonomy Catalogue",
 };
-const BUCKET_KICKER = { uav: "UAV", sensors: "Sensor" };
+const BUCKET_KICKER = { uav: "UAV", cuas: "Counter-UAS", sensors: "Sensor", software: "Software", other: "Component" };
 const HIDDEN = new Set(["Name", "Company", "Summary", "Website", "Image", "Status", "Enrichment status", "Source URLs", "Category", "Confidence", "slug", "Mentions"]);
 
 const PUBLISH_STATUS = null; // null = all rows; "live" = only publication_status='live'
@@ -41,12 +53,14 @@ const asArray = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]);
 const specLabel = (k) => k.replace(/^.*· /, "");
 const analystNote = (note) => { const m = String(note || "").split(/Analyst note:\s*/i); return m.length > 1 ? m[1].trim() : null; };
 
-const slugSeen = new Set();
-const slugify = (name) => {
+const slugSeen = new Map();   // section -> set of slugs already used
+const slugify = (name, section = "_") => {
+  if (!slugSeen.has(section)) slugSeen.set(section, new Set());
+  const seen = slugSeen.get(section);
   let base = String(name || "item").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "item";
   let s = base, i = 2;
-  while (slugSeen.has(s)) s = `${base}-${i++}`;
-  slugSeen.add(s);
+  while (seen.has(s)) s = `${base}-${i++}`;
+  seen.add(s);
   return s;
 };
 
@@ -231,7 +245,6 @@ async function sbFetchAll(path, params, label = path) {
 async function fetchProducts() {
   return sbFetchAll("products", {
     select: "id,name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
-    category: "in.(UAV,Sensor)",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "products");
@@ -374,6 +387,7 @@ function reshape(p) {
   if (p.companies && p.companies.name) row.Company = p.companies.name;
   if (p.country) row.Country = p.country;
   if (p.subcategory) row.Subcategory = p.subcategory;
+  if (p.category) row.Category = p.category;   // filterable; HIDDEN keeps it off spec tables
   if (p.summary) row.Summary = p.summary;
   if (p.website) row.Website = p.website;
   if (p.price) row.Price = p.price;
@@ -781,7 +795,7 @@ function companiesShell(total) {
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
-  <a class="news-link" href="/cuas-systems/">C-UAS Systems</a>
+  <a class="news-link" href="/cuas-systems/">C-UAS Vendors</a>
   <a class="news-link active" href="/companies/">Companies</a>
   <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
 </div></header>
@@ -809,11 +823,11 @@ function companiesShell(total) {
 function cuasShell(total) {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>C-UAS Systems · xSonomy</title>
+<title>C-UAS Vendors · xSonomy</title>
 <meta name="description" content="${total} counter-UAS companies — integrated systems, detection, mitigation and command &amp; control. Filter by capability, type, region and country.">
 <link rel="canonical" href="${SITE}/cuas-systems/">
 <meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
-<meta property="og:title" content="C-UAS Systems · xSonomy"><meta property="og:url" content="${SITE}/cuas-systems/">
+<meta property="og:title" content="C-UAS Vendors · xSonomy"><meta property="og:url" content="${SITE}/cuas-systems/">
 <meta property="og:description" content="${total} counter-UAS companies, filterable by capability: integrated systems, detection, mitigation, command &amp; control.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -823,7 +837,7 @@ function cuasShell(total) {
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
-  <a class="news-link active" href="/cuas-systems/">C-UAS Systems</a>
+  <a class="news-link active" href="/cuas-systems/">C-UAS Vendors</a>
   <a class="news-link" href="/companies/">Companies</a>
   <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
 </div></header>
@@ -835,7 +849,7 @@ function cuasShell(total) {
   </aside>
   <section class="results">
     <div class="cokick">// Counter-UAS</div>
-    <h1 class="coh1">C-UAS Systems</h1>
+    <h1 class="coh1">C-UAS Vendors</h1>
     <p class="colead">Companies working in counter-unmanned aircraft systems, grouped by what they supply: <b>Integrated</b> end-to-end systems, <b>Detection</b> sensors, <b>Mitigation</b> effectors, and <b>Command &amp; Control</b> software. Filter by capability on the left.</p>
     <div id="cocount" class="cocount"></div>
     <div id="cogrid"></div>
@@ -864,13 +878,13 @@ async function main() {
   await mkdir(join(OUT, "data"), { recursive: true });
   await cp(SRC, OUT, { recursive: true });
 
-  const buckets = { uav: [], sensors: [] };
+  const buckets = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, []]));
   const newsBySlug = new Map();
   const creditBySlug = new Map();
   for (const p of products) {
-    const bucket = p.category === "UAV" ? "uav" : "sensors";
+    const bucket = BUCKET_OF[p.category] || "other";
     const row = reshape(p);
-    row.slug = slugify(row.Name || "item");
+    row.slug = slugify(row.Name || "item", bucket);
     Object.assign(row, taxonomy.get(p.id) || {});
     // Normalised status is UAV-only and always present, so "N/A" is a real bucket
     // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
@@ -952,7 +966,7 @@ async function main() {
   await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length));
   const byCap = {};
   for (const c of cuasRegistry) for (const k of c.cuas) byCap[k] = (byCap[k] || 0) + 1;
-  console.log(`  C-UAS Systems: ${cuasRegistry.length} rows -> /cuas-systems/ ` +
+  console.log(`  C-UAS Vendors: ${cuasRegistry.length} rows -> /cuas-systems/ ` +
     `(${Object.entries(byCap).map(([k, n]) => `${k} ${n}`).join(", ")})`);
   // Tagged in Supabase but absent from the companies fetch = a truncated or
   // gated read. Loud, because it fails silently as a short list otherwise.

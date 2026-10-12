@@ -108,6 +108,30 @@ function completeness(row) {
   return (row.__pct = Math.round((100 * n) / PCT_TOTAL));
 }
 
+// Counter-UAS, Software and Other arrive from news extraction and are thin: country is
+// filled on ~80%, company on ~60%, almost nothing else. So they get a light config —
+// search plus the handful of fields that actually exist — rather than a wall of dashes.
+const LEAN_SEARCH = ["Name", "Company", "Summary", "Subtype"];
+const CUAS_CFG = {
+  search: LEAN_SEARCH,
+  selects: ["Country", "Category", "Subcategory"],
+  ranges: [],
+  compare: [["Category", "Type"], ["Country", "Country"], ["Subcategory", "Subcategory"], ["Confidence", "Confidence"]],
+};
+const SOFTWARE_CFG = {
+  search: LEAN_SEARCH,
+  selects: ["Country", "Subcategory"],
+  ranges: [],
+  compare: [["Country", "Country"], ["Subcategory", "Subcategory"], ["Confidence", "Confidence"]],
+};
+const OTHER_CFG = {
+  search: LEAN_SEARCH,
+  selects: ["Country", "Subcategory"],
+  ranges: [],
+  compare: [["Country", "Country"], ["Subcategory", "Subcategory"], ["Confidence", "Confidence"]],
+};
+const CFG_BY_CAT = { cuas: CUAS_CFG, software: SOFTWARE_CFG, other: OTHER_CFG };
+
 const els = {
   tabs: document.getElementById("tabs"),
   subtabs: document.getElementById("subtabs"),
@@ -234,7 +258,7 @@ function sensorBlock(row, i) {
   const why = whyText(row);
   const kind = sensorKind(row);
   const subtitle = [first(row.Subtype), first(row["Form factor"])].filter(Boolean).join(" · ");
-  const href = `/sensors/${esc(row.slug)}/`;
+  const href = `/${state.cat}/${esc(row.slug)}/`;
   // Card shows: Sensor class, Price band, + first 4 category fields (that exist).
   const cls = first(row["Use class"]) || first(row.Subcategory) || "—";
   const priceBand = first(row["Sensor · Price band"]) || row.Price || "";
@@ -260,10 +284,27 @@ function sensorBlock(row, i) {
     <div class="sblock-foot">${cmpBtn(row.slug)}</div>
   </div>`;
 }
+// Card for the sparse sections. Shows only what these rows actually have — company,
+// country, summary when present, and the news count — instead of a spec grid of dashes.
+function leanCard(row) {
+  const href = `/${state.cat}/${esc(row.slug)}/`;
+  const kind = [first(row.Category), first(row.Subcategory)].filter(Boolean).join(" · ");
+  const summary = String(row.Summary || "").trim();
+  return `<div class="sblock lean" data-href="${href}">
+    <div class="sblock-top"><div class="sblock-num">${esc(first(row.Company) || "")}</div>${geoBadge(row.Country)}</div>
+    <div class="sblock-title"><div><a class="sblock-name" href="${href}">${esc(row.Name || "Untitled")}</a>
+      ${kind ? `<div class="sblock-sub">${esc(kind)}</div>` : ""}</div></div>
+    ${row.Image ? `<img class="sblock-photo" src="/${esc(row.Image)}" alt="${esc(row.Name)}" loading="lazy"/>` : ""}
+    ${summary ? `<p class="sblock-summary clamp">${esc(summary)}</p>` : `<p class="sblock-summary na">No description yet.</p>`}
+    <div class="sblock-foot">${mentionsBadge(row.Mentions)}${cmpBtn(row.slug)}</div>
+  </div>`;
+}
 function card(row, i) {
   const wrap = document.createElement("div");
   wrap.style.display = "contents";
-  wrap.innerHTML = state.cat === "uav" ? uavCard(row) : sensorBlock(row, i);
+  wrap.innerHTML = state.cat === "uav" ? uavCard(row)
+    : CFG_BY_CAT[state.cat] ? leanCard(row)
+    : sensorBlock(row, i);
   return wrap.firstElementChild;
 }
 
@@ -372,7 +413,7 @@ async function selectCat(key, file) {
     selectSub("radar");
   } else {
     els.subtabs.innerHTML = "";
-    state.cfg = UAV_CFG;
+    state.cfg = CFG_BY_CAT[key] || UAV_CFG;
     state.cardFields = null;
     state.rows = data;
     state.max = {
