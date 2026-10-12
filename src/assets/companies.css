@@ -57,3 +57,8 @@
 .copager button.cur{background:var(--accent);color:#0a0d10;border-color:var(--accent)}
 .copager button[disabled]{opacity:.3;cursor:default}
 .news-link.active{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+
+/* Outbound marker beside a company name in the static registry pages, so the name itself
+   can link to our detail page. */
+.cn .ext { color: var(--ink-2, #6b7780); font-size: 11px; text-decoration: none; }
+.cn .ext:hover { color: var(--accent, #5fd0e0); }

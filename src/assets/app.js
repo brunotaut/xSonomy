@@ -578,4 +578,16 @@ function render() {
   list.forEach((row, i) => els.grid.appendChild(card(row, i)));
 }
 
-boot().catch((e) => { document.body.innerHTML = `<pre style="padding:20px">Failed to load catalogue: ${e.message}</pre>`; });
+// A failed fetch used to replace the whole document, taking the heading, the navigation
+// and the static list of records with it. Keep the page and report the failure next to
+// the filters instead — the static first page in #grid stays readable and linkable.
+boot().catch((e) => {
+  console.error(e);
+  const box = document.getElementById("empty");
+  if (box) {
+    box.hidden = false;
+    box.textContent = "The live filters could not load (" + e.message + "). " +
+      "The listing below still works, and reloading usually fixes it.";
+  }
+  document.getElementById("filters")?.setAttribute("hidden", "");
+});

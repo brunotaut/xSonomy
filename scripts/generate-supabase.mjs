@@ -633,7 +633,11 @@ function companyRow(c) {
   const dash = '<span class="mut">—</span>';
   const tcol = TYPE_COLOR[c.company_type] || "#9aa6ad";
   const nm = esc(c.name);
-  const nameInner = c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener">${nm}</a>` : nm;
+  // The name links to our own detail page; the manufacturer's site sits beside it as a
+  // separate link. Pointing the name off-site left the detail pages with nothing linking
+  // to them from these listings.
+  const nameInner = (c.slug ? `<a href="/companies/${esc(c.slug)}/">${nm}</a>` : nm) +
+    (c.website ? ` <a class="ext" href="${esc(c.website)}" target="_blank" rel="noopener" title="Company website" aria-label="${nm} website">&#8599;</a>` : "");
   const { flag, region } = countryMeta(c.hq_country);
   const countryLine = c.hq_country
     ? `<div class="cc">${flag ? `<span class="fl">${flag}</span>` : ""}${esc(c.hq_country)}${region ? ` · ${region}` : ""}</div>`
@@ -656,46 +660,208 @@ function companyRow(c) {
   </tr>`;
 }
 
-function pager(page, totalPages) {
-  const href = (p) => (p === 1 ? "/companies/" : `/companies/${p}/`);
-  const out = [];
-  out.push(page > 1 ? `<a href="${href(page - 1)}">← Prev</a>` : `<span class="dis">← Prev</span>`);
-  for (let p = 1; p <= totalPages; p++) {
-    out.push(p === page ? `<span class="cur">${p}</span>` : `<a href="${href(p)}">${p}</a>`);
-  }
-  out.push(page < totalPages ? `<a href="${href(page + 1)}">Next →</a>` : `<span class="dis">Next →</span>`);
-  return `<div class="pager">${out.join("")}</div>`;
-}
 
 function companyRegistryPage(rows, page, totalPages, total) {
   const canonical = page === 1 ? `${SITE}/companies/` : `${SITE}/companies/${page}/`;
   const from = (page - 1) * 100 + 1, to = (page - 1) * 100 + rows.length;
-  const title = `Companies${page > 1 ? ` — page ${page}` : ""} · xSonomy`;
-  const nav = `<nav><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a><a class="on" href="/companies/">Companies</a><a href="http://uav360.xyz/" target="_blank" rel="noopener">News</a></nav>`;
+  const title = `Companies${page > 1 ? ` — page ${page} of ${totalPages}` : ""} · xSonomy`;
+  const nav = siteNav("companies");
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="Directory of UAV and counter-UAS companies — type, HQ country, headcount, revenue and funding. ${total} companies in the xSonomy registry.">
 <link rel="canonical" href="${canonical}">
-${page > 1 ? `<meta name="robots" content="noindex,follow">` : ""}
+${page > 1 ? `<link rel="prev" href="${page === 2 ? `${SITE}/companies/` : `${SITE}/companies/${page - 1}/`}">` : ""}
+${page < totalPages ? `<link rel="next" href="${SITE}/companies/${page + 1}/">` : ""}
 <meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
 <meta property="og:title" content="${esc(title)}"><meta property="og:url" content="${canonical}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>${COMPANIES_CSS}</style>
+<style>${COMPANIES_CSS}${LIST_CSS}</style>
 ${GA_TAG}</head><body>
 <header class="hd"><div class="w"><a class="brand" href="/">x<b>Sonomy</b></a>${nav}</div></header>
 <div class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> ${page === 1 ? "Companies" : `<a href="/companies/">Companies</a> <span>/</span> page ${page}`}</nav>
 <div class="kicker">// Company Registry</div>
-<h1>Companies</h1>
+<h1>Companies${page > 1 ? ` — page ${page}` : ""}</h1>
 <div class="count">Showing ${from}–${to} of ${total} · page ${page} of ${totalPages}</div>
 <div class="tablewrap"><table>
 <thead><tr><th>Company</th><th>Type</th><th>Employees</th><th>Revenue</th><th>Valuation</th></tr></thead>
 <tbody>${rows.map(companyRow).join("")}</tbody>
 </table></div>
-${pager(page, totalPages)}
+${listPager("/companies/", page, totalPages)}
+<p class="backlink"><a href="/companies/">Search and filter all ${total} companies &rarr;</a></p>
 </div></body></html>`;
 }
+
+
+// ---------- P0: static discovery ----------
+// The section hubs are a JavaScript app, so until it boots their HTML carries no heading,
+// no entries and two links. Crawlers can run JS, but discovery should not depend on it —
+// so every hub now ships a heading, an honest intro, a first page of real anchors and
+// links to further pages. The app replaces the entries on boot; the heading stays.
+const LIST_PAGE_SIZE = 48;
+
+// Per-section copy. Also fixes the six hubs previously sharing one meta description.
+const SECTION_COPY = {
+  uav: {
+    h1: "UAV catalogue",
+    lede: "Uncrewed aircraft indexed from manufacturer material and defence press, with specifications, classification and linked coverage.",
+    desc: (n) => `${n} uncrewed aircraft with specifications, weight class, propulsion, range and linked news. Filter by airframe, mission, origin and more.`,
+  },
+  cuas: {
+    h1: "Counter-UAS systems and effectors",
+    lede: "Counter-drone systems and the effectors they use — detection and command-and-control alongside guns, lasers, interceptors and missiles.",
+    desc: (n) => `${n} counter-UAS systems and effectors, from detection and C2 to interceptors, lasers and guns, with manufacturers and linked news.`,
+  },
+  sensors: {
+    h1: "Sensors catalogue",
+    lede: "Radar, RF, electro-optical, acoustic and other sensing products used for detection, surveillance and navigation.",
+    desc: (n) => `${n} radar, RF, EO/IR, LiDAR and acoustic sensing products, with detection ranges, modality and manufacturers.`,
+  },
+  software: {
+    h1: "Software and autonomy",
+    lede: "Command-and-control, airspace management, autonomy stacks and analytics software for uncrewed systems.",
+    desc: (n) => `${n} software products for uncrewed systems — command and control, airspace management, autonomy and analytics.`,
+  },
+  other: {
+    h1: "Components and other equipment",
+    lede: "Payloads, powertrains, datalinks, Remote ID hardware and other equipment that does not sit in the categories above.",
+    desc: (n) => `${n} components and related equipment — payloads, powertrains, datalinks and Remote ID hardware.`,
+  },
+};
+
+// The homepage used to serve exactly the UAV hub's markup under a second URL. It now
+// introduces the catalogue and routes to each section, so the two pages are not
+// competing copies of one list.
+const HOME_DESC = "Catalogue of uncrewed aircraft, counter-UAS systems, sensors and software — specifications, manufacturers, classification and linked news coverage.";
+
+function homeIntro() {
+  return `<h1>UAV and counter-UAS catalogue</h1>
+<p class="lede">An open reference for uncrewed systems and the equipment built to counter them: specifications,
+manufacturers, classification and the news coverage behind each record. Pick a section below, or search and
+filter from here.</p>`;
+}
+
+function homeIndex(buckets, companyCount, cuasVendorCount) {
+  const card = (href, label, count, unit, blurb) =>
+    `<li><a href="${href}">${esc(label)}</a><span class="m">${count.toLocaleString("en")} ${unit}</span><p>${esc(blurb)}</p></li>`;
+  const sections = Object.keys(CATEGORIES)
+    .map((k) => card(`/${k}/`, SECTION_COPY[k].h1, buckets[k].length, "records", SECTION_COPY[k].lede))
+    .join("");
+  const registries =
+    card("/companies/", "Companies", companyCount, "companies",
+      "Manufacturers and suppliers with type, HQ country, headcount, revenue and funding.") +
+    card("/cuas-systems/", "C-UAS vendors", cuasVendorCount, "vendors",
+      "The subset of companies supplying counter-UAS capability, grouped by what they actually supply.");
+
+  // "Most covered" is drawn from the linked news, so it is a real signal rather than a
+  // hand-picked list — and it gives crawlers a route into the deepest records.
+  const covered = Object.entries(buckets)
+    .flatMap(([k, rows]) => rows.filter((r) => r.Mentions).map((r) => ({ k, r })))
+    .sort((a, b) => b.r.Mentions - a.r.Mentions ||
+      String(a.r.Name || "").localeCompare(String(b.r.Name || ""), "en"))
+    .slice(0, 24);
+
+  return `<div class="static-index home">
+<h2>Browse by section</h2>
+<ul>${sections}${registries}</ul>
+${covered.length ? `<h2>Most covered in the news</h2>
+<ul>${covered.map(({ k, r }) =>
+  `<li><a href="/${k}/${esc(r.slug)}/">${esc(r.Name || "Untitled")}</a>` +
+  `<span class="m">${esc(asArray(r.Company)[0] || CATEGORIES[k].label)} · ${r.Mentions} ${r.Mentions === 1 ? "article" : "articles"}</span></li>`).join("")}</ul>` : ""}
+</div>`;
+}
+
+// Pagination links for any section. Page 1 is the hub itself, so it stays the canonical
+// entry point and deeper pages are real URLs rather than a filter state.
+function listPager(base, page, totalPages) {
+  if (totalPages < 2) return "";
+  const href = (p) => (p === 1 ? base : `${base}${p}/`);
+  const out = [];
+  out.push(page > 1 ? `<a href="${href(page - 1)}" rel="prev">&larr; Prev</a>` : `<span class="dis">&larr; Prev</span>`);
+  const near = (p) => p === 1 || p === totalPages || Math.abs(p - page) <= 2;
+  let gap = false;
+  for (let p = 1; p <= totalPages; p++) {
+    if (!near(p)) { if (!gap) { out.push(`<span class="dis">…</span>`); gap = true; } continue; }
+    gap = false;
+    out.push(p === page ? `<span class="cur">${p}</span>` : `<a href="${href(p)}">${p}</a>`);
+  }
+  out.push(page < totalPages ? `<a href="${href(page + 1)}" rel="next">Next &rarr;</a>` : `<span class="dis">Next &rarr;</span>`);
+  return `<nav class="pager" aria-label="Pagination">${out.join("")}</nav>`;
+}
+
+// One entry: a real anchor to the canonical detail URL plus enough context to be worth
+// reading on its own. Summary is included only when the record actually has one.
+function listEntry(bucket, row) {
+  const meta = [asArray(row.Company)[0], asArray(row.Country)[0]].filter(Boolean).join(" · ");
+  const sum = clip(row.Summary, 150);
+  return `<li><a href="/${bucket}/${esc(row.slug)}/">${esc(row.Name || "Untitled")}</a>` +
+    `${meta ? `<span class="m">${esc(meta)}</span>` : ""}` +
+    `${sum ? `<p>${esc(sum)}</p>` : ""}</li>`;
+}
+
+function listBlock(bucket, rows, page, totalPages, total) {
+  const from = (page - 1) * LIST_PAGE_SIZE + 1, to = from + rows.length - 1;
+  return `<div class="static-index">
+<p class="count">Showing ${from}&ndash;${to} of ${total}${totalPages > 1 ? ` · page ${page} of ${totalPages}` : ""}</p>
+<ul>${rows.map((r) => listEntry(bucket, r)).join("")}</ul>
+${listPager(`/${bucket}/`, page, totalPages)}
+</div>`;
+}
+
+// Pages 2+ are plain static pages rather than the app: they exist so every record is
+// reachable by following links, and a crawler gets distinct content per URL. Each one
+// self-canonicals — deliberately NOT canonicalised to page 1, and not noindexed.
+function listingPage(bucket, rows, page, totalPages, total) {
+  const copy = SECTION_COPY[bucket];
+  const canonical = `${SITE}/${bucket}/${page}/`;
+  const label = CATEGORIES[bucket].label;
+  const title = `${copy.h1} — page ${page} of ${totalPages} · xSonomy`;
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(copy.desc(total))} Page ${page} of ${totalPages}.">
+<link rel="canonical" href="${canonical}">
+${page > 1 ? `<link rel="prev" href="${page === 2 ? `${SITE}/${bucket}/` : `${SITE}/${bucket}/${page - 1}/`}">` : ""}
+${page < totalPages ? `<link rel="next" href="${SITE}/${bucket}/${page + 1}/">` : ""}
+<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
+<meta property="og:title" content="${esc(title)}"><meta property="og:url" content="${canonical}">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>${COMPANIES_CSS}${LIST_CSS}</style>
+${GA_TAG}</head><body>
+<header class="hd"><div class="w"><a class="brand" href="/">x<b>Sonomy</b></a>${siteNav(bucket)}</div></header>
+<div class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/${bucket}/">${esc(label)}</a> <span>/</span> page ${page}</nav>
+<h1>${esc(copy.h1)}</h1>
+<p class="lede">${esc(copy.lede)}</p>
+${listBlock(bucket, rows, page, totalPages, total)}
+<p class="backlink"><a href="/${bucket}/">Search and filter all ${total} records &rarr;</a></p>
+</div></body></html>`;
+}
+
+// Shared header navigation. Previously each template hand-rolled its own and they drifted
+// apart — the company registry still listed only UAVs and Sensors.
+function siteNav(active) {
+  const items = Object.entries(CATEGORIES).map(([k, c]) =>
+    `<a${k === active ? ' class="on"' : ""} href="/${k}/">${esc(c.label)}</a>`).join("");
+  return `<nav>${items}<a${active === "cuas-systems" ? ' class="on"' : ""} href="/cuas-systems/">C-UAS Vendors</a>` +
+    `<a${active === "companies" ? ' class="on"' : ""} href="/companies/">Companies</a>` +
+    `<a href="http://uav360.xyz/" target="_blank" rel="noopener">News</a></nav>`;
+}
+
+const LIST_CSS = `
+.crumbs{font-family:var(--mono,monospace);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#6b7680;margin-bottom:14px}
+.crumbs a{color:#8b96a0}.crumbs span{opacity:.5;margin:0 4px}
+.lede{max-width:70ch;color:#9aa6b1;margin:0 0 18px}
+.static-index ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.static-index li{border:1px solid rgba(255,255,255,.1);padding:12px;background:#0f1418}
+.static-index li a{font-family:var(--display,sans-serif);font-size:14px;letter-spacing:.02em}
+.static-index li .m{display:block;font-family:var(--mono,monospace);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b7680;margin-top:4px}
+.static-index li p{margin:7px 0 0;font-size:12.5px;line-height:1.5;color:#9aa6b1}
+.backlink{margin-top:22px;font-size:13px}
+`;
 
 // ---- Per-company detail page ----
 const CO_PAGE_EXTRA_CSS = `
@@ -808,7 +974,28 @@ ${ctas ? `<div class="cta">${ctas}</div>` : ""}
 </div></body></html>`;
 }
 
-function companiesShell(total) {
+// The two registry shells hand-rolled their own tab strip and never gained the three
+// sections added later, so Counter-UAS, Software and Other were unreachable from them.
+function shellTabs() {
+  return `<nav class="tabs">${Object.entries(CATEGORIES)
+    .map(([k, c]) => `<a href="/${k}/">${esc(c.label)}</a>`).join("")}</nav>`;
+}
+
+// Static entry list for the company registries. Same shape as the product hubs: real
+// anchors to the detail pages, so the registry does not depend on its JSON loading.
+function companyEntries(rows, pagerHtml = "", countLine = "") {
+  return `<div class="static-index">
+${countLine ? `<p class="count">${countLine}</p>` : ""}
+<ul>${rows.map((c) => {
+    const meta = [c.company_type, c.hq_country].filter(Boolean).join(" · ");
+    return `<li><a href="/companies/${esc(c.slug)}/">${esc(c.name)}</a>` +
+      `${meta ? `<span class="m">${esc(meta)}</span>` : ""}</li>`;
+  }).join("")}</ul>
+${pagerHtml}
+</div>`;
+}
+
+function companiesShell(total, staticIndex = "") {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Companies · xSonomy</title>
@@ -820,10 +1007,11 @@ function companiesShell(total) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/assets/companies.css">
+<style>${LIST_CSS}</style>
 ${GA_TAG}</head><body>
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
-  <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
+  ${shellTabs()}
   <a class="news-link" href="/cuas-systems/">C-UAS Vendors</a>
   <a class="news-link active" href="/companies/">Companies</a>
   <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
@@ -836,10 +1024,11 @@ ${GA_TAG}</head><body>
     <button id="coreset" class="reset" type="button">Reset filters</button>
   </aside>
   <section class="results">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> Companies</nav>
     <div class="cokick">// Company Registry</div>
     <h1 class="coh1">Companies</h1>
     <div id="cocount" class="cocount"></div>
-    <div id="cogrid"></div>
+    <div id="cogrid">${staticIndex}</div>
     <div id="copager" class="copager"></div>
   </section>
 </main>
@@ -849,7 +1038,7 @@ ${GA_TAG}</head><body>
 
 // Integrated C-UAS registry page. Same shell, filters and table as /companies/,
 // pointed at the cuas-integrated subset via <body data-src>.
-function cuasShell(total) {
+function cuasShell(total, staticIndex = "") {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>C-UAS Vendors · xSonomy</title>
@@ -862,10 +1051,11 @@ function cuasShell(total) {
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/assets/companies.css">
+<style>${LIST_CSS}</style>
 ${GA_TAG}</head><body data-src="/data/cuas-systems.json">
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
-  <nav class="tabs"><a href="/uav/">UAVs</a><a href="/sensors/">Sensors</a></nav>
+  ${shellTabs()}
   <a class="news-link active" href="/cuas-systems/">C-UAS Vendors</a>
   <a class="news-link" href="/companies/">Companies</a>
   <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
@@ -877,11 +1067,12 @@ ${GA_TAG}</head><body data-src="/data/cuas-systems.json">
     <button id="coreset" class="reset" type="button">Reset filters</button>
   </aside>
   <section class="results">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> C-UAS Vendors</nav>
     <div class="cokick">// Counter-UAS</div>
     <h1 class="coh1">C-UAS Vendors</h1>
     <p class="colead">Companies working in counter-unmanned aircraft systems, grouped by what they supply: <b>Integrated</b> end-to-end systems, <b>Detection</b> sensors, <b>Mitigation</b> effectors, and <b>Command &amp; Control</b> software. Filter by capability on the left.</p>
     <div id="cocount" class="cocount"></div>
-    <div id="cogrid"></div>
+    <div id="cogrid">${staticIndex}</div>
     <div id="copager" class="copager"></div>
   </section>
 </main>
@@ -970,7 +1161,30 @@ async function main() {
   const registry = companies.map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);
   await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(registry));
   await mkdir(join(OUT, "companies"), { recursive: true });
-  await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length));
+
+  // Bar widths in the static registry pages are relative, so the scale has to come from
+  // the data. Left at 1 (the declared default) every bar renders full width.
+  const withSlug = companies.filter((c) => c.slug);
+  MAXREV = Math.max(1, ...withSlug.map((c) => Number(c.revenue_amount) || 0));
+  MAXVAL = Math.max(1, ...withSlug.map((c) => Number(c.valuation) || 0));
+
+  const CO_PER_PAGE = 100;
+  const coTotalPages = Math.max(1, Math.ceil(withSlug.length / CO_PER_PAGE));
+  const coPageUrls = [];
+  await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length,
+    companyEntries(withSlug.slice(0, CO_PER_PAGE), listPager("/companies/", 1, coTotalPages),
+      `Showing 1–${Math.min(CO_PER_PAGE, withSlug.length)} of ${withSlug.length}` +
+      (coTotalPages > 1 ? ` · page 1 of ${coTotalPages}` : ""))));
+
+  // Pages 2+ are the static table view: every company past the first hundred is now
+  // reachable by following links instead of only by filtering in the browser.
+  for (let pn = 2; pn <= coTotalPages; pn++) {
+    const slice = withSlug.slice((pn - 1) * CO_PER_PAGE, pn * CO_PER_PAGE);
+    const dir = join(OUT, "companies", String(pn));
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, "index.html"), companyRegistryPage(slice, pn, coTotalPages, withSlug.length));
+    coPageUrls.push(`${SITE}/companies/${pn}/`);
+  }
 
   let coPages = 0;
   for (const c of companies) {
@@ -992,7 +1206,11 @@ async function main() {
       ({ ...rest, cuas: cuasCaps.get(id) }));
   await writeFile(join(OUT, "data", "cuas-systems.json"), JSON.stringify(cuasRegistry));
   await mkdir(join(OUT, "cuas-systems"), { recursive: true });
-  await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length));
+  // Vendor detail pages live under /companies/, so the whole filtered list fits in one
+  // static block — no pagination needed and nothing left reachable only via JavaScript.
+  const cuasWithSlug = cuasRegistry.filter((c) => c.slug);
+  await writeFile(join(OUT, "cuas-systems", "index.html"), cuasShell(cuasRegistry.length,
+    companyEntries(cuasWithSlug, "", `${cuasWithSlug.length} vendors`)));
   const byCap = {};
   for (const c of cuasRegistry) for (const k of c.cuas) byCap[k] = (byCap[k] || 0) + 1;
   console.log(`  C-UAS Vendors: ${cuasRegistry.length} rows -> /cuas-systems/ ` +
@@ -1002,26 +1220,62 @@ async function main() {
   if (cuasRegistry.length !== cuasCaps.size)
     console.warn(`  WARNING: ${cuasCaps.size} companies tagged cuas-* but only ${cuasRegistry.length} present in the companies fetch.`);
 
+  // ---- Hubs: the app shell plus a static first page ----
+  // Each hub keeps the filterable app, but now ships a heading, an intro, a record count
+  // and a first page of real links in the HTML, with pages 2+ as their own static URLs.
+  // Without this, every record is reachable only by running the JavaScript.
+  const indexPath = join(OUT, "index.html");
+  const rawShell = await readFile(indexPath, "utf8");
+  const listUrls = [];
+
+  for (const key of Object.keys(CATEGORIES)) {
+    const copy = SECTION_COPY[key];
+    const rows = [...buckets[key]].sort((a, b) =>
+      String(a.Name || "").localeCompare(String(b.Name || ""), "en") || String(a.slug).localeCompare(String(b.slug)));
+    const total = rows.length;
+    const totalPages = Math.max(1, Math.ceil(total / LIST_PAGE_SIZE));
+    const url = `${SITE}/${key}/`;
+
+    let page = rawShell
+      .replace('href="https://xsonomy.com/"', `href="${url}"`)
+      .replace('content="https://xsonomy.com/"', `content="${url}"`)
+      .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(copy.desc(total))}"`)
+      .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(copy.desc(total))}"`)
+      .replace("<!--SECTION_INTRO-->",
+        `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> ${esc(CATEGORIES[key].label)}</nav>` +
+        `<h1>${esc(copy.h1)}</h1><p class="lede">${esc(copy.lede)}</p>`)
+      .replace("<!--STATIC_INDEX-->", listBlock(key, rows.slice(0, LIST_PAGE_SIZE), 1, totalPages, total));
+    if (SECTION_TITLE[key]) {
+      const t = esc(SECTION_TITLE[key]);
+      page = page.replace(/<title>[\s\S]*?<\/title>/, `<title>${t}</title>`)
+                 .replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${t}"`);
+    }
+    await mkdir(join(OUT, key), { recursive: true });
+    await writeFile(join(OUT, key, "index.html"), page);
+
+    for (let pn = 2; pn <= totalPages; pn++) {
+      const slice = rows.slice((pn - 1) * LIST_PAGE_SIZE, pn * LIST_PAGE_SIZE);
+      const dir = join(OUT, key, String(pn));
+      await mkdir(dir, { recursive: true });
+      await writeFile(join(dir, "index.html"), listingPage(key, slice, pn, totalPages, total));
+      listUrls.push(`${SITE}/${key}/${pn}/`);
+    }
+    console.log(`  /${key}/: ${total} records over ${totalPages} page${totalPages === 1 ? "" : "s"}`);
+  }
+
+  await writeFile(indexPath, rawShell
+    .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(HOME_DESC)}"`)
+    .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(HOME_DESC)}"`)
+    .replace("<!--SECTION_INTRO-->", homeIntro())
+    .replace("<!--STATIC_INDEX-->", homeIndex(buckets, companies.length, cuasRegistry.length)));
+
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    [`${SITE}/`, ...sectionUrls, `${SITE}/cuas-systems/`, `${SITE}/companies/`, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
+    [`${SITE}/`, ...sectionUrls, `${SITE}/cuas-systems/`, `${SITE}/companies/`, ...coPageUrls, ...listUrls, ...urls].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") + `\n</urlset>\n`;
   await writeFile(join(OUT, "sitemap.xml"), sitemap);
   await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
   await writeFile(join(OUT, "CNAME"), "xsonomy.com\n");
-
-  const indexPath = join(OUT, "index.html");
-  const shell = (await readFile(indexPath, "utf8")).replace("<!--PRODUCT_INDEX-->", "");
-  await writeFile(indexPath, shell);
-  for (const key of Object.keys(CATEGORIES)) {
-    const url = `${SITE}/${key}/`;
-    let page = shell
-      .replace('href="https://xsonomy.com/"', `href="${url}"`)
-      .replace('content="https://xsonomy.com/"', `content="${url}"`);
-    if (SECTION_TITLE[key]) page = page.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(SECTION_TITLE[key])}</title>`);
-    await mkdir(join(OUT, key), { recursive: true });
-    await writeFile(join(OUT, key, "index.html"), page);
-  }
 
   console.log(`\nBuilt static site -> ${OUT} (${urls.length} product pages) from Supabase.`);
 }

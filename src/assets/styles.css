@@ -275,3 +275,51 @@ a { color: var(--accent); text-decoration: none; }
 .sblock.lean .sblock-summary.na { color: var(--ink-3); font-style: italic; }
 .sblock.lean .sblock-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .sblock.lean .mentions { margin-right: auto; }
+
+/* ---------- Static discovery block ----------
+   Every hub now ships a heading and a first page of real links, so the catalogue is
+   readable and crawlable before the app boots. The app replaces the list on render;
+   the heading, intro and breadcrumb stay. If the data fetch fails, this is what the
+   visitor is left with, which is why it is styled rather than hidden. */
+.crumbs {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-2); margin-bottom: 12px;
+}
+.crumbs a { color: var(--ink-1); }
+.crumbs span { opacity: .5; margin: 0 5px; }
+.results > h1 {
+  font-family: var(--display); font-weight: 600; font-size: 26px;
+  letter-spacing: .02em; margin: 0 0 8px;
+}
+.results > .lede {
+  max-width: 72ch; color: var(--ink-1); font-size: 13.5px; margin: 0 0 18px;
+}
+.static-index { grid-column: 1 / -1; }
+.static-index > .count { display: block; margin-bottom: 12px; }
+.static-index h2 {
+  font-family: var(--display); font-weight: 600; font-size: 15px;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--ink-1);
+  margin: 26px 0 12px;
+}
+.static-index h2:first-child { margin-top: 0; }
+.static-index ul {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;
+}
+.static-index li {
+  border: 1px solid var(--line); background: var(--bg-1); padding: 12px;
+}
+.static-index li > a { font-family: var(--display); font-size: 14px; letter-spacing: .02em; }
+.static-index li .m {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-2); margin-top: 4px;
+}
+.static-index li p { margin: 7px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-1); }
+.pager {
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 20px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+}
+.pager a, .pager .cur, .pager .dis { padding: 7px 11px; border: 1px solid var(--line); }
+.pager .cur { border-color: var(--accent-line); color: var(--accent); background: var(--accent-soft); }
+.pager .dis { color: var(--ink-3); }
+.backlink { margin-top: 20px; font-size: 13px; }
