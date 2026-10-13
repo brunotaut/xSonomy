@@ -54,6 +54,9 @@ a { color: var(--accent); text-decoration: none; }
 .filters::-webkit-scrollbar { width: 8px; }
 .filters::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
 @media (max-width: 860px) { .filters { position: static; max-height: none; overflow: visible; } }
+/* Spacing below the search box, which now sits above these. Scoped to :not(:empty)
+   so the sections without sub-tabs keep their original spacing. */
+.subtabs:not(:empty) { margin-top: 16px; }
 .subtabs { display: flex; flex-direction: column; gap: 5px; margin-bottom: 18px; }
 .subtabs:empty { display: none; }
 .subtabs button { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-1); background: transparent; border: 1px solid var(--line); padding: 10px 12px; cursor: pointer; }

@@ -54,10 +54,13 @@
 
   <main class="wrap layout">
     <aside class="filters" id="filters" aria-label="Filters">
-      <div id="subtabs" class="subtabs"></div>
+      <!-- Search sits above everything, including the sensor sub-tabs. It applies to the
+           whole section, so having it below the sub-tabs read as if it only searched
+           within the selected sensor type. -->
       <div class="search-box">
         <input id="search" type="search" placeholder="Search name, company, summary…" autocomplete="off" />
       </div>
+      <div id="subtabs" class="subtabs"></div>
       <div id="facets"></div>
       <button id="reset" class="reset" type="button">Reset filters</button>
     </aside>
