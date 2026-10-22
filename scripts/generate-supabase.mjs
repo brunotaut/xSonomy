@@ -273,7 +273,7 @@ async function sbFetchAll(path, params, label = path) {
 
 async function fetchProducts() {
   return sbFetchAll("products", {
-    select: "id,name,subcategory,country,summary,website,image_url,price,status,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
+    select: "id,name,subcategory,country,summary,website,image_url,price,status,status_detail,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "products");
@@ -305,6 +305,12 @@ const STATUS_BUCKETS = [
 // Matched only as a substring, never as a prefix, so "Developed / in use" stays In
 // Production while a bare "Developed" lands in Development rather than N/A.
 const STATUS_WEAK = [["Development", ["developed"]]];
+// products.status now holds the normalised value, so prefer it and fall back to
+// normalising the free text. Both paths are live until every row is migrated.
+const PRODUCT_STATUS_LABEL = {
+  in_production: "In Production", discontinued: "Discontinued", prototype: "Prototype",
+  development: "Development", cancelled: "Cancelled", unknown: "N/A",
+};
 function normaliseStatus(raw) {
   const s = String(asArray(raw)[0] || "").trim().toLowerCase();
   if (!s) return "N/A";
@@ -423,6 +429,10 @@ function reshape(p) {
   if (p.confidence) row.Confidence = p.confidence;
   if (Array.isArray(p.source_urls) && p.source_urls.length) row["Source URLs"] = p.source_urls.join("\n");
   if (p.specs && typeof p.specs === "object") Object.assign(row, p.specs);
+  // Production status used to live in specs under this key and is being moved to
+  // its own column. Feed it back under the same label so the spec table on the
+  // detail pages reads the same either way.
+  if (p.status_detail) row["UAV · Production status"] = p.status_detail;
   row.__image_url = p.image_url || null;
   return row;
 }
@@ -1110,7 +1120,7 @@ async function main() {
     // Normalised status is UAV-only and always present, so "N/A" is a real bucket
     // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
     // pages show the richer raw `UAV · Production status` instead.
-    if (bucket === "uav") row.Status = normaliseStatus(row["UAV · Production status"]);
+    if (bucket === "uav") row.Status = PRODUCT_STATUS_LABEL[p.status] || normaliseStatus(row["UAV · Production status"]);
     // The count rides along in the JSON for the catalogue cards; the articles themselves
     // stay out of it (they would add megabytes) and are handed to productPage by slug.
     const items = news.get(p.id) || [];
