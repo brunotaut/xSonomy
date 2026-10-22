@@ -12,7 +12,7 @@ collection, entity extraction and enrichment happen in `brunotaut/xsonomy-news`.
 - DB: Supabase project `uobidcahmrmfdmfbrtkt`. Build uses `SUPABASE_SERVICE_KEY` server-side only; no key reaches the browser.
 
 ## How it builds
-- `scripts/generate-supabase.mjs` — **the live generator.** Reads `products` (with `specs` JSONB, plus `status` / `status_detail` for the UAV production status, which moved out of `specs` on 2026-10-22), the taxonomy and the news links, writes per-category JSON, SEO product pages at `/<category>/<slug>/`, sitemap, robots, copies `src/` → `public/`. `PUBLISH_STATUS` at top: `null` = all rows, `"live"` = only `publication_status='live'`.
+- `scripts/generate-supabase.mjs` — **the live generator.** Reads `products` (with `specs` JSONB, plus `status` / `status_detail` for the UAV production status, which moved out of `specs` on 2026-10-22), the taxonomy and the news links, writes per-category JSON, SEO product pages at `/<category>/<slug>/`, sitemap, robots, copies `src/` → `public/`. `PUBLISH_STATUS` at top: **now `"live"`** (changed 2026-10-22 — it was `null`, which made `draft` meaningless and would have published externally-researched draft companies). The build also refuses to run if an unpublished row reaches it.
 - `.github/workflows/deploy.yml` — daily 06:00 UTC + on push + manual → builds with `generate-supabase.mjs` → deploys `public/` to Pages.
 - `src/assets/app.js` (+ `companies.js`, `companies.css`) — client-side search/filter grid. `CONFIG` in `app.js` controls filters/tags per category.
 

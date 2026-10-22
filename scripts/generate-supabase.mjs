@@ -44,7 +44,13 @@ const SECTION_TITLE = {
 const BUCKET_KICKER = { uav: "UAV", cuas: "Counter-UAS", sensors: "Sensor", software: "Software", other: "Component" };
 const HIDDEN = new Set(["Name", "Company", "Summary", "Website", "Image", "Status", "Enrichment status", "Source URLs", "Category", "Confidence", "slug", "Mentions"]);
 
-const PUBLISH_STATUS = null; // null = all rows; "live" = only publication_status='live'
+// "live" = only publication_status='live' reaches the site; null = everything, including drafts.
+//
+// This was null until 2026-10-22, which meant `draft` was a label with no effect: companies
+// imported from external research as drafts would have appeared on xsonomy.com at the next
+// build. Draft now genuinely means not published. Switching it back re-exposes every draft row,
+// so it is a publishing decision, not a tuning knob.
+const PUBLISH_STATUS = "live";
 
 // ---- utils (inlined from generate.mjs) ----
 const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -273,7 +279,7 @@ async function sbFetchAll(path, params, label = path) {
 
 async function fetchProducts() {
   return sbFetchAll("products", {
-    select: "id,name,subcategory,country,summary,website,image_url,price,status,status_detail,specs,confidence,source_urls,category,companies!products_company_id_fkey(name)",
+    select: "id,name,subcategory,country,summary,website,image_url,price,status,status_detail,specs,confidence,source_urls,category,publication_status,companies!products_company_id_fkey(name)",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "products");
@@ -1160,6 +1166,16 @@ async function main() {
     if (pic && pic.url) { row.__image_url = pic.url; creditBySlug.set(row.slug, pic); }
     await attachImage(row);
     buckets[bucket].push(row);
+  }
+
+  // Nothing unpublished may reach the site. Cheap, and it fails the build rather than
+  // leaking quietly if the gate is ever loosened by accident.
+  if (PUBLISH_STATUS) {
+    const leaked = products.filter((p) => p.publication_status && p.publication_status !== PUBLISH_STATUS);
+    if (leaked.length) {
+      throw new Error(`${leaked.length} product(s) with publication_status != "${PUBLISH_STATUS}" ` +
+        `reached the build, e.g. "${leaked[0].name}". Refusing to publish.`);
+    }
   }
 
   const meta = { generatedAt: new Date().toISOString(), categories: {} };
