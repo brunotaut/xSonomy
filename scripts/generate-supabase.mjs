@@ -1091,6 +1091,34 @@ ${GA_TAG}</head><body data-src="/data/cuas-systems.json">
 </body></html>`;
 }
 
+// Merged-away slugs whose URLs are indexed. GitHub Pages cannot send a 301, so the
+// build leaves a stub at the old path: a canonical link naming the new URL, which is
+// what search engines act on, plus a meta refresh and a visible link for people.
+//
+// Deliberately no `noindex`. It contradicts the canonical — one says "index the other
+// page instead", the other says "index nothing here" — and Google advises against the
+// pair. The canonical on its own is what passes the old URL's value to the new one.
+async function fetchRedirects() {
+  return sbFetchAll("slug_redirects", { select: "from_slug,to_slug,kind", order: "from_slug.asc" }, "slug_redirects");
+}
+
+function redirectPage(from, to, kind) {
+  const target = `/${kind === "product" ? "uav" : "companies"}/${to}/`;
+  return `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moved &middot; xSonomy</title>
+<link rel="canonical" href="${SITE}${target}">
+<meta http-equiv="refresh" content="0; url=${target}">
+<style>body{background:#101417;color:#e7ecef;font-family:system-ui,sans-serif;display:grid;
+place-items:center;min-height:100vh;margin:0;text-align:center;padding:24px}
+a{color:#5fd0e0}p{max-width:46ch;line-height:1.6}</style>
+${GA_TAG}</head><body>
+<div><p>This entry was merged into another record.</p>
+<p><a href="${target}">Continue to the current page</a></p></div>
+<script>location.replace(${JSON.stringify(target)});</script>
+</body></html>`;
+}
+
 async function main() {
   await loadDotenv();
   sbConfig();
@@ -1279,6 +1307,22 @@ async function main() {
     .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(HOME_DESC)}"`)
     .replace("<!--SECTION_INTRO-->", homeIntro())
     .replace("<!--STATIC_INDEX-->", homeIndex(buckets, companies.length, cuasRegistry.length)));
+
+  // Stubs for merged-away URLs. Written after the real pages so a redirect can never
+  // overwrite a live one, and kept out of the sitemap — they are not content.
+  const redirects = await fetchRedirects();
+  let stubs = 0;
+  for (const r of redirects) {
+    const dir = join(OUT, r.kind === "product" ? "uav" : "companies", r.from_slug);
+    if (existsSync(join(dir, "index.html"))) {
+      console.warn(`  WARNING: redirect ${r.from_slug} collides with a real page — skipped`);
+      continue;
+    }
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, "index.html"), redirectPage(r.from_slug, r.to_slug, r.kind));
+    stubs++;
+  }
+  console.log(`  Redirects: ${stubs} stub page${stubs === 1 ? "" : "s"}`);
 
   const sectionUrls = Object.keys(CATEGORIES).map((k) => `${SITE}/${k}/`);
   const today = new Date().toISOString().slice(0, 10);
