@@ -1,0 +1,41 @@
+name: Check landscape interface
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'package.json'
+      - '.github/workflows/landscape-checks.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - run: npm test
+
+  connected-build:
+    # Repository-owned branches only. Never use pull_request_target or expose
+    # the service key to fork code. This reads the DB and does not deploy Pages.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Validate full static build against Supabase (no deployment)
+        run: npm run build:supabase
+        env:
+          SUPABASE_URL: https://uobidcahmrmfdmfbrtkt.supabase.co
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

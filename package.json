@@ -5,6 +5,7 @@
   "type": "module",
   "description": "xSonomy Stage 1 catalogue \u2014 static site generated from Supabase, hosted on GitHub Pages.",
   "scripts": {
+    "test": "node --test scripts/test/*.test.mjs",
     "build:supabase": "node scripts/generate-supabase.mjs",
     "images:find": "node scripts/find-images.mjs",
     "images:accept": "node scripts/accept-images.mjs"
