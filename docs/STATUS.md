@@ -24,6 +24,30 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-10-28 — map-first landscape interface (review branch)
+
+Implemented the approved visual direction at `/landscape/`: Europe choropleth,
+local SVG country flags, capability bars, disjoint UAV-only / C-UAS-only / both
+donut, company list/details, technology exploration, URL-preserved filters and
+responsive layouts. No made-up historical trends or maturity scores.
+
+The generator now projects the reconciled `europe-uav-cuas-2026` **included** set,
+intersected with **live**, canonical in-scope countries and UAV/C-UAS taxonomy.
+Reads only; no publication changes, DB mutations, snapshot changes or research
+handoff changes. Existing product/company routes stay intact. Public counts can
+be lower than research counts because verified draft companies remain unpublished.
+
+Validation: 9 Node tests pass, including a full generator run against a local
+read-only API fixture; Chromium interaction checks pass for country/map keyboard,
+search/domain/capability filtering, profile dialog/Escape, URL/back navigation,
+empty/error states, map-failure fallback, and 390px/320px responsive overflow.
+Screenshots in `docs/previews/` use **synthetic demo data**, not live counts.
+
+Live Supabase credentials are unavailable in this workspace. The new PR workflow
+runs tests and a connected, read-only build for repository-owned branches, with
+no Pages deployment. Its result must be checked before merge. No merge/deployment
+has been performed. See `docs/LANDSCAPE_UI.md` for data and interaction contracts.
+
 ### 2026-10-13 — Google Analytics with Consent Mode v2
 GA4 (`G-8WL3V0JVBR`) on ~5,300 pages, with storage denied until the visitor opts in.
 
