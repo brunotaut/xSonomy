@@ -376,3 +376,6 @@ checked against live data via SQL and the UI was driven in a browser against a 1
 fixture built from real rows. First CI build should confirm PostgREST exposes
 `product_taxonomy_view`.
 
+
+### 2026-10-28 — Primes and drone detail
+Added an explicit company-type Primes category/filter and overview platform-type and mission cards. Types come from the existing taxonomy; prime status comes only from company_type. Filters remain shareable and intersect country/domain selection. No database changes.

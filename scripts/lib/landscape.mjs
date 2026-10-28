@@ -52,7 +52,7 @@ export function buildLandscape({ companies, candidates, countries, sectors, assi
     const effective = new Set(explicit.flatMap(a => ancestry(a.sector_id).map(s => s.slug)));
     rows.push({
       id: c.id, name: c.name, slug: c.slug, country: countryByName.get(c.hq_country).code.trim(),
-      description: c.description || '',
+      description: c.description || '', companyType: c.company_type || null,
       domains: roots.filter(r => effective.has(r.slug)).map(r => r.slug),
       sectors: taxonomy.filter(s => effective.has(s.id)).map(s => s.id),
       explicit: [...new Set(explicit.map(a => byId.get(a.sector_id).slug))],

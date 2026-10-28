@@ -7,3 +7,5 @@
 .flag-image{display:inline-block;width:24px;height:18px;object-fit:cover;vertical-align:middle;border-radius:2px;flex-shrink:0}.map-tooltip .flag-image,.profile-country .flag-image{margin-right:7px}
 @media(max-width:380px){.topbar{gap:16px;padding:0 14px}.brand{font-size:20px}.topbar nav{gap:12px}.topbar nav a{font-size:10px}.domain-chart{gap:16px;padding:15px}#donut{width:125px;height:125px}#domain-legend{min-width:100px}.legend-row{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.explore-grid{grid-template-columns:repeat(4,minmax(0,1fr))}#drone-breakdown .tech-grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}#filters{flex-wrap:wrap}.search{min-width:220px}@media(max-width:1050px){.explore-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.explore-grid{grid-template-columns:1fr}#company-type{flex:1;font-size:12px}}

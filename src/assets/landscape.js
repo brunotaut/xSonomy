@@ -56,9 +56,10 @@ function bind() {
     history.replaceState(null, '', location.pathname + filterQuery(state));
     render();
   });
+  $('company-type').addEventListener('change', e => setState({ type:e.target.value }));
   $('domain').addEventListener('change', e => setState({ domain: e.target.value }));
   $('country').addEventListener('change', e => setState({ country: e.target.value }));
-  $('reset').addEventListener('click', () => setState({ q:'', country:'', domain:'', sector:'' }));
+  $('reset').addEventListener('click', () => setState({ q:'', country:'', domain:'', sector:'', type:'' }));
   $('views').addEventListener('click', e => { if(e.target.dataset.view) setState({ view:e.target.dataset.view }); });
   $('all-tech').addEventListener('click', () => setState({ view:'technologies' }));
   document.addEventListener('click', e => {
@@ -68,6 +69,8 @@ function bind() {
     if (country) return setState({ country:state.country === country.dataset.country ? '' : country.dataset.country });
     const sector = e.target.closest('[data-sector]');
     if (sector) return setState({ sector:sector.dataset.sector, view:'companies' });
+    const type = e.target.closest('[data-type]');
+    if (type) return setState({ type:type.dataset.type, view:'companies' });
     const domain = e.target.closest('[data-domain]');
     if (domain) return setState({ domain:domain.dataset.domain, view:'companies' });
     const profile = e.target.closest('[data-profile]');
@@ -81,10 +84,11 @@ function bind() {
 function render() {
   const companies = filterCompanies(data.companies, state);
   const stats = summarize(companies);
+  $('company-type').value = state.type || '';
   $('search').value = state.q; $('domain').value = state.domain; $('country').value = state.country;
   for (const view of ['overview','companies','technologies']) $(view).hidden = state.view !== view;
   for (const button of $('views').children) button.dataset.view === state.view ? button.setAttribute('aria-current','page') : button.removeAttribute('aria-current');
-  const labels = { q:state.q, country:countryByCode.get(state.country)?.name || state.country, domain:({uav:'UAV','counter-uas':'Counter-UAS',both:'Both domains'})[state.domain] || state.domain, sector:sectorById.get(state.sector)?.name || state.sector };
+  const labels = { type:state.type === 'prime' ? 'Primes' : state.type, q:state.q, country:countryByCode.get(state.country)?.name || state.country, domain:({uav:'UAV','counter-uas':'Counter-UAS',both:'Both domains'})[state.domain] || state.domain, sector:sectorById.get(state.sector)?.name || state.sector };
   $('active-filters').innerHTML = Object.entries(labels).filter(([,v]) => v).map(([k,v]) => `<button type="button" data-clear="${k}" aria-label="Remove ${esc(v)} filter">${esc(v)} ×</button>`).join('');
   $('status').textContent = companies.length ? '' : 'No companies match these filters. Reset filters to explore the full landscape.';
   $('metrics').innerHTML = [
@@ -96,6 +100,8 @@ function render() {
   renderMap(stats);
   renderCharts(stats);
   renderExplore(stats);
+  $('explore').innerHTML += `<button type="button" class="explore-tile" data-type="prime">${icon('building')}<span><strong>Primes</strong><small>${count(companies.filter(c=>c.companyType==='prime').length)} companies</small></span><b aria-hidden="true">↗</b></button>`;
+  $('drone-breakdown').innerHTML = droneGroups(stats);
   renderCompanies(companies);
   renderTechnologies(stats);
 }
@@ -165,8 +171,14 @@ function renderCompanies(companies) {
   $('company-rows').innerHTML = companies.map(c => `<tr><td><button type="button" data-profile="${esc(c.id)}">${esc(c.name)}</button></td><td><span class="flag" aria-hidden="true">${flag(c.country)}</span>${esc(c.countryName)}</td><td>${c.domains.map(d => `<span class="pill">${d==='uav'?'UAV':'Counter-UAS'}</span>`).join('')}</td><td>${companyCapabilities(c).slice(0,2).map(s=>`<span class="pill">${esc(s.name)}</span>`).join('')}${c.explicit.length>2?`<span class="pill">+${c.explicit.length-2}</span>`:''}</td><td><a href="/companies/${encodeURIComponent(c.slug)}/" aria-label="Full profile: ${esc(c.name)}">↗</a></td></tr>`).join('');
 }
 
+function sectorCards(sectors, stats) {
+  return `<div class="tech-grid">${sectors.map(s => `<button class="tech-card" type="button" data-sector="${esc(s.id)}"><strong>${esc(s.name)}</strong><span>${count(stats.sectors.get(s.id)||0)}</span><small>companies →</small></button>`).join('')}</div>`;
+}
+function droneGroups(stats) {
+  return [['uav-platform','Platform types'],['uav-mission','Missions & applications']].map(([id,label]) => `<section class="tech-group"><h3>${label}</h3>${sectorCards(data.sectors.filter(s=>s.parent===id),stats)}</section>`).join('') + '<p class="chart-note">Counts represent classified companies, not aircraft models. Types and missions can overlap; unclassified capabilities are not inferred.</p>';
+}
 function renderTechnologies(stats) {
-  $('technology-groups').innerHTML = ['uav','counter-uas'].map(domain => `<section class="tech-group"><h3>${domain==='uav'?'UAV':'Counter-UAS'}</h3><div class="tech-grid">${data.sectors.filter(s=>s.domain===domain && s.leaf).map(s => `<button class="tech-card" type="button" data-sector="${esc(s.id)}"><strong>${esc(s.name)}</strong><span>${count(stats.sectors.get(s.id)||0)}</span><small>companies →</small></button>`).join('')}</div></section>`).join('');
+  $('technology-groups').innerHTML = droneGroups(stats) + ['uav-ecosystem','counter-uas'].map(id => `<section class="tech-group"><h3>${id==='uav-ecosystem'?'Enabling technology':'Counter-UAS'}</h3>${sectorCards(data.sectors.filter(s=>s.leaf && (id==='counter-uas'?s.domain===id:s.parent===id)),stats)}</section>`).join('');
 }
 
 function safeURL(url) { try { const u = new URL(url, location.origin); return ['http:','https:'].includes(u.protocol) ? u.href : null; } catch { return null; } }
