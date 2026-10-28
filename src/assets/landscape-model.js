@@ -1,6 +1,7 @@
 export function filterCompanies(companies, filters) {
   const q = (filters.q || '').trim().toLocaleLowerCase();
   return companies.filter(c =>
+    (!filters.type || c.companyType === filters.type) &&
     (!filters.country || c.country === filters.country) &&
     (!filters.domain || (filters.domain === 'both' ? c.domains.length === 2 : c.domains.includes(filters.domain))) &&
     (!filters.sector || c.sectors.includes(filters.sector)) &&
@@ -23,11 +24,11 @@ export function summarize(companies) {
 
 export function readFilters(search) {
   const p = new URLSearchParams(search);
-  return { q: p.get('q') || '', country: p.get('country') || '', domain: p.get('domain') || '', sector: p.get('sector') || '', view: ['companies', 'technologies'].includes(p.get('view')) ? p.get('view') : 'overview' };
+  return { type: p.get('type') || '', q: p.get('q') || '', country: p.get('country') || '', domain: p.get('domain') || '', sector: p.get('sector') || '', view: ['companies', 'technologies'].includes(p.get('view')) ? p.get('view') : 'overview' };
 }
 
 export function filterQuery(filters) {
   const p = new URLSearchParams();
-  for (const key of ['q', 'country', 'domain', 'sector', 'view']) if (filters[key] && !(key === 'view' && filters[key] === 'overview')) p.set(key, filters[key]);
+  for (const key of ['q', 'country', 'domain', 'sector', 'type', 'view']) if (filters[key] && !(key === 'view' && filters[key] === 'overview')) p.set(key, filters[key]);
   return p.toString() ? `?${p}` : '';
 }

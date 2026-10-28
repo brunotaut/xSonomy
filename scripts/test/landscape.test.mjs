@@ -44,7 +44,7 @@ test('filters intersect and search includes products; no results is legitimate',
   assert.equal(filterCompanies(companies,{country:'GB'}).length,0);
 });
 test('shareable filter state round-trips punctuation and defaults',()=>{
-  const state={q:'A&B + UAV',country:'DE',domain:'both',sector:'uav-platform',view:'companies'};
+  const state={type:'prime',q:'A&B + UAV',country:'DE',domain:'both',sector:'uav-platform',view:'companies'};
   assert.deepEqual(readFilters(filterQuery(state)),state);
   assert.equal(readFilters('?view=garbage').view,'overview');
 });
@@ -61,4 +61,11 @@ test('fetch uses the working edition, stable pagination keys and propagates miss
   assert.equal(calls[0].params.landscape_slug,`eq.${LANDSCAPE}`);
   assert.equal(calls.find(c=>c.table==='company_sectors').params.order,'company_id.asc,sector_id.asc');
   await assert.rejects(fetchLandscape(async()=>{throw Error('database unavailable');},[]),/database unavailable/);
+});
+
+test('primes use explicit company type, without inferring from size or name',()=>{
+  const f=fixture();f.companies[0].company_type='prime';
+  const rows=buildLandscape(f).companies;
+  assert.deepEqual(filterCompanies(rows,{type:'prime'}).map(c=>c.id),['uav']);
+  assert.equal(filterCompanies(rows,{type:'prime',domain:'counter-uas'}).length,0);
 });
