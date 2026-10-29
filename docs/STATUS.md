@@ -454,3 +454,35 @@ Added `/landscape-next/` with the approved map-led interface, multi-select facet
 
 ### 2026-10-29 — Atlas main rollout
 After successful staging build/deployment and browser verification on xsonomy.com/landscape-next/, promoted the atlas to /landscape/. Preserved the previous interface at /landscape-classic/ for rollback, canonical URL and analytics injection. Legacy query filters are accepted, including both-domain selection; company and product URLs are unchanged. Real hub/investor data remains a research dependency and demos are hidden publicly. Added keyboard focus retention after facet and marker updates.
+
+## 2026-10-29 — 36 draft products corrected and published (PUBLISH_STATUS change)
+
+**Authorised by Nazar** on 2026-10-29, after the source-backed correction package was reviewed.
+Logged here under rule 4 of CLAUDE.md. This is the companion to the company publication earlier
+the same day, which deliberately left these products in `draft`.
+
+The 36 products belonging to the 162 newly published landscape companies were corrected and are
+now `live`. Those 25 company pages no longer render with empty product lists.
+
+- Products live, whole catalogue: **3,492 → 3,528**.
+- Changed fields: `summary` (36), `source_urls` (15), `country` (8), `name` (2), `category` (1),
+  `publication_status` (36), `updated_at`. **No `slug` was touched** — rule 3 holds, including on
+  the two renamed products, which keep `ukropter-drone` and `argonian-argonian-dome`.
+- Company ownership unchanged on all 36.
+- Prior values retained for rollback in
+  `xsonomy-news/research-agent/reports/2026-10-29-draft-product-publication-applied.csv`, with a
+  ready-to-run `...-publication-rollback.sql`.
+
+Every source was read before the write, not merely status-checked. Three products previously held
+for lack of evidence turned out to have evidence after all: **RP-24** and **C4PER** were wrong URL
+guesses (the pages exist at `/system/rp-mlrs-24/` and `/solutions/andromeda/c4per`), and **Shield X
+SkyBlock**'s manufacturer page was live but unrecorded. Two products previously judged ready —
+**Robotto Spectre** and **Spectre-1** — carried summaries their cited pages did not support, and
+were rewritten from pages that do. **OBRIY** and **STEZHKA** had each other's descriptions; STEZHKA
+also moved `Software → Other`, the only category change.
+
+Drift check before writing: zero on all six fields across all 36 rows. The update is guarded and
+idempotent — it matches only rows still in `draft` whose values actually differ, so a rerun changes
+nothing.
+
+Full report: `xsonomy-news/research-agent/reports/2026-10-29-draft-product-corrections.md`.
