@@ -379,3 +379,31 @@ fixture built from real rows. First CI build should confirm PostgREST exposes
 
 ### 2026-10-28 — Primes and drone detail
 Added an explicit company-type Primes category/filter and overview platform-type and mission cards. Types come from the existing taxonomy; prime status comes only from company_type. Filters remain shareable and intersect country/domain selection. No database changes.
+
+---
+
+## 2026-10-29 — 162 verified landscape companies published (PUBLISH_STATUS change)
+
+**Approved by Nazar** on 2026-10-29 ("go"), recorded in
+`xsonomy-news/research-agent/decisions/2026-10-29-publish-verified-landscape.md`. Logged here under
+rule 4 of CLAUDE.md, which makes any change to which rows are public a decision rather than a task.
+
+Merits verification of the European UAV & Counter-UAS landscape finished on 2026-10-29 with **567
+verified companies**. Only **405** of them were published, so **162 verified companies existed in
+the database but appeared nowhere on the public site**. All 162 were `draft`. They are now `live`.
+
+- Companies live, whole catalogue: **2,304 → 2,466**.
+- Verified landscape companies published: **405 → 567**. Unpublished: **0**.
+- Changed fields: `publication_status` and `updated_at`, nothing else.
+- Prior statuses retained for rollback in
+  `xsonomy-news/research-agent/reports/2026-10-29-publication-manifest.csv`.
+
+Every one of the 162 was checked against all five conditions in `scripts/lib/landscape.mjs` before
+writing — `included`, scope country, slug present, taxonomy inside the UAV/C-UAS trees, and the
+`live` status itself — plus slug collisions and redirect shadowing. Zero failures, zero skipped.
+
+**Their products were not published.** 26 of the 162 have products, 36 of 37 rows still `draft`, so
+those company pages will render with empty product lists. That is a separate decision and was not
+made here.
+
+Full report: `xsonomy-news/research-agent/reports/2026-10-29-verified-publication.md`.
