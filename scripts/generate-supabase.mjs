@@ -14,6 +14,7 @@ import { mkdir, rm, cp, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { fetchLandscape } from "./lib/landscape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -479,7 +480,7 @@ async function fetchCompanies() {
       "id,name,slug,legal_name,description,overview,history,company_type,ownership,status,founded_year,defunct_year," +
       "hq_country,hq_city,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
       "revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency," +
-      "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls",
+      "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls,publication_status",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "companies");
@@ -1024,7 +1025,7 @@ ${ctas ? `<div class="cta">${ctas}</div>` : ""}
 // The two registry shells hand-rolled their own tab strip and never gained the three
 // sections added later, so Counter-UAS, Software and Other were unreachable from them.
 function shellTabs() {
-  return `<nav class="tabs">${Object.entries(CATEGORIES)
+  return `<nav class="tabs"><a href="/landscape/">Landscape</a>${Object.entries(CATEGORIES)
     .map(([k, c]) => `<a href="/${k}/">${esc(c.label)}</a>`).join("")}</nav>`;
 }
 
@@ -1241,6 +1242,16 @@ async function main() {
     arr.push({ name: p.name, category: p.category, url: pageUrlByProduct.get(p.name) || null });
     prodsByCompany.set(p.company_id, arr);
   }
+
+  // The landscape is the reconciled public subset, not the general registry.
+  // Fail closed if its source tables cannot be read; never substitute all companies.
+  const landscape = await fetchLandscape(sbFetchAll, companies, prodsByCompany);
+  await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
+  const landscapePath = join(OUT, "landscape", "index.html");
+  await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))
+    .replace("<!--LANDSCAPE_ANALYTICS-->", GA_TAG));
+  console.log(`  Landscape: ${landscape.companies.length} included, published companies -> /landscape/`);
+  urls.push(`${SITE}/landscape/`);
 
   // registry JSON stays lean: strip long-text/detail-only fields
   const registry = companies.map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);

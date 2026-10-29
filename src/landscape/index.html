@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>European UAV & Counter-UAS Landscape · xSonomy</title>
+  <meta name="description" content="Explore Europe's UAV and counter-UAS companies through an interactive country map, capability charts and company profiles.">
+  <link rel="canonical" href="https://xsonomy.com/landscape/">
+  <link rel="stylesheet" href="/assets/landscape.css">
+  <!--LANDSCAPE_ANALYTICS-->
+</head>
+<body>
+  <a class="skip" href="#main">Skip to landscape</a>
+  <header class="topbar">
+    <a class="brand" href="/">xSonomy<span> / </span></a>
+    <nav aria-label="Main"><a href="/landscape/" aria-current="page">Landscape</a><a href="/">Catalogue</a><a href="https://news.xsonomy.com/">Intelligence ↗</a></nav>
+    <span class="edition">EUROPEAN ECOSYSTEM</span>
+  </header>
+  <main id="main">
+    <div class="heading"><div><div class="eyebrow">THE BIG PICTURE</div><h1>Europe's drone ecosystem<span>.</span></h1><p>UAV & Counter-UAS landscape</p></div><span class="public-badge"><i></i> Public landscape</span></div>
+    <form id="filters" role="search" aria-label="Filter landscape">
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="Search companies, products or capabilities" placeholder="Search companies, products or capabilities…" autocomplete="off"></label>
+      <label class="sr-only" for="domain">Domain</label><select id="domain"><option value="">All domains</option value="uav">UAV</option><option value="counter-uas">Counter-UAS</option><option value="both">Both domains</option></select>
+      <label class="sr-only" for="country">Country</label><select id="country"><option value="">All countries</option></select>
+      <label class="sr-only" for="company-type">Company category</label><select id="company-type"><option value="">All companies</option><option value="prime">Primes</option></select>
+      <button id="reset" type="button">Reset filters ↺</button>
+    </form>
+    <div class="viewbar"><nav id="views" aria-label="Landscape views"><button type="button" data-view="overview" aria-current="page">Overview</button><button type="button" data-view="companies">Companies</button><button type="button" data-view="technologies">Technologies</button></nav><span id="updated"></span></div>
+    <div id="active-filters" class="active-filters"></div>
+    <p id="status" role="status">Loading the latest landscape…</p>
+    <div id="dashboard" hidden>
+      <section id="metrics" class="metrics" aria-label="Landscape totals"></section>
+      <section id="overview" aria-label="Landscape overview">
+        <div class="dashboard-grid">
+          <section class="panel map-panel"><div class="panel-heading"><h2>Across Europe</h2><span>Companies by headquarters</span></div>
+            <div class="map-area"><div id="map" aria-label="Country map"></div><div id="map-tooltip" class="map-tooltip" hidden></div></div>
+            <div class="map-legend"><span>0</span><i></i><span id="map-max"></span><span class="muted">Outside scope: grey</span></div>
+            <div id="country-chips" class="country-chips"></div>
+          </section>
+          <div class="chart-column">
+            <section class="panel capability-panel"><div class="panel-heading"><h2>Capability mix</h2><button id="all-tech" class="text-button" type="button">Explore all ↗</button></div><div id="capabilities" class="bars"></div><p class="chart-note">Companies can appear in more than one capability.</p></section>
+            <section class="panel domain-panel"><div class="panel-heading"><h2>Domain coverage</h2><span>Unique companies</span></div><div class="domain-chart"><div id="donut"></div><div id="domain-legend"></div></div></section>
+          </div>
+        </div>
+        <section class="explore-section"><div class="section-title"><h2>Drone types & missions</h2><span>Select a classification to explore its companies</span></div><div id="drone-breakdown"></div></section>
+        <section class="explore-section"><div class="section-title"><h2>Explore technologies</h2><span>Follow a capability to its companies</span></div><div id="explore" class="explore-grid"></div></section>
+      </section>
+      <section id="companies" hidden aria-labelledby="companies-title"><div class="section-title"><h2 id="companies-title">Companies</h2><span id="company-count"></span></div><div class="table-wrap"><table><thead><tr><th scope="col">Company</th><th scope="col">Country</th><th scope="col">Domain</th><th scope="col">Capabilities</th><th scope="col">Profile</th></tr></thead><tbody id="company-rows"></tbody></table></div><p id="company-empty" hidden>No companies match. Try clearing a filter.</p></section>
+      <section id="technologies" hidden aria-labelledby="technologies-title"><div class="section-title"><h2 id="technologies-title">Technologies</h2><span>Evidence-backed taxonomy · select to explore</span></div><div id="technology-groups"></div></section>
+    </div>
+    <noscript><p>The interactive landscape needs JavaScript. <a href="/companies/">Browse the company registry</a>.</p></noscript>
+    <footer><span><i class="status-dot"></i>Verified & publicly approved companies</span><span>Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a> · Counts describe database coverage</span></footer>
+  </main>
+  <dialog id="profile"><button id="close-profile" class="close-profile" aria-label="Close company details" type="button">×</button><div id="profile-content"></div></dialog>
+  <script type="module" src="/assets/landscape.js"></script>
+</body>
+</html>
