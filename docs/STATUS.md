@@ -451,3 +451,6 @@ Full report: `xsonomy-news/research-agent/reports/2026-10-29-verified-publicatio
 
 ### 2026-10-29 — Atlas UI staging
 Added `/landscape-next/` with the approved map-led interface, multi-select facets, search, prime filter, drag/zoom, collision-separated markers, URL-restored selection/layers/camera, mobile filter panel and bottom detail sheet. Uses the existing `/data/landscape.json` publication without database changes. Demo hubs/investors and snapshot fallback are disabled on the public catalogue; retained only in the separate private UI prototype. Existing company profile URLs remain unchanged. Browser QA covered desktop and 320/390px embedded viewport layouts, filtering, empty results, company details and URL restoration. Automated filter/URL/collision checks included.
+
+### 2026-10-29 — Atlas main rollout
+After successful staging build/deployment and browser verification on xsonomy.com/landscape-next/, promoted the atlas to /landscape/. Preserved the previous interface at /landscape-classic/ for rollback, canonical URL and analytics injection. Legacy query filters are accepted, including both-domain selection; company and product URLs are unchanged. Real hub/investor data remains a research dependency and demos are hidden publicly. Added keyboard focus retention after facet and marker updates.
