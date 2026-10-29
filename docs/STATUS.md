@@ -380,28 +380,44 @@ fixture built from real rows. First CI build should confirm PostgREST exposes
 ---
 
 ## 2026-10-26 — C-UAS grouping chips are now derived, not read from stored rows
+*(written 2026-10-26, merged and deployed 2026-10-29 — figures below were re-measured on the day it shipped)*
 
 `fetchCuasCapabilities()` in `generate-supabase.mjs` used to pick sectors with
 `slug.startsWith("cuas-")` and chip a company with whatever rows it happened to hold.
 That treated `cuas-detection` (a grouping) and `cuas-det-radar` (a capability) as the
-same kind of thing, and it only showed "Detection" on companies where somebody had
+same kind of thing, so "Detection" only appeared on companies where somebody had
 *also* stored the parent row.
 
 It now walks `parent_id` from the `counter-uas` root and chips each company with its own
 capabilities **plus every grouping above them**. The database stopped storing those
 parent rows on the same day — see `xsonomy-news/docs/CUAS_DERIVED_PARENT_TAXONOMY_MIGRATION_REPORT.md`.
 
-Effect on `/cuas-systems/`, for live companies:
+**The figures in the original draft of this entry are superseded.** It predicted 199 vendors
+and Detection 47 → 85, Mitigation 85 → 123, Tracking 0 → 35. Two things happened between
+writing and shipping: the stored parent rows were deleted, which pushed the grouping counts
+*further* down, and 162 verified companies were published on 2026-10-29, which enlarged the
+registry. Both sides below were measured against live data on 2026-10-29, so the comparison
+isolates this fix and nothing else.
 
-- **Registry size unchanged: 199 vendors.**
-- **All 13 specific capability chips unchanged** (Radar 29, Interceptor 36, RF 23, …).
-- Detection **47 → 85**, Mitigation **85 → 123**, Tracking / Identification **0 → 35** —
-  these were undercounts; the groupings now cover everyone who has a capability beneath
-  them. "Tracking" is a new chip label.
+Effect on `/cuas-systems/`:
 
-**Not verified by a build:** no `.env`/`SUPABASE_SERVICE_KEY` locally. `node --check`
-passes and the new logic was reproduced in SQL against live data to produce the numbers
-above. First CI build should confirm the chip counts match.
+| Chip | Before (prefix logic) | After (derived) |
+|---|---:|---:|
+| **Vendors in the registry** | 300 | **300 — unchanged** |
+| Detection | 18 | **118** |
+| Mitigation | 31 | **180** |
+| Tracking / Identification | *absent* | **52 — new chip** |
+| Integrated | 51 | 51 |
+| Command & Control | 29 | 29 |
+
+All ten specific capability chips are unchanged: Interceptor UAV 65, Kinetic 42, RF Detection 40,
+RF Jamming 38, Radar 37, EO/IR 26, Acoustic 21, AI / Computer Vision 19, Sensor Fusion 16,
+Directed Energy 13, GNSS 5. Only the groupings above them move, which is the point: a radar
+company was not being counted under Detection unless a redundant parent row said so.
+
+Verified by the deployed build, not predicted: `npm test` passes all 10 tests on the merged
+tree, and the live `/data/cuas-systems.json` was read back after deployment.
+
 ### 2026-10-28 — Primes and drone detail
 Added an explicit company-type Primes category/filter and overview platform-type and mission cards. Types come from the existing taxonomy; prime status comes only from company_type. Filters remain shareable and intersect country/domain selection. No database changes.
 
