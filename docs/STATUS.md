@@ -448,3 +448,6 @@ those company pages will render with empty product lists. That is a separate dec
 made here.
 
 Full report: `xsonomy-news/research-agent/reports/2026-10-29-verified-publication.md`.
+
+### 2026-10-29 — Atlas UI staging
+Added `/landscape-next/` with the approved map-led interface, multi-select facets, search, prime filter, drag/zoom, collision-separated markers, URL-restored selection/layers/camera, mobile filter panel and bottom detail sheet. Uses the existing `/data/landscape.json` publication without database changes. Demo hubs/investors and snapshot fallback are disabled on the public catalogue; retained only in the separate private UI prototype. Existing company profile URLs remain unchanged. Browser QA covered desktop and 320/390px embedded viewport layouts, filtering, empty results, company details and URL restoration. Automated filter/URL/collision checks included.
