@@ -352,3 +352,29 @@ checked against live data via SQL and the UI was driven in a browser against a 1
 fixture built from real rows. First CI build should confirm PostgREST exposes
 `product_taxonomy_view`.
 
+
+---
+
+## 2026-10-26 — C-UAS grouping chips are now derived, not read from stored rows
+
+`fetchCuasCapabilities()` in `generate-supabase.mjs` used to pick sectors with
+`slug.startsWith("cuas-")` and chip a company with whatever rows it happened to hold.
+That treated `cuas-detection` (a grouping) and `cuas-det-radar` (a capability) as the
+same kind of thing, and it only showed "Detection" on companies where somebody had
+*also* stored the parent row.
+
+It now walks `parent_id` from the `counter-uas` root and chips each company with its own
+capabilities **plus every grouping above them**. The database stopped storing those
+parent rows on the same day — see `xsonomy-news/docs/CUAS_DERIVED_PARENT_TAXONOMY_MIGRATION_REPORT.md`.
+
+Effect on `/cuas-systems/`, for live companies:
+
+- **Registry size unchanged: 199 vendors.**
+- **All 13 specific capability chips unchanged** (Radar 29, Interceptor 36, RF 23, …).
+- Detection **47 → 85**, Mitigation **85 → 123**, Tracking / Identification **0 → 35** —
+  these were undercounts; the groupings now cover everyone who has a capability beneath
+  them. "Tracking" is a new chip label.
+
+**Not verified by a build:** no `.env`/`SUPABASE_SERVICE_KEY` locally. `node --check`
+passes and the new logic was reproduced in SQL against live data to produce the numbers
+above. First CI build should confirm the chip counts match.

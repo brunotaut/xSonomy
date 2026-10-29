@@ -486,27 +486,57 @@ async function fetchCompanies() {
 }
 
 // ---- C-UAS capability sectors ----
-// Every counter-UAS company sits in exactly one capability sector under the
-// `counter-uas` domain. The /cuas-systems/ page lists all of them and lets the
-// visitor filter by capability. Short labels keep chips and table cells legible.
-const CUAS_PREFIX = "cuas-";
+// A counter-UAS company is classified by the most specific capability it can
+// evidence -- `cuas-det-radar`, not `cuas-detection`. The broader groupings above
+// it are worked out here rather than read from the database, so a radar company
+// shows both "Radar" and "Detection" without a second stored row saying so.
+// Storing both is how a parent row came to be counted as a capability, which
+// produced a published figure that was an order of magnitude wrong.
+//
+// Nesting comes from `parent_id`, never from the slug: the leaf `cuas-integrated`
+// hangs directly off the root while `cuas-detection` is a parent, so no prefix
+// rule gets both right.
+const CUAS_ROOT = "counter-uas";
 const CUAS_LABEL = {
   "cuas-integrated": "Integrated",
   "cuas-detection": "Detection",
   "cuas-mitigation": "Mitigation",
+  "cuas-tracking": "Tracking",
   "cuas-c2": "Command & Control",
 };
 
-// -> Map(company_id -> ["Integrated", …]). Two plain queries, so we don't rely
-// on PostgREST embedded-resource filtering.
+// -> Map(company_id -> ["Radar", "Detection", …]). The root domain is not a chip:
+// it would read "Counter-UAS" on every row of the counter-UAS page.
 async function fetchCuasCapabilities() {
-  const sectors = (await sbFetchAll("sectors", { select: "id,slug,name", order: "slug.asc" }, "sectors"))
-    .filter((s) => s.slug.startsWith(CUAS_PREFIX));
-  if (!sectors.length) throw new Error(`No "${CUAS_PREFIX}*" sectors found in Supabase.`);
+  const all = await sbFetchAll("sectors", { select: "id,slug,name,parent_id", order: "slug.asc" }, "sectors");
+  const root = all.find((s) => s.slug === CUAS_ROOT);
+  if (!root) throw new Error(`No "${CUAS_ROOT}" sector found in Supabase.`);
+  const byId = new Map(all.map((s) => [s.id, s]));
+
+  const under = (s) => {
+    const seen = new Set();
+    for (let cur = s.parent_id; cur && !seen.has(cur); cur = byId.get(cur)?.parent_id) {
+      if (cur === root.id) return true;
+      seen.add(cur);
+    }
+    return false;
+  };
+  const inScope = all.filter(under);
+  if (!inScope.length) throw new Error(`No sectors found under "${CUAS_ROOT}" in Supabase.`);
+
+  // A sector's own label plus every label above it, stopping below the root.
+  const labelsFor = (s) => {
+    const out = [];
+    const seen = new Set();
+    for (let cur = s; cur && cur.id !== root.id && !seen.has(cur.id); cur = byId.get(cur.parent_id)) {
+      seen.add(cur.id);
+      out.push(CUAS_LABEL[cur.slug] || cur.name);
+    }
+    return out;
+  };
 
   const byCompany = new Map();
-  for (const s of sectors) {
-    const label = CUAS_LABEL[s.slug] || s.name;
+  for (const s of inScope) {
     const links = await sbFetchAll("company_sectors", {
       select: "company_id",
       sector_id: `eq.${s.id}`,
@@ -514,7 +544,7 @@ async function fetchCuasCapabilities() {
     }, `company_sectors(${s.slug})`);
     for (const { company_id } of links) {
       const arr = byCompany.get(company_id) || [];
-      if (!arr.includes(label)) arr.push(label);
+      for (const label of labelsFor(s)) if (!arr.includes(label)) arr.push(label);
       byCompany.set(company_id, arr);
     }
   }
