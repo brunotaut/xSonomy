@@ -486,3 +486,6 @@ idempotent — it matches only rows still in `draft` whose values actually diffe
 nothing.
 
 Full report: `xsonomy-news/research-agent/reports/2026-10-29-draft-product-corrections.md`.
+
+### 2026-10-29 — Atlas cache consistency
+Final browser verification found the previous staging model could remain cached while the new main HTML loaded. Main and staging now load content-hashed application/model filenames; old files are retained for cached pages. Run `node scripts/version-atlas.mjs` after changing canonical atlas/model sources, then test. Tests target the model loaded by the page. No database changes.
