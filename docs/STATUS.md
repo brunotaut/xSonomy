@@ -608,3 +608,46 @@ missed on 30 Oct because it is typed `research_institute`); CyArk, WeRobotics an
 not UAV organisations; reinstating the four academic records removed earlier that this policy
 would have kept (Rzeszów, Porto, Laser Zentrum Hannover, TUBITAK UZAY); and whether a relevance
 test should apply to Harvard and Yale School of Public Health at all.
+
+---
+
+## 2026-10-30 — European defence investor research imported; approved records exported
+
+A 106-record investor research dataset (European Defence & UAV Investor Research,
+`research-1`) was imported into a **new staging layer in Supabase**, and the approved
+subset is now exported through this repo's existing landscape pipeline.
+
+**This repo's part is read-only, as always.** `scripts/lib/landscape.mjs` gained an
+investor projection; `generate-supabase.mjs` writes it to **`/data/landscape-investors.json`**
+and puts a `{count, locations, url, membership}` pointer in `landscape.json`, so the map
+payload does not carry investor data but a consumer of the existing endpoint can still
+find it. **No frontend change** — no page reads the new file yet.
+
+- **21 investors, 38 locations** are live in the export, from 12 confirmed deals and 9
+  stated mandates. The other 85 records stay in staging: 16 adjacent investors, 4
+  unverified candidates and 3 financial programmes among them.
+- Approval is earned, not copied: the build revalidates each candidate for a city-level
+  location with coordinates, an evidence URL, a review date and a deal-or-mandate status.
+  An approved record with **no location fails the build** rather than shipping.
+- The caveats ship **in the payload**, because each is a mistake a reader would otherwise
+  make: a country association is an index entry, not a headquarters or an eligibility
+  claim; a coordinate is a city centroid, not an office; offices, contact addresses,
+  meeting venues and legal registrations are different things; a published ticket range is
+  not available capital; an empty field means not established, never zero.
+- **Nothing else moved.** The landscape is still **567**, live companies **2,447**, and the
+  200 investors already extracted from news articles are untouched — 12 of the new records
+  match one and record a *link*, never a merge. No company, product or taxonomy row was
+  written.
+
+Four new unit tests cover the caveats, the location-kind distinction and both failure
+modes; suite **22/22**.
+
+Full detail, counts and the response schema:
+`xsonomy-news/research-agent/reports/2026-10-30-investor-research-import.md`.
+Reproduction steps: `xsonomy-news/research-agent/imports/README-investor-research.md`.
+
+**One gap, and one judgement.** The fund-vehicle table is deliberately empty: the dataset
+names vehicles inside prose notes, and parsing entity names out of sentences would be
+invention. And the dataset itself calls the 21 "candidates, not completed editorial
+approval" — they were promoted so the export has content; reverting them to `review` is one
+SQL statement, recorded in the report.
