@@ -502,3 +502,27 @@ for the publication.
 
 ### 2026-10-29 — Atlas cache consistency
 Final browser verification found the previous staging model could remain cached while the new main HTML loaded. Main and staging now load content-hashed application/model filenames; old files are retained for cached pages. Run `node scripts/version-atlas.mjs` after changing canonical atlas/model sources, then test. Tests target the model loaded by the page. No database changes.
+
+## 2026-10-30 — Company pages now link to their own product (interface fix)
+
+Fixes the exception logged in the entry above. `pageUrlByProduct` in
+`scripts/generate-supabase.mjs` mapped products to page URLs by **name**, so when two live
+products shared a name the last one written won for every owner. It is now keyed on the product
+**id**, filled while the pages are generated — the only point where the database id and the
+generated slug are both in hand — and `fetchCompanyProducts` selects `id` to look it up.
+
+Measured on the live site, build `2026-10-30T00:19:09.744Z`:
+
+| | before | after |
+|---|---|---|
+| Bionic System Solutions → Komodo | `/other/komodo/` (DOK-ING's ground robot) | `/cuas/komodo/` |
+| HADES Defense Systems → HAWK | `/cuas/hawk-2/` (an unrelated HAWK) | `/cuas/hawk/` |
+
+Across all 567 landscape companies **exactly those two links changed** — none gained, none lost.
+DOK-ING keeps `/other/komodo/`, and the ANDROMEDA pair is untouched. No slug changed, so no URL
+moved; products 3,528, companies 2,466 and landscape 567 all unchanged.
+
+`landscape.json` is built from the same map and was wrong in the same two places; it is fixed with
+it. A new end-to-end test, `scripts/test/company-product-links.test.mjs`, covers both shapes — a
+name shared across two buckets and one shared inside a single bucket where `slugify` appends
+`-2` — and was confirmed to fail against the old name-keyed lookup. `npm test` 17 of 17.
