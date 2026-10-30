@@ -487,5 +487,18 @@ nothing.
 
 Full report: `xsonomy-news/research-agent/reports/2026-10-29-draft-product-corrections.md`.
 
+**Deployed and verified** on build `2026-10-29T23:57:55.490Z`. All 36 product pages and all 25
+company pages return 200, and those company pages now list their products. Landscape still 567,
+companies still 2,466.
+
+**One exception, not fixed.** `pageUrlByProduct` in `scripts/generate-supabase.mjs:1237` keys
+product page URLs by product *name*, so when two live products share a name the last bucket
+processed wins for both owners. Bionic System Solutions' **Komodo** now links to `/other/komodo/`
+(DOK-ING's ground robot) and HADES' **HAWK** links to `/cuas/hawk-2/` (the ownerless HAWK). Both
+products' own pages are correct. Publishing these products surfaced a dormant defect rather than
+creating one — before today neither was linked at all. ANDROMEDA escapes it only by letter case.
+The fix is to key that map by product id. Flagged for a decision; code changes were out of scope
+for the publication.
+
 ### 2026-10-29 — Atlas cache consistency
 Final browser verification found the previous staging model could remain cached while the new main HTML loaded. Main and staging now load content-hashed application/model filenames; old files are retained for cached pages. Run `node scripts/version-atlas.mjs` after changing canonical atlas/model sources, then test. Tests target the model loaded by the page. No database changes.
