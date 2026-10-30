@@ -563,3 +563,48 @@ institutes** (Harvard, Duke, Yale School of Public Health, University of Tokyo, 
 Fraunhofer IDMT and others). Removing Rzeszów, Porto, TUBITAK UZAY and Laser Zentrum Hannover
 while those stay live is inconsistent. Whether a university or research institute belongs in this
 catalogue at all is a policy question that has not been answered, and it was not answered here.
+
+---
+
+## 2026-10-30 — "Research & academia" is now its own class, outside the company count
+
+Nazar approved the counting rule proposed in
+`xsonomy-news/research-agent/reports/2026-10-30-composite-and-academia-review.md`. The policy
+question the entry above left open is answered: **universities and research institutes stay in the
+catalogue, but they are not companies.**
+
+**No database or schema change was needed.** The class is `company_type IN ('research_institute',
+'university')` — both values were already permitted by the `companies_company_type_check`
+constraint and already in use on 36 live records. What was wrong was only that the *site* counted
+them as companies. The split now happens in `scripts/generate-supabase.mjs`, where `/companies/`
+and the new `/research/` are built from the same fetch.
+
+- `/companies/` now lists and counts **2,411 suppliers**, down from 2,447.
+- **`/research/` is new**: the same registry UI, filters and table over the **36** universities,
+  national laboratories and research institutes. In the sitemap, listed in static HTML, linked
+  from the homepage and from a "Research" tab in every header.
+- **Nothing was removed.** Every one of the 36 keeps its `/companies/<slug>/` page at the same
+  indexed URL, keeps its products, and keeps its landscape place. The landscape is still **567** —
+  Delft (MAVLab), Fraunhofer IDMT, NPTs 'Virazh' and Roke Manor Research are in it on reconciled
+  merits, and membership has never run on entity type.
+
+`PUBLISH_STATUS` is untouched and no row's publication changed. `companiesShell` and `cuasShell`
+were factored into one `registryShell()` rather than copied a third time; the refactor was proven
+byte-for-byte by generating both pages before and after and diffing. New regression test
+`scripts/test/research-registry.test.mjs`; suite 18/18.
+
+**One thing is pending and it is Nazar's to run.** Eleven `company_type` values are wrong, so the
+class's membership is imperfect: five records mistyped as research are actually companies (Roke
+Manor Research is a Chemring-owned engineering firm, not an institute) and six universities carry
+no type at all. The guarded, idempotent SQL and its rollback are in
+`xsonomy-news/research-agent/reports/2026-10-30-research-academia-class.sql`, to run in the
+Supabase SQL editor — both database-write tools were refused in that session. After it runs:
+**2,410 companies · 37 research & academic organisations.** The site needs no rebuild logic change
+either way.
+
+**Still open, and deliberately not decided here**, because each is a publication change under rule
+4: unpublishing `Pixhawk` (an open hardware standard, not an organisation — an extraction error
+missed on 30 Oct because it is typed `research_institute`); CyArk, WeRobotics and LMI, which are
+not UAV organisations; reinstating the four academic records removed earlier that this policy
+would have kept (Rzeszów, Porto, Laser Zentrum Hannover, TUBITAK UZAY); and whether a relevance
+test should apply to Harvard and Yale School of Public Health at all.

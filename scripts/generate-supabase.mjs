@@ -53,6 +53,15 @@ const HIDDEN = new Set(["Name", "Company", "Summary", "Website", "Image", "Statu
 // so it is a publishing decision, not a tuning knob.
 const PUBLISH_STATUS = "live";
 
+// Research & academia — the organisation class adopted 2026-10-30. Universities, national
+// laboratories and research institutes do real work on uncrewed systems, so their pages,
+// products and landscape membership are untouched; they simply are not suppliers, and
+// counting them as companies inflated the registry's headline figure. Membership is the
+// existing `company_type`, so the database needed no change: the split is here, where
+// /companies/ and /research/ are built from the same fetch.
+const RESEARCH_TYPES = new Set(["research_institute", "university"]);
+const isResearchOrg = (c) => RESEARCH_TYPES.has(c.company_type);
+
 // ---- utils (inlined from generate.mjs) ----
 const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const clip = (s, n = 155) => { const t = String(s || "").replace(/\s+/g, " ").trim(); return t.length > n ? t.slice(0, n - 1).trimEnd() + "…" : t; };
@@ -791,7 +800,7 @@ manufacturers, classification and the news coverage behind each record. Pick a s
 filter from here.</p>`;
 }
 
-function homeIndex(buckets, companyCount, cuasVendorCount) {
+function homeIndex(buckets, companyCount, cuasVendorCount, researchCount) {
   const card = (href, label, count, unit, blurb) =>
     `<li><a href="${href}">${esc(label)}</a><span class="m">${num(count)} ${unit}</span><p>${esc(blurb)}</p></li>`;
   const sections = Object.keys(CATEGORIES)
@@ -801,7 +810,9 @@ function homeIndex(buckets, companyCount, cuasVendorCount) {
     card("/companies/", "Companies", companyCount, "companies",
       "Manufacturers and suppliers with type, HQ country, headcount, revenue and funding.") +
     card("/cuas-systems/", "C-UAS vendors", cuasVendorCount, "vendors",
-      "The subset of companies supplying counter-UAS capability, grouped by what they actually supply.");
+      "The subset of companies supplying counter-UAS capability, grouped by what they actually supply.") +
+    card("/research/", "Research & academia", researchCount, "organisations",
+      "Universities, national laboratories and research institutes working on uncrewed systems — counted apart from the suppliers.");
 
   // "Most covered" is drawn from the linked news, so it is a real signal rather than a
   // hand-picked list — and it gives crawlers a route into the deepest records.
@@ -896,6 +907,7 @@ function siteNav(active) {
     `<a${k === active ? ' class="on"' : ""} href="/${k}/">${esc(c.label)}</a>`).join("");
   return `<nav>${items}<a${active === "cuas-systems" ? ' class="on"' : ""} href="/cuas-systems/">C-UAS Vendors</a>` +
     `<a${active === "companies" ? ' class="on"' : ""} href="/companies/">Companies</a>` +
+    `<a${active === "research" ? ' class="on"' : ""} href="/research/">Research</a>` +
     `<a href="http://uav360.xyz/" target="_blank" rel="noopener">News</a></nav>`;
 }
 
@@ -1043,39 +1055,44 @@ ${pagerHtml}
 </div>`;
 }
 
-function companiesShell(total, staticIndex = "") {
+// Shared shell for every registry view — /companies/, /cuas-systems/ and /research/.
+// The three differ only in their dataset, their copy and which tab is lit, so the markup
+// lives here once instead of drifting between near-identical copies.
+function registryShell({ path, label, kicker, h1, desc, ogDesc, lead = "", dataSrc = "", sanctioned = false, staticIndex = "" }) {
+  const tab = (href, text) =>
+    `<a class="news-link${href === path ? " active" : ""}" href="${href}">${text}</a>`;
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Companies · xSonomy</title>
-<meta name="description" content="Directory of ${total} UAV and counter-UAS companies — type, HQ country, headcount, revenue and valuation. Filter by type and region.">
-<link rel="canonical" href="${SITE}/companies/">
+<title>${esc(label)} · xSonomy</title>
+<meta name="description" content="${desc}">
+<link rel="canonical" href="${SITE}${path}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
-<meta property="og:title" content="Companies · xSonomy"><meta property="og:url" content="${SITE}/companies/">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta property="og:title" content="${esc(label)} · xSonomy"><meta property="og:url" content="${SITE}${path}">
+${ogDesc ? `<meta property="og:description" content="${ogDesc}">\n` : ""}<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/assets/companies.css">
 <style>${LIST_CSS}</style>
-${GA_TAG}</head><body>
+${GA_TAG}</head><body${dataSrc ? ` data-src="${dataSrc}"` : ""}>
 <header class="site-header"><div class="wrap">
   <div class="brand">xSonomy</div>
   ${shellTabs()}
-  <a class="news-link" href="/cuas-systems/">C-UAS Vendors</a>
-  <a class="news-link active" href="/companies/">Companies</a>
+  ${tab("/cuas-systems/", "C-UAS Vendors")}
+  ${tab("/companies/", "Companies")}
+  ${tab("/research/", "Research")}
   <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
 </div></header>
 <main class="wrap layout">
   <aside class="filters" aria-label="Filters">
     <div class="search-box"><input id="cosearch" type="search" placeholder="Search company or country…" autocomplete="off"></div>
     <div id="cofacets"></div>
-    <label class="cotoggle"><input id="cosanc" type="checkbox"> Sanctioned companies</label>
-    <button id="coreset" class="reset" type="button">Reset filters</button>
+${sanctioned ? `    <label class="cotoggle"><input id="cosanc" type="checkbox"> Sanctioned companies</label>\n` : ""}    <button id="coreset" class="reset" type="button">Reset filters</button>
   </aside>
   <section class="results">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> Companies</nav>
-    <div class="cokick">// Company Registry</div>
-    <h1 class="coh1">Companies</h1>
-    <div id="cocount" class="cocount"></div>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> ${esc(label)}</nav>
+    <div class="cokick">${kicker}</div>
+    <h1 class="coh1">${esc(h1)}</h1>
+${lead ? `    <p class="colead">${lead}</p>\n` : ""}    <div id="cocount" class="cocount"></div>
     <div id="cogrid">${staticIndex}</div>
     <div id="copager" class="copager"></div>
   </section>
@@ -1084,48 +1101,40 @@ ${GA_TAG}</head><body>
 </body></html>`;
 }
 
+// The supplier registry. Research and academic organisations are counted and listed
+// separately at /research/, so this total is suppliers only.
+function companiesShell(total, researchTotal, staticIndex = "") {
+  return registryShell({
+    path: "/companies/", label: "Companies", kicker: "// Company Registry", h1: "Companies",
+    desc: `Directory of ${total} UAV and counter-UAS companies — type, HQ country, headcount, revenue and valuation. Filter by type and region.`,
+    lead: `Manufacturers, suppliers and integrators. ${num(researchTotal)} universities, national laboratories and research institutes are listed separately under <a href="/research/">Research</a>.`,
+    sanctioned: true, staticIndex,
+  });
+}
+
 // Integrated C-UAS registry page. Same shell, filters and table as /companies/,
 // pointed at the cuas-integrated subset via <body data-src>.
 function cuasShell(total, staticIndex = "") {
-  return `<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>C-UAS Vendors · xSonomy</title>
-<meta name="description" content="${total} counter-UAS companies — integrated systems, detection, mitigation and command &amp; control. Filter by capability, type, region and country.">
-<link rel="canonical" href="${SITE}/cuas-systems/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="xSonomy">
-<meta property="og:title" content="C-UAS Vendors · xSonomy"><meta property="og:url" content="${SITE}/cuas-systems/">
-<meta property="og:description" content="${total} counter-UAS companies, filterable by capability: integrated systems, detection, mitigation, command &amp; control.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/styles.css">
-<link rel="stylesheet" href="/assets/companies.css">
-<style>${LIST_CSS}</style>
-${GA_TAG}</head><body data-src="/data/cuas-systems.json">
-<header class="site-header"><div class="wrap">
-  <div class="brand">xSonomy</div>
-  ${shellTabs()}
-  <a class="news-link active" href="/cuas-systems/">C-UAS Vendors</a>
-  <a class="news-link" href="/companies/">Companies</a>
-  <a class="news-link" href="http://uav360.xyz/" target="_blank" rel="noopener">News</a>
-</div></header>
-<main class="wrap layout">
-  <aside class="filters" aria-label="Filters">
-    <div class="search-box"><input id="cosearch" type="search" placeholder="Search company or country…" autocomplete="off"></div>
-    <div id="cofacets"></div>
-    <button id="coreset" class="reset" type="button">Reset filters</button>
-  </aside>
-  <section class="results">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> C-UAS Vendors</nav>
-    <div class="cokick">// Counter-UAS</div>
-    <h1 class="coh1">C-UAS Vendors</h1>
-    <p class="colead">Companies working in counter-unmanned aircraft systems, grouped by what they supply: <b>Integrated</b> end-to-end systems, <b>Detection</b> sensors, <b>Mitigation</b> effectors, and <b>Command &amp; Control</b> software. Filter by capability on the left.</p>
-    <div id="cocount" class="cocount"></div>
-    <div id="cogrid">${staticIndex}</div>
-    <div id="copager" class="copager"></div>
-  </section>
-</main>
-<script type="module" src="/assets/companies.js"></script>
-</body></html>`;
+  return registryShell({
+    path: "/cuas-systems/", label: "C-UAS Vendors", kicker: "// Counter-UAS", h1: "C-UAS Vendors",
+    desc: `${total} counter-UAS companies — integrated systems, detection, mitigation and command &amp; control. Filter by capability, type, region and country.`,
+    ogDesc: `${total} counter-UAS companies, filterable by capability: integrated systems, detection, mitigation, command &amp; control.`,
+    lead: `Companies working in counter-unmanned aircraft systems, grouped by what they supply: <b>Integrated</b> end-to-end systems, <b>Detection</b> sensors, <b>Mitigation</b> effectors, and <b>Command &amp; Control</b> software. Filter by capability on the left.`,
+    dataSrc: "/data/cuas-systems.json", staticIndex,
+  });
+}
+
+// Research & academia. Universities, national laboratories and research institutes do
+// real UAV work and keep their pages and products, but they are not suppliers, so they
+// sit outside the company count rather than inflating it.
+function researchShell(total, staticIndex = "") {
+  return registryShell({
+    path: "/research/", label: "Research & academia", kicker: "// Research &amp; Academia", h1: "Research & academia",
+    desc: `${total} universities, national laboratories and research institutes working on uncrewed systems and counter-UAS — country, type and linked products.`,
+    ogDesc: `${total} universities, national laboratories and research institutes working on uncrewed and counter-UAS systems.`,
+    lead: `Universities, national laboratories and research institutes with work in uncrewed systems or counter-UAS. They are organisations, not suppliers, so they are counted here rather than in the <a href="/companies/">company registry</a>.`,
+    dataSrc: "/data/research.json", staticIndex,
+  });
 }
 
 // Merged-away slugs whose URLs are indexed. GitHub Pages cannot send a 301, so the
@@ -1257,21 +1266,28 @@ async function main() {
   console.log(`  Landscape: ${landscape.companies.length} included, published companies -> /landscape/`);
   urls.push(`${SITE}/landscape/`);
 
+  // The registry is suppliers only. Research and academic organisations keep their
+  // detail pages and their products, but they are listed and counted at /research/.
+  const suppliers = companies.filter((c) => !isResearchOrg(c));
+  const researchOrgs = companies.filter(isResearchOrg);
+
   // registry JSON stays lean: strip long-text/detail-only fields
-  const registry = companies.map(({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest);
-  await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(registry));
+  const lean = ({ id, description, overview, history, source_urls, legal_name, ...rest }) => rest;
+  await writeFile(join(OUT, "data", "companies.json"), JSON.stringify(suppliers.map(lean)));
   await mkdir(join(OUT, "companies"), { recursive: true });
 
   // Bar widths in the static registry pages are relative, so the scale has to come from
-  // the data. Left at 1 (the declared default) every bar renders full width.
-  const withSlug = companies.filter((c) => c.slug);
-  MAXREV = Math.max(1, ...withSlug.map((c) => Number(c.revenue_amount) || 0));
-  MAXVAL = Math.max(1, ...withSlug.map((c) => Number(c.valuation) || 0));
+  // the data. Left at 1 (the declared default) every bar renders full width. The scale
+  // spans both registries so a figure means the same width on either page.
+  const withSlug = suppliers.filter((c) => c.slug);
+  const allWithSlug = companies.filter((c) => c.slug);
+  MAXREV = Math.max(1, ...allWithSlug.map((c) => Number(c.revenue_amount) || 0));
+  MAXVAL = Math.max(1, ...allWithSlug.map((c) => Number(c.valuation) || 0));
 
   const CO_PER_PAGE = 100;
   const coTotalPages = Math.max(1, Math.ceil(withSlug.length / CO_PER_PAGE));
   const coPageUrls = [];
-  await writeFile(join(OUT, "companies", "index.html"), companiesShell(companies.length,
+  await writeFile(join(OUT, "companies", "index.html"), companiesShell(suppliers.length, researchOrgs.length,
     companyEntries(withSlug.slice(0, CO_PER_PAGE), listPager("/companies/", 1, coTotalPages),
       `Showing 1–${num(Math.min(CO_PER_PAGE, withSlug.length))} of ${num(withSlug.length)}` +
       (coTotalPages > 1 ? ` · page 1 of ${coTotalPages}` : ""))));
@@ -1295,7 +1311,8 @@ async function main() {
     urls.push(`${SITE}/companies/${c.slug}/`);
     coPages++;
   }
-  console.log(`  Companies: ${companies.length} rows -> /companies/ + ${coPages} detail pages`);
+  console.log(`  Companies: ${suppliers.length} suppliers -> /companies/ + ${coPages} detail pages ` +
+    `(${researchOrgs.length} research & academic organisations counted separately)`);
 
   // C-UAS view — same registry UI over every company in a cuas-* sector, with
   // the capability carried through as `cuas` for the on-page filter and column.
@@ -1319,6 +1336,17 @@ async function main() {
   // gated read. Loud, because it fails silently as a short list otherwise.
   if (cuasRegistry.length !== cuasCaps.size)
     console.warn(`  WARNING: ${cuasCaps.size} companies tagged cuas-* but only ${cuasRegistry.length} present in the companies fetch.`);
+
+  // Research & academia — the same registry UI over the organisations the company count
+  // excludes. Detail pages are shared with /companies/, so the list fits one static
+  // block and nothing here is reachable only by running the JavaScript.
+  await writeFile(join(OUT, "data", "research.json"), JSON.stringify(researchOrgs.map(lean)));
+  await mkdir(join(OUT, "research"), { recursive: true });
+  const researchWithSlug = researchOrgs.filter((c) => c.slug);
+  await writeFile(join(OUT, "research", "index.html"), researchShell(researchOrgs.length,
+    companyEntries(researchWithSlug, "", `${num(researchWithSlug.length)} organisations`)));
+  urls.push(`${SITE}/research/`);
+  console.log(`  Research & academia: ${researchOrgs.length} rows -> /research/`);
 
   // ---- Hubs: the app shell plus a static first page ----
   // Each hub keeps the filterable app, but now ships a heading, an intro, a record count
@@ -1367,7 +1395,7 @@ async function main() {
     .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(HOME_DESC)}"`)
     .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(HOME_DESC)}"`)
     .replace("<!--SECTION_INTRO-->", homeIntro())
-    .replace("<!--STATIC_INDEX-->", homeIndex(buckets, companies.length, cuasRegistry.length)));
+    .replace("<!--STATIC_INDEX-->", homeIndex(buckets, suppliers.length, cuasRegistry.length, researchOrgs.length)));
 
   // Stubs for merged-away URLs. Written after the real pages so a redirect can never
   // overwrite a live one, and kept out of the sitemap — they are not content.
