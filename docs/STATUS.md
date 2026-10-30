@@ -526,3 +526,40 @@ moved; products 3,528, companies 2,466 and landscape 567 all unchanged.
 it. A new end-to-end test, `scripts/test/company-product-links.test.mjs`, covers both shapes — a
 name shared across two buckets and one shared inside a single bucket where `slugify` appends
 `-2` — and was confirmed to fail against the old name-keyed lookup. `npm test` 17 of 17.
+
+## 2026-10-30 — 19 entity-extraction errors removed from the catalogue (PUBLISH_STATUS change)
+
+**Asked for by Nazar** on 2026-10-30. Logged here under rule 4 of CLAUDE.md.
+
+Records that are not companies — publications, universities, an NGO, an industry cluster, a
+procurement platform, an accelerator, a recruiter, an acquisition vehicle, a membership
+association, two research institutes, three composite slash-name labels and one product line —
+were `live` in the public catalogue. They are now `draft`, so they no longer render.
+
+- Companies live: **2,466 → 2,447** (19 removed).
+- Products live: **3,528 → 3,521** (7 removed — the artefact products belonging to those records,
+  such as the GOKTURK-3, PRISMA and COSMO-SkyMed satellites. Leaving them live would have added
+  seven more ownerless products to the public site).
+- Changed field: `publication_status` and `updated_at` only. **Nothing was deleted.**
+- Landscape unchanged at **567**; all 567 verified companies still published; the 36 products
+  published yesterday all still live.
+- Prior statuses and a ready-to-run rollback:
+  `xsonomy-news/research-agent/reports/2026-10-30-entity-error-removal-manifest.csv` and
+  `...-removal-rollback.sql`.
+
+Their nineteen URLs now 404. That is the intended outcome — these pages should not exist — and no
+redirect was created, because there is nowhere correct to send a reader. No `slug_redirects` row
+pointed at any of them.
+
+**Four records were deliberately kept.** ams OSRAM, Aston Harald Composite, JFG Composites and
+Klaveness were excluded from the landscape on merits, not because the record is wrong. They are
+real companies and belong in a company catalogue even when they are out of this landscape's scope.
+
+**The pattern is wider than this list.** A sweep of the live catalogue found **22 composite
+slash-name records** (only 3 were caught by the European work; others include Northrop Grumman /
+IAI and Shahed Aviation Industries / HESA, though some slash names are legitimate single entities
+such as the Thales / Elbit U-TacS joint venture) and **about 40 live universities and research
+institutes** (Harvard, Duke, Yale School of Public Health, University of Tokyo, DLR, TNO,
+Fraunhofer IDMT and others). Removing Rzeszów, Porto, TUBITAK UZAY and Laser Zentrum Hannover
+while those stay live is inconsistent. Whether a university or research institute belongs in this
+catalogue at all is a policy question that has not been answered, and it was not answered here.
