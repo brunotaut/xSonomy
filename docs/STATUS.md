@@ -651,3 +651,46 @@ names vehicles inside prose notes, and parsing entity names out of sentences wou
 invention. And the dataset itself calls the 21 "candidates, not completed editorial
 approval" — they were promoted so the export has content; reverting them to `review` is one
 SQL statement, recorded in the report.
+
+---
+
+## 2026-10-30 — the 11 pending organisation-type corrections are applied
+
+The membership corrections left pending by the entry above are done. Nazar approved the
+exact 11 `company_type` changes and the rebuild; this entry records the execution.
+
+**The write route worked this time.** The earlier session's refusal was not circumvented —
+the same guarded statement was applied through the permitted migration route, as
+`research_academia_class_membership_corrections`.
+
+Before applying, each of the 11 was rechecked against the live record: **zero drift**, all
+eleven still `live`, all eleven still needing the change. A dry run projected exactly
+11 rows, 2,410 suppliers, 37 research organisations and landscape 567 — which is what the
+apply produced.
+
+| | Before | After |
+|---|---|---|
+| `/companies/` suppliers | 2,411 | **2,410** |
+| `/research/` organisations | 36 | **37** |
+| Live companies | 2,447 | 2,447 (unchanged) |
+| Landscape membership | 567 | **567** (unchanged) |
+| Live products | 3,521 | 3,521 (unchanged) |
+
+**Five records left `/research/` because they are not research organisations**: CASC /
+CAAA → `state_owned`, Chengdu Aircraft Design and Research Institute → `division`, NPO
+Android Technology → `sme`, **Roke Manor Research → `division`** (a Chemring-owned
+engineering firm; "Research" is its trading name), SGS-CSTC → `jv`. **Six universities
+joined it** because they carried no type at all: Central Michigan, Embry-Riddle, Peking,
+Hong Kong, Maryland, Pennsylvania.
+
+**Roke Manor Research is in the published landscape and stayed there.** Membership runs on
+reconciled merits, not entity type, so retyping it moved which registry lists it and
+nothing else.
+
+`company_type` and `updated_at` were the only columns written. No publication change, no
+reinstatement, no merge, no ownership change, no deletion, no slug change — none of which
+this instruction authorised. A rerun of the statement now matches **0 rows**. Tests 22/22.
+
+Applied manifest, before-values and a ready-to-run rollback:
+`xsonomy-news/research-agent/reports/2026-10-30-research-academia-class-applied.csv`,
+`...-class-rollback.sql`, and the execution report `...-class-execution.md`.
