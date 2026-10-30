@@ -556,7 +556,7 @@ async function fetchCuasCapabilities() {
 // products on its detail page. Light: three columns only.
 async function fetchCompanyProducts() {
   return sbFetchAll("products", {
-    select: "name,category,company_id",
+    select: "id,name,category,company_id",
     order: "name.asc,id.asc",
     ...(PUBLISH_STATUS ? { publication_status: `eq.${PUBLISH_STATUS}` } : {}),
   }, "products(light)");
@@ -1177,10 +1177,17 @@ async function main() {
   const buckets = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, []]));
   const newsBySlug = new Map();
   const creditBySlug = new Map();
+  // product id -> its built page URL, filled here because this is the only place the
+  // database id and the generated slug are both in hand; `reshape` does not carry the
+  // id into the row. Keyed on id, never on name: two live products may share a name
+  // exactly (Komodo, HAWK), and keying on name made both owners' pages link to
+  // whichever was written last.
+  const pageUrlByProduct = new Map();
   for (const p of products) {
     const bucket = BUCKET_OF[p.category] || "other";
     const row = reshape(p);
     row.slug = slugify(row.Name || "item", bucket);
+    pageUrlByProduct.set(p.id, `/${bucket}/${row.slug}/`);
     Object.assign(row, taxonomy.get(p.id) || {});
     // Normalised status is UAV-only and always present, so "N/A" is a real bucket
     // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
@@ -1231,15 +1238,12 @@ async function main() {
   const companies = await fetchCompanies();
   const lightProducts = await fetchCompanyProducts();
 
-  // product-name → built page URL (only UAV/Sensor products have pages)
-  const pageUrlByProduct = new Map();
-  for (const [bucket, rows] of Object.entries(buckets))
-    for (const row of rows) pageUrlByProduct.set(row.Name, `/${bucket}/${row.slug}/`);
+  // pageUrlByProduct was filled while the pages were generated, above.
   const prodsByCompany = new Map();
   for (const p of lightProducts) {
     if (!p.company_id) continue;
     const arr = prodsByCompany.get(p.company_id) || [];
-    arr.push({ name: p.name, category: p.category, url: pageUrlByProduct.get(p.name) || null });
+    arr.push({ name: p.name, category: p.category, url: pageUrlByProduct.get(p.id) || null });
     prodsByCompany.set(p.company_id, arr);
   }
 
