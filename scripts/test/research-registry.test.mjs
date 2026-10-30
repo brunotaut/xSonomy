@@ -37,6 +37,7 @@ test('universities and research institutes leave the company count but keep thei
     company_sectors: companies.map((c) => ({ company_id: c.id, sector_id: 'i', source_urls: [] })),
     landscape_candidates: companies.map((c) => ({ company_id: c.id, status: 'included' })),
     product_taxonomy_view: [], article_products: [], articles: [], slug_redirects: [],
+    v_landscape_investors: [], v_investor_country_reviews: [],
   };
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');

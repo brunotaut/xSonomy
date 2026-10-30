@@ -11,7 +11,7 @@ import { fixture } from './landscape-fixture.mjs';
 test('whole static generator emits the gated landscape, analytics and sitemap from a read-only API',async()=>{
   const root=await mkdtemp(join(tmpdir(),'xsonomy-build-'));
   const f=fixture(); const requests=[];
-  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[]};
+  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[],v_landscape_investors:[],v_investor_country_reviews:[]};
   const server=createServer((req,res)=>{
     requests.push({method:req.method,url:req.url});
     const url=new URL(req.url,'http://localhost'); const table=url.pathname.split('/').pop();

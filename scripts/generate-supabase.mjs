@@ -14,7 +14,7 @@ import { mkdir, rm, cp, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchLandscape } from "./lib/landscape.mjs";
+import { fetchLandscape, fetchLandscapeInvestors } from "./lib/landscape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -1259,6 +1259,22 @@ async function main() {
   // The landscape is the reconciled public subset, not the general registry.
   // Fail closed if its source tables cannot be read; never substitute all companies.
   const landscape = await fetchLandscape(sbFetchAll, companies, prodsByCompany);
+
+  // Approved investor research records ride the same pipeline but land in their own file,
+  // so the map payload does not carry them; landscape.json points at it. Investors are a
+  // different kind of organisation from the companies in the landscape and are never
+  // mixed into its membership.
+  const investors = await fetchLandscapeInvestors(sbFetchAll);
+  await writeFile(join(OUT, "data", "landscape-investors.json"), JSON.stringify(investors));
+  landscape.investors = {
+    count: investors.investors.length,
+    locations: investors.investors.reduce((n, i) => n + i.locations.length, 0),
+    url: "/data/landscape-investors.json",
+    membership: investors.membership,
+  };
+  console.log(`  Investors: ${investors.investors.length} approved, ` +
+    `${landscape.investors.locations} locations -> /data/landscape-investors.json`);
+
   await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
   const landscapePath = join(OUT, "landscape", "index.html");
   await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))

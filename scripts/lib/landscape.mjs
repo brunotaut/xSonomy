@@ -72,3 +72,89 @@ export function buildLandscape({ companies, candidates, countries, sectors, assi
 function isWebUrl(value) {
   try { return ['https:', 'http:'].includes(new URL(value).protocol); } catch { return false; }
 }
+
+// ---- Investor research export ----
+// A separate export, built by the same pipeline and pointed to from landscape.json, so
+// the map payload does not grow for consumers that only want companies.
+//
+// Only `approved` rows reach this: the staging layer holds all 106 research records, and
+// approval requires a validated city-level location. The caveats are carried in the
+// payload rather than left in a report, because every one of them is a mistake a consumer
+// would otherwise make: a country association is an index entry, not a headquarters or an
+// eligibility claim; a coordinate is a city centroid, not an office; a published ticket
+// range is not available capital; and an empty field means "not established", never zero.
+export const INVESTOR_EXPORT = 'european-defence-investors';
+
+export async function fetchLandscapeInvestors(sbFetchAll) {
+  const [investors, reviews] = await Promise.all([
+    sbFetchAll('v_landscape_investors', { select: '*', order: 'name.asc' }, 'investors'),
+    sbFetchAll('v_investor_country_reviews', { select: '*', order: 'country.asc' }, 'investor country reviews'),
+  ]);
+  return buildLandscapeInvestors({ investors, reviews });
+}
+
+export function buildLandscapeInvestors({ investors, reviews }) {
+  const records = investors.map((r) => {
+    const locations = (r.locations || []).map((l) => ({
+      city: l.city, country: l.country,
+      latitude: l.latitude, longitude: l.longitude,
+      // An operational office, a contact address, a meeting venue and a legal
+      // registration are different facts; the kind is what keeps them apart.
+      kind: l.kind, precision: l.precision,
+      sources: (l.sources || []).filter((s) => isWebUrl(s.url)),
+    }));
+    // Approval required one, so an empty list here means the projection or the approval
+    // gate has drifted. Fail loudly rather than publish a record with nowhere to put it.
+    if (!locations.length) throw new Error(`Approved investor ${r.slug} has no location.`);
+    return {
+      id: r.id, slug: r.slug, name: r.name,
+      entityType: r.entity_type || null,
+      evidenceStatus: r.evidence_status,
+      evidenceStatusLabel: r.evidence_status_label || null,
+      evidenceBasis: r.evidence_basis || null,
+      uavReviewPriority: r.priority_for_uav_review || null,
+      stages: r.stages || [], focus: r.focus || [],
+      selectedPortfolio: r.selected_portfolio || [],
+      investmentGeography: r.investment_geography || [],
+      ticket: r.ticket_currency ? {
+        currency: r.ticket_currency, minimum: r.ticket_minimum, maximum: r.ticket_maximum,
+        basis: r.ticket_basis, source: isWebUrl(r.ticket_source_url) ? r.ticket_source_url : null,
+      } : null,
+      legalDomicile: r.legal_domicile_country ? {
+        country: r.legal_domicile_country, precision: r.legal_domicile_precision,
+        note: r.legal_domicile_note,
+      } : null,
+      countryAssociations: r.country_associations || [],
+      researchNote: r.research_note || null,
+      missingFields: r.missing_fields || [],
+      verifiedAsOf: r.verified_as_of || null,
+      // The investor already in the catalogue that this record describes, where one
+      // exists. A link, not a merge: that row is unchanged.
+      matchedInvestorId: r.matched_investor_id || null,
+      sources: (r.sources || []).filter((s) => isWebUrl(s.url)),
+      locations,
+    };
+  });
+  return {
+    edition: INVESTOR_EXPORT, generatedAt: new Date().toISOString(),
+    membership: 'Approved investor research records: a confirmed deal or a stated mandate, ' +
+      'with a published city-level location, an evidence URL and a review date.',
+    caveats: {
+      countryAssociations: investors[0]?.country_association_meaning ||
+        'Research index; not a verified headquarters, legal domicile or eligibility field.',
+      coordinates: 'Approximate city centroids, not exact office locations.',
+      locationKinds: 'Published offices, contact addresses, meeting locations and legal ' +
+        'registrations are distinct and are not interchangeable.',
+      tickets: 'Published investment or financing ranges; not a guarantee of available capital.',
+      fundSizes: 'Deliberately omitted: targets, commitments and AUM are not comparable.',
+      emptyFields: 'An absent value means not established, never zero.',
+      classification: 'Adjacent investors, unverified candidates and financial programmes are ' +
+        'classified separately from confirmed deals and stated mandates, and are not approved here.',
+    },
+    countryReviews: reviews.map((c) => ({
+      country: c.country, name: c.name_en, status: c.status,
+      note: c.note_en, reviewedAt: c.reviewed_at, recordCount: c.record_count,
+    })),
+    investors: records,
+  };
+}
