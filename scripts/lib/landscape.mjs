@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 // Read-only projection of the reconciled working edition. Never publishes drafts
 // or recomputes research verdicts from loose product/category/name matches.
 export const LANDSCAPE = 'europe-uav-cuas-2026';
@@ -90,7 +91,16 @@ export async function fetchLandscapeInvestors(sbFetchAll) {
     sbFetchAll('v_landscape_investors', { select: '*', order: 'name.asc' }, 'investors'),
     sbFetchAll('v_investor_country_reviews', { select: '*', order: 'country.asc' }, 'investor country reviews'),
   ]);
-  return buildLandscapeInvestors({ investors, reviews });
+  const result = buildLandscapeInvestors({ investors, reviews });
+  const supplement = JSON.parse(readFileSync(new URL('./investor-directory.json', import.meta.url), 'utf8'));
+  const approved = new Map(result.investors.map(i => [i.slug, i]));
+  result.investors = supplement.map(i => ({...i, ...approved.get(i.slug), ukraineRelated:i.ukraineRelated}));
+  for (const i of approved.values()) if (!result.investors.some(r => r.slug === i.slug)) result.investors.push(i);
+  result.investors.sort((a,b) => a.name.localeCompare(b.name));
+  result.membership = 'Investor research directory including confirmed investments, stated mandates, adjacent investors, unverified candidates and separately labelled funding programmes.';
+  result.caveats.classification = 'Evidence status is shown per record. Inclusion does not imply verification or current investment availability.';
+  result.caveats.coordinates = 'City markers use approximate city centres. Hollow markers show a country research association, not an office or headquarters.';
+  return result;
 }
 
 export function buildLandscapeInvestors({ investors, reviews }) {

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-38a1ee1dfbb0.js';
+import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-58cae5f1d1d2.js';
 // Shaped exactly like /data/landscape-investors.json so the atlas is tested against the
 // export it actually consumes, including the fields the research layer may leave empty.
 const loc=(city,country,kind='published_office_or_contact_city')=>({city,country,latitude:50,longitude:10,kind,precision:'approximate_city_centroid',sources:[{url:'https://example.com/contact',title:'Contact',accessedAt:'2026-10-30'}]});
@@ -64,7 +64,15 @@ test('investor filters survive a URL round trip',()=>{
 
 test('the investor export is validated before it is drawn',()=>{
  assert.equal(validateInvestors(V),V);
- assert.throws(()=>validateInvestors({investors:[{slug:'x',name:'X',locations:[]}]}),/Invalid investor export/);
+ assert.equal(validateInvestors({investors:[{slug:'x',name:'X',locations:[]}]}).investors.length,1);
  assert.throws(()=>validateInvestors({investors:[{slug:'x',name:'X',locations:[{country:'DE',latitude:null,longitude:10}]}]}));
  assert.throws(()=>validateInvestors({}));
 });
+
+ test('unverified country-only records and Ukraine linkage remain discoverable',()=>{
+ const data={investors:[{slug:'candidate',name:'Candidate',locations:[],countryAssociations:['UA'],ukraineRelated:true}]};
+ assert.equal(filterInvestors(data,S({countries:['UA']})).length,1);
+ assert.equal(filterInvestors(data,S({ukraineOnly:true})).length,1);
+ assert.equal(filterInvestors(data,S({countries:['DE']})).length,0);
+ assert.equal(readState('#'+encodeURIComponent(JSON.stringify(S({ukraineOnly:true})))).ukraineOnly,true);
+ });

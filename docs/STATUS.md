@@ -815,3 +815,5 @@ and **DORCUS is not an Exail product at all**. `iXblue` is still unresolved.
 
 Review and exact-ID corrections:
 `xsonomy-news/research-agent/reports/2026-10-31-exail-rescreen.md`.
+### 2026-10-31 — expanded investor directory
+User authorised inclusion of unverified investor candidates and the supplied Ukraine workbook. Added 118 research records (106 previous + 12 distinct additions), with 26 Ukraine-linked records. Approved DB records take precedence; the supplemental research dataset does not mutate Supabase. Private OSY Fly fit/outreach notes are omitted. Country association markers are explicitly not offices. US-only investors remain in the directory. Added direct list URL and Ukraine-linked toggle.
