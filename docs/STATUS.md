@@ -694,3 +694,46 @@ this instruction authorised. A rerun of the statement now matches **0 rows**. Te
 Applied manifest, before-values and a ready-to-run rollback:
 `xsonomy-news/research-agent/reports/2026-10-30-research-academia-class-applied.csv`,
 `...-class-rollback.sql`, and the execution report `...-class-execution.md`.
+
+## 2026-10-31 — The investor layer on /landscape/ now shows the real records
+
+The Atlas investor layer was a single fictional record, `Example Ventures` in Paris, gated
+off behind `data-demo="false"`. It now reads the approved export the import produced,
+`/data/landscape-investors.json`: **21 investors across 38 published locations in 17
+countries**, the counts read from the file rather than written into the code.
+
+Investors are a different organisation class from the companies, and the page keeps them
+apart. The headline figures swap labels in the investor section — approved investor
+records, countries with investor locations, matching investors and their locations — and
+never join the 567 landscape companies, the primes or the 37 research organisations.
+**One investor is one identity however many locations it publishes**, so the record count
+and the location count are always reported separately.
+
+What the map shows: one marker per matching published location, filled for an office or
+contact city and hollow for a meeting location, with the existing spiral placement keeping
+every overlapping marker selectable — London and Munich each carry two investors. Markers
+are keyboard-reachable buttons whose labels name the kind and say the coordinate is an
+approximate city centre.
+
+Filters are synchronised between map and list: search over investor names and portfolio
+companies, country of **published location**, investor type, stage and technology focus,
+all preserved in the URL hash the page already used. Published stage ranges
+("Pre-seed–B", "Seed–B+", "Stage-agnostic") are read onto one ladder so a stage filter can
+work at all; cards keep the published wording, and a record with no published stage stays
+filterable as *Not established* rather than being folded into a guess.
+
+The caveats the import recorded travel with the data onto the page: `countryAssociations`
+is shown as a research index and never as headquarters or investment geography, a stated
+mandate is never presented as a confirmed investment, a portfolio mention is never
+presented as a verified relationship to a similarly named catalogue company, and a
+published ticket range is never presented as available capital.
+
+The investor export is fetched separately from `landscape.json`. If it fails the company
+layer is untouched: the status line says so, a retry button appears, the investor layer
+and legend withdraw, and a failed *refresh* keeps the records already on screen instead of
+blanking them.
+
+No database records were changed, the import was not repeated and publication eligibility
+is unchanged. Company filters, counts and the map itself are as they were — 567 companies,
+29 countries, 252 counter-UAS, 15 counter-UAS primes, 37 capability bars. Tests 29/29
+(seven new in `scripts/test/atlas-investors.test.mjs`).
