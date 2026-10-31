@@ -737,3 +737,41 @@ No database records were changed, the import was not repeated and publication el
 is unchanged. Company filters, counts and the map itself are as they were — 567 companies,
 29 countries, 252 counter-UAS, 15 counter-UAS primes, 37 capability bars. Tests 29/29
 (seven new in `scripts/test/atlas-investors.test.mjs`).
+
+## 2026-10-31 — 13 composite-name records renamed
+
+The 12 approved Tier A renames plus the dependent row F (`Vega Radio Engineering
+Corporation`) are applied. Rechecked first against the live records: **zero drift** — every
+current name matched the package manifest exactly, all 13 were `live`, none carried any
+alias, and the collision dry run came back empty on all five checks (no name clash exact or
+normalised, no alias clash with another record, another alias or another company's name).
+
+The write was `companies.name` on 13 rows plus 11 `company_aliases` rows. **Nothing else.**
+A rerun now matches 0 rows.
+
+| | Before | After |
+|---|---|---|
+| Live companies | 2,447 | 2,447 |
+| `/companies/` suppliers | 2,410 | 2,410 |
+| `/research/` organisations | 37 | 37 |
+| **Landscape membership** | **567** | **567** |
+| Live products | 3,521 | 3,521 |
+| Live names containing `" / "` | 19 | **7** |
+
+**Every URL is unchanged.** Slugs were not touched, and company pages are keyed on `slug`,
+so nothing moved and no redirect was needed (rule 3 satisfied by doing nothing). Product
+pages derive their slug from the product name, so they did not move either. `Meridian` and
+`UAV Tactical Systems (U-TacS)` are still `included` in the landscape and `Brolis Defence
+Group` still `excluded` — membership is keyed on `company_id`, never on the name.
+
+Row F carries no alias deliberately: `(Luch Design Bureau, Rybinsk)` was wrongly appended to
+the parent's name — KB Luch is Vega's subsidiary, not another name for it — so keeping it
+would preserve the error rather than the history.
+
+The 7 names still containing `" / "` are exactly the unauthorised records: 1 merge, 3
+unpublish/reassign, 2 held and ECA Group / Infotron. No publication change, no
+reinstatement, no merge, no deletion, no ownership change, no slug change.
+
+Execution report, before-values and rollback:
+`xsonomy-news/research-agent/reports/2026-10-31-composite-renames-execution.md`,
+`...-composite-renames.sql`, `...-composite-renames-rollback.sql`.
