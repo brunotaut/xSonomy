@@ -775,3 +775,43 @@ reinstatement, no merge, no deletion, no ownership change, no slug change.
 Execution report, before-values and rollback:
 `xsonomy-news/research-agent/reports/2026-10-31-composite-renames-execution.md`,
 `...-composite-renames.sql`, `...-composite-renames-rollback.sql`.
+
+## 2026-10-31 — Exail re-screened; a landscape change is proposed, not made
+
+Option E2 was taken: **ECA Group / Infotron was not merged into Exail.** Exail was
+re-screened first, against the full landscape criteria rather than aircraft manufacturing
+alone. Nothing was written — this is a proposal awaiting a decision.
+
+**The finding.** Exail was excluded on the test *"is it an aerial UAV OEM"*. That is not
+the test the landscape uses. The taxonomy has a whole UAV Ecosystem branch, and the
+landscape already includes suppliers who build no aircraft: **SBG Systems** (French,
+inertial navigation, included) and **Civitanavi** (Italian, whose own record reads *"an
+ecosystem supplier, not a UAV OEM"*, included). Excluding Exail while including its French
+competitor for the same capability is not defensible.
+
+**Current, Exail-owned, aerial evidence** — the thing the exclusion note said it was
+waiting for: Exail's **UmiX-40 IMU was selected for the navigation system of the Airbus
+SIRTAP tactical UAS** (12 May 2025, Exail's own newsroom). Exail's product range carries a
+*"Land and air navigation & pointing"* category today.
+
+**Three of yesterday's four findings were wrong**, and this corrects them. The newest IT180
+material is not a 2015 ECA release — an Exail item of 1 July 2023 calls the IT180-60 *"its"*
+aerial drone and quotes the Director of Exail's *Land and Air robotics division*. And the
+UMIS datasheet does not merely integrate third-party UAVs: it lists UAVs among Exail's own
+toolbox vehicles and says Exail provides unmanned systems *"at sea and in the air"*.
+
+**Recommended:** admit Exail as a Navigation / GNSS + Components ecosystem supplier — not
+as a UAV OEM — adding the two sector rows in the same change, because Exail has **zero**
+taxonomy rows and the build skips any company without one, so flipping the status alone
+would leave the page and the database disagreeing.
+
+**The count, not steered.** Admitting Exail: 567 → **568**. Merging ECA into Exail
+afterwards: 568 → **567**. Merging without admitting Exail: 567 → **566**. The 567 that
+falls out of the first two is a coincidence of two independent decisions, **not a target**.
+
+Also found and not fixed: 12 Exail products are mis-categorised as UAVs (all maritime),
+3 are duplicate bare designations, 2 are family names held as products, 1 has no source,
+and **DORCUS is not an Exail product at all**. `iXblue` is still unresolved.
+
+Review and exact-ID corrections:
+`xsonomy-news/research-agent/reports/2026-10-31-exail-rescreen.md`.
