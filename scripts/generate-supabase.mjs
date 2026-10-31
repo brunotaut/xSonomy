@@ -1148,8 +1148,8 @@ async function fetchRedirects() {
   return sbFetchAll("slug_redirects", { select: "from_slug,to_slug,kind", order: "from_slug.asc" }, "slug_redirects");
 }
 
-function redirectPage(from, to, kind) {
-  const target = `/${kind === "product" ? "uav" : "companies"}/${to}/`;
+function redirectPage(from, to, section) {
+  const target = `/${section}/${to}/`;
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Moved &middot; xSonomy</title>
@@ -1192,11 +1192,17 @@ async function main() {
   // exactly (Komodo, HAWK), and keying on name made both owners' pages link to
   // whichever was written last.
   const pageUrlByProduct = new Map();
+  // generated product slug -> the section it was built into. A product redirect has to
+  // land in the same section as its target: products live under /uav/, /cuas/,
+  // /sensors/, /software/ or /other/ depending on `category`, so a redirect cannot
+  // assume one of them.
+  const sectionByProductSlug = new Map();
   for (const p of products) {
     const bucket = BUCKET_OF[p.category] || "other";
     const row = reshape(p);
     row.slug = slugify(row.Name || "item", bucket);
     pageUrlByProduct.set(p.id, `/${bucket}/${row.slug}/`);
+    sectionByProductSlug.set(row.slug, bucket);
     Object.assign(row, taxonomy.get(p.id) || {});
     // Normalised status is UAV-only and always present, so "N/A" is a real bucket
     // rather than a gap. Kept out of the detail-page spec table by HIDDEN — those
@@ -1418,13 +1424,21 @@ async function main() {
   const redirects = await fetchRedirects();
   let stubs = 0;
   for (const r of redirects) {
-    const dir = join(OUT, r.kind === "product" ? "uav" : "companies", r.from_slug);
+    // A product redirect is only meaningful if its target was actually built: an
+    // unresolved one would otherwise be guessed into the wrong section and left as a
+    // stub pointing nowhere. Saying so is more useful than writing a dead page.
+    const section = r.kind === "product" ? sectionByProductSlug.get(r.to_slug) : "companies";
+    if (!section) {
+      console.warn(`  WARNING: redirect ${r.from_slug} -> ${r.to_slug} has no live target — skipped`);
+      continue;
+    }
+    const dir = join(OUT, section, r.from_slug);
     if (existsSync(join(dir, "index.html"))) {
       console.warn(`  WARNING: redirect ${r.from_slug} collides with a real page — skipped`);
       continue;
     }
     await mkdir(dir, { recursive: true });
-    await writeFile(join(dir, "index.html"), redirectPage(r.from_slug, r.to_slug, r.kind));
+    await writeFile(join(dir, "index.html"), redirectPage(r.from_slug, r.to_slug, section));
     stubs++;
   }
   console.log(`  Redirects: ${stubs} stub page${stubs === 1 ? "" : "s"}`);

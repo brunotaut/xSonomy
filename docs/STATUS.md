@@ -817,3 +817,49 @@ Review and exact-ID corrections:
 `xsonomy-news/research-agent/reports/2026-10-31-exail-rescreen.md`.
 ### 2026-10-31 — expanded investor directory
 User authorised inclusion of unverified investor candidates and the supplied Ukraine workbook. Added 118 research records (106 previous + 12 distinct additions), with 26 Ukraine-linked records. Approved DB records take precedence; the supplemental research dataset does not mutate Supabase. Private OSY Fly fit/outreach notes are omitted. Country association markers are explicitly not offices. US-only investors remain in the directory. Added direct list URL and Ukraine-linked toggle.
+
+## 2026-10-31 — Spotter Global's composite product record split, and a dead redirect path fixed
+
+The last loose end from the rename verification. Spotter Global's one live product row was
+named `AX250 · GAX500-3D` — two real radars in one record. Splitting it turned up something
+worse than the naming.
+
+**The row carried Robin Radar's specs.** Its figures contradicted themselves (5.4 kg *and*
+29 kg, 18 Hz *and* 30 rpm), and every odd value — `29 kg; 550 mm dia x 630 mm; 2x 12 W`,
+`1.0 s (30 rpm)`, `5 km` — matches Robin Radar Systems' **IRIS**, where they are still
+present and still correctly labelled. They had been copy-pasted across with the `IRIS`
+labels stripped, so the catalogue was publishing a Dutch competitor's radar as Spotter's,
+**at 20x the real detection range**: the AX250 reaches 250 m, not 5 km. Robin's own record
+is undamaged.
+
+Now two rows. The existing id stays with the **AX250** (so the record keeps its history),
+rebuilt from the SpotterRF AX-250-3D datasheet; **GAX500-3D** is a new row from Spotter's
+CH3D material. Both `live` — the GAX500-3D was already published inside the composite row,
+so leaving it `draft` would have *removed* live content. `PUBLISH_STATUS` untouched.
+Source URLs went from none to 2 and 4.
+
+**Unknown left as unknown.** The GAX500-3D has no published frequency band and Spotter never
+says whether CH3D has moving parts, so both fields are blank rather than guessed; the
+unsourced micro-Doppler claim and the unsourced price estimate are gone from both. No new
+filter values were invented.
+
+**The URL was saved, but only after fixing the generator.** Product URLs come from the
+product *name*, not `products.slug`, so `/sensors/ax250-gax500-3d/` could not survive the
+rename. The redirect machinery wrote every product stub to `/uav/` regardless of the
+product's section — for a sensor, a dead page pointing at another dead page. All 52
+existing redirects are company ones, so **this had never run**; this split is the first
+product redirect in the table. The section is now resolved from the target's own built page,
+and a product redirect with no live target is skipped with a warning instead of guessed.
+Redirects had no test coverage at all; there is now one that fails against the old generator.
+
+Live products 3,521 → 3,522, sensors 500 → 501, redirect stubs 52 → 53, tests 30 → 31 all
+passing. Landscape unaffected at **567** — membership is keyed on companies, not products.
+
+**Flagged, not fixed:** `IRIS · ELVIRA` (Robin Radar) and `EchoGuard / EchoShield (MESA)`
+(Echodyne) have the same two-products-one-row shape, and the first is the source of this
+contamination. The other ~114 records with `·` in the name are mostly deliberate portfolio
+entries and were left alone. Worth a sweep for other copy-paste contamination — this one
+was found by chance.
+
+Report, SQL and rollback:
+`xsonomy-news/research-agent/reports/2026-10-31-spotter-global-product-split.md`.
