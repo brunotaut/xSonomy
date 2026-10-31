@@ -858,8 +858,17 @@ passing. Landscape unaffected at **567** — membership is keyed on companies, n
 **Flagged, not fixed:** `IRIS · ELVIRA` (Robin Radar) and `EchoGuard / EchoShield (MESA)`
 (Echodyne) have the same two-products-one-row shape, and the first is the source of this
 contamination. The other ~114 records with `·` in the name are mostly deliberate portfolio
-entries and were left alone. Worth a sweep for other copy-paste contamination — this one
-was found by chance.
+entries and were left alone.
+
+Two sweeps over the radar records before closing out. Exact duplicate spec strings across
+companies: **none** — and that would not have caught this one either, because the pasted
+values had been partly edited, so string matching is the wrong detector. Sweeping instead for
+records that contradict *themselves* found one real defect: **`MAVERICK Fortress-3D`
+(Silentium Defence)** has an unresolved analyst note sitting in a published spec field —
+*"Note: 'MAVERICK/Fortress-3D' is a Silentium Defence passive radar; DeTect's drone radar is
+HARRIER…"* — and a rotating scan type against a passive-coherent-location modality, which
+cannot both be true. It looks like the same two-vendors-one-row confusion, between Silentium
+Defence and DeTect, and needs a re-screen rather than a tidy-up.
 
 Report, SQL and rollback:
 `xsonomy-news/research-agent/reports/2026-10-31-spotter-global-product-split.md`.
