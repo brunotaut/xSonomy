@@ -27,6 +27,7 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     await mkdir(join(root,'scripts/lib'),{recursive:true});
     await cp(new URL('../generate-supabase.mjs',import.meta.url),join(root,'scripts/generate-supabase.mjs'));
     await cp(new URL('../lib/landscape.mjs',import.meta.url),join(root,'scripts/lib/landscape.mjs'));
+    await cp(new URL('../lib/investor-profiles.mjs',import.meta.url),join(root,'scripts/lib/investor-profiles.mjs'));
     await cp(new URL('../lib/investor-directory.json',import.meta.url),join(root,'scripts/lib/investor-directory.json'));
     const {stdout}=await promisify(execFile)(process.execPath,['scripts/generate-supabase.mjs'],{cwd:root,env:{...process.env,SUPABASE_URL:`http://127.0.0.1:${server.address().port}`,SUPABASE_SERVICE_KEY:'test-only-secret'},timeout:30000});
     assert.match(stdout,/Landscape: 3 included, published/);

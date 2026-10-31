@@ -520,7 +520,27 @@
       }
     ],
     "locations": [],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "fund_size",
+        "display": "€214M",
+        "scope": "Vsquared Ventures II — final close",
+        "source": "https://www.ypog.law/en/press/ypog-advises-vsquared-ventures",
+        "asOf": "2024-06-13",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "aum",
+        "display": "Approximately €450M",
+        "scope": "Manager AUM at Fund II closing; historical figure",
+        "source": "https://www.ypog.law/en/press/ypog-advises-vsquared-ventures",
+        "asOf": "2024-06-13",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "alpine-space-ventures",
@@ -1268,7 +1288,36 @@
       }
     ],
     "locations": [],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "fund_size",
+        "display": "€25M",
+        "scope": "Dark Star Ventures Fund I — stated size; closing status not specified",
+        "source": "https://darkstar.ee/dark",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "ticket",
+        "display": "€0.5M–€1.5M",
+        "scope": "Published investment range",
+        "source": "https://darkstar.ee/dark",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "investment_count",
+        "display": "9",
+        "scope": "First year; three public investments, six undisclosed",
+        "source": "https://darkstar.ee/dark",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "smartcap",
@@ -1880,7 +1929,10 @@
       "Autonomy"
     ],
     "selectedPortfolio": [
-      "Kelluu"
+      "Kelluu",
+      "EclecticIQ",
+      "Intelic",
+      "Perciv AI"
     ],
     "countryAssociations": [
       "NL",
@@ -1936,7 +1988,28 @@
         ]
       }
     ],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "fund_size",
+        "display": "More than €150M",
+        "scope": "European Defence & Security Technology Fund — first close",
+        "source": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund",
+        "asOf": "2025-11-18",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "ticket",
+        "display": "€1M–€10M",
+        "scope": "Published investment range",
+        "source": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund",
+        "asOf": "2025-11-18",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ],
+    "portfolioSource": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund"
   },
   {
     "id": "secfund-bom",
@@ -2070,7 +2143,27 @@
         ]
       }
     ],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "aum",
+        "display": "€1B",
+        "scope": "Manager assets under management",
+        "source": "https://www.nif.fund/about/",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "ticket",
+        "display": "€3M–€15M",
+        "scope": "Initial investment; follow-on reserves separate",
+        "source": "https://www.nif.fund/about/",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "invest-nl",
@@ -3505,7 +3598,18 @@
       }
     ],
     "locations": [],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "ticket",
+        "display": "$500K–$1.5M",
+        "scope": "Initial investment",
+        "source": "https://d3.vc/",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "mits-capital-lightning-fund",
@@ -3578,9 +3682,15 @@
       "Autonomy"
     ],
     "selectedPortfolio": [
-      "MaXon Systems",
+      "Swarmer",
+      "BaBayte",
       "Claymore Industries",
-      "HIMERA"
+      "Falcons",
+      "GutSee Health",
+      "Himera",
+      "Kara Dag Technologies",
+      "MaXon Systems",
+      "Teletactica"
     ],
     "countryAssociations": [
       "UA",
@@ -3620,7 +3730,8 @@
         ]
       }
     ],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "portfolioSource": "https://www.greenflag.vc/portfolio"
   },
   {
     "id": "angel-one",
@@ -4206,7 +4317,18 @@
         ]
       }
     ],
-    "ukraineRelated": true
+    "ukraineRelated": true,
+    "financialMetrics": [
+      {
+        "kind": "fund_size",
+        "display": "€197M",
+        "scope": "Fund II — announced close; announcement date not established",
+        "source": "https://expeditionsfund.com/news",
+        "asOf": null,
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "otb-ventures",
@@ -4544,7 +4666,36 @@
     "locations": [],
     "sources": [],
     "researchNote": "Included in the supplied Ukraine-linked investor workbook; investment activity and location have not been independently verified.",
-    "sourceReference": "Ukraine_Defense_Tech_VC_Funds.xlsx, VC Funds - Ukraine Defense, row 25"
+    "sourceReference": "Ukraine_Defense_Tech_VC_Funds.xlsx, VC Funds - Ukraine Defense, row 25",
+    "financialMetrics": [
+      {
+        "kind": "fund_size",
+        "display": "€50M",
+        "scope": "Fund V — announced launch size",
+        "source": "https://flyerone.vc/post/posts/50m-fund-v-10-new-investments-and-an-exit-f1vs-2025",
+        "asOf": "2025",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "capital_deployed",
+        "display": "$46M",
+        "scope": "Cumulative investment over seven years; manager-wide, all sectors",
+        "source": "https://flyerone.vc/post/posts/50m-fund-v-10-new-investments-and-an-exit-f1vs-2025",
+        "asOf": "2025",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      },
+      {
+        "kind": "investment_count",
+        "display": "97 companies",
+        "scope": "Cumulative company count reported in 2025",
+        "source": "https://flyerone.vc/post/posts/50m-fund-v-10-new-investments-and-an-exit-f1vs-2025",
+        "asOf": "2025",
+        "checkedAt": "2026-10-31",
+        "status": "source_confirmed"
+      }
+    ]
   },
   {
     "id": "r-g-ai",

@@ -863,3 +863,5 @@ was found by chance.
 
 Report, SQL and rollback:
 `xsonomy-news/research-agent/reports/2026-10-31-spotter-global-product-split.md`.
+### 2026-10-31 — investor financial profiles and portfolio links
+Added separately typed source-backed financial metrics to seven investor profiles, with scope, dates and sources. No aggregate round sizes are attributed to a fund. Missing data remains explicitly not established. Portfolio links resolve only unique exact names in published database company rows, carrying company IDs/slugs; ambiguous and absent names remain unlinked. `docs/investor-portfolio-reconciliation.json` is the database owner's queue, including relationships and evidence. No Supabase rows were created in this read-only catalogue repository.

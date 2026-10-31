@@ -1,3 +1,4 @@
+import { enrichInvestorProfiles } from './lib/investor-profiles.mjs';
 // xSonomy catalogue generator.
 // Reads Supabase and writes the whole static site: per-category JSON for the
 // client-side grid, an SEO page per product, company pages, sitemap and robots.
@@ -1270,7 +1271,7 @@ async function main() {
   // so the map payload does not carry them; landscape.json points at it. Investors are a
   // different kind of organisation from the companies in the landscape and are never
   // mixed into its membership.
-  const investors = await fetchLandscapeInvestors(sbFetchAll);
+  const investors = enrichInvestorProfiles(await fetchLandscapeInvestors(sbFetchAll), companies);
   await writeFile(join(OUT, "data", "landscape-investors.json"), JSON.stringify(investors));
   landscape.investors = {
     count: investors.investors.length,

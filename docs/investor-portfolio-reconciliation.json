@@ -1,0 +1,1914 @@
+{
+  "asOf": "2026-10-31",
+  "instructions": "Resolve against all database companies, including drafts and aliases. These are not confirmed missing entities. Create only verified absent organisations, preserve existing identities, and keep non-UAV holdings outside the landscape. Store investor/company relationships and field-level evidence separately; do not infer investor contributions from round totals.",
+  "summary": {
+    "edges": 87,
+    "linked": 43,
+    "unresolvedEdges": 44,
+    "unresolvedNames": 38
+  },
+  "relationships": [
+    {
+      "investorSlug": "md-one-ventures",
+      "name": "Valarian",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn50search9",
+          "url": "https://uk.linkedin.com/company/md-one-ventures",
+          "title": "MD One Ventures | LinkedIn",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn27search11",
+          "url": "https://www.md-one.com/investments",
+          "title": "Investments - MD ONE",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "md-one-ventures",
+      "name": "Milvus",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn50search9",
+          "url": "https://uk.linkedin.com/company/md-one-ventures",
+          "title": "MD One Ventures | LinkedIn",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn27search11",
+          "url": "https://www.md-one.com/investments",
+          "title": "Investments - MD ONE",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "seraphim-space",
+      "name": "Mutable Tactics",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search0",
+          "url": "https://seraphim.vc/news/mutable-tactics-pre-seed/",
+          "title": "Mutable Tactics closes pre-seed funding round to help military defence drones operate as coordinated teams | Seraphim Space",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn44search1",
+          "url": "https://seraphim.vc/portfolio/",
+          "title": "Explore Seraphim’s SpaceTech Portfolio of Startups",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "seraphim-space",
+      "name": "ICEYE",
+      "companyId": null,
+      "companySlug": "iceye",
+      "url": "/companies/iceye/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search0",
+          "url": "https://seraphim.vc/news/mutable-tactics-pre-seed/",
+          "title": "Mutable Tactics closes pre-seed funding round to help military defence drones operate as coordinated teams | Seraphim Space",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn44search1",
+          "url": "https://seraphim.vc/portfolio/",
+          "title": "Explore Seraphim’s SpaceTech Portfolio of Startups",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "seraphim-space",
+      "name": "SatVu",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search0",
+          "url": "https://seraphim.vc/news/mutable-tactics-pre-seed/",
+          "title": "Mutable Tactics closes pre-seed funding round to help military defence drones operate as coordinated teams | Seraphim Space",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn44search1",
+          "url": "https://seraphim.vc/portfolio/",
+          "title": "Explore Seraphim’s SpaceTech Portfolio of Startups",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "plural",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search2",
+          "url": "https://www.pluralplatform.com/portfolio/helsing",
+          "title": "Helsing | Plural",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "baillie-gifford",
+      "name": "TEKEVER",
+      "companyId": null,
+      "companySlug": "tekever",
+      "url": "/companies/tekever/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn37search9",
+          "url": "https://www.tekever.com/news/tekever-raises-70-millions-euros-and-brings-strategic-investors-on-board/",
+          "title": "TEKEVER Raises 70 Millions Euros and Brings Strategic Investors on Board – Tekever",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sisyphus-ventures",
+      "name": "Stendr",
+      "companyId": null,
+      "companySlug": "stendr",
+      "url": "/companies/stendr/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn53search4",
+          "url": "https://www.vestbee.com/insights/articles/europes-defence-and-dual-use-investors",
+          "title": "Europe’s defence and dual-use investors | Vestbee",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sisyphus-ventures",
+      "name": "ZeroPhase",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn53search4",
+          "url": "https://www.vestbee.com/insights/articles/europes-defence-and-dual-use-investors",
+          "title": "Europe’s defence and dual-use investors | Vestbee",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sisyphus-ventures",
+      "name": "Tiberius Aerospace",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn53search4",
+          "url": "https://www.vestbee.com/insights/articles/europes-defence-and-dual-use-investors",
+          "title": "Europe’s defence and dual-use investors | Vestbee",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "helantic",
+      "name": "Fernride",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search8",
+          "url": "https://www.helantic.com/",
+          "title": "Helantic | European Defense & Deeptech Venture Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "helantic",
+      "name": "HyImpulse",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search8",
+          "url": "https://www.helantic.com/",
+          "title": "Helantic | European Defense & Deeptech Venture Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "helantic",
+      "name": "LiveEO",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search8",
+          "url": "https://www.helantic.com/",
+          "title": "Helantic | European Defense & Deeptech Venture Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "dtcp",
+      "name": "Quantum Systems",
+      "companyId": null,
+      "companySlug": "quantum-systems",
+      "url": "/companies/quantum-systems/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn29search1",
+          "url": "https://www.dtcp.capital/news-and-insights/detail/dtcp-launches-eur500-million-fund-for-defense-and-security-technologies-in-europe/",
+          "title": "DTCP Launches €500 Million Fund for Defence and Security Technologies in Europe - Digital Transformation Capital Partners GmbH",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn35search7",
+          "url": "https://sixrobotics.com/news/six-robotics-raises-%E2%82%AC12-million-to-scale-autonomy-for-unmanned-systems",
+          "title": "Six Robotics raises €12 million to scale autonomy for unmanned systems - Six Robotics",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "dtcp",
+      "name": "Six Robotics",
+      "companyId": null,
+      "companySlug": "six-robotics",
+      "url": "/companies/six-robotics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn29search1",
+          "url": "https://www.dtcp.capital/news-and-insights/detail/dtcp-launches-eur500-million-fund-for-defense-and-security-technologies-in-europe/",
+          "title": "DTCP Launches €500 Million Fund for Defence and Security Technologies in Europe - Digital Transformation Capital Partners GmbH",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn35search7",
+          "url": "https://sixrobotics.com/news/six-robotics-raises-%E2%82%AC12-million-to-scale-autonomy-for-unmanned-systems",
+          "title": "Six Robotics raises €12 million to scale autonomy for unmanned systems - Six Robotics",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "htgf",
+      "name": "Alpine Eagle",
+      "companyId": null,
+      "companySlug": "alpine-eagle",
+      "url": "/companies/alpine-eagle/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn41search10",
+          "url": "https://www.htgf.de/en/portfolio/htgffamily/alpine-eagle/",
+          "title": "Alpine Eagle",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "bpifrance",
+      "name": "Kalray",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search5",
+          "url": "https://www.bpifrance.com/products/definvest/",
+          "title": "Definvest - Bpifrance.com",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn29search9",
+          "url": "https://www.defense.gouv.fr/sites/default/files/aid/DrOID%202023-EN.pdf",
+          "title": "Sharing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "bpifrance",
+      "name": "SinterMAT",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search5",
+          "url": "https://www.bpifrance.com/products/definvest/",
+          "title": "Definvest - Bpifrance.com",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn29search9",
+          "url": "https://www.defense.gouv.fr/sites/default/files/aid/DrOID%202023-EN.pdf",
+          "title": "Sharing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "bpifrance",
+      "name": "Exotrail",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn28search5",
+          "url": "https://www.bpifrance.com/products/definvest/",
+          "title": "Definvest - Bpifrance.com",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn29search9",
+          "url": "https://www.defense.gouv.fr/sites/default/files/aid/DrOID%202023-EN.pdf",
+          "title": "Sharing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sienna-investment-managers",
+      "name": "Turgis & Gaillard",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn29search2",
+          "url": "https://www.sienna-im.com/news/a-dynamic-start-for-the-deployment-by-sienna-im-of-its-financing-strategy-focused-on-the-defence-industry/",
+          "title": "Defence strategy deployment: a dynamic start",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn29search3",
+          "url": "https://www.eif.org/press/all/eif-commits-eur30-million-to-sienna-hephaistos-private-investments-the-first-european-private-credit-fund-dedicated-to-the-defence-industry",
+          "title": "EIF commits EUR 30 m to Sienna Hephaistos Private Investments",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sienna-investment-managers",
+      "name": "Spherea",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn29search2",
+          "url": "https://www.sienna-im.com/news/a-dynamic-start-for-the-deployment-by-sienna-im-of-its-financing-strategy-focused-on-the-defence-industry/",
+          "title": "Defence strategy deployment: a dynamic start",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn29search3",
+          "url": "https://www.eif.org/press/all/eif-commits-eur30-million-to-sienna-hephaistos-private-investments-the-first-european-private-credit-fund-dedicated-to-the-defence-industry",
+          "title": "EIF commits EUR 30 m to Sienna Hephaistos Private Investments",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "coinvest-capital",
+      "name": "Unmanned Defense Systems",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search12",
+          "url": "https://www.coinvest.lt/post/unmanned-defense-systems-raises-3-2m-to-scale-battlefield-tested-uavs-and-advance-ai-based-swarm-in",
+          "title": "Unmanned Defense Systems raises €3.2M to scale battlefield-tested UAVs and advance AI-based swarm integrations with contemporary BMS",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search0",
+          "url": "https://www.coinvest.lt/post/airvolve-a-defense-startup-from-europe-aims-at-disrupting-conventional-helicopters-industry",
+          "title": "Airvolve: a defense startup from Europe aims at disrupting conventional helicopters’ industry",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search13",
+          "url": "https://www.coinvest.lt/news",
+          "title": "News | Coinvest Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "coinvest-capital",
+      "name": "Airvolve",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search12",
+          "url": "https://www.coinvest.lt/post/unmanned-defense-systems-raises-3-2m-to-scale-battlefield-tested-uavs-and-advance-ai-based-swarm-in",
+          "title": "Unmanned Defense Systems raises €3.2M to scale battlefield-tested UAVs and advance AI-based swarm integrations with contemporary BMS",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search0",
+          "url": "https://www.coinvest.lt/post/airvolve-a-defense-startup-from-europe-aims-at-disrupting-conventional-helicopters-industry",
+          "title": "Airvolve: a defense startup from Europe aims at disrupting conventional helicopters’ industry",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search13",
+          "url": "https://www.coinvest.lt/news",
+          "title": "News | Coinvest Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "coinvest-capital",
+      "name": "PDKINEMATICS",
+      "companyId": null,
+      "companySlug": "pdkinematics",
+      "url": "/companies/pdkinematics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search12",
+          "url": "https://www.coinvest.lt/post/unmanned-defense-systems-raises-3-2m-to-scale-battlefield-tested-uavs-and-advance-ai-based-swarm-in",
+          "title": "Unmanned Defense Systems raises €3.2M to scale battlefield-tested UAVs and advance AI-based swarm integrations with contemporary BMS",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search0",
+          "url": "https://www.coinvest.lt/post/airvolve-a-defense-startup-from-europe-aims-at-disrupting-conventional-helicopters-industry",
+          "title": "Airvolve: a defense startup from Europe aims at disrupting conventional helicopters’ industry",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search13",
+          "url": "https://www.coinvest.lt/news",
+          "title": "News | Coinvest Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "bsv-ventures",
+      "name": "Airvolve",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search2",
+          "url": "https://www.nif.fund/news/nato-innovation-fund-backs-bsv-ventures-marking-first-baltic-investment/",
+          "title": "NATO Innovation Fund backs BSV Ventures, marking first Baltic investment | Nato Innovation Fund",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search11",
+          "url": "https://bsv.ventures/portfolio.html",
+          "title": "Portfolio - BSV Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "iron-wolf-capital",
+      "name": "PDKINEMATICS",
+      "companyId": null,
+      "companySlug": "pdkinematics",
+      "url": "/companies/pdkinematics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search4",
+          "url": "https://www.ironwolfcapital.com/",
+          "title": "European Deep Tech & Defence Fund | Iron Wolf Capital",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn31search13",
+          "url": "https://www.coinvest.lt/news",
+          "title": "News | Coinvest Capital",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "litban",
+      "name": "Unmanned Defense Systems",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search10",
+          "url": "https://www.udefenses.com/about-us",
+          "title": "Unmanned Defense Systems - About us",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "smartcap",
+      "name": "Frankenburg Technologies",
+      "companyId": null,
+      "companySlug": "frankenburg-technologies",
+      "url": "/companies/frankenburg-technologies/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn30search4",
+          "url": "https://smartcap.ee/sc_portfolio/",
+          "title": "Portfolio - SmartCap",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn30search5",
+          "url": "https://smartcap.ee/defence-fund/",
+          "title": "Defence Fund - SmartCap",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "smartcap",
+      "name": "Farsight Vision",
+      "companyId": null,
+      "companySlug": "farsight-vision",
+      "url": "/companies/farsight-vision/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn30search4",
+          "url": "https://smartcap.ee/sc_portfolio/",
+          "title": "Portfolio - SmartCap",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn30search5",
+          "url": "https://smartcap.ee/defence-fund/",
+          "title": "Defence Fund - SmartCap",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "smartcap",
+      "name": "Kraken Technology Group",
+      "companyId": null,
+      "companySlug": "kraken-technology-group",
+      "url": "/companies/kraken-technology-group/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn30search4",
+          "url": "https://smartcap.ee/sc_portfolio/",
+          "title": "Portfolio - SmartCap",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn30search5",
+          "url": "https://smartcap.ee/defence-fund/",
+          "title": "Defence Fund - SmartCap",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "change-ventures",
+      "name": "Origin Robotics",
+      "companyId": null,
+      "companySlug": "origin-robotics",
+      "url": "/companies/origin-robotics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn31search5",
+          "url": "https://www.changeventures.com/portfolio",
+          "title": "Portfolio",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "gungnir-capital",
+      "name": "Kelluu",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "gungnir-capital",
+      "name": "Acodyne",
+      "companyId": null,
+      "companySlug": "acodyne",
+      "url": "/companies/acodyne/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "gungnir-capital",
+      "name": "Monava",
+      "companyId": null,
+      "companySlug": "monava",
+      "url": "/companies/monava/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "gungnir-capital",
+      "name": "Creoir",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "front-ventures",
+      "name": "Black Forest Systems",
+      "companyId": null,
+      "companySlug": "black-forest-systems",
+      "url": "/companies/black-forest-systems/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn41search7",
+          "url": "https://www.frontventures.se/",
+          "title": "Front Ventures — Defense Tech Investment",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn41search8",
+          "url": "https://www.frontventures.se/investments/",
+          "title": "Our Investments — Front Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "front-ventures",
+      "name": "Aviation Center Engelholm",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn41search7",
+          "url": "https://www.frontventures.se/",
+          "title": "Front Ventures — Defense Tech Investment",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn41search8",
+          "url": "https://www.frontventures.se/investments/",
+          "title": "Our Investments — Front Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "prima-materia",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search4",
+          "url": "https://helsing.ai/newsroom/helsing-raises-eur600m-to-invest-in-european-technological-sovereignty?trk=article-ssr-frontend-pulse_little-text-block",
+          "title": "Helsing raises €600m to invest in European technological sovereignty – Helsing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "saab",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn46search5",
+          "url": "https://www.saab.com/newsroom/press-releases/2023/saab-signs-strategic-cooperation-agreement-and-makes-investment-in-helsing",
+          "title": "Saab signs strategic cooperation agreement and makes investment in Helsing",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn46search6",
+          "url": "https://www.saab.com/about/innovation/ventures",
+          "title": "Ventures | Innovation | Saab",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "eifo",
+      "name": "Six Robotics",
+      "companyId": null,
+      "companySlug": "six-robotics",
+      "url": "/companies/six-robotics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn33search11",
+          "url": "https://eifo.dk/en/knowledge-hub/eifo-invests-in-the-venture-fund-d3-to-boost-ukrainian-and-european-innovation-in-defence",
+          "title": "EIFO invests in D3 to boost Ukrainian and European innovation in defence",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn35search7",
+          "url": "https://sixrobotics.com/news/six-robotics-raises-%E2%82%AC12-million-to-scale-autonomy-for-unmanned-systems",
+          "title": "Six Robotics raises €12 million to scale autonomy for unmanned systems - Six Robotics",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "scale-capital",
+      "name": "Six Robotics",
+      "companyId": null,
+      "companySlug": "six-robotics",
+      "url": "/companies/six-robotics/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn35search7",
+          "url": "https://sixrobotics.com/news/six-robotics-raises-%E2%82%AC12-million-to-scale-autonomy-for-unmanned-systems",
+          "title": "Six Robotics raises €12 million to scale autonomy for unmanned systems - Six Robotics",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "psv-hafnium",
+      "name": "Acodyne",
+      "companyId": null,
+      "companySlug": "acodyne",
+      "url": "/companies/acodyne/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "tesi",
+      "name": "Kelluu",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn32search5",
+          "url": "https://tesi.fi/en/about-tesi/",
+          "title": "About Tesi - Profitable risk-taking with proven impact - tesi.fi",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "lifeline-ventures",
+      "name": "Sensofusion",
+      "companyId": null,
+      "companySlug": "sensofusion",
+      "url": "/companies/sensofusion/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn47search4",
+          "url": "https://www.lifelineventures.com/",
+          "title": "Lifeline Ventures | Supporting resilient founders",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "keen-venture-partners",
+      "name": "Kelluu",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "keen-venture-partners",
+      "name": "EclecticIQ",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "keen-venture-partners",
+      "name": "Intelic",
+      "companyId": null,
+      "companySlug": "intelic",
+      "url": "/companies/intelic/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "keen-venture-partners",
+      "name": "Perciv AI",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.keenventurepartners.com/posts/keen-venture-partners-launched-the-european-defence-and-security-fund"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "nato-innovation-fund",
+      "name": "TEKEVER",
+      "companyId": null,
+      "companySlug": "tekever",
+      "url": "/companies/tekever/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn37search9",
+          "url": "https://www.tekever.com/news/tekever-raises-70-millions-euros-and-brings-strategic-investors-on-board/",
+          "title": "TEKEVER Raises 70 Millions Euros and Brings Strategic Investors on Board – Tekever",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn52search0",
+          "url": "https://www.nif.fund/about/",
+          "title": "About | NATO Innovation Fund",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "nato-innovation-fund",
+      "name": "Kelluu",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn37search9",
+          "url": "https://www.tekever.com/news/tekever-raises-70-millions-euros-and-brings-strategic-investors-on-board/",
+          "title": "TEKEVER Raises 70 Millions Euros and Brings Strategic Investors on Board – Tekever",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn32search0",
+          "url": "https://gungnir.vc/",
+          "title": "Gungnir Capital — Europe's Defence Technology VC",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn52search0",
+          "url": "https://www.nif.fund/about/",
+          "title": "About | NATO Innovation Fund",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "nazca-capital",
+      "name": "Teltronic",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn45search1",
+          "url": "https://www.cnmv.es/Portal/Consultas/ECR/fondo?nif=V21664354",
+          "title": "CNMV - Información de fondos de capital-riesgo - FONDO NAZCA AEROESPACIAL Y DEFENSA INNVIERTE I, FCR - Datos Generales",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn45search8",
+          "url": "https://www.spaincap.org/comunicacion/noticias/nazca-adquiere-el-100-del-capital-de-teltronic-primera-inversion-de-su-nuevo-fondo-de-defensa",
+          "title": "Noticias",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "baryon-fund",
+      "name": "Airvolute",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn43search11",
+          "url": "https://www.linkedin.com/posts/baryon-fund_ai-europeantech-deeptech-activity-7416562343360290816-J4wE",
+          "title": "#ai #europeantech #deeptech #dualuse | Baryon Fund",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn48search8",
+          "url": "https://www.linkedin.com/company/baryon-fund",
+          "title": "Baryon Fund | LinkedIn",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn48search3",
+          "url": "https://lei-luxembourg.lu/informations-detaillees/61223675/213800IJPSTMF6TJHA43/baryon-fund/",
+          "title": "BARYON FUND - 213800IJPSTMF6TJHA43 (Issued) - LEI Luxembourg",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "redalpine",
+      "name": "Cambridge Aerospace",
+      "companyId": null,
+      "companySlug": "cambridge-aerospace",
+      "url": "/companies/cambridge-aerospace/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn48search2",
+          "url": "https://www.redalpine.com/post/welcome-to-our-august-newsletter-1",
+          "title": "welcome to our august newsletter",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "verve-ventures",
+      "name": "ANYbotics",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn41search9",
+          "url": "https://www.seca.ch/en/find-members/verve-capital-partners-ag/",
+          "title": "SECA",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "purple-ventures",
+      "name": "VRgineers",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "depo-ventures",
+      "name": "Wayren",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "depo-ventures",
+      "name": "Zvook",
+      "companyId": null,
+      "companySlug": "zvook",
+      "url": "/companies/zvook/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "n1",
+      "name": "VRgineers",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "rockaway-ventures",
+      "name": "Vermeer",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "rockaway-alpha-defense",
+      "name": "URC",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "rockaway-alpha-defense",
+      "name": "JISR",
+      "companyId": null,
+      "companySlug": "jisr",
+      "url": "/companies/jisr/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn26search2",
+          "url": "https://defencehub.gov.cz/investors-database/",
+          "title": "Investors database · Defence Hub CzechInvest",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "neo-ventures-neo-autonomy",
+      "name": "Fadron",
+      "companyId": null,
+      "companySlug": "fadron",
+      "url": "/companies/fadron/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn43search0",
+          "url": "https://neoventures.net/active-investments/",
+          "title": "Active Portfolio Companies | Neo Ventures",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn43search6",
+          "url": "https://neoventures.net/neo-autonomy-announces-fund-launch-targeting-e15m/",
+          "title": "NEO Autonomy Announces Fund Launch Targeting €15M+ - Neo Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "marathon-venture-capital",
+      "name": "Delian Alliance Industries",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn40search4",
+          "url": "https://www.eif.org/case-study/all/delian-alliance-industries",
+          "title": "Delian Alliance Industries: autonomous surveillance 24/7",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "d3",
+      "name": "UFORCE",
+      "companyId": null,
+      "companySlug": "uforce",
+      "url": "/companies/uforce/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn33search0",
+          "url": "https://d3.vc/portfolio/",
+          "title": "Portfolio - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search1",
+          "url": "https://d3.vc/",
+          "title": "Home - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search11",
+          "url": "https://eifo.dk/en/knowledge-hub/eifo-invests-in-the-venture-fund-d3-to-boost-ukrainian-and-european-innovation-in-defence",
+          "title": "EIFO invests in D3 to boost Ukrainian and European innovation in defence",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "d3",
+      "name": "Cambridge Aerospace",
+      "companyId": null,
+      "companySlug": "cambridge-aerospace",
+      "url": "/companies/cambridge-aerospace/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn33search0",
+          "url": "https://d3.vc/portfolio/",
+          "title": "Portfolio - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search1",
+          "url": "https://d3.vc/",
+          "title": "Home - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search11",
+          "url": "https://eifo.dk/en/knowledge-hub/eifo-invests-in-the-venture-fund-d3-to-boost-ukrainian-and-european-innovation-in-defence",
+          "title": "EIFO invests in D3 to boost Ukrainian and European innovation in defence",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "d3",
+      "name": "Hive Robotics",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn33search0",
+          "url": "https://d3.vc/portfolio/",
+          "title": "Portfolio - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search1",
+          "url": "https://d3.vc/",
+          "title": "Home - D3",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn33search11",
+          "url": "https://eifo.dk/en/knowledge-hub/eifo-invests-in-the-venture-fund-d3-to-boost-ukrainian-and-european-innovation-in-defence",
+          "title": "EIFO invests in D3 to boost Ukrainian and European innovation in defence",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Swarmer",
+      "companyId": null,
+      "companySlug": "swarmer",
+      "url": "/companies/swarmer/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "BaBayte",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Claymore Industries",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Falcons",
+      "companyId": null,
+      "companySlug": "falcons",
+      "url": "/companies/falcons/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "GutSee Health",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Himera",
+      "companyId": null,
+      "companySlug": "himera",
+      "url": "/companies/himera/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Kara Dag Technologies",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "MaXon Systems",
+      "companyId": null,
+      "companySlug": "maxon-systems",
+      "url": "/companies/maxon-systems/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "green-flag-ventures",
+      "name": "Teletactica",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "primary_portfolio_source",
+      "sources": [
+        {
+          "url": "https://www.greenflag.vc/portfolio"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "freedom-fund-vc",
+      "name": "Bravo Dynamics",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn55search7",
+          "url": "https://www.linkedin.com/company/freedom-fund-venture-capital",
+          "title": "Freedom Fund VC | LinkedIn",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn55search8",
+          "url": "https://aequo.ua/en/news/bravo-dynamics-secures-investment-from-freedom-fund-vc",
+          "title": "Aequo",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "general-catalyst",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn42search2",
+          "url": "https://helsing.ai/newsroom/helsing-further-strengthens-european-defence-capabilities-with-funding-round",
+          "title": "Helsing further strengthens European defence capabilities with funding round – Helsing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "accel",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn42search2",
+          "url": "https://helsing.ai/newsroom/helsing-further-strengthens-european-defence-capabilities-with-funding-round",
+          "title": "Helsing further strengthens European defence capabilities with funding round – Helsing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "lightspeed",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn42search2",
+          "url": "https://helsing.ai/newsroom/helsing-further-strengthens-european-defence-capabilities-with-funding-round",
+          "title": "Helsing further strengthens European defence capabilities with funding round – Helsing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "greenoaks",
+      "name": "Helsing",
+      "companyId": null,
+      "companySlug": "helsing",
+      "url": "/companies/helsing/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn42search2",
+          "url": "https://helsing.ai/newsroom/helsing-further-strengthens-european-defence-capabilities-with-funding-round",
+          "title": "Helsing further strengthens European defence capabilities with funding round – Helsing",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "airbus-ventures-av",
+      "name": "Aerospacelab",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn44search6",
+          "url": "https://www.airbusventures.vc/portfolio",
+          "title": "Portfolio / AV",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn44search7",
+          "url": "https://www.airbusventures.vc/?_bhlid=a4d5b0736d9ca88e351636da10f0e119d36b4a43",
+          "title": "Home / AV",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "expeditions",
+      "name": "Alpine Eagle",
+      "companyId": null,
+      "companySlug": "alpine-eagle",
+      "url": "/companies/alpine-eagle/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search0",
+          "url": "https://expeditionsfund.com/portfolio",
+          "title": "Portfolio - Expeditions",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "expeditions",
+      "name": "Cambridge Aerospace",
+      "companyId": null,
+      "companySlug": "cambridge-aerospace",
+      "url": "/companies/cambridge-aerospace/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search0",
+          "url": "https://expeditionsfund.com/portfolio",
+          "title": "Portfolio - Expeditions",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "otb-ventures",
+      "name": "Alta Ares",
+      "companyId": null,
+      "companySlug": "alta-ares",
+      "url": "/companies/alta-ares/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search1",
+          "url": "https://otb.vc/portfolio/",
+          "title": "Portfolio - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn34search6",
+          "url": "https://otb.vc/",
+          "title": "Home - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn51search4",
+          "url": "https://otb.vc/about/",
+          "title": "About - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "otb-ventures",
+      "name": "MatrixSpace",
+      "companyId": null,
+      "companySlug": "matrixspace",
+      "url": "/companies/matrixspace/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search1",
+          "url": "https://otb.vc/portfolio/",
+          "title": "Portfolio - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn34search6",
+          "url": "https://otb.vc/",
+          "title": "Home - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        },
+        {
+          "ref": "turn51search4",
+          "url": "https://otb.vc/about/",
+          "title": "About - OTB Ventures",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sunfish-partners",
+      "name": "DefendEye",
+      "companyId": null,
+      "companySlug": "defendeye",
+      "url": "/companies/defendeye/",
+      "matchStatus": "unique_exact_name",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search2",
+          "url": "https://www.sunfish-partners.com/",
+          "title": "Sunfish Partners - Early stage VC investing in Polish deep tech startups",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    },
+    {
+      "investorSlug": "sunfish-partners",
+      "name": "EU Motors",
+      "companyId": null,
+      "companySlug": null,
+      "url": null,
+      "matchStatus": "needs_reconciliation",
+      "relationshipStatus": "research_record",
+      "sources": [
+        {
+          "ref": "turn34search2",
+          "url": "https://www.sunfish-partners.com/",
+          "title": "Sunfish Partners - Early stage VC investing in Polish deep tech startups",
+          "accessed_at": "2026-10-30"
+        }
+      ],
+      "investorContribution": null,
+      "roundTotal": null
+    }
+  ]
+}
