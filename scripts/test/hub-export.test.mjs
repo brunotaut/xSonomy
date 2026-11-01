@@ -130,10 +130,12 @@ test('a confirmed match with a published target becomes a profile link', () => {
     hub({ research_id: 'dlr-test-center', slug: 'dlr-test-center', name: 'DLR test centre',
       matched_company_id: 'aaaaaaaa-0000-0000-0000-000000000001',
       matched_company_slug: 'dlr-german-aerospace-center',
+      matched_company_name: 'DLR (German Aerospace Center)',
       match_role: 'facility_of_matched_organisation' }),
     hub({ research_id: 'mits-accelerator', slug: 'mits-accelerator', name: 'MITS Accelerator',
       matched_investor_id: 'bbbbbbbb-0000-0000-0000-000000000002',
       matched_investor_slug: 'mits-capital-lightning-fund',
+      matched_investor_name: 'MITS Capital / Lightning Fund',
       match_role: 'related_organisation_different_function' }),
   ]});
   const dlr = out.hubs.find((h) => h.slug === 'dlr-test-center');
@@ -142,6 +144,9 @@ test('a confirmed match with a published target becomes a profile link', () => {
   assert.equal(dlr.matchedCompanyUrl, 'https://xsonomy.com/companies/dlr-german-aerospace-center/',
     'the url follows the generator\'s own company route, it is not invented here');
   assert.equal(dlr.matchedInvestorSlug, null);
+  // the label travels with the link: DLR is a research institute and is not in the
+  // landscape company payload, so looking its name up there would find nothing
+  assert.equal(dlr.matchedCompanyName, 'DLR (German Aerospace Center)');
 
   // an investor has no standalone page, so the slug travels and the panel opens it
   const mits = out.hubs.find((h) => h.slug === 'mits-accelerator');
@@ -149,10 +154,21 @@ test('a confirmed match with a published target becomes a profile link', () => {
   assert.equal(mits.matchedInvestorSlug, 'mits-capital-lightning-fund');
   assert.equal(mits.matchedCompanyUrl, null);
   assert.equal(mits.matchedCompanySlug, null);
+  assert.equal(mits.matchedInvestorName, 'MITS Capital / Lightning Fund');
+  assert.equal(mits.matchedCompanyName, null);
 
   // "related, with a different function" is a conclusion, not a doubt: the two are
   // definitely connected and definitely not the same organisation
   assert.equal(mits.matchRole, 'related_organisation_different_function');
+});
+
+test('a resolved slug with no name still labels its link', () => {
+  const out = buildLandscapeHubs({ reviews: [], hubs: [hub({
+    matched_company_id: 'eeeeeeee-0000-0000-0000-000000000005',
+    matched_company_slug: 'some-company', matched_company_name: null,
+    match_role: 'same_organisation',
+  })]});
+  assert.equal(out.hubs[0].matchedCompanyName, 'some-company', 'the slug is the fallback label');
 });
 
 test('an unconfirmed match is never linked, even when its target is published', () => {

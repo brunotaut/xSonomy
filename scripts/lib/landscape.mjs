@@ -253,7 +253,13 @@ function matchedProfile(r) {
   return {
     matchedCompanySlug: company,
     matchedCompanyUrl: company ? `https://xsonomy.com/companies/${encodeURIComponent(company)}/` : null,
+    // The label travels with the link, from the same resolved row. Looking the name up
+    // in a payload instead is what made the DLR link read `dlr-german-aerospace-center`:
+    // a research institute is not in the landscape company list, so there was no name
+    // there either.
+    matchedCompanyName: company ? (r.matched_company_name || company) : null,
     matchedInvestorSlug: investor,
+    matchedInvestorName: investor ? (r.matched_investor_name || investor) : null,
   };
 }
 
