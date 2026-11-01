@@ -10,14 +10,14 @@ const H={edition:'european-uav-cuas-hubs',generatedAt:'2026-11-01T06:00:00.000Z'
  caveats:{coordinates:'Approximate locality centroids, generally rounded to two decimals.',locationKinds:'A contact office is not a flight-test site.',recordUnits:'A site belongs to another record and is not an independent hub.',bvlos:'Planned or authorisation-dependent BVLOS is not current BVLOS availability.'},
  countryReviews:[{country:'AT',name:'Austria',researchRecords:2,mapCandidates:2,approvedRecords:2,approvedLocations:2,note:'Not a census.',reviewedAt:'2026-10-31'}],
  hubs:[
- {researchId:'airlabs-austria',slug:'airlabs-austria',name:'AIRlabs Austria',country:'AT',countryName:'Austria',localityText:'Graz',hubType:'innovation_network',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['UAV','BVLOS'],summary:'Multi-site Austrian UAV innovation network.',researchNote:'Graz point represents the network office.',operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchNote:null,
+ {researchId:'airlabs-austria',slug:'airlabs-austria',name:'AIRlabs Austria',country:'AT',countryName:'Austria',localityText:'Graz',hubType:'innovation_network',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['UAV','BVLOS'],summary:'Multi-site Austrian UAV innovation network.',researchNote:'Graz point represents the network office.',operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchConfirmed:false,matchedCompanySlug:null,matchedCompanyUrl:null,matchedInvestorSlug:null,matchNote:null,
   relationships:[{kind:'site_of',direction:'incoming',researchId:'airlabs-steinalpl-test-area',name:'AIRlabs Steinalpl test area',published:true,note:'Separate localities with separate functions.'}],sources:src,locations:[loc('Graz','AT','network_office_city')]},
- {researchId:'airlabs-steinalpl-test-area',slug:'airlabs-steinalpl-test-area',name:'AIRlabs Steinalpl test area',country:'AT',countryName:'Austria',localityText:'Steinalpl',hubType:'test_area',recordUnit:'site',evidenceStatus:'documented',technologyFocus:['UAV','Alpine testing'],summary:'Alpine test area in the AIRlabs network.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'operator_describes_bvlos_test_area_subject_to_arrangement',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchNote:null,
+ {researchId:'airlabs-steinalpl-test-area',slug:'airlabs-steinalpl-test-area',name:'AIRlabs Steinalpl test area',country:'AT',countryName:'Austria',localityText:'Steinalpl',hubType:'test_area',recordUnit:'site',evidenceStatus:'documented',technologyFocus:['UAV','Alpine testing'],summary:'Alpine test area in the AIRlabs network.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'operator_describes_bvlos_test_area_subject_to_arrangement',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchConfirmed:false,matchedCompanySlug:null,matchedCompanyUrl:null,matchedInvestorSlug:null,matchNote:null,
   relationships:[{kind:'site_of',direction:'outgoing',researchId:'airlabs-austria',name:'AIRlabs Austria',published:true,note:'Belongs to the AIRlabs Austria network.'}],sources:src,locations:[loc('Steinalpl','AT')]},
- {researchId:'atlas-flight-centers',slug:'atlas-flight-centers',name:'ATLAS Flight Centers',country:'ES',countryName:'Spain',localityText:'Villacarrillo',hubType:'test_centre',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['UAV','Flight testing'],summary:'Spanish UAV flight test centre with two site localities.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchNote:null,
+ {researchId:'atlas-flight-centers',slug:'atlas-flight-centers',name:'ATLAS Flight Centers',country:'ES',countryName:'Spain',localityText:'Villacarrillo',hubType:'test_centre',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['UAV','Flight testing'],summary:'Spanish UAV flight test centre with two site localities.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:null,matchRole:null,matchConfirmed:false,matchedCompanySlug:null,matchedCompanyUrl:null,matchedInvestorSlug:null,matchNote:null,
   relationships:[{kind:'operated_by',direction:'outgoing',researchId:'catec-research-centre',name:'CATEC',published:false,note:'CATEC remains in staging pending location resolution.'}],sources:src,locations:[loc('Villacarrillo','ES'),loc('Beas de Segura','ES')]},
- {researchId:'bofors-test-center',slug:'bofors-test-center',name:'Bofors Test Center',country:'SE',countryName:'Sweden',localityText:'Karlskoga',hubType:'defence_test_centre',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['Target drones'],summary:'Swedish defence test range.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'explicit_source_scope_or_documented_activity',reviewedAt:'2026-10-31',matchedCompanyId:'co-bofors',matchedInvestorId:null,matchRole:'needs_review',matchNote:'Shares a name with the catalogue company Bofors. Recorded as a link to resolve, NOT asserted as the same organisation.',relationships:[],sources:src,locations:[loc('Karlskoga','SE')]},
- {researchId:'mits-accelerator',slug:'mits-accelerator',name:'MITS Accelerator',country:'UA',countryName:'Ukraine',localityText:'Kyiv',hubType:'accelerator',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:[],summary:'Ukrainian defence-tech acceleration programme.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Apply via the programme.',bvlosStatus:'planned_2027_per_operator_not_current',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:'inv-mits',matchRole:'related_organisation_different_function',matchNote:'Related to the catalogue investor MITS Capital but a different function.',relationships:[],sources:src,locations:[loc('Kyiv','UA','programme_delivery_city')]}]};
+ {researchId:'bofors-test-center',slug:'bofors-test-center',name:'Bofors Test Center',country:'SE',countryName:'Sweden',localityText:'Karlskoga',hubType:'defence_test_centre',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:['Target drones'],summary:'Swedish defence test range.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Contact operator.',bvlosStatus:'not_established',cuasEvidence:'explicit_source_scope_or_documented_activity',reviewedAt:'2026-10-31',matchedCompanyId:'co-bofors',matchedInvestorId:null,matchRole:'needs_review',matchConfirmed:false,matchedCompanySlug:null,matchedCompanyUrl:null,matchedInvestorSlug:null,matchNote:'Shares a name with the catalogue company Bofors. Recorded as a link to resolve, NOT asserted as the same organisation.',relationships:[],sources:src,locations:[loc('Karlskoga','SE')]},
+ {researchId:'mits-accelerator',slug:'mits-accelerator',name:'MITS Accelerator',country:'UA',countryName:'Ukraine',localityText:'Kyiv',hubType:'accelerator',recordUnit:'organisation_or_hub',evidenceStatus:'documented',technologyFocus:[],summary:'Ukrainian defence-tech acceleration programme.',researchNote:null,operationalStatus:'not_independently_confirmed',accessModel:'Apply via the programme.',bvlosStatus:'planned_2027_per_operator_not_current',cuasEvidence:'not_established',reviewedAt:'2026-10-31',matchedCompanyId:null,matchedInvestorId:'inv-mits',matchRole:'related_organisation_different_function',matchConfirmed:true,matchedCompanySlug:null,matchedCompanyUrl:null,matchedInvestorSlug:'mits-capital-lightning-fund',matchNote:'Related to the catalogue investor MITS Capital but a different function.',relationships:[],sources:src,locations:[loc('Kyiv','UA','programme_delivery_city')]}]};
 const S=o=>({...defaults(),...o});
 
 test('a site record never inflates the independent organisation count',()=>{
@@ -152,17 +152,35 @@ test('unpublished relationship targets are never resolvable to a record',()=>{
  assert.equal(isSiteRecord(net),false);
 });
 
+// Whether a match may be linked is now decided once, in the export, and arrives as
+// matchConfirmed plus a resolved slug. The interface must not re-derive it from the
+// role: a second copy of that rule in the client is what let the two drift apart, so
+// that DLR and MITS Capital were both confirmed and both still rendered as plain text.
 test('a needs_review match never becomes an asserted relationship',()=>{
- const ASSERTED=['facility_of_matched_organisation','related_organisation_different_function'];
  const bofors=H.hubs.find(h=>h.slug==='bofors-test-center');
  assert.equal(bofors.matchRole,'needs_review');
- assert.equal(ASSERTED.includes(bofors.matchRole),false,'so the interface must not link it');
+ assert.equal(bofors.matchConfirmed,false,'so the interface must not link it');
+ assert.equal(bofors.matchedCompanyUrl,null,'and the export withholds the url, not just the role');
+ assert.notEqual(bofors.matchedCompanyId,null,'the stored id still travels, for the text');
  assert.match(bofors.matchNote,/NOT asserted as the same organisation/);
  const mits=H.hubs.find(h=>h.slug==='mits-accelerator');
- assert.equal(ASSERTED.includes(mits.matchRole),true,'a different-function link is confirmed, so it may link');
- assert.notEqual(mits.matchedInvestorId,null);
- assert.equal(mits.matchedCompanyId,null,'and it is an investor, not a company');
- assert.equal(ASSERTED.includes('rejected_false_positive'),false,'a rejected coincidence stays unlinked');
+ assert.equal(mits.matchConfirmed,true,'a different-function link is a conclusion, so it may link');
+ assert.equal(mits.matchedInvestorSlug,'mits-capital-lightning-fund');
+ assert.equal(mits.matchedCompanyUrl,null,'and it is an investor, not a company');
+});
+
+test('the hub panel links from the resolved fields and does not re-derive the rule',async()=>{
+ const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
+ const panel=app.slice(app.indexOf('function hubPanel'),app.indexOf('function renderHubMenus'));
+ assert.match(panel,/h\.matchConfirmed===true/,'the gate comes from the export');
+ assert.match(panel,/safeUrl\(h\.matchedCompanyUrl\)/,'the company link is the resolved url');
+ assert.match(panel,/data-investor="\$\{esc\(invSlug\)\}"/,'the investor opens by its resolved slug');
+ // the old bug: resolving the match by searching a payload that does not contain the
+ // target. DLR is a research institute and is not in the landscape company list at all.
+ assert.equal(/companies\|\|\[\]\)\.find\(c=>c\.id===h\.matchedCompanyId\)\?\.slug/.test(panel),false,
+  'the link must not depend on finding the id in the landscape payload');
+ assert.equal(/ASSERTED_MATCH/.test(app),false,'no second copy of the confirmed-role list in the client');
+ assert.match(panel,/A possible match, not confirmed/,'an unconfirmed match says so in words');
 });
 
 test('no Ukrainian UI label and no demo record survives in the model',async()=>{

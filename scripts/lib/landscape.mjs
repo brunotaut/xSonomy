@@ -233,6 +233,30 @@ export async function fetchLandscapeHubs(sbFetchAll) {
   return buildLandscapeHubs({ hubs, reviews });
 }
 
+// A hub match is a reviewed conclusion about how a hub record relates to an existing
+// catalogue record. Only these three roles state a relationship; see matchConfirmed.
+const CONFIRMED_MATCH_ROLES = [
+  'same_organisation',
+  'facility_of_matched_organisation',
+  'related_organisation_different_function',
+];
+
+// The profile fields, emitted only when the relationship is confirmed AND the target is
+// published. Identity is resolved in the database by id (v_landscape_hubs), never here
+// by name, and the slug is never constructed - a company's url is the one routing
+// convention the generator already uses, /companies/<slug>/, and an investor has no
+// standalone page, so its research slug is emitted for the panel to open.
+function matchedProfile(r) {
+  const confirmed = CONFIRMED_MATCH_ROLES.includes(r.match_role);
+  const company = confirmed && r.matched_company_slug ? String(r.matched_company_slug) : null;
+  const investor = confirmed && r.matched_investor_slug ? String(r.matched_investor_slug) : null;
+  return {
+    matchedCompanySlug: company,
+    matchedCompanyUrl: company ? `https://xsonomy.com/companies/${encodeURIComponent(company)}/` : null,
+    matchedInvestorSlug: investor,
+  };
+}
+
 export function buildLandscapeHubs({ hubs, reviews }) {
   const records = hubs.map((r) => {
     const locations = (r.locations || []).map((l) => ({
@@ -270,6 +294,19 @@ export function buildLandscapeHubs({ hubs, reviews }) {
       matchedInvestorId: r.matched_investor_id || null,
       matchRole: r.match_role || null,
       matchNote: r.match_note_en || null,
+      // Whether the relationship itself is settled. `same_organisation`,
+      // `facility_of_matched_organisation` and `related_organisation_different_function`
+      // are all reviewed conclusions - the last says the two are definitely related and
+      // definitely not the same thing, which is a finding, not a doubt. `needs_review` is
+      // an unresolved candidate and `rejected_false_positive` is a confirmed NON-match,
+      // so neither may ever be rendered as a relationship.
+      matchConfirmed: CONFIRMED_MATCH_ROLES.includes(r.match_role),
+      // Profile links. Two independent conditions, and both must hold: the relationship
+      // is confirmed, AND the target has a published profile (the view resolves the
+      // stored id to a slug and returns null when no published profile exists). Bofors
+      // Test Center is why they are kept apart - its matched company IS published, but
+      // the match is only `needs_review`, so it must stay unlinked text.
+      ...matchedProfile(r),
       relationships: (r.relationships || []).map((x) => ({
         kind: x.kind, direction: x.direction, researchId: x.researchId,
         name: x.name, published: x.published === true, note: x.note || null,
@@ -319,6 +356,11 @@ export function buildLandscapeHubs({ hubs, reviews }) {
       matches: 'A match links this record to an existing catalogue company or investor ' +
         'without merging them. The role states whether it is the same organisation, a ' +
         'facility of it, or a related organisation with a different function.',
+      matchLinks: 'A profile link appears only where the relationship is a reviewed ' +
+        'conclusion and the matched record has a published profile. A possible match ' +
+        'that has not been confirmed stays unlinked text even when the record it points ' +
+        'at is published, because the link would assert a relationship the review has ' +
+        'not reached.',
       emptyFields: 'An absent value means not established, never zero.',
       completeness: 'A first-wave country review, not a census of European facilities.',
     },

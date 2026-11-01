@@ -121,3 +121,76 @@ test('a match is a link with a stated role, never a merge', () => {
   assert.equal(h.matchedCompanyId, null);
   assert.match(out.caveats.matches, /without merging/);
 });
+
+// The profile link is two independent conditions, and Bofors Test Center is why they
+// have to be kept apart: its matched company IS published, but the match is only a
+// possible one. A link there would assert a relationship nobody has concluded.
+test('a confirmed match with a published target becomes a profile link', () => {
+  const out = buildLandscapeHubs({ reviews: [], hubs: [
+    hub({ research_id: 'dlr-test-center', slug: 'dlr-test-center', name: 'DLR test centre',
+      matched_company_id: 'aaaaaaaa-0000-0000-0000-000000000001',
+      matched_company_slug: 'dlr-german-aerospace-center',
+      match_role: 'facility_of_matched_organisation' }),
+    hub({ research_id: 'mits-accelerator', slug: 'mits-accelerator', name: 'MITS Accelerator',
+      matched_investor_id: 'bbbbbbbb-0000-0000-0000-000000000002',
+      matched_investor_slug: 'mits-capital-lightning-fund',
+      match_role: 'related_organisation_different_function' }),
+  ]});
+  const dlr = out.hubs.find((h) => h.slug === 'dlr-test-center');
+  assert.equal(dlr.matchConfirmed, true);
+  assert.equal(dlr.matchedCompanySlug, 'dlr-german-aerospace-center');
+  assert.equal(dlr.matchedCompanyUrl, 'https://xsonomy.com/companies/dlr-german-aerospace-center/',
+    'the url follows the generator\'s own company route, it is not invented here');
+  assert.equal(dlr.matchedInvestorSlug, null);
+
+  // an investor has no standalone page, so the slug travels and the panel opens it
+  const mits = out.hubs.find((h) => h.slug === 'mits-accelerator');
+  assert.equal(mits.matchConfirmed, true);
+  assert.equal(mits.matchedInvestorSlug, 'mits-capital-lightning-fund');
+  assert.equal(mits.matchedCompanyUrl, null);
+  assert.equal(mits.matchedCompanySlug, null);
+
+  // "related, with a different function" is a conclusion, not a doubt: the two are
+  // definitely connected and definitely not the same organisation
+  assert.equal(mits.matchRole, 'related_organisation_different_function');
+});
+
+test('an unconfirmed match is never linked, even when its target is published', () => {
+  const out = buildLandscapeHubs({ reviews: [], hubs: [hub({
+    name: 'Bofors Test Center',
+    matched_company_id: 'cccccccc-0000-0000-0000-000000000003',
+    matched_company_slug: 'bofors',            // published and addressable
+    match_role: 'needs_review',                 // but the match is not concluded
+    match_note_en: 'Shares a name with the catalogue company Bofors.',
+  })]});
+  const h = out.hubs[0];
+  assert.equal(h.matchConfirmed, false);
+  assert.equal(h.matchedCompanySlug, null, 'a published target is not enough on its own');
+  assert.equal(h.matchedCompanyUrl, null);
+  assert.equal(h.matchedCompanyId, 'cccccccc-0000-0000-0000-000000000003',
+    'the stored id and the note still travel, so the panel can show it as text');
+  assert.match(h.matchNote, /Shares a name/);
+  assert.match(out.caveats.matchLinks, /not been confirmed stays unlinked text/);
+});
+
+test('a confirmed match whose target is unpublished stays text', () => {
+  const out = buildLandscapeHubs({ reviews: [], hubs: [hub({
+    matched_company_id: 'dddddddd-0000-0000-0000-000000000004',
+    matched_company_slug: null,   // the view returns null for a draft or slugless row
+    match_role: 'same_organisation',
+  })]});
+  const h = out.hubs[0];
+  assert.equal(h.matchConfirmed, true, 'same_organisation is a confirmed role');
+  assert.equal(h.matchedCompanyUrl, null, 'but there is no published profile to open');
+  assert.equal(h.matchedCompanySlug, null);
+});
+
+test('a rejected match carries no link and no relationship', () => {
+  const out = buildLandscapeHubs({ reviews: [], hubs: [hub({
+    matched_company_id: null, matched_company_slug: null,
+    match_role: 'rejected_false_positive',
+    match_note_en: 'Name similarity only.',
+  })]});
+  assert.equal(out.hubs[0].matchConfirmed, false);
+  assert.equal(out.hubs[0].matchedCompanyUrl, null);
+});
