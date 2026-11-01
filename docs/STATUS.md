@@ -1163,3 +1163,32 @@ Checked on a 375 px viewport: no horizontal scroll and every portfolio link reso
 
 **Not finished, and not claimed to be: 40 of the 118 investors have still never been
 researched financially.** They are listed in the ledger and identifiable from the data.
+
+## 2026-11-01 — 28 non-aerial products moved out of /uav/
+
+Nazar authorised the prepared batch. Review, manifest, applied SQL and rollback:
+`xsonomy-news/research-agent/reports/2026-11-02-non-aerial-product-batch.*`. Database work
+ran in `xsonomy-news`; this repo still only reads.
+
+Twenty-eight products categorised `UAV` were not aerial vehicles — uncrewed surface
+vessels (Saildrone Explorer/Spectre/Surveyor/ARES, the Kraken K3/K5/K7, Mako, GULL,
+SEASTRIKE, Lightfish, MAGURA V5, Saronic Corsair, Sea Baby), underwater vehicles (REMUS
+100/130, Hugin, Gavia, Lionfish, Ghostfin, Sub Sea Baby) and ground robots (Hunter WOLF,
+WOLF-X, Ascento Guard, FireAnt, Kuryer, Max1, Dot). Products categorised UAV: **1,444 →
+1,416**; Other: **382 → 410**. Live products unchanged at 3,522 — nothing was published or
+unpublished.
+
+**Their pages moved** from `/uav/<slug>/` to `/other/<slug>/`, and all 28 old URLs are
+preserved by `from_section='uav'` redirect stubs. Checked before applying: every slug was
+free in `/other/` and no namesake was left behind in `/uav/`, so nothing inherited a
+vacated slug. Redirect rows: 65 → 93.
+
+**The candidate set was 36, not the 19 the earlier report named** — that count matched one
+note phrasing, while the taxonomy's own `domain` facet finds eleven more carrying no such
+note. Eight are deliberately held, listed in the report.
+
+**One flag was wrong and the data said so.** Katana carried a knowledge-seeded
+`domain = Surface (USV)` beside a web-sourced `airframe = Single-rotor / helicopter`; it is
+the helicopter that won DARPA's Lift Challenge. A catalogue-wide sweep for that
+contradiction returned Katana alone. It **stays a UAV** at `/uav/katana/` and the bad
+taxonomy row was corrected instead.
