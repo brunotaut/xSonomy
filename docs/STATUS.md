@@ -1353,3 +1353,21 @@ inherit the ambiguity.
 claiming more than the source does. It now reads "Fund size (stated)". Coverage is
 unchanged at 118 investors and 207 observations; no catalogue code changed. Detail in
 `xsonomy-news`: `research-agent/reports/2026-11-01-tech-horizons-and-rollback-closeout.md`.
+
+### Extraction fix (in `xsonomy-news`) — nothing changes on the site
+
+The pipeline that created the bad catalogue rows has been fixed at source: a name is only
+created as a product if a source positively says it is one, a quoted span has to be found
+in the actual article, and a manufacturer is only linked when **one span names both the
+product and the maker**. Unverified candidates are now saved as `review` instead of `live`,
+so they never reach xsonomy.com — the site shows the same products it showed before.
+
+The one thing to expect: **catalogue growth from the news backlog pauses.** 719 already-
+analysed articles carry no evidence, so roughly 1,000 new product names will sit in review
+rather than publishing themselves. There is a one-command backfill to clear that, which has
+not been run. Detail in `xsonomy-news`:
+`research-agent/reports/2026-11-01-extraction-identity-fix.md`.
+
+Also prepared and not applied: deleting two stale "aerial" taxonomy rows from Cassio S and
+DA 15-N.ISS — a piloted light aircraft and a servo actuator that were tagged as uncrewed
+aerial systems because the tag was copied from a category they no longer have.
