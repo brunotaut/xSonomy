@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-817ff0fd25b0.js';
 // Shaped exactly like /data/landscape-investors.json so the atlas is tested against the
 // export it actually consumes, including the fields the research layer may leave empty.
@@ -103,7 +103,7 @@ test('every corrected metric type still reaches a card slot, with its own label'
  const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
  for(const t of ['vehicle_nav','average_investment_size','follow_on_investment_range','grant_funding_disbursed','grant_count'])
   assert.ok(app.includes(`${t}:'`),`${t} needs a label in METRIC_LABEL, which also drives METRIC_ORDER`);
- assert.match(app,/SCALE_METRICS=\['manager_aum','vehicle_nav'\]/);
+ assert.match(app,/SCALE_METRICS=\['manager_aum','vehicle_nav','cumulative_capital_raised'\]/);
  assert.match(app,/TICKET_METRICS=\['initial_investment_range','average_investment_size','follow_on_investment_range'\]/);
  assert.match(app,/DEPLOYED_METRICS=\['cumulative_capital_invested','grant_funding_disbursed'\]/);
  // and each slot must label the corrected type as what it is, not as what it replaced
@@ -135,4 +135,30 @@ test('an unknown amount is never rendered as a zero',async()=>{
  assert.match(app,/Investor contribution: \$\{p\.investorContribution\?esc\(amt\(p\.investorContribution\)\):'not disclosed'\}/);
  assert.match(app,/not established/);
  assert.equal(/:'0'/.test(app),false,'no slot may fall back to a zero');
+});
+
+// Every metric type the database can store must have a label and a card slot. METRIC_ORDER is
+// derived from METRIC_LABEL, so an unlabelled type is dropped from the detail panel silently,
+// and a type in no slot group never reaches a list card — a figure researched and stored, then
+// invisible. This list mirrors the investor_financial_metrics_metric_type_check constraint.
+test('every stored metric type has a label and exactly one card slot',()=>{
+ const src=readFileSync(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8');
+ const TYPES=['fund_size_target','fund_size_stated','fund_close_first','fund_close_interim',
+  'fund_close_final','fund_close_announced','committed_capital','manager_aum','vehicle_nav',
+  'cumulative_capital_raised','cumulative_capital_invested','grant_funding_disbursed','grant_count',
+  'initial_investment_range','follow_on_investment_range','average_investment_size',
+  'investment_count','portfolio_company_count'];
+ const group=n=>{const m=src.match(new RegExp(n+'=\\\[([^\\\]]*)\\\]'));assert.ok(m,n+' not found in atlas.js');
+  return m[1].split(',').map(s=>s.trim().replace(/^'|'$/g,''))};
+ const labels=src.match(/const METRIC_LABEL=\{([^}]*)\}/);assert.ok(labels,'METRIC_LABEL not found');
+ const slots=[...group('FUND_METRICS'),...group('SCALE_METRICS'),...group('TICKET_METRICS'),...group('DEPLOYED_METRICS')];
+ const counted=['investment_count','portfolio_company_count','grant_count'];
+ for(const t of TYPES){
+  assert.ok(new RegExp('(^|,|\\{)'+t+':').test(labels[1]),t+' has no METRIC_LABEL entry, so the detail panel would drop it');
+  if(counted.includes(t))continue; // counts are rendered from their own fields, not a money slot
+  assert.equal(slots.filter(s=>s===t).length,1,t+' must appear in exactly one card slot group');
+ }
+ // and a scale metric must never be mislabelled as AUM
+ assert.ok(/SCALE_PREFIX=\{[^}]*cumulative_capital_raised:/.test(src),
+  'capital raised since inception needs its own prefix: it is not assets under management');
 });

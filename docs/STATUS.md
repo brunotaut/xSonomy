@@ -1192,3 +1192,50 @@ note. Eight are deliberately held, listed in the report.
 the helicopter that won DARPA's Lift Challenge. A catalogue-wide sweep for that
 contradiction returned Katana alone. It **stays a UAV** at `/uav/katana/` and the bad
 taxonomy row was corrected instead.
+
+## 1 November 2026 — the investor research queue is empty, and one figure would have been invisible
+
+**The 40-record research queue is finished: 0 untouched records.** Across the whole
+directory, **102 of 118** investors now carry typed, sourced figures (55 before this pass),
+**16** are recorded as researched-with-nothing-usable, and **none** is unresearched. 207
+current observations across 104 registered vehicles. The queue is measurable, not asserted:
+it is the set of records with no `investor_financial_research_log` row and no current metric.
+
+**A new metric type was needed and nearly rendered nothing.** Karista publishes about
+€220M "raised since its creation" — which is not assets under management (a point-in-time
+figure net of realisations) and not capital deployed. Storing it as either would have
+published one thing as another, so `cumulative_capital_raised` was added. But the atlas
+derives `METRIC_ORDER` from `METRIC_LABEL` and keys its list-card slots on the metric type,
+so a type absent from both is **dropped silently from the detail panel and the card** — the
+figure would have been researched, stored, and invisible. The label, the slot and a
+`SCALE_PREFIX` entry (so "raised since inception" is never captioned "AUM") were added, and
+**a test now asserts every type the database can store has a label and exactly one slot.**
+It was mutation-checked: remove the label and it fails with that reason.
+
+**What the research refused to do** is as much of the result as what it stored:
+
+- **11 of the 104 vehicles carry no figure on purpose.** They exist so a sibling fund's
+  number cannot drift onto a fund that has none — Rockaway's defence sub-fund (target
+  €450M) beside Rockaway Alpha (€1bn+ target, ~€150M portfolio); IVC's DefenceTech fund
+  (no published size) beside its ClimateTech fund, whose €60M is what gets misquoted as
+  "IVC's €60M fund"; iG TECH's three Hungarian funds, which are not required to publish.
+- **Round totals are not cheques.** Prima Materia *led* Helsing's €600M round; its own
+  outlay was €100M of a €102.5M Series A. Tech Horizons *led* a >$20M Series A. Neither
+  round total was stored as the investor's capital.
+- **Group AUM is not defence capacity.** Tikehau's ~€53bn group AUM, Omnes's €6.7bn and
+  Saab's group accounts are all labelled as what they are; Tikehau's A&D strategy
+  (~€600M) and TDS fund (€150M) sit at their own levels.
+- **Four NSSIF figures measure four different things** — £14.9M committed in FY2024-25
+  (official), the £85m 2017 programme, ~£220M cumulative (third-party), and a
+  "£100m per annum" claim found only in a job advert, which was not stored.
+- **Kibo's €155M is a combined close** across Fund III and Opportunity Fund I, recorded
+  with an explicit warning not to attribute it to either alone.
+- **An AI-generated "report"** surfaced in search listing six defence funds that appear in
+  no primary source. None were used; the trap is named in the Defence Invest log row.
+
+**Two identities resolved.** N1 is the Czech group at n1.rocks (U-Tech Fund, backed by
+Barta, Průša and Winkler), not the Kyiv N1 Investment Company whose "$20m" sits in
+directories. "Rockaway Alpha Defense" is the Defense sub-fund of Rockaway Alpha Fund SICAV,
+distinct from the Alpha sub-fund the record's name conflates it with.
+
+**Unknown amounts remain `null` and render as unknown — never zero.** There is a test.
