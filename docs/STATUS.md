@@ -874,3 +874,56 @@ Report, SQL and rollback:
 `xsonomy-news/research-agent/reports/2026-10-31-spotter-global-product-split.md`.
 ### 2026-10-31 — investor financial profiles and portfolio links
 Added separately typed source-backed financial metrics to seven investor profiles, with scope, dates and sources. No aggregate round sizes are attributed to a fund. Missing data remains explicitly not established. Portfolio links resolve only unique exact names in published database company rows, carrying company IDs/slugs; ambiguous and absent names remain unlinked. `docs/investor-portfolio-reconciliation.json` is the database owner's queue, including relationships and evidence. No Supabase rows were created in this read-only catalogue repository.
+
+## 2026-11-01 — investor portfolio links became stored relationships
+
+Portfolio links were computed at build time: a unique exact name match against **published**
+companies. That link existed only while the name happened to match, could never reach an
+unpublished company, and carried no evidence of its own. They are database rows now —
+`investor_companies`, 61 of them, each with a source URL, a review date, an evidence status
+and a persistent company id.
+
+**The 38 "unresolved" names were not 38 missing companies.** Delian Alliance Industries was
+already in the catalogue as a **draft**, which is precisely why the old matcher could not see
+it. Two more were spelling variants, now resolved by alias: the investor publishes *Unmanned
+Defense Systems* where the company is *Unmanned Defence Systems*, and MD One publishes
+*Milvus* where the company is *Milvus Advanced*.
+
+**16 companies verified and created**, 8 published and 8 deliberately not. `/companies/`
+describes itself as a directory of UAV and counter-UAS companies, so therapeutics,
+nanomaterials, rocket launch, satellite analytics, ground logistics autonomy, enterprise
+security and test equipment are created as drafts: the relationship is stored and the holding
+is shown, but the public directory and its stated count stay true. **None of the 16 has a
+taxonomy row or a landscape row** — the landscape build requires an explicit sector
+assignment, so a company created from a portfolio listing cannot enter it. Portfolio
+membership is not an eligibility argument. Landscape unchanged at **567**.
+
+**Matching is curated where automation was wrong.** A substring pass tied the French
+Systematic Paris Region cluster to Systematic A/S, a Danish software company, and iNTACT to
+INTA. Those are recorded as rejected false positives so nobody makes them later.
+
+**Amounts stay separate.** `investor_contribution` and `round_total` are independent nullable
+pairs with a CHECK that a contribution cannot exceed its round. Three are disclosed: Coinvest
+Capital's own €0.9M share of the €3.2M round it led into Unmanned Defence Systems, and
+Sienna's €7M and €11.8M, where no round total is published and so none is recorded. EIFO →
+Six Robotics is stored as `fund_of_funds`, because the cited source is about EIFO investing in
+the D3 **fund**, not in that company.
+
+**Financial metrics are typed, not lumped.** Twelve types keep the distinctions a single
+"fund size" field destroys: Flyer One's €50M is an announced *launch size* (a target), Keen's
+is a *first close* stored as a `minimum` bound so "more than €150M" never renders as exact,
+Vsquared's is a *final close*, and Dark Star's "9" counts *investments* while Flyer One's
+"97 companies" counts *distinct portfolio companies*.
+
+**The supplement is gone.** `investor-directory.json` and `investor-profiles.mjs` are deleted
+after proving parity: 118 records in and out, no slug lost, Ukraine count unchanged at 26, and
+every holding name still present either as a resolved relationship or as a listed unresolved
+holding. The projection was broadened from the 21 records that had a city location to all 118,
+each keeping its own evidence label — 94 of them are placed only by country association, which
+is why a JSON file had to exist alongside the database at all.
+
+Tests 41/41. Live: 118 records, 61 relationships, 52 with a profile URL, 14 metrics, 26
+unresolved holdings each with a reason.
+
+Import, rollback and the ambiguity/idempotency test results:
+`xsonomy-news/research-agent/imports/README-investor-portfolio.md`.
