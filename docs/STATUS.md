@@ -1008,7 +1008,7 @@ and fund-position managers, so the "Search investors & portfolio companies" plac
 true; accent-free names like `d3` and `defence fund` both find their record.
 
 **Counts from this build:** 118 records, 41 locations, **74** portfolio relationships, **13**
-unresolved holdings, **9** fund positions, **24** investors with financial figures (was 7).
+unresolved holdings, **9** fund positions, **23** investors with financial figures (was 7).
 Landscape **567**, unchanged — none of the ten companies created in the database pass has a
 taxonomy or candidate row, so a portfolio listing still cannot admit a company to it.
 
@@ -1028,3 +1028,8 @@ distinct lines; BSV Ventures' Airvolve holding with the Baltic Sandbox Ventures 
 note; MITS Capital's contested $50m target with the contest spelled out; SmartCap's four
 commitments each linking through to the manager. Mobile at 375px: no horizontal scroll, the
 new link is a 35px touch target.
+
+Every source URL written in the database pass was then link-checked, and the one that did not
+resolve was removed rather than published: Varangians' €9.1m close had a single source, which
+now returns 404. That is why the figure count is 23 investors and not 24, and it is the reason
+for the second deploy.
