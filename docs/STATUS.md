@@ -1283,3 +1283,13 @@ recorded. Nothing was executed against production.
 **A correction to the last entry.** It reported news tests 41/41. One was in fact failing on
 the committed tree: the coverage pass regenerated the ledger and dropped its pointer to the
 rollback manifest. Fixed. Catalogue **75/75**, news **48/48**.
+
+### Pending, not applied: non-aerial product batch 2
+
+A second non-aerial product batch is prepared in `xsonomy-news`
+(`research-agent/reports/2026-11-01-non-aerial-product-batch-2.md`) and **has not been
+applied**, so nothing on the site has changed. If it is approved it will move six product
+pages from `/uav/<slug>/` to `/other/<slug>/` — Dire WOLF, Ghost Shark, LUNA-2, MMCM, rMCM
+and XLUUV — taking UAV from 1,416 to 1,410 and Other from 410 to 416, with six
+`slug_redirects` rows keeping the old URLs working. Every slug was checked free in `/other/`
+and no namesake is left behind in `/uav/`.
