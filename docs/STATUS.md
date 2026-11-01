@@ -1033,3 +1033,51 @@ Every source URL written in the database pass was then link-checked, and the one
 resolve was removed rather than published: Varangians' €9.1m close had a single source, which
 now returns 404. That is why the figure count is 23 investors and not 24, and it is the reason
 for the second deploy.
+
+## 2026-11-01 — Exail admitted, ECA merged into it, and 11 product pages moved sections
+
+Supersedes the "landscape change is proposed, not made" entry of 2026-10-31. **Nazar
+authorised** three things and all three are applied and live: the reviewed admission and
+merge (with the `merged_with` lineage row and ECA retired in both landscape editions,
+history preserved), the Exail description, and **category-only** corrections for the
+products whose maritime identity is evidenced. One guarded 17-step transaction, run in
+`xsonomy-news` and against the Supabase SQL editor — this repo still only reads.
+
+Write-up, applied SQL and rollback: `xsonomy-news/research-agent/reports/
+2026-11-01-exail-merge-applied.md` (+ `.sql`, `-rollback.sql`).
+
+**Landscape stays 567** — +1 Exail admitted, −1 ECA retired. Those are two independent
+decisions that happen to cancel; both were authorised, so both landed. Live companies
+2,458 → 2,457; suppliers 2,421 → 2,420; the 37 research & academic organisations, the 118
+investor records and the 38 hub records are untouched. Exail shows on the map with
+`domains: ['uav']`, sectors `eco-navigation` + `eco-components`, a 335-character
+description where it previously had none, and 19 products.
+
+**This repo's change: a product's old URL now survives a category correction.** A product
+page lives at `/<section>/<slug>/`, where the section comes from `products.category` and
+the slug from the product *name*. So correcting a category moves the page —
+`/uav/drix-h-8/` → `/other/drix-h-8/` — while the slug stays the same. The redirect table
+could not express that: `fetchRedirects` wrote every stub into the section of its
+**target**, so a same-slug stub landed on top of the live page it pointed at and was
+skipped as a collision, and the database's `from_slug <> to_slug` CHECK rejected the row
+outright. Redirects now carry `from_section`, the generator writes the stub there, and the
+canonical still points at the target's own section. NULL keeps the old behaviour, so all
+53 pre-existing rows — including `ax250-gax500-3d → ax250` — are unaffected.
+
+Verified live after the 16:26 UTC rebuild: all 11 `/other/<slug>/` pages are real pages,
+all 11 `/uav/<slug>/` URLs still answer with a canonical to the new one, `uav.json` is
+1,444 and `other.json` 382 (matching the database), `/uav/it180-sth-u/` is unmoved, and
+`/companies/eca-group/` and `/companies/eca-group-infotron/` both canonical straight to
+`/companies/exail/` rather than chaining. Tests **60/60**, including a new one that builds
+the whole site and proves the cross-section redirect works — and that without
+`from_section` the move cannot be expressed at all.
+
+**Held back on purpose, both reported:** `Exail A27` (no source anywhere names the product,
+so its identity and therefore its category cannot be established) and `DORCUS` (not an
+Exail product at all — an ownership question Nazar left pending). No product was renamed,
+retired, deduplicated or unpublished.
+
+**Found while verifying, not fixed:** 101 live landscape companies still render with an
+empty description, and the same "filed under category UAV but is not an aerial system"
+taxonomy flag sits on 19 further products outside Exail that are still categorised UAV.
+Each deserves its own pass.
