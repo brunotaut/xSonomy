@@ -1081,3 +1081,46 @@ retired, deduplicated or unpublished.
 empty description, and the same "filed under category UAV but is not an aerial system"
 taxonomy flag sits on 19 further products outside Exail that are still categorised UAV.
 Each deserves its own pass.
+
+## 2026-11-01 — Hub cards now link to the profiles their matches point at
+
+DLR and MITS Capital were both **confirmed** catalogue matches that the hub panel still
+rendered as plain text. Two unrelated causes, both fixed. Write-up and rollback:
+`xsonomy-news/research-agent/reports/2026-11-01-hub-profile-links.md`.
+
+**Why it could not work.** The panel resolved a match by searching the payloads this page
+already loads. For a company it searched `landscape.json`'s company array — which holds
+only the 567 landscape members. DLR is a research institute, counted *outside* that list,
+so its id was never in the array; `/companies/dlr-german-aerospace-center/` had existed
+the whole time. For an investor it compared the hub's `matchedInvestorId` against the
+investor payload's ids — but hub records point at the **legacy `investors` table** while
+the published records are `investor_research` rows keyed on their own ids, so *no*
+investor match could ever have resolved, for any hub.
+
+**The fix, in the right layer.** `v_landscape_hubs` now resolves each stored id to a
+published profile — by id, in SQL, never by name and never by building a slug — and
+returns null when no published profile exists. The export emits `matchedCompanySlug`,
+`matchedCompanyUrl`, `matchedCompanyName`, `matchedInvestorSlug`, `matchedInvestorName`
+and `matchConfirmed`, and the panel renders what it was given. `atlas.js`'s own
+`ASSERTED_MATCH` copy of the confirmed-role list is **deleted** — holding the rule in two
+places is what let it drift from the data.
+
+**A link needs two independent conditions:** the relationship is a reviewed conclusion,
+*and* the target has a published profile. **Bofors Test Center is why they are separate** —
+its matched company is published and `/companies/bofors/` returns 200, but the match is
+only `needs_review`, so the export withholds the slug and url entirely and the panel says
+*"A possible match, not confirmed… so this is deliberately not a link."* A rejected
+false positive gets its own wording. Nothing turned Bofors Test Center into a confirmed
+relationship.
+
+**Verified on the live page**, not just in the export: DLR's panel renders
+`DLR (German Aerospace Center) — company profile ↗` to
+`https://xsonomy.com/companies/dlr-german-aerospace-center/` (200, and the page's own `h1`
+is DLR), and MITS Accelerator renders `MITS Capital / Lightning Fund — investor record →`
+opening `mits-capital-lightning-fund`. Hub counts (37 organisations + 1 site, 40
+locations, 25 countries), eligibility, filters and the 567-company landscape are unchanged.
+Tests **66/66**.
+
+One correction mid-flight: the first deploy linked correctly but still *labelled* the
+company from the landscape payload, so DLR read as `dlr-german-aerospace-center`. The
+name now travels with the slug from the row that resolved it.
