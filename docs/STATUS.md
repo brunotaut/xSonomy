@@ -1124,3 +1124,42 @@ Tests **66/66**.
 One correction mid-flight: the first deploy linked correctly but still *labelled* the
 company from the landscape payload, so DLR read as `dlr-german-aerospace-center`. The
 name now travels with the slug from the row that resolved it.
+
+## 2026-11-01 — Investor figures now labelled by what they are; coverage 23 → 55
+
+Write-up and per-investor ledger:
+`xsonomy-news/research-agent/reports/2026-11-02-investor-semantics-and-coverage.md`
+(+ `-financial-ledger.md`). Database work ran in `xsonomy-news`; this repo still only reads.
+
+**The bug worth remembering: a note never reaches a label.** Four figures carried careful
+explanatory prose and the wrong structured type, and the interface reads the type. A listed
+trust's net asset value was stored as the manager's **total** assets (Seraphim), an average
+cheque as a published **range** with min = max (DTCP), and grant money and grant counts as
+**equity invested** and **investments made** (Brave1). Flyer One's €50M sat as a *target*
+when its own source says Fund V was "launched at €50 million" — stating no target and
+reporting no close. Five new metric types separate them, and a `vehicle_nav` now **cannot**
+be stored without a named vehicle.
+
+**This repo's part: the card had to move with the data.** `invCards` picks each figure by
+metric type, so retyping would have silently emptied the slot each one used to fill —
+Seraphim's would have vanished from the AUM line, DTCP's from the ticket line, Brave1's from
+the invested line, all while sitting in the export. Each slot now reads every type that
+belongs in it (`SCALE_METRICS`, `TICKET_METRICS`, `DEPLOYED_METRICS`) and labels the
+corrected ones honestly: **Vehicle NAV**, **Average ticket**, **Grants disbursed**, **Own
+capital invested**. A test forbids any slot being keyed on a single bare type again.
+
+**Second card change.** The unverified-candidate notice read *"Unverified candidate. Limited
+information is available; inclusion is not confirmation of investment activity"* — directly
+above sourced figures and sourced holdings. It now says what is unestablished is the
+investor's **defence relevance, not its existence**, and where sourced facts are present it
+says they stand on their own sources. The softer wording survives for a record with nothing.
+
+Verified live after the 17:40 UTC rebuild: 118 investor records, 100 observations across 55
+investors, 100 relationship rows over **70 unique companies** (different numbers), 82 rows
+linking a published profile and every one of those URLs returning 200, 7 unresolved
+holdings, 13 fund positions in their own section, zero retired relationships exported, no
+amount rendered as zero. Landscape **567**, companies 2,457 → 2,464. Tests **72/72**.
+Checked on a 375 px viewport: no horizontal scroll and every portfolio link resolves.
+
+**Not finished, and not claimed to be: 40 of the 118 investors have still never been
+researched financially.** They are listed in the ledger and identifiable from the data.
