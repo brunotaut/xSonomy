@@ -156,7 +156,15 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       fundPositions: (r.fund_positions || []).map((f) => ({
         ...f, source: isWebUrl(f.source) ? f.source : null,
       })),
-      financialMetrics: (r.financial_metrics || []).filter((m) => isWebUrl(m.source)),
+      // A figure whose recipient is not established is held in the research layer, never
+      // published as somebody's. The database already makes such a row non-current and the
+      // view reads only current rows, so this is the second lock on that door — deliberately,
+      // because the defect it guards against is a real one: an unproven identity match once
+      // put two organisations' possible figures on one fund behind a prose caveat, and a
+      // caveat does not stop an export.
+      financialMetrics: (r.financial_metrics || [])
+        .filter((m) => isWebUrl(m.source))
+        .filter((m) => (m.attribution ?? 'attributed') === 'attributed'),
       sources: (r.sources || []).filter((s) => isWebUrl(s.url)),
       locations,
     };
@@ -201,6 +209,10 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       retiredRelationships: 'A relationship whose cited source turned out not to support ' +
         'the specific investor and company is withdrawn from the portfolio rather than ' +
         'kept with a softer label, and is listed as an unresolved holding instead.',
+      metricAttribution: 'A figure is published only against the organisation it is ' +
+        'established to belong to, and only against a fund of that organisation. Where two ' +
+        'similarly named entities cannot be shown to be the same, the figure is held back ' +
+        'rather than attached to whichever of them is in front of it.',
     },
     countryReviews: reviews.map((c) => ({
       country: c.country, name: c.name_en, status: c.status,

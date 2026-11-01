@@ -333,3 +333,43 @@ test('a retired relationship stays out of the export whichever reason retired it
   assert.deepEqual(out.investors[0].portfolio, []);
   assert.match(out.caveats.retiredRelationships, /withdrawn from the portfolio/);
 });
+
+// An unproven identity match once put a Luxembourg entity's ticket range and a Prague
+// fund's announced raise on the same vehicle, with a sentence of prose to say the match
+// was unproven. Prose does not filter an export. A figure whose recipient is not
+// established now carries that status from the database and is dropped here, so neither
+// layer alone has to be right for the wrong thing to stay unpublished.
+test('an observation whose recipient is unresolved is not published as anyone\'s', () => {
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({
+    financial_metrics: [
+      { metricType: 'fund_size_target', display: '€150M announced at launch',
+        amountMin: 150000000, amountMax: null, currency: 'EUR', bound: 'exact',
+        scope: 'An announced launch size.', vehicle: 'Tech Horizons SCSp',
+        source: 'https://example.com/launch', verification: 'reported',
+        attribution: 'attributed', checkedAt: '2026-11-01' },
+      { metricType: 'initial_investment_range', display: '€300K–€3M per deal',
+        amountMin: 300000, amountMax: 3000000, currency: 'EUR', bound: 'range',
+        scope: 'An aggregator profile for a similarly named entity.',
+        vehicle: 'Tech Horizons SCSp', source: 'https://example.com/aggregator',
+        verification: 'unverified', attribution: 'unresolved_identity',
+        checkedAt: '2026-11-01' },
+    ],
+  })] });
+  const metrics = out.investors[0].financialMetrics;
+  assert.equal(metrics.length, 1, 'the unresolved figure must not travel');
+  assert.equal(metrics[0].metricType, 'fund_size_target');
+  // not merely hidden from the card: absent from the file
+  assert.equal(JSON.stringify(out).includes('300000'), false,
+    'the withheld amount must not survive anywhere in the export');
+  assert.match(out.caveats.metricAttribution, /held back/);
+});
+
+test('a figure with no attribution field still publishes, so older rows are not dropped', () => {
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({
+    financial_metrics: [{ metricType: 'manager_aum', display: '€1.2B AUM', amountMin: 1200000000,
+      amountMax: null, currency: 'EUR', bound: 'approximate', scope: 'Manager-wide.',
+      source: 'https://example.com/aum', verification: 'reported', checkedAt: '2026-11-01' }],
+  })] });
+  assert.equal(out.investors[0].financialMetrics.length, 1,
+    'absent means attributed: a guard that silently empties the export is worse than none');
+});

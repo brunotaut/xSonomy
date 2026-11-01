@@ -1239,3 +1239,47 @@ directories. "Rockaway Alpha Defense" is the Defense sub-fund of Rockaway Alpha 
 distinct from the Alpha sub-fund the record's name conflates it with.
 
 **Unknown amounts remain `null` and render as unknown — never zero.** There is a test.
+
+## 1 November 2026 (later) — Tech Horizons is one organisation, and the rollback predicate is gone
+
+**Tech Horizons resolved on a register number, not a name.** The record held a €150M raise
+attributed to "Presto Tech Horizons" and a €300K–€3M ticket range attributed to a
+Luxembourg "Tech Horizons" profile, both on one vehicle, with prose saying the match was
+unproven. The manager's own legal notice gives `RCS Luxembourg B282214`, and the Luxembourg
+register's entry for that number runs **Presto GP III Sàrl → Presto Tech Horizons GP Sàrl →
+Tech Horizons GP Sàrl**. Same organisation. Corroborated by the launch coverage calling it
+Presto Ventures' *third* fund (the vehicle was formerly Presto Ventures III SCSp) and by
+Vidar Systems and Bavovna AI appearing on the manager's own portfolio page.
+
+Domicile is now Luxembourg (`Tech Horizons SCSp`, Capellen) and the office is Prague. The
+old note "office vs domicile pending verification" is answered.
+
+**The identity work found two wrong figures.** The €150M cited an article headlined
+"European Defense Tech Fund Secures €150M" — which is **Keen Venture Partners'** first
+close, mentioning this fund only in passing with no amount attached. Re-sourced to the June
+2024 launch coverage, re-dated from 2025-11 to 2024-06, and still labelled an *announced
+launch size*: no source reports a close. And the €300K–€3M range is **contradicted by the
+manager's own site**, which states €1M–€5M; it is now withdrawn from publication, kept for
+audit, and replaced by the official range as `source_confirmed`.
+
+Counts unchanged: **118 investors, 102 with figures, 207 observations.** One observation
+was traded for a better-sourced one.
+
+**Two new guards, because a caveat does not filter an export.** A composite foreign key
+means one investor's figure can no longer name another investor's fund, and a new
+`attribution_status` column with a CHECK means a figure whose owner is unproven cannot be
+`is_current` — so it cannot reach the site, while staying available to the next pass. The
+generator drops such a figure a second time. Both were proven by statements *expected to
+fail*, which wrote nothing.
+
+**Rollback.** The one remaining unscoped statement — nulling `retired_kind` wherever it
+equalled `unsupported_evidence` — would have reached a row the *coverage* pass retired, was
+not the before-image anyway, and would have failed its own CHECK. Replaced with exact ids
+and guards. The two latest passes now have their own manifest with 239 exact ids; passes A
+and B are declared to have none. Nine specific reversals are marked **unavailable** rather
+than guessed, including the prior scope text of five re-typed metrics, which no report ever
+recorded. Nothing was executed against production.
+
+**A correction to the last entry.** It reported news tests 41/41. One was in fact failing on
+the committed tree: the coverage pass regenerated the ledger and dropped its pointer to the
+rollback manifest. Fixed. Catalogue **75/75**, news **48/48**.
