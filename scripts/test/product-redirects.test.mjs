@@ -48,7 +48,7 @@ test('a product redirect is written into its target section, and a dead one is s
       { from_slug: 'alpha-old', to_slug: 'alpha', kind: 'company' },
     ],
     product_taxonomy_view: [], article_products: [], articles: [],
-    v_landscape_investors: [], v_investor_country_reviews: [],
+    v_landscape_investors: [], v_investor_country_reviews: [], v_landscape_hubs: [], v_hub_country_reviews: [],
   };
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');

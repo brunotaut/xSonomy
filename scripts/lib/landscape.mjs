@@ -168,3 +168,129 @@ export function buildLandscapeInvestors({ investors, reviews }) {
     investors: records,
   };
 }
+
+// ---- UAV / Counter-UAS hub research export ----
+// A third export beside the landscape and the investors, in its own file with a pointer
+// from landscape.json, because hubs are a different kind of thing again: a test centre is
+// neither a company in the landscape nor an investor, and must never be mixed into either
+// count.
+//
+// Every caveat below is a mistake a consumer would otherwise make, and most of them are
+// mistakes the research itself warns about:
+//   * a research recommendation is not an editorial approval, so map_candidate alone did
+//     not publish anything;
+//   * a contact office, a programme delivery city, a simulation lab and a flight-test
+//     locality are different facts, which is what `kind` keeps apart;
+//   * a locality centroid is not a facility, a runway or an airspace boundary;
+//   * a documented facility is not a bookable one;
+//   * planned capability is not current capability, which is why bvlos is carried as the
+//     source's own wording rather than reduced to a badge;
+//   * a site belongs to another record and is not an independent organisation.
+export const HUB_EXPORT = 'european-uav-cuas-hubs';
+
+export async function fetchLandscapeHubs(sbFetchAll) {
+  const [hubs, reviews] = await Promise.all([
+    sbFetchAll('v_landscape_hubs', { select: '*', order: 'name.asc' }, 'hubs'),
+    sbFetchAll('v_hub_country_reviews', { select: '*', order: 'country.asc' }, 'hub country reviews'),
+  ]);
+  return buildLandscapeHubs({ hubs, reviews });
+}
+
+export function buildLandscapeHubs({ hubs, reviews }) {
+  const records = hubs.map((r) => {
+    const locations = (r.locations || []).map((l) => ({
+      locality: l.locality, country: l.country,
+      latitude: l.latitude, longitude: l.longitude,
+      kind: l.kind, precision: l.precision, coordinateBasis: l.coordinateBasis || null,
+    }));
+    // Approval required one, so an empty list means the projection or the approval gate
+    // has drifted. Fail loudly rather than publish a hub with nowhere to put it.
+    if (!locations.length) throw new Error(`Approved hub ${r.research_id} has no location.`);
+    const sources = (r.sources || []).filter((s) => isWebUrl(s.url));
+    if (!sources.length) throw new Error(`Approved hub ${r.research_id} has no web source.`);
+    return {
+      id: r.id, researchId: r.research_id, slug: r.slug, name: r.name,
+      country: r.country, countryName: r.country_name || null,
+      localityText: r.locality_text || null,
+      hubType: r.hub_type,
+      // organisation | site | programme. Only `organisation` counts as an independent hub.
+      recordUnit: r.record_unit,
+      evidenceStatus: r.evidence_status,
+      technologyFocus: r.technology_focus || [],
+      summary: r.summary_en || null,
+      researchNote: r.research_note_en || null,
+      operationalStatus: r.operational_status || null,
+      accessModel: r.access_model || null,
+      // The source's own wording, deliberately not reduced to a boolean: "planned for
+      // 2027" and "subject to authorisation" are both true and neither is "available".
+      bvlosStatus: r.bvlos_status || null,
+      cuasEvidence: r.cuas_evidence || null,
+      reviewedAt: r.reviewed_at || null,
+      // A link to an existing catalogue record, never a merge, and the role says what kind
+      // of link it is: the same organisation, a facility of it, or a related organisation
+      // with a different function.
+      matchedCompanyId: r.matched_company_id || null,
+      matchedInvestorId: r.matched_investor_id || null,
+      matchRole: r.match_role || null,
+      matchNote: r.match_note_en || null,
+      relationships: (r.relationships || []).map((x) => ({
+        kind: x.kind, direction: x.direction, researchId: x.researchId,
+        name: x.name, published: x.published === true, note: x.note || null,
+      })),
+      sources, locations,
+    };
+  });
+  const organisations = records.filter((h) => h.recordUnit === 'organisation_or_hub');
+  return {
+    edition: HUB_EXPORT, generatedAt: new Date().toISOString(),
+    membership: 'Approved UAV and Counter-UAS hub research records: a documented relevant ' +
+      'function, a public locality with an approximate centroid, and an evidence URL. ' +
+      'Planned, historical, unverified and location-pending records are held in research ' +
+      'staging and are not here.',
+    counts: {
+      // Reported separately and never added together. A site belongs to another record, so
+      // counting it as an organisation would overstate how many independent hubs exist.
+      organisations: organisations.length,
+      sites: records.filter((h) => h.recordUnit === 'site').length,
+      programmes: records.filter((h) => h.recordUnit === 'programme').length,
+      records: records.length,
+      locations: records.reduce((n, h) => n + h.locations.length, 0),
+      countries: new Set(records.map((h) => h.country)).size,
+    },
+    caveats: {
+      approval: 'A research map-candidate recommendation is not an approval. Each record ' +
+        'and locality here was reviewed separately.',
+      coordinates: 'Approximate locality centroids, generally rounded to two decimals. ' +
+        'Never a runway, an airspace boundary, a flight volume or a facility outline.',
+      locationKinds: 'Test localities, research-laboratory cities, simulation-laboratory ' +
+        'cities, network offices, operator contact cities and programme delivery cities are ' +
+        'distinct and are not interchangeable. A contact office is not a flight-test site.',
+      availability: 'A documented facility is not a bookable one. Access, eligibility and ' +
+        'commissioning of planned capability are not established by this research.',
+      bvlos: 'Carried as the source\'s own wording. Planned or authorisation-dependent ' +
+        'BVLOS is not current BVLOS availability.',
+      cuas: 'Counter-UAS scope is recorded only where a source states it. Absence means ' +
+        'not established, not absent.',
+      affiliation: 'Programme or alliance affiliation, including NATO DIANA, does not by ' +
+        'itself establish UAV or Counter-UAS capability.',
+      recordUnits: 'Sites and programmes are listed alongside organisations but counted ' +
+        'separately. A site belongs to another record and is not an independent hub.',
+      classification: 'A research laboratory is not automatically a regional industrial ' +
+        'cluster, and a national programme is not automatically a physical test site.',
+      locationEvidence: 'In this wave every locality carries the same evidence set as its ' +
+        'record, so sources are listed once per record rather than repeated per locality.',
+      matches: 'A match links this record to an existing catalogue company or investor ' +
+        'without merging them. The role states whether it is the same organisation, a ' +
+        'facility of it, or a related organisation with a different function.',
+      emptyFields: 'An absent value means not established, never zero.',
+      completeness: 'A first-wave country review, not a census of European facilities.',
+    },
+    countryReviews: reviews.map((c) => ({
+      country: c.country, name: c.name_en,
+      researchRecords: c.research_records, mapCandidates: c.map_candidates,
+      approvedRecords: c.approved_records, approvedLocations: c.approved_locations,
+      note: c.review_note_en, reviewedAt: c.reviewed_at,
+    })),
+    hubs: records,
+  };
+}

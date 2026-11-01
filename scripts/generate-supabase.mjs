@@ -15,7 +15,7 @@ import { mkdir, rm, cp, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchLandscape, fetchLandscapeInvestors } from "./lib/landscape.mjs";
+import { fetchLandscape, fetchLandscapeInvestors, fetchLandscapeHubs } from "./lib/landscape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -1281,6 +1281,20 @@ async function main() {
   };
   console.log(`  Investors: ${investors.investors.length} approved, ` +
     `${landscape.investors.locations} locations -> /data/landscape-investors.json`);
+
+  // Approved UAV / C-UAS hub research, same pattern again: its own file, a pointer from
+  // landscape.json, and counts that stay out of the company and investor totals. The
+  // organisation count excludes site records, which belong to another hub.
+  const hubs = await fetchLandscapeHubs(sbFetchAll);
+  await writeFile(join(OUT, "data", "landscape-hubs.json"), JSON.stringify(hubs));
+  landscape.hubs = {
+    ...hubs.counts,
+    url: "/data/landscape-hubs.json",
+    membership: hubs.membership,
+  };
+  console.log(`  Hubs: ${hubs.counts.organisations} organisations + ${hubs.counts.sites} site` +
+    `${hubs.counts.sites === 1 ? "" : "s"}, ${hubs.counts.locations} locations in ` +
+    `${hubs.counts.countries} countries -> /data/landscape-hubs.json`);
 
   await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
   const landscapePath = join(OUT, "landscape", "index.html");
