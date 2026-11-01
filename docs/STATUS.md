@@ -1346,3 +1346,10 @@ all of it is data, deployed through the normal build. Detail in `xsonomy-news`:
 **aerial** domain row — a piloted light aircraft and a servo actuator. Whether a domain row
 describes what a product *is* or what it *flies on* needs an answer before more records
 inherit the ambiguity.
+
+**Investor data, same day.** The Tech Horizons €150M observation was re-typed from
+`fund_size_target` to `fund_size_stated` — the cited source says the fund was *launched at*
+€150M and uses no target language, so the card caption "Fund size (announced target)" was
+claiming more than the source does. It now reads "Fund size (stated)". Coverage is
+unchanged at 118 investors and 207 observations; no catalogue code changed. Detail in
+`xsonomy-news`: `research-agent/reports/2026-11-01-tech-horizons-and-rollback-closeout.md`.
