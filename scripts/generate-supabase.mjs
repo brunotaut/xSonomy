@@ -1145,7 +1145,7 @@ function researchShell(total, staticIndex = "") {
 // page instead", the other says "index nothing here" — and Google advises against the
 // pair. The canonical on its own is what passes the old URL's value to the new one.
 async function fetchRedirects() {
-  return sbFetchAll("slug_redirects", { select: "from_slug,to_slug,kind", order: "from_slug.asc" }, "slug_redirects");
+  return sbFetchAll("slug_redirects", { select: "from_slug,to_slug,kind,from_section", order: "from_slug.asc" }, "slug_redirects");
 }
 
 function redirectPage(from, to, section) {
@@ -1461,7 +1461,12 @@ async function main() {
       console.warn(`  WARNING: redirect ${r.from_slug} -> ${r.to_slug} has no live target — skipped`);
       continue;
     }
-    const dir = join(OUT, section, r.from_slug);
+    // Where the OLD url lived. A product that changes category changes section, so its
+    // old and new urls can differ only in that: /uav/neptis/ becomes /other/neptis/.
+    // `from_section` says which section the stub belongs in; without it the stub would
+    // be written on top of the live page it points at and skipped as a collision.
+    const fromSection = r.kind === "product" ? (r.from_section || section) : "companies";
+    const dir = join(OUT, fromSection, r.from_slug);
     if (existsSync(join(dir, "index.html"))) {
       console.warn(`  WARNING: redirect ${r.from_slug} collides with a real page — skipped`);
       continue;
