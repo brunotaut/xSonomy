@@ -927,3 +927,57 @@ unresolved holdings each with a reason.
 
 Import, rollback and the ambiguity/idempotency test results:
 `xsonomy-news/research-agent/imports/README-investor-portfolio.md`.
+
+## 1 November 2026 — the Hubs tab becomes real
+
+`b4491ae`. Frontend only: no import was repeated, no database row touched, no publication
+rule changed. The export this consumes was already live from the previous session.
+
+**The demo hubs are deleted, not hidden.** The Hubs tab used to be five invented cities —
+Prague, Munich, Paris, London, Kyiv — kept behind a `data-demo` flag that was switched off,
+so visitors saw no Hubs tab at all. The array is gone from `atlas.js`, the DEMO badge is gone
+from the tab, and the footer no longer promises that hubs will appear later. Nothing in the
+code can now produce a hub record that did not come from `/data/landscape-hubs.json`: a
+failed fetch yields an error state with a retry, never a fallback.
+
+**Counts derived from the file, never hardcoded.** Live: **37 independent hub organisations,
+1 associated site, 38 records, 40 locations across 25 countries.** The three units are
+reported separately and never added together — the AIRlabs Steinalpl test area is a `site_of`
+the AIRlabs Austria network and is counted as an associated site, not as a 38th organisation.
+Filtered counts follow the same rule: Austria shows *1 organisation · 1 associated site · 2
+locations*, and ATLAS Flight Centers contributes two site localities under one organisation.
+
+**A contact office is not a flight-test site, and the map says so.** Hubs are triangles,
+distinct from company circles and investor squares. 36 solid triangles are test, flight-test,
+research-laboratory and simulation-laboratory localities; 4 hollow ones are the Graz network
+office, the Andenes operator contact city, the Attard contact office and the Kyiv programme
+delivery city. Each hollow marker's accessible name ends *"not a flight-test site"*, the
+legend repeats the distinction, and every locality line in the panel carries its own kind.
+
+**Planned capability never reads as availability.** BVLOS appears under *"the source's own
+wording"* with the caveat beside it. Unmanned Valley reads *"Planned 2027 per operator not
+current"*; Snowdonia reads *"Documented in CAA test site information subject to
+authorisation"*. There is no BVLOS badge or boolean to misread.
+
+**Unconfirmed matches stay unconfirmed.** Bofors Test Center shares a name with the catalogue
+company Bofors, which is the BAE artillery business — it renders as *"Possible match — not
+confirmed"* with its reason and **no link**. Only `facility_of_matched_organisation` and
+`related_organisation_different_function` may become links. The unpublished `operated_by →
+CATEC` relationship is shown as text saying the record is held in research staging, so there
+is no broken link. The NaviSpot/PSNC shared campus renders as two separate operators.
+
+Two things fixed while verifying: hub search folds accents, so typing `kakolewo` finds
+*Kąkolewo* and `troia` finds *Tróia*; and the source's own BVLOS wording keeps its acronyms
+rather than rendering as a lowercased database token.
+
+Checked live in a browser at desktop and 375px: 40 markers all keyboard-focusable with
+`role="button"`, no two within 6px of each other, 38 cards, filters and selection round-trip
+through the URL, reset clears the two new facets, no horizontal scroll on mobile, and the
+panel opens and closes. A simulated hub outage left companies (567) and investors (118)
+working with a retry that recovered the layer. Tests 55/55.
+
+**Remaining blocker:** `matchedCompanyId` and `matchedInvestorId` are database UUIDs, and
+neither DLR nor MITS Capital appears in the published landscape or investor payloads under
+those ids, so a confirmed match currently renders its role and note without a profile link.
+Adding `matchedCompanySlug` / `matchedInvestorSlug` to the export would light the links up
+with no interface change — that is an export change, outside this task's scope.
