@@ -185,9 +185,13 @@ export function buildLandscapeInvestors({ investors, reviews }) {
         'either may be unknown. A round total is what all investors supplied together and ' +
         'is never read as one investor\'s cheque.',
       metricTypes: 'Financial metrics are typed precisely: a target is not a close, a first ' +
-        'close is not a final close, manager AUM is not a fund, capital invested to date is ' +
-        'not committed capital, a typical first cheque is not a fund size, and a count of ' +
-        'investments is not a count of companies.',
+        'close is not a final close, manager AUM is not a fund and is not one vehicle\'s net ' +
+        'asset value, capital invested to date is not committed capital, grant funding is ' +
+        'not equity capital, a stated average cheque is not a published range, a typical ' +
+        'first cheque is not a fund size, and a count of investments is not a count of ' +
+        'companies or of grants. The type is what the figure IS; the scope says whose and ' +
+        'as of when. Figures of different types, currencies or periods are never added ' +
+        'together.',
       unresolvedHoldings: 'Holdings that could not be resolved to a company are listed with ' +
         'the reason rather than matched to a similarly named organisation.',
       fundPositions: 'A fund position is capital committed to another manager\'s fund. It ' +

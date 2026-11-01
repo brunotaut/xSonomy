@@ -264,3 +264,72 @@ test('an investor with no fund positions gets an empty array, not a missing fiel
   assert.deepEqual(out.investors[0].fundPositions, []);
   assert.deepEqual(out.investors[0].portfolio, []);
 });
+
+// A figure's TYPE is what the interface reads. Notes do not reach the label, the card
+// slot or any filter, so a figure whose type is wrong is displayed wrong however careful
+// its prose. These four were corrected in the 2026-11-01 pass.
+test('corrected metric types survive the projection with their vehicle and scope', () => {
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({
+    financial_metrics: [
+      { metricType: 'vehicle_nav', display: '£421.3M NAV', currency: 'GBP', amountMin: 421300000,
+        vehicle: 'Seraphim Space Investment Trust plc', scope: 'One listed vehicle’s NAV, not the manager’s total.',
+        verification: 'reported', asOf: '2026-03-31', asOfIsExactDate: true, checkedAt: '2026-11-01',
+        source: 'https://investors.seraphim.vc/q3.pdf' },
+      { metricType: 'average_investment_size', display: 'About €20M average investment', currency: 'EUR',
+        amountMin: 20000000, amountMax: null, scope: 'A stated average, not a published range.',
+        verification: 'source_confirmed', checkedAt: '2026-11-01', source: 'https://www.dtcp.capital/news' },
+      { metricType: 'grant_funding_disbursed', display: '₴6.2B in grants disbursed', currency: 'UAH',
+        amountMin: 6200000000, scope: 'Grants, not equity capital invested.', verification: 'reported',
+        checkedAt: '2026-11-01', source: 'https://mod.gov.ua/en/news/brave1' },
+      { metricType: 'grant_count', display: '1,000+ grants awarded', count: 1000,
+        scope: 'Grants awarded, not investments in companies.', verification: 'reported',
+        checkedAt: '2026-11-01', source: 'https://mod.gov.ua/en/news/brave1' },
+    ],
+  })] });
+  const m = out.investors[0].financialMetrics;
+  const byType = Object.fromEntries(m.map((x) => [x.metricType, x]));
+
+  // a vehicle NAV is one vehicle's, so it must carry the vehicle it belongs to
+  assert.equal(byType.vehicle_nav.vehicle, 'Seraphim Space Investment Trust plc');
+  assert.ok(!('manager_aum' in byType), 'a vehicle NAV must not be published as manager AUM');
+
+  // an average is a single figure: it must not acquire an upper bound and become a range
+  assert.equal(byType.average_investment_size.amountMax, null);
+  assert.ok(!('initial_investment_range' in byType), 'an average ticket is not a published range');
+
+  // grants are their own instrument in both the money row and the count row
+  assert.equal(byType.grant_funding_disbursed.currency, 'UAH');
+  assert.equal(byType.grant_count.count, 1000);
+  assert.ok(!('cumulative_capital_invested' in byType) && !('investment_count' in byType),
+    'grant disbursements and grant counts must never aggregate with equity and investments');
+
+  assert.match(out.caveats.metricTypes, /grant funding is not equity capital/);
+  assert.match(out.caveats.metricTypes, /different types, currencies or periods are never added/);
+});
+
+test('an unknown amount travels as null and never as zero', () => {
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({
+    financial_metrics: [{ metricType: 'initial_investment_range', display: 'Up to €500K',
+      currency: 'EUR', amountMin: 500000, amountMax: null, bound: 'maximum',
+      scope: 'A ceiling, not a range.', verification: 'reported', checkedAt: '2026-11-01',
+      source: 'https://example.com/a' }],
+    portfolio: [{ name: 'Scandinavian X', slug: 'scandinavian-x',
+      url: 'https://xsonomy.com/companies/scandinavian-x/', relationshipType: 'direct_investment',
+      evidenceStatus: 'investor_published_portfolio', investorContribution: null, roundTotal: null,
+      role: 'co_investor' }],
+  })] });
+  const i = out.investors[0];
+  assert.equal(i.financialMetrics[0].amountMax, null, 'an absent upper bound stays absent');
+  assert.notEqual(i.financialMetrics[0].amountMax, 0);
+  assert.equal(i.portfolio[0].investorContribution, null, 'an undisclosed contribution is null');
+  assert.equal(i.portfolio[0].roundTotal, null, 'an undisclosed round total is null');
+  assert.match(out.caveats.emptyFields, /never zero/);
+});
+
+test('a retired relationship stays out of the export whichever reason retired it', () => {
+  // the view filters retired rows, so the export must never be handed one; this asserts
+  // the contract the projection relies on rather than re-testing the view
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({ portfolio: [] })] });
+  assert.deepEqual(out.investors[0].portfolio, []);
+  assert.match(out.caveats.retiredRelationships, /withdrawn from the portfolio/);
+});

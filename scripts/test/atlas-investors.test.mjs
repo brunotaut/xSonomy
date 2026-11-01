@@ -94,3 +94,45 @@ test('search reaches stored portfolio companies and fund-position managers',()=>
  // and a fund position is never mistaken for a holding of that name
  assert.deepEqual(filterInvestors(data,S({q:'nothing here'})).map(i=>i.slug),[]);
 });
+
+// The list card picks each figure by metric TYPE. Retyping a figure - which the
+// 2026-11-01 semantic pass did to four of them - silently empties the slot it used to
+// fill unless the slot knows the new type, so Seraphim's NAV, DTCP's average ticket and
+// Brave1's grants would each have vanished from the card while still being in the data.
+test('every corrected metric type still reaches a card slot, with its own label',async()=>{
+ const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
+ for(const t of ['vehicle_nav','average_investment_size','follow_on_investment_range','grant_funding_disbursed','grant_count'])
+  assert.ok(app.includes(`${t}:'`),`${t} needs a label in METRIC_LABEL, which also drives METRIC_ORDER`);
+ assert.match(app,/SCALE_METRICS=\['manager_aum','vehicle_nav'\]/);
+ assert.match(app,/TICKET_METRICS=\['initial_investment_range','average_investment_size','follow_on_investment_range'\]/);
+ assert.match(app,/DEPLOYED_METRICS=\['cumulative_capital_invested','grant_funding_disbursed'\]/);
+ // and each slot must label the corrected type as what it is, not as what it replaced
+ assert.match(app,/'Vehicle NAV: '/,'a vehicle NAV must not be captioned as manager AUM');
+ assert.match(app,/'Average ticket: '/,'an average must not be captioned as a ticket range');
+ assert.match(app,/'Grants disbursed: '/,'grant money must not be captioned as own capital invested');
+ assert.match(app,/'Own capital invested: '/);
+ // no slot may be keyed on a single bare type any more
+ assert.equal(/firstMetric\(i,\['manager_aum'\]\)/.test(app),false);
+ assert.equal(/firstMetric\(i,\['cumulative_capital_invested'\]\)/.test(app),false);
+});
+
+test('an unverified candidate with sourced facts is not called wholly unverified',async()=>{
+ const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
+ const notice=app.slice(app.indexOf("i.evidenceStatus==='watchlist'"),app.indexOf("i.sourceReference"));
+ // the uncertainty is about defence relevance, not about whether the organisation exists
+ assert.match(notice,/defence relevance/);
+ assert.match(notice,/not its existence/);
+ // and the old blanket claim is gone
+ assert.equal(/inclusion is not confirmation of investment activity\.<\/p>'\)/.test(app),false,
+  'the blanket "not confirmation of investment activity" claim must no longer stand beside sourced figures');
+ // the softer fallback survives for a record that genuinely has nothing
+ assert.match(notice,/Limited information is available/);
+ assert.match(notice,/sourced facts in their own right/);
+});
+
+test('an unknown amount is never rendered as a zero',async()=>{
+ const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
+ assert.match(app,/Investor contribution: \$\{p\.investorContribution\?esc\(amt\(p\.investorContribution\)\):'not disclosed'\}/);
+ assert.match(app,/not established/);
+ assert.equal(/:'0'/.test(app),false,'no slot may fall back to a zero');
+});
