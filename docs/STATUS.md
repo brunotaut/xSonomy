@@ -1284,12 +1284,36 @@ recorded. Nothing was executed against production.
 the committed tree: the coverage pass regenerated the ledger and dropped its pointer to the
 rollback manifest. Fixed. Catalogue **75/75**, news **48/48**.
 
-### Pending, not applied: non-aerial product batch 2
+### Non-aerial batch 2: the authorised part is applied and live
 
-A second non-aerial product batch is prepared in `xsonomy-news`
-(`research-agent/reports/2026-11-01-non-aerial-product-batch-2.md`) and **has not been
-applied**, so nothing on the site has changed. If it is approved it will move six product
-pages from `/uav/<slug>/` to `/other/<slug>/` — Dire WOLF, Ghost Shark, LUNA-2, MMCM, rMCM
-and XLUUV — taking UAV from 1,416 to 1,410 and Other from 410 to 416, with six
-`slug_redirects` rows keeping the old URLs working. Every slug was checked free in `/other/`
-and no namesake is left behind in `/uav/`.
+**Six product pages did not move — two did.** `/uav/dire-wolf/` and `/uav/ghost-shark/` are
+now `/other/dire-wolf/` and `/other/ghost-shark/`, with `slug_redirects` rows keeping the
+old URLs working. **LUNA-2, MMCM, rMCM and XLUUV were not moved** — LUNA-2 was excluded
+from the authorisation and the other three went to a retirement proposal instead, so the
+prepared plan's six-record move did not happen and the figures below are not the ones the
+last entry predicted.
+
+**`/uav/exail-a27/` is now a 404.** Exail A27 was unpublished: Exail's AUV range is A9-M,
+A18-M, A6K-M and Ulyx and no source names an A27. The record, its taxonomy, its sources and
+its Exail link are all preserved in the database for audit — only the page is gone. No
+redirect was created, because there is no product to redirect to, and the generator skips
+any redirect whose target is not live anyway.
+
+**Ghost Shark's manufacturer now reads Anduril, not Albacore.** Albacore's own site names
+exactly one vehicle, Ghostfin, which stays a separate record and keeps its page.
+
+| | Before | After |
+|---|---:|---:|
+| Live products, UAV | 1,416 | **1,413** |
+| Live products, Other | 410 | **412** |
+| Live products, total | 3,522 | **3,521** |
+| `slug_redirects` | 95 | **97** |
+
+UAV falls by three, not two: two moved and one was unpublished. Tests **75/75**. No
+catalogue code changed — this is a data change, deployed through the normal daily build.
+Full detail in `xsonomy-news`:
+`research-agent/reports/2026-11-01-non-aerial-product-batch-2-applied.md`.
+
+**Still pending, and still touching no page yet:** a proposal to retire MMCM, rMCM and
+XLUUV as product records, which would remove three more `/uav/` pages and take UAV to
+1,410. Not applied.
