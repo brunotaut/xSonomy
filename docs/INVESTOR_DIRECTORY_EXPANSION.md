@@ -21,3 +21,30 @@ Published cities retain source-backed approximate locations. Records with no cit
 ## Database handoff
 
 Import the twelve new slugs idempotently into research staging; reconcile identity first. Preserve watchlist/unverified status and source row. Store Ukraine linkage independently of HQ and investment eligibility. Broaden the public research projection to include labelled candidates/programmes and zero-location records without changing the companies publication gate. Once the DB exports this full set, remove the supplement only after comparing stable IDs, fields and counts. Do not replace verified data with workbook claims.
+
+## Supplement retired — 1 November 2026
+
+`scripts/lib/investor-directory.json` and `scripts/lib/investor-profiles.mjs` are **deleted**.
+Everything they carried is now in the database and reaches the site through
+`v_landscape_investors`:
+
+- the twelve workbook additions are `investor_research` rows with `evidence_status='watchlist'`;
+- Ukraine linkage is `investor_research.ukraine_related`, independent of office country and
+  of investment eligibility;
+- the workbook row reference is `investor_research.source_reference`;
+- the public projection was broadened from the 21 `deal`/`mandate` records that had a city
+  location to the whole reviewed directory of 118, each keeping its own `evidence_status`, so
+  unverified candidates stay labelled and programmes stay programmes. The companies
+  publication gate was not touched.
+
+Portfolio links are no longer computed at build time by unique exact name match against
+published companies. They are stored relationships in `investor_companies`, each with its own
+evidence status, source URL and review date, and each pointing at a persistent company id.
+Holdings that could not be resolved are listed in `investor_portfolio_unresolved` with the
+reason, rather than silently dropped.
+
+Parity was proved before deletion: 118 records in and 118 out, no slug lost or gained, the
+Ukraine count unchanged at 26, every holding name from the previous export still present
+(case-insensitively) either as a resolved relationship or as a listed unresolved holding, and
+both `portfolioSource` URLs still present as relationship sources. The previous export carried
+78 portfolio entries; the new one represents 87.

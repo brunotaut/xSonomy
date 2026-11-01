@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 // Read-only projection of the reconciled working edition. Never publishes drafts
 // or recomputes research verdicts from loose product/category/name matches.
 export const LANDSCAPE = 'europe-uav-cuas-2026';
@@ -91,16 +90,11 @@ export async function fetchLandscapeInvestors(sbFetchAll) {
     sbFetchAll('v_landscape_investors', { select: '*', order: 'name.asc' }, 'investors'),
     sbFetchAll('v_investor_country_reviews', { select: '*', order: 'country.asc' }, 'investor country reviews'),
   ]);
-  const result = buildLandscapeInvestors({ investors, reviews });
-  const supplement = JSON.parse(readFileSync(new URL('./investor-directory.json', import.meta.url), 'utf8'));
-  const approved = new Map(result.investors.map(i => [i.slug, i]));
-  result.investors = supplement.map(i => ({...i, ...approved.get(i.slug), ukraineRelated:i.ukraineRelated}));
-  for (const i of approved.values()) if (!result.investors.some(r => r.slug === i.slug)) result.investors.push(i);
-  result.investors.sort((a,b) => a.name.localeCompare(b.name));
-  result.membership = 'Investor research directory including confirmed investments, stated mandates, adjacent investors, unverified candidates and separately labelled funding programmes.';
-  result.caveats.classification = 'Evidence status is shown per record. Inclusion does not imply verification or current investment availability.';
-  result.caveats.coordinates = 'City markers use approximate city centres. Hollow markers show a country research association, not an office or headquarters.';
-  return result;
+  // The versioned supplement that used to be merged in here is gone: the twelve workbook
+  // additions, the Ukraine flag and the workbook row reference are all database columns now,
+  // and the projection carries the whole 118-record directory rather than only the 21
+  // records that had a city location.
+  return buildLandscapeInvestors({ investors, reviews });
 }
 
 export function buildLandscapeInvestors({ investors, reviews }) {
@@ -113,9 +107,9 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       kind: l.kind, precision: l.precision,
       sources: (l.sources || []).filter((s) => isWebUrl(s.url)),
     }));
-    // Approval required one, so an empty list here means the projection or the approval
-    // gate has drifted. Fail loudly rather than publish a record with nowhere to put it.
-    if (!locations.length) throw new Error(`Approved investor ${r.slug} has no location.`);
+    // A record with no city is normal here: most of the directory is placed only by country
+    // association, which is a research-index position and not an office. The map decides
+    // what to draw; the directory still lists the record.
     return {
       id: r.id, slug: r.slug, name: r.name,
       entityType: r.entity_type || null,
@@ -141,25 +135,54 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       // The investor already in the catalogue that this record describes, where one
       // exists. A link, not a merge: that row is unchanged.
       matchedInvestorId: r.matched_investor_id || null,
+      // Independent of office country and of investment eligibility.
+      ukraineRelated: r.ukraine_related === true,
+      // Where a record exists only because a supplied workbook listed it, this says so.
+      sourceReference: r.source_reference || null,
+      // Persistent relationships from the database, each with its own evidence. `url` is
+      // null when the company is not published: the holding is still shown, it just does
+      // not link anywhere.
+      portfolio: (r.portfolio || []).map((h) => ({
+        ...h, source: isWebUrl(h.source) ? h.source : null,
+      })),
+      // Holdings the investor publishes that no company record could be resolved to.
+      portfolioUnresolved: (r.portfolio_unresolved || []).map((u) => ({
+        ...u, source: isWebUrl(u.source) ? u.source : null,
+      })),
+      financialMetrics: (r.financial_metrics || []).filter((m) => isWebUrl(m.source)),
       sources: (r.sources || []).filter((s) => isWebUrl(s.url)),
       locations,
     };
   });
   return {
     edition: INVESTOR_EXPORT, generatedAt: new Date().toISOString(),
-    membership: 'Approved investor research records: a confirmed deal or a stated mandate, ' +
-      'with a published city-level location, an evidence URL and a review date.',
+    membership: 'Investor research directory: confirmed investments, stated mandates, ' +
+      'adjacent investors, separately labelled unverified candidates and funding programmes.',
     caveats: {
       countryAssociations: investors[0]?.country_association_meaning ||
         'Research index; not a verified headquarters, legal domicile or eligibility field.',
-      coordinates: 'Approximate city centroids, not exact office locations.',
+      coordinates: 'City markers use approximate city centres. A country-association marker ' +
+        'is a research-index position, not an office or a headquarters.',
       locationKinds: 'Published offices, contact addresses, meeting locations and legal ' +
         'registrations are distinct and are not interchangeable.',
       tickets: 'Published investment or financing ranges; not a guarantee of available capital.',
       fundSizes: 'Deliberately omitted: targets, commitments and AUM are not comparable.',
       emptyFields: 'An absent value means not established, never zero.',
-      classification: 'Adjacent investors, unverified candidates and financial programmes are ' +
-        'classified separately from confirmed deals and stated mandates, and are not approved here.',
+      classification: 'Evidence status is shown per record. Inclusion does not imply ' +
+        'verification or current investment availability. Adjacent investors, unverified ' +
+        'candidates and funding programmes keep their own labels and types.',
+      portfolio: 'A portfolio relationship is a stored, sourced fact about a holding. It is ' +
+        'not an eligibility argument: being in an investor\'s portfolio never admits a ' +
+        'company to the UAV and counter-UAS landscape, which has its own criteria.',
+      amounts: 'An investor contribution and a total round size are separate fields and ' +
+        'either may be unknown. A round total is what all investors supplied together and ' +
+        'is never read as one investor\'s cheque.',
+      metricTypes: 'Financial metrics are typed precisely: a target is not a close, a first ' +
+        'close is not a final close, manager AUM is not a fund, capital invested to date is ' +
+        'not committed capital, a typical first cheque is not a fund size, and a count of ' +
+        'investments is not a count of companies.',
+      unresolvedHoldings: 'Holdings that could not be resolved to a company are listed with ' +
+        'the reason rather than matched to a similarly named organisation.',
     },
     countryReviews: reviews.map((c) => ({
       country: c.country, name: c.name_en, status: c.status,

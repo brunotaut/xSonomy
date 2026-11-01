@@ -1,4 +1,3 @@
-import { enrichInvestorProfiles } from './lib/investor-profiles.mjs';
 // xSonomy catalogue generator.
 // Reads Supabase and writes the whole static site: per-category JSON for the
 // client-side grid, an SEO page per product, company pages, sitemap and robots.
@@ -1271,16 +1270,24 @@ async function main() {
   // so the map payload does not carry them; landscape.json points at it. Investors are a
   // different kind of organisation from the companies in the landscape and are never
   // mixed into its membership.
-  const investors = enrichInvestorProfiles(await fetchLandscapeInvestors(sbFetchAll), companies);
+  // Portfolio links used to be computed here by unique exact name match against published
+  // companies. They are stored relationships now, each with its own evidence, so the export
+  // carries persistent company ids and stable profile URLs instead of a build-time guess.
+  const investors = await fetchLandscapeInvestors(sbFetchAll);
   await writeFile(join(OUT, "data", "landscape-investors.json"), JSON.stringify(investors));
+  const portfolioRows = investors.investors.reduce((n, i) => n + i.portfolio.length, 0);
   landscape.investors = {
     count: investors.investors.length,
     locations: investors.investors.reduce((n, i) => n + i.locations.length, 0),
+    ukraineRelated: investors.investors.filter((i) => i.ukraineRelated).length,
+    portfolioRelationships: portfolioRows,
+    withFinancialMetrics: investors.investors.filter((i) => i.financialMetrics.length).length,
     url: "/data/landscape-investors.json",
     membership: investors.membership,
   };
-  console.log(`  Investors: ${investors.investors.length} approved, ` +
-    `${landscape.investors.locations} locations -> /data/landscape-investors.json`);
+  console.log(`  Investors: ${investors.investors.length} records, ` +
+    `${landscape.investors.locations} locations, ${portfolioRows} portfolio relationships, ` +
+    `${landscape.investors.withFinancialMetrics} with financial metrics -> /data/landscape-investors.json`);
 
   // Approved UAV / C-UAS hub research, same pattern again: its own file, a pointer from
   // landscape.json, and counts that stay out of the company and investor totals. The

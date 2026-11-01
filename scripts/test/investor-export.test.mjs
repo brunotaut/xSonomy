@@ -49,9 +49,11 @@ test('the export carries the caveats and keeps location kinds apart', () => {
     ['published_office_or_contact_city', 'published_meeting_location']);
   // coordinates are published as approximate, never as an address
   assert.ok(out.investors.every((i) => i.locations.every((l) => l.precision === 'approximate_city_centroid')));
-  assert.match(out.caveats.coordinates, /city centroids/);
+  assert.match(out.caveats.coordinates, /approximate city centres/);
+  // a country-association marker is never presented as an office
+  assert.match(out.caveats.coordinates, /not an office or a headquarters/);
   assert.match(out.caveats.countryAssociations, /not a verified HQ/);
-  assert.match(out.caveats.classification, /Adjacent investors, unverified candidates and financial programmes/);
+  assert.match(out.caveats.classification, /unverified\s+candidates and funding programmes keep their own labels/);
   // a country association stays an index entry and is never renamed to a country or HQ
   assert.deepEqual(out.investors[0].countryAssociations, ['GB', 'NL']);
   for (const i of out.investors) assert.ok(!('country' in i) && !('hqCountry' in i));
@@ -86,9 +88,103 @@ test('a published ticket range keeps its basis, and the manager keeps its own do
   assert.equal(i.locations[0].country, 'NL');
 });
 
-test('an approved record with no location fails the build instead of shipping', () => {
-  assert.throws(() => buildLandscapeInvestors({ investors: [row({ locations: [] })], reviews: [] }),
-    /Approved investor keen-venture-partners has no location/);
+test('a record placed only by country association is published, not rejected', () => {
+  // 94 of the 118 directory records have no city at all. Rejecting them was why a versioned
+  // JSON supplement had to exist alongside the database; the directory lists them and the
+  // map simply has nothing to draw.
+  const out = buildLandscapeInvestors({
+    investors: [row({ locations: [], country_associations: ['UA'], ukraine_related: true })],
+    reviews: [],
+  });
+  assert.equal(out.investors.length, 1);
+  assert.deepEqual(out.investors[0].locations, []);
+  assert.deepEqual(out.investors[0].countryAssociations, ['UA']);
+  assert.equal(out.investors[0].ukraineRelated, true);
+});
+
+test('portfolio holdings are stored relationships, and amounts stay separate', () => {
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({
+    portfolio: [
+      { companyId: 'c1', name: 'Resolved Co', nameAsPublished: 'Resolved Co', slug: 'resolved-co',
+        url: '/companies/resolved-co/', published: true, relationshipType: 'direct_investment',
+        evidenceStatus: 'investor_announcement', source: 'https://example.com/round',
+        investorContribution: { amount: 900000, currency: 'EUR' },
+        roundTotal: { amount: 3200000, currency: 'EUR' }, role: 'lead',
+        matchMethod: 'verified_new_record', matchNote: null },
+      { companyId: 'c2', name: 'Unpublished Co', nameAsPublished: 'Unpublished Co',
+        slug: 'unpublished-co', url: null, published: false,
+        relationshipType: 'portfolio_listed', evidenceStatus: 'third_party_reported',
+        source: 'javascript:alert(1)', investorContribution: null, roundTotal: null,
+        role: null, matchMethod: 'draft_company', matchNote: 'not published' },
+    ],
+    portfolio_unresolved: [
+      { name: 'Airvolve', reason: 'Could not be verified.', source: 'https://example.com/p' },
+    ],
+  })]});
+  const [resolved, unpublished] = out.investors[0].portfolio;
+
+  // A persistent company id always; a profile URL only when the company is published.
+  assert.equal(resolved.companyId, 'c1');
+  assert.equal(resolved.url, '/companies/resolved-co/');
+  assert.equal(unpublished.companyId, 'c2');
+  assert.equal(unpublished.url, null, 'an unpublished company must not be linked');
+  assert.equal(unpublished.published, false, 'but the holding is still shown');
+
+  // The two amounts are distinct fields. The round total is not the contribution.
+  assert.equal(resolved.investorContribution.amount, 900000);
+  assert.equal(resolved.roundTotal.amount, 3200000);
+  assert.notEqual(resolved.investorContribution.amount, resolved.roundTotal.amount);
+  assert.equal(unpublished.investorContribution, null);
+  assert.equal(unpublished.roundTotal, null);
+
+  // A non-web relationship source is dropped, as everywhere else in the export.
+  assert.equal(unpublished.source, null);
+
+  // Unresolved holdings travel with the reason instead of being matched to a near name.
+  assert.equal(out.investors[0].portfolioUnresolved[0].name, 'Airvolve');
+  assert.match(out.investors[0].portfolioUnresolved[0].reason, /Could not be verified/);
+  assert.match(out.caveats.unresolvedHoldings, /rather than matched to a similarly named/);
+
+  // Portfolio membership is never an eligibility argument.
+  assert.match(out.caveats.portfolio, /never admits a company to the UAV and counter-UAS landscape/);
+  assert.match(out.caveats.amounts, /never read as one investor/);
+});
+
+test('financial metric types stay distinct and unsourced metrics are dropped', () => {
+  const m = (over) => ({ metricType: 'fund_size_target', display: 'EUR50M', amountMin: 5e7,
+    amountMax: 5e7, currency: 'EUR', count: null, bound: 'exact', scope: 'Fund V launch size',
+    asOf: '2025', asOfIsExactDate: false, vehicle: 'Fund V',
+    source: 'https://example.com/f', verification: 'source_confirmed',
+    checkedAt: '2026-10-31', ...over });
+  const out = buildLandscapeInvestors({ reviews: [], investors: [row({ financial_metrics: [
+    m({}),
+    m({ metricType: 'fund_close_final', display: 'EUR214M' }),
+    m({ metricType: 'manager_aum', display: 'Approximately EUR450M', bound: 'approximate' }),
+    m({ metricType: 'cumulative_capital_invested', display: 'USD46M', currency: 'USD' }),
+    m({ metricType: 'initial_investment_range', amountMin: 1e6, amountMax: 1e7, bound: 'range' }),
+    m({ metricType: 'investment_count', amountMin: null, amountMax: null, currency: null, count: 9 }),
+    m({ metricType: 'portfolio_company_count', amountMin: null, amountMax: null, currency: null, count: 97 }),
+    m({ metricType: 'fund_close_first', bound: 'minimum', amountMax: null, display: 'More than EUR150M' }),
+    m({ source: 'ftp://example.com/nope' }),
+  ] })]});
+  const kinds = out.investors[0].financialMetrics.map((x) => x.metricType);
+
+  // A target, a first close and a final close are three different facts.
+  for (const k of ['fund_size_target', 'fund_close_first', 'fund_close_final'])
+    assert.ok(kinds.includes(k), `${k} must survive as its own type`);
+  // Manager AUM is not a fund; capital invested is not committed capital.
+  assert.ok(kinds.includes('manager_aum') && kinds.includes('cumulative_capital_invested'));
+  // A count of investments is not a count of companies.
+  assert.ok(kinds.includes('investment_count') && kinds.includes('portfolio_company_count'));
+  const counts = out.investors[0].financialMetrics.filter((x) => x.count !== null);
+  assert.deepEqual(counts.map((x) => x.count).sort((a, b) => a - b), [9, 97]);
+  assert.ok(counts.every((x) => x.currency === null && x.amountMin === null),
+    'a count must not carry money fields');
+  // A bound qualifier keeps "more than" from rendering as an exact figure.
+  assert.equal(out.investors[0].financialMetrics.find((x) => x.metricType === 'fund_close_first').bound, 'minimum');
+  // The metric with a non-web source is gone; the other nine remain.
+  assert.equal(out.investors[0].financialMetrics.length, 8);
+  assert.match(out.caveats.metricTypes, /a target is not a close/);
 });
 
 test('non-web source URLs are dropped rather than published', () => {
