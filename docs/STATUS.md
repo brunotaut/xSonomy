@@ -1314,6 +1314,35 @@ catalogue code changed — this is a data change, deployed through the normal da
 Full detail in `xsonomy-news`:
 `research-agent/reports/2026-11-01-non-aerial-product-batch-2-applied.md`.
 
-**Still pending, and still touching no page yet:** a proposal to retire MMCM, rMCM and
-XLUUV as product records, which would remove three more `/uav/` pages and take UAV to
-1,410. Not applied.
+### Batch 2 closed out: three pages retired, one more moved
+
+**`/uav/mmcm/`, `/uav/rmcm/` and `/uav/xluuv/` are now 404s.** All three were retired as
+product records — two were procurement programmes and one was a US Navy size class, not
+products at all. The records, their article links and their taxonomy are preserved in the
+database for audit; only the pages are gone, and no redirects were created because there is
+nothing to redirect to.
+
+**`/uav/luna-2/` is now `/other/luna-2/`**, with a redirect keeping the old URL working.
+The satellite stays published: it is the only orbital record in the catalogue, so this was
+one record to place rather than a scope rule to write, and it is well sourced.
+
+**Ghost Shark's sources now read anduril.com and defence.gov.au.** They had pointed at an
+article about Albacore's *Ghostfin* — a different vehicle with a similar name, which is how
+the wrong manufacturer got onto the record in the first place.
+
+| | Start of day | Now |
+|---|---:|---:|
+| Live products, UAV | 1,416 | **1,409** |
+| Live products, Other | 410 | **413** |
+| Live products, total | 3,522 | **3,518** |
+| `slug_redirects` | 95 | **98** |
+
+Four `/uav/` pages became 404s across the day (Exail A27 plus these three) and three moved
+to `/other/` with their old URLs preserved. Tests **75/75**. No catalogue code changed —
+all of it is data, deployed through the normal build. Detail in `xsonomy-news`:
+`research-agent/reports/2026-11-01-batch-2-decisions-applied.md`.
+
+**One question still open** and touching no page: two products categorised `Other` carry an
+**aerial** domain row — a piloted light aircraft and a servo actuator. Whether a domain row
+describes what a product *is* or what it *flies on* needs an answer before more records
+inherit the ambiguity.
