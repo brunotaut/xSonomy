@@ -981,3 +981,50 @@ neither DLR nor MITS Capital appears in the published landscape or investor payl
 those ids, so a confirmed match currently renders its role and note without a profile link.
 Adding `matchedCompanySlug` / `matchedInvestorSlug` to the export would light the links up
 with no interface change — that is an export change, outside this task's scope.
+
+## 1 November 2026 — investor corrections and a new kind of fact
+
+The database work and its rollback live in `xsonomy-news`
+(`research-agent/reports/2026-11-01-investor-corrections.md`). What changed here is the
+export, the interface and the tests.
+
+**Fund positions are their own array.** `investor_fund_positions` holds capital one investor
+committed to another manager's fund — EIFO's US$5m into D3, SmartCap's four published
+commitments, the EIF's €30m into Sienna's defence credit fund, the NATO Innovation Fund as an
+LP in three funds. They are **never** merged into `portfolio`, are counted separately in
+`landscape.json` (`fundPositions`, beside `portfolioRelationships` and `unresolvedHoldings`),
+render under their own heading with their own caveat, and link across to the manager's own
+record when it is published. A commitment to a fund is not a holding in that fund's companies,
+and nothing in the payload or the interface lets the two be added together.
+
+**A retired relationship leaves the export.** `v_landscape_investors` now filters
+`retired_at is null`. A holding withdrawn because its cited source did not support it stops
+being published, while the row and its reason stay in the table for audit. Rockaway Alpha
+Defense now shows no portfolio at all and two unresolved entries, which is the honest state.
+
+Also carried through from tables that already had them: a relationship's fund `vehicle` and an
+unresolved holding's `reviewedAt`. Investor search now reaches stored portfolio-company names
+and fund-position managers, so the "Search investors & portfolio companies" placeholder is
+true; accent-free names like `d3` and `defence fund` both find their record.
+
+**Counts from this build:** 118 records, 41 locations, **74** portfolio relationships, **13**
+unresolved holdings, **9** fund positions, **24** investors with financial figures (was 7).
+Landscape **567**, unchanged — none of the ten companies created in the database pass has a
+taxonomy or candidate row, so a portfolio listing still cannot admit a company to it.
+
+Three of those ten are published and now have pages: `/companies/airvolve/`,
+`/companies/kelluu/`, `/companies/mutable-tactics/`. The other seven are drafts and generate
+no page, so the export gives them `published: false` and no URL.
+
+Tests **59/59** (four new): a fund position never becomes a portfolio holding and neither
+array leaks into the other; an undisclosed commitment stays undisclosed rather than zero; an
+unpublished manager gets no link target and a non-web source is dropped; an investor with no
+fund positions gets an empty array rather than a missing field; and search reaches both
+stored holdings and fund managers.
+
+**Verified live** at `/landscape/?view=investors`: EIFO's one holding and one fund position
+under separate headings; Coinvest's €510,000 contribution and €825,000 round total as
+distinct lines; BSV Ventures' Airvolve holding with the Baltic Sandbox Ventures former-name
+note; MITS Capital's contested $50m target with the contest spelled out; SmartCap's four
+commitments each linking through to the manager. Mobile at 375px: no horizontal scroll, the
+new link is a 35px touch target.

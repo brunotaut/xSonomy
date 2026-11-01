@@ -1276,17 +1276,24 @@ async function main() {
   const investors = await fetchLandscapeInvestors(sbFetchAll);
   await writeFile(join(OUT, "data", "landscape-investors.json"), JSON.stringify(investors));
   const portfolioRows = investors.investors.reduce((n, i) => n + i.portfolio.length, 0);
+  // Fund positions are counted apart from portfolio relationships on purpose. A
+  // commitment to another manager's fund is a different kind of fact, and adding the two
+  // together would restate indirect exposure as company holdings.
+  const fundPositions = investors.investors.reduce((n, i) => n + i.fundPositions.length, 0);
   landscape.investors = {
     count: investors.investors.length,
     locations: investors.investors.reduce((n, i) => n + i.locations.length, 0),
     ukraineRelated: investors.investors.filter((i) => i.ukraineRelated).length,
     portfolioRelationships: portfolioRows,
+    unresolvedHoldings: investors.investors.reduce((n, i) => n + i.portfolioUnresolved.length, 0),
+    fundPositions,
     withFinancialMetrics: investors.investors.filter((i) => i.financialMetrics.length).length,
     url: "/data/landscape-investors.json",
     membership: investors.membership,
   };
   console.log(`  Investors: ${investors.investors.length} records, ` +
     `${landscape.investors.locations} locations, ${portfolioRows} portfolio relationships, ` +
+    `${landscape.investors.unresolvedHoldings} unresolved holdings, ${fundPositions} fund positions, ` +
     `${landscape.investors.withFinancialMetrics} with financial metrics -> /data/landscape-investors.json`);
 
   // Approved UAV / C-UAS hub research, same pattern again: its own file, a pointer from

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-3dcace4aa6c9.js';
+import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-817ff0fd25b0.js';
 // Shaped exactly like /data/landscape-investors.json so the atlas is tested against the
 // export it actually consumes, including the fields the research layer may leave empty.
 const loc=(city,country,kind='published_office_or_contact_city')=>({city,country,latitude:50,longitude:10,kind,precision:'approximate_city_centroid',sources:[{url:'https://example.com/contact',title:'Contact',accessedAt:'2026-10-30'}]});
@@ -76,3 +76,21 @@ test('the investor export is validated before it is drawn',()=>{
  assert.equal(filterInvestors(data,S({countries:['DE']})).length,0);
  assert.equal(readState('#'+encodeURIComponent(JSON.stringify(S({ukraineOnly:true})))).ukraineOnly,true);
  });
+
+test('search reaches stored portfolio companies and fund-position managers',()=>{
+ const data={investors:[
+  {slug:'eifo',name:'EIFO',locations:[],countryAssociations:['DK'],
+   portfolio:[{name:'Six Robotics',nameAsPublished:'Six Robotics'}],
+   fundPositions:[{targetName:'D3',targetSlug:'d3'}]},
+  {slug:'smartcap',name:'SmartCap',locations:[],countryAssociations:['EE'],
+   portfolio:[{name:'Frankenburg Technologies',nameAsPublished:'Frankenburg Technologies'}],
+   fundPositions:[{targetName:'DTCP Defence Fund I',targetSlug:'dtcp'}]}]};
+ // a holding the investor publishes under another spelling is still findable
+ assert.deepEqual(filterInvestors(data,S({q:'six robotics'})).map(i=>i.slug),['eifo']);
+ assert.deepEqual(filterInvestors(data,S({q:'frankenburg'})).map(i=>i.slug),['smartcap']);
+ // the manager of a fund someone committed to is findable from the LP's side
+ assert.deepEqual(filterInvestors(data,S({q:'d3'})).map(i=>i.slug),['eifo']);
+ assert.deepEqual(filterInvestors(data,S({q:'defence fund'})).map(i=>i.slug),['smartcap']);
+ // and a fund position is never mistaken for a holding of that name
+ assert.deepEqual(filterInvestors(data,S({q:'nothing here'})).map(i=>i.slug),[]);
+});

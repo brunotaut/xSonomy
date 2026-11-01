@@ -149,6 +149,13 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       portfolioUnresolved: (r.portfolio_unresolved || []).map((u) => ({
         ...u, source: isWebUrl(u.source) ? u.source : null,
       })),
+      // Capital committed to another manager's fund. Kept in its own array, never
+      // merged into `portfolio`: the fund's own investments are not this investor's
+      // companies, and presenting them as holdings is the error this field prevents.
+      // `targetSlug` is present only when the manager is itself a published record.
+      fundPositions: (r.fund_positions || []).map((f) => ({
+        ...f, source: isWebUrl(f.source) ? f.source : null,
+      })),
       financialMetrics: (r.financial_metrics || []).filter((m) => isWebUrl(m.source)),
       sources: (r.sources || []).filter((s) => isWebUrl(s.url)),
       locations,
@@ -183,6 +190,13 @@ export function buildLandscapeInvestors({ investors, reviews }) {
         'investments is not a count of companies.',
       unresolvedHoldings: 'Holdings that could not be resolved to a company are listed with ' +
         'the reason rather than matched to a similarly named organisation.',
+      fundPositions: 'A fund position is capital committed to another manager\'s fund. It ' +
+        'is not a holding: the companies that fund invests in are its own, not this ' +
+        'investor\'s, and indirect exposure through a fund is never shown as a direct ' +
+        'company holding.',
+      retiredRelationships: 'A relationship whose cited source turned out not to support ' +
+        'the specific investor and company is withdrawn from the portfolio rather than ' +
+        'kept with a softer label, and is listed as an unresolved holding instead.',
     },
     countryReviews: reviews.map((c) => ({
       country: c.country, name: c.name_en, status: c.status,

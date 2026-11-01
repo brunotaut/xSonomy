@@ -199,3 +199,68 @@ test('non-web source URLs are dropped rather than published', () => {
   assert.deepEqual(out.investors[0].sources.map((s) => s.url), ['https://example.com/ok']);
   assert.equal(out.investors[0].ticket.source, null);
 });
+
+test('a fund position never becomes a portfolio holding', () => {
+  const out = buildLandscapeInvestors({
+    investors: [row({
+      slug: 'eifo', name: 'EIFO',
+      // one real holding and one commitment to somebody else's fund
+      portfolio: [{
+        companyId: 'c1', name: 'Six Robotics', nameAsPublished: 'Six Robotics',
+        slug: 'six-robotics', url: '/companies/six-robotics/', published: true,
+        relationshipType: 'direct_investment', evidenceStatus: 'third_party_reported',
+        source: 'https://www.dtcp.capital/news-and-insights/detail/dtcp-defence-fund-leads-eur12-million-financing-round-in-six-robotics/',
+        reviewedAt: '2026-11-01', round: 'Seed', role: 'participant', vehicle: null,
+        investorContribution: null, roundTotal: { amount: 12000000, currency: 'EUR' },
+        matchMethod: 'manual', matchNote: 'Named as a participant by the lead investor.',
+      }],
+      fund_positions: [{
+        targetName: 'D3', targetSlug: 'd3', vehicle: null, positionType: 'limited_partner',
+        commitment: { amount: 5000000, currency: 'USD', bound: 'exact' },
+        announcedAt: '2025-07-04', evidenceStatus: 'investor_announcement',
+        source: 'https://eifo.dk/en/knowledge-hub/eifo-invests-in-the-venture-fund-d3-to-boost-ukrainian-and-european-innovation-in-defence',
+        reviewedAt: '2026-11-01', note: 'D3’s portfolio companies are not EIFO holdings.',
+      }],
+    })],
+    reviews: [],
+  });
+  const i = out.investors[0];
+  // the two arrays are separate, and neither leaks into the other
+  assert.equal(i.portfolio.length, 1);
+  assert.equal(i.fundPositions.length, 1);
+  assert.equal(i.portfolio.some((p) => p.name === 'D3'), false);
+  assert.equal(i.fundPositions.some((f) => f.targetName === 'Six Robotics'), false);
+  // a commitment carries its own bound, and is not a company holding of any kind
+  assert.deepEqual(i.fundPositions[0].commitment, { amount: 5000000, currency: 'USD', bound: 'exact' });
+  assert.equal('companyId' in i.fundPositions[0], false);
+  assert.match(out.caveats.fundPositions, /not a holding/);
+  assert.match(out.caveats.fundPositions, /never shown as a direct\s+company holding/);
+  // the round total is the whole round, and no contribution was invented from it
+  assert.equal(i.portfolio[0].investorContribution, null);
+  assert.deepEqual(i.portfolio[0].roundTotal, { amount: 12000000, currency: 'EUR' });
+});
+
+test('a fund position with no commitment figure and no published manager still travels', () => {
+  const out = buildLandscapeInvestors({
+    investors: [row({
+      fund_positions: [{
+        targetName: 'Some Fund III', targetSlug: null, vehicle: 'Some Fund III',
+        positionType: 'limited_partner', commitment: null, announcedAt: null,
+        evidenceStatus: 'third_party_reported', source: 'not-a-url',
+        reviewedAt: '2026-11-01', note: 'Commitment size not disclosed.',
+      }],
+    })],
+    reviews: [],
+  });
+  const f = out.investors[0].fundPositions[0];
+  assert.equal(f.commitment, null, 'an undisclosed commitment stays undisclosed, never zero');
+  assert.equal(f.targetSlug, null, 'an unpublished manager gets no link target');
+  assert.equal(f.source, null, 'a non-web source is dropped rather than rendered');
+  assert.match(out.caveats.retiredRelationships, /withdrawn from the portfolio/);
+});
+
+test('an investor with no fund positions gets an empty array, not a missing field', () => {
+  const out = buildLandscapeInvestors({ investors: [row()], reviews: [] });
+  assert.deepEqual(out.investors[0].fundPositions, []);
+  assert.deepEqual(out.investors[0].portfolio, []);
+});
