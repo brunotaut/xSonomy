@@ -1438,3 +1438,10 @@ Read-only rebuild for writer commit `65bc1d27a573d3d1781bba85ecef72df05e22aeb`: 
 Read-only rebuild requested for writer commit `2f9faa1ac23df56f595b5e98e99c9b21a895c609`: 123 approved sourced financing events across 65 companies, 376 round participations and 342 investor profiles. This checkpoint reviewed 20 published-landscape identities and imported 22 confirmed events, including the distinct October Buntar round, Volocopter Series C–E history, Skyports Series B/C, and separated Dronamics grant/equity financing. Lower bounds, signed commitments, unnamed participants and ownership transactions remain explicit rather than normalised into invented exact rounds.
 
 Writer validation: 146 tests pass; production rollback rehearsal restored the 101-event baseline; atomic import and idempotent rerun produced zero source or participant-source mismatches. The full programme remains in progress.
+
+
+### 2026-11-02 — company website and founding year in headers
+
+Company map panels and full company profiles now show an external website link and founding year directly beneath the name when present. Landscape export includes foundedYear from the existing founded_year field. Missing facts are omitted; HTTP(S) links are parsed and escaped. A new versioned atlas entry retains the existing versioned model import. No database changes.
+
+Validation: atlas scripts and companyPage function passed syntax checks; empty/invalid-value rendering checked. Local Node/browser execution unavailable in this session; deployment build is the integration check.
