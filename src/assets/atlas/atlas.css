@@ -65,3 +65,29 @@ a.product-tag:focus-visible{outline-color:var(--purple)}
 .coverage-note{font-size:11px;color:var(--muted);margin-top:10px}.round-sources{margin-top:10px}.round-sources summary{padding:5px 0;background:none;border:0;font-size:11px;color:var(--mint)}.round-sources a{display:block;font-size:11px;padding:5px 0}
 
 nav .atlas-events-link{display:inline-flex;align-items:center;padding:8px 12px;border:1px solid transparent;border-radius:8px;color:inherit;text-decoration:none}nav .atlas-events-link:hover,nav .atlas-events-link:focus-visible{border-color:var(--mint);color:var(--mint)}
+
+/* Geographical density: anchored circles, restrained halos and zoom-aware labels. */
+#geography path{stroke:#345060;stroke-width:.7;transition:opacity .2s}
+#geography path.selected{stroke:#e5fff1;stroke-width:1.7}
+#geography path:hover{stroke:#effff7;stroke-width:1.8}
+.geo-point{pointer-events:none}.locality-marker{cursor:pointer;pointer-events:all}
+.geo-point .point-hit{fill:transparent;stroke:none}
+.geo-point .point-glow{stroke:none;pointer-events:none}
+.geo-point .point-core{fill:var(--point-color);fill-opacity:.88;stroke:var(--point-color);stroke-width:1.3}
+.geo-point .point-core.hollow{fill:#122431;fill-opacity:.92;stroke-width:2}
+.geo-point.country-approximate .point-core{stroke-dasharray:3 2;fill-opacity:.6}
+.geo-point .point-orbit{fill:none;stroke-width:1.5;opacity:.9;pointer-events:none}
+.geo-point .capital-badge{fill:none;stroke:#e4f1f5;stroke-width:.7;opacity:.65;pointer-events:none}
+.geo-point .point-count{fill:#081710;font-size:10px;font-weight:750;text-anchor:middle;dominant-baseline:central;stroke:none;pointer-events:none}
+.geo-point .hollow~.point-count{fill:#e8f3f6}
+.geo-point .place-label{fill:#e1edf2;font-size:10px;font-weight:550;paint-order:stroke;stroke:#0a1621;stroke-width:3;stroke-linejoin:round;pointer-events:none}
+.geo-point .reference-label{font-size:9px;fill:#a3b5c3;font-weight:400}
+.geo-point .quiet{opacity:0}.geo-point:hover .quiet,.geo-point:focus .quiet,.geo-point.picked .quiet{opacity:1}
+.geo-point .capital-ring{fill:#0c1b25;stroke:#adbdc8;stroke-width:.9}
+.geo-point .capital-core{fill:#bdcbd4;stroke:none}
+.geo-point.marker:focus circle{stroke:none}.geo-point.marker:focus .point-core,.geo-point.picked .point-core,.geo-point.marker:hover .point-core{stroke:#fff;stroke-width:2}
+.dot.gold,.dot.gold.hollow{border-radius:50%}.dot.capital{border:1px solid #b4c6d2;background:transparent;width:7px;height:7px}
+.density-key i{display:inline-block;width:45px;height:7px;background:linear-gradient(90deg,#203a45,#91deb8);border-radius:4px;margin-right:6px}
+.map .legend{gap:7px 12px;max-width:calc(100% - 75px);font-size:9px}
+@media(prefers-reduced-motion:reduce){#geography path{transition:none}}
+.locality-marker .place-label{pointer-events:all}

@@ -487,7 +487,7 @@ async function fetchCompanies() {
   return sbFetchAll("companies", {
     select:
       "id,name,slug,legal_name,description,overview,history,company_type,ownership,status,founded_year,defunct_year," +
-      "hq_country,hq_city,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
+      "hq_country,hq_city,latitude,longitude,website,linkedin_url,wikipedia_url,twitter_url,employee_range,employee_count," +
       "revenue_amount,revenue_currency,revenue_year,total_funding,funding_currency,valuation,valuation_currency," +
       "is_public,stock_ticker,stock_exchange,nato_cage_code,is_sanctioned,source_urls,publication_status",
     order: "name.asc,id.asc",

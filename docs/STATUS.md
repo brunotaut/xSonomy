@@ -24,6 +24,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — City locations and map density
+
+Nazar requested capitals, known company cities, graduated country shading and glowing city dots across company, hub/site and investor layers. Added a GeoNames CC BY 4.0 locality gazetteer, 32 capitals, anchored city groups, count-scaled circular markers, separate mint/purple/gold layers, country density gradients and zoom-dependent labels. Clicking a city opens its matching company/hub/investor lists. Country-only records retain dashed, explicitly approximate markers; office and test-site kinds remain distinct in details and tooltips. The read-only export now includes existing HQ city/coordinates. No database edits or publication-gate changes.
+
+Validation: 99/99 tests passed, including whole-generator HQ city/coordinate projection. New geographic tests cover country-constrained aliases, blank names, identity deduplication, unknown-city placement, monotonic density/size and stable anchors. Browser QA confirmed all three layers, London investor city details, zoom, circular-only location markers and no desktop overflow. Gazetteer sources and limitations: `scripts/geography/README.md`.
+
 ### 2026-11-02 — Events header aligned with landscape
 
 Removed the extra xSonomy logo/back-link header row from Events at Nazar’s request. The page now starts directly with the ecosystem introduction, matching the landscape page structure. Existing navigation and event functionality are unchanged.
