@@ -60,6 +60,7 @@ export function buildLandscape({ companies, candidates, countries, sectors, assi
       explicit: [...new Set(explicit.map(a => byId.get(a.sector_id).slug))],
       sources: [...new Set([...(Array.isArray(c.source_urls) ? c.source_urls : []), ...explicit.flatMap(a => a.source_urls || [])])].filter(isWebUrl),
       website: isWebUrl(c.website) ? c.website : null,
+      foundedYear: Number.isInteger(c.founded_year) && c.founded_year > 0 ? c.founded_year : null,
       products: (productsByCompany.get(c.id) || []).map(p => ({ name: p.name, url: p.url || null })),
       funding: c.total_funding != null && Number.isFinite(Number(c.total_funding)) ? { amount: Number(c.total_funding), currency: c.funding_currency || null } : null,
       fundingRounds: (fundingRounds||[]).filter(r=>r.company_id===c.id).map(r=>({id:r.id,key:r.round_key,stage:r.stage,type:r.financing_type,kind:r.record_kind||'round',parentRoundId:r.parent_round_id||null,date:r.announced_date,amount:r.amount!=null?{amount:Number(r.amount),currency:r.currency}:null,amountQualifier:r.amount_qualifier||'exact',amountBasis:r.amount_basis,closingStatus:r.closing_status,note:r.note_en||null,checkedAt:r.checked_at,sources:(r.sources||[]).filter(s=>isWebUrl(s.url)),investors:(r.investors||[]).filter(i=>isWebUrl(i.source))})).filter(r=>r.sources.length).sort((a,b)=>(b.date||'').localeCompare(a.date||'')),
