@@ -59,6 +59,7 @@ export function buildLandscape({ companies, candidates, countries, sectors, assi
       sources: [...new Set([...(Array.isArray(c.source_urls) ? c.source_urls : []), ...explicit.flatMap(a => a.source_urls || [])])].filter(isWebUrl),
       website: isWebUrl(c.website) ? c.website : null,
       products: (productsByCompany.get(c.id) || []).map(p => ({ name: p.name, url: p.url || null })),
+      funding: c.total_funding != null && Number.isFinite(Number(c.total_funding)) ? { amount: Number(c.total_funding), currency: c.funding_currency || null } : null,
     });
   }
   return {

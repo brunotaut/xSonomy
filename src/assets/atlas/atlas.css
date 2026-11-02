@@ -47,3 +47,14 @@ details.more p{font-size:12px}
 a.product-tag:hover{background:#3a3055;border-color:var(--purple);color:#fff}
 a.product-tag:focus-visible{outline-color:var(--purple)}
 .product-unlinked{color:#baafcf}
+
+/* Increase the map and its adjacent results column together by 50 percent. */
+.workspace{height:calc(150dvh - 570px);min-height:675px}
+.company-investments h4{margin:14px 0 8px;font-size:12px;color:var(--muted)}
+.funding-total{display:flex;flex-direction:column;gap:4px;border-left:3px solid var(--mint);padding:8px 12px;background:#182b28;border-radius:4px}
+.funding-total small{color:var(--muted)}.funding-total strong{font-size:20px;color:var(--mint)}
+.investor-link,.portfolio-company-link{padding:0;border:0;background:none;color:var(--mint);font-weight:600;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.investor-link:hover,.portfolio-company-link:hover{color:#fff;background:none}
+.investment-card .round-label{font-weight:600;margin:10px 0 5px;font-size:13px}
+.investment-source{display:inline-block;margin-top:8px;font-size:11px}
+@media(max-width:720px){.workspace{height:calc(150dvh - 435px);min-height:600px}}

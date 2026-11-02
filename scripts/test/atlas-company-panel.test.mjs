@@ -19,7 +19,7 @@ test('Back returns to the same filtered company list and restores scroll and key
   const expected={...state,selected:null};
   let handler,rendered=false,saved=false,focused=false;
   const panel={scrollTop:0,querySelector(selector){assert.equal(selector,'[data-company="test"]');return {focus(options){assert.equal(options.preventScroll,true);focused=true}}}};
-  const context=vm.createContext({state,D:{},suppressClick:false,companyListScroll:260,detailOpen:false,CSS:{escape:v=>v},$:()=>panel,render:()=>{rendered=true},save:()=>{saved=true},document:{addEventListener(event,fn){handler=fn}}});
+  const context=vm.createContext({state,D:{},panelHistory:[],suppressClick:false,companyListScroll:260,detailOpen:false,CSS:{escape:v=>v},$:()=>panel,render:()=>{rendered=true},save:()=>{saved=true},document:{addEventListener(event,fn){handler=fn}}});
   vm.runInContext(source.slice(source.indexOf("document.addEventListener('click'"),source.indexOf("document.addEventListener('change'")),context);
   await handler({target:{closest:()=>({id:'backToCompanies',dataset:{}})}});
   assert.deepEqual(state,expected);
