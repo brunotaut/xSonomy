@@ -982,8 +982,16 @@ function companyPage(c, prods) {
       ? `<a href="${p.url}">${esc(p.name)}<span class="pc">${esc(p.category)}</span></a>`
       : `<span>${esc(p.name)}<span class="pc">${esc(p.category)}</span></span>`).join("");
 
+  const headerFacts = [];
+  if (typeof c.website === "string" && /^https?:\/\//i.test(c.website)) {
+    try {
+      const website = new URL(c.website);
+      headerFacts.push(`<a href="${esc(website.href)}" target="_blank" rel="noopener noreferrer">${esc(website.hostname.replace(/^www\./, ""))} ↗</a>`);
+    } catch {}
+  }
+  if (Number.isInteger(c.founded_year) && c.founded_year > 0) headerFacts.push(`Founded ${c.founded_year}`);
+
   const ctas = [
-    c.website ? `<a class="btn p" href="${esc(c.website)}" target="_blank" rel="noopener nofollow">Website ↗</a>` : "",
     c.linkedin_url ? `<a class="btn" href="${esc(c.linkedin_url)}" target="_blank" rel="noopener nofollow">LinkedIn ↗</a>` : "",
     c.wikipedia_url ? `<a class="btn" href="${esc(c.wikipedia_url)}" target="_blank" rel="noopener nofollow">Wikipedia ↗</a>` : "",
     c.twitter_url ? `<a class="btn" href="${esc(c.twitter_url)}" target="_blank" rel="noopener nofollow">X / Twitter ↗</a>` : "",
@@ -1020,6 +1028,7 @@ ${GA_TAG}</head><body>
   <span class="mono-sq" style="--c:${tcol}"><i class="br"></i>${initials(c.name)}</span>
   <div>
     <h1 style="margin:0">${esc(c.name)}${c.is_sanctioned ? '<span class="flagb">Sanctioned</span>' : ""}${statusB}</h1>
+    ${headerFacts.length ? `<div class="sub" style="display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0;overflow-wrap:anywhere">${headerFacts.map(f => `<span>${f}</span>`).join("")}</div>` : ""}
     <div class="sub" style="margin-bottom:0">${esc([hq ? `${flag ? flag + " " : ""}${hq}` : "", region].filter(Boolean).join(" · "))}</div>
   </div>
 </div>
