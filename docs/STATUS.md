@@ -24,6 +24,16 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — funding research checkpoint 04 publication
+
+The source-audited investment workstream added 28 approved financing events for 17
+published-landscape companies. The read-only landscape build now projects 151 events
+across 81 companies, 458 event participations and 395 investor profiles. Original
+currencies, amount qualifiers, financing types, issuer identity, source URLs and explicit
+investor roles are retained. Consortium-level grants and other unattributable claims were
+held rather than assigned to a company. The database import passed rollback rehearsal,
+idempotent rerun and source-integrity validation before this deployment trigger.
+
 ### 2026-10-28 — map-first landscape interface (review branch)
 
 Implemented the approved visual direction at `/landscape/`: Europe choropleth,
