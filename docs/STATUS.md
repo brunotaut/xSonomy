@@ -24,6 +24,16 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — funding research checkpoint 05 publication
+
+The source-audited investment workstream reviewed 21 more published-landscape
+identities, added 19 approved events for 15 companies, and corrected two guarded
+existing facts. The read-only landscape build now projects 170 events across 95
+companies, 504 event participations and 434 investor profiles. The Arke Telekom
+announcement date now follows the issuer timestamp, and DeltaQuad remains labelled
+announced because the transaction was explicitly subject to regulatory approval.
+Rollback rehearsal, idempotent import, source integrity and 154 repository tests passed.
+
 ### 2026-11-02 — Events chapter on the landscape
 
 Nazar authorised publishing the events module. Added Events to the landscape menu, opening `/landscape/events/`: a responsive timeline and monthly calendar with country, topic, year and specialist/adjacent filters, an undated-edition tab, source-backed detail dialogs and all-day calendar downloads. Filters and selected editions are shareable through the URL. Far-future editions remain available without an upper cutoff; source dates and research checks stay distinct from build timestamps.
