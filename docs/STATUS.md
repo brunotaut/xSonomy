@@ -24,6 +24,14 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — Events chapter on the landscape
+
+Nazar authorised publishing the events module. Added Events to the landscape menu, opening `/landscape/events/`: a responsive timeline and monthly calendar with country, topic, year and specialist/adjacent filters, an undated-edition tab, source-backed detail dialogs and all-day calendar downloads. Filters and selected editions are shareable through the URL. Far-future editions remain available without an upper cutoff; source dates and research checks stay distinct from build timestamps.
+
+The generator reads `ecosystem_events` and `ecosystem_event_sources` server-side, projects 57 dated editions plus 15 undated records to `/data/landscape-events.json`, and references it from the landscape payload. No keys reach the browser, no DB writes, and no existing company/investor/hub publication rules changed. Dated records require an organiser/institution date source; undated records cannot produce calendar entries. New route is included in sitemap and consent-gated analytics.
+
+Validation: full Node suite passed, including read-only whole-generator fixtures; event tests cover future-year retention, source gating, accent-insensitive filters, ongoing events, share state, leap/year boundaries, escaping and Unicode iCalendar folding. Browser QA on the real research snapshot confirmed timeline, 2029 calendar/details, separate TBA state and absence of calendar-download action for undated editions. Desktop screenshot and overflow inspection passed; responsive breakpoints are implemented, but this browser API does not expose viewport resizing for a separate phone-sized run. Production build and page verification follow the publication commit.
+
 ### 2026-11-02 — funding research checkpoint 04 publication
 
 The source-audited investment workstream added 28 approved financing events for 17

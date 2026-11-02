@@ -63,3 +63,5 @@ a.product-tag:focus-visible{outline-color:var(--purple)}
 .round-amount{color:var(--mint);font-size:24px;font-weight:650;margin:6px 0}.round-investors{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}
 .investor-round-tag{margin:0;color:#dcecff;background:#203347;border-color:#426581;text-align:left}.investor-round-tag:hover{border-color:var(--blue)}
 .coverage-note{font-size:11px;color:var(--muted);margin-top:10px}.round-sources{margin-top:10px}.round-sources summary{padding:5px 0;background:none;border:0;font-size:11px;color:var(--mint)}.round-sources a{display:block;font-size:11px;padding:5px 0}
+
+nav .atlas-events-link{display:inline-flex;align-items:center;padding:8px 12px;border:1px solid transparent;border-radius:8px;color:inherit;text-decoration:none}nav .atlas-events-link:hover,nav .atlas-events-link:focus-visible{border-color:var(--mint);color:var(--mint)}

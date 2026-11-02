@@ -14,7 +14,7 @@ import { mkdir, rm, cp, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchLandscape, fetchLandscapeInvestors, fetchLandscapeHubs } from "./lib/landscape.mjs";
+import { fetchLandscape, fetchLandscapeInvestors, fetchLandscapeHubs, fetchLandscapeEvents } from "./lib/landscape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -1319,10 +1319,18 @@ async function main() {
     `${hubs.counts.sites === 1 ? "" : "s"}, ${hubs.counts.locations} locations in ` +
     `${hubs.counts.countries} countries -> /data/landscape-hubs.json`);
 
+  const events = await fetchLandscapeEvents(sbFetchAll);
+  await writeFile(join(OUT, "data", "landscape-events.json"), JSON.stringify(events));
+  landscape.events = { ...events.counts, url: "/data/landscape-events.json", horizon: "open_ended" };
+  console.log(`  Events: ${events.counts.confirmed} dated + ${events.counts.watchlist} undated -> /landscape/events/`);
+  urls.push(`${SITE}/landscape/events/`);
+
   await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
-  const landscapePath = join(OUT, "landscape", "index.html");
-  await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))
-    .replace("<!--LANDSCAPE_ANALYTICS-->", GA_TAG));
+  for (const section of ["landscape", "landscape/events"]) {
+    const landscapePath = join(OUT, section, "index.html");
+    await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))
+      .replace("<!--LANDSCAPE_ANALYTICS-->", GA_TAG));
+  }
   console.log(`  Landscape: ${landscape.companies.length} included, published companies -> /landscape/`);
   urls.push(`${SITE}/landscape/`);
 

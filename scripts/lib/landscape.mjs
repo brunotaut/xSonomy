@@ -248,6 +248,33 @@ export function buildLandscapeInvestors({ investors, reviews, fundingCompanies =
 //   * a site belongs to another record and is not an independent organisation.
 export const HUB_EXPORT = 'european-uav-cuas-hubs';
 
+// Event editions remain distinct from organisations. Undated research is exported in
+// a separate collection, never counted as a confirmed date or placed on the calendar.
+export async function fetchLandscapeEvents(sbFetchAll) {
+  const [events, sources] = await Promise.all([
+    sbFetchAll('ecosystem_events', {select: '*', publication_status: 'in.(ready,watchlist)', order: 'name.asc,slug.asc'}, 'ecosystem events'),
+    sbFetchAll('ecosystem_event_sources', {select: '*'}, 'event sources'),
+  ]);
+  return buildLandscapeEvents({events, sources});
+}
+export function buildLandscapeEvents({events=[], sources=[], generatedAt=new Date().toISOString()}={}) {
+  const http = value => {try {const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:null;} catch {return null;}};
+  const result={schemaVersion:1, generatedAt, horizon:'open_ended', events:[], watchlist:[]};
+  for (const r of events) {
+    if (!['ready','watchlist'].includes(r.publication_status)) continue;
+    const evidence=sources.filter(s=>s.event_id===r.id&&http(s.url)).map(s=>({url:http(s.url),type:s.source_type,fields:s.supported_fields||[],note:s.finding_en,checkedAt:s.checked_at}));
+    if (!r.slug||!r.name||!evidence.length||!http(r.website_url)) throw Error('Event missing identity or evidence: '+r.slug);
+    const dated=r.publication_status==='ready';
+    if (dated && (r.date_status!=='confirmed'||r.event_status!=='scheduled'||!/^\d{4}-\d{2}-\d{2}$/.test(r.start_date)||!/^\d{4}-\d{2}-\d{2}$/.test(r.end_date)||r.end_date<r.start_date||!evidence.some(s=>s.fields.includes('dates')&&['organizer','institution'].includes(s.type)))) throw Error('Unverified dated event: '+r.slug);
+    const e={slug:r.slug,series:r.series_key,name:r.name,year:r.edition_year||null,start:dated?r.start_date:null,end:dated?r.end_date:null,dateLabel:dated?null:r.date_label||null,dateStatus:r.date_status,country:r.country_code,countryName:r.country,city:r.city||null,venue:r.venue||null,organizer:r.organizer_name||null,url:http(r.website_url),registrationUrl:http(r.registration_url),exhibitorUrl:http(r.exhibitor_url),types:r.event_types||[],topics:r.topic_tags||[],audience:r.audience_tags||[],relevance:r.relevance_tier,description:r.description_en||'',note:r.research_note_en||null,attendance:r.attendance_mode,access:r.access_policy,checkedAt:r.checked_at,speakerDeadline:r.speaker_deadline||null,registrationDeadline:r.registration_deadline||null,sources:evidence};
+    result[dated?'events':'watchlist'].push(e);
+  }
+  result.events.sort((a,b)=>a.start.localeCompare(b.start)||a.name.localeCompare(b.name));
+  result.watchlist.sort((a,b)=>a.name.localeCompare(b.name)||(a.year||0)-(b.year||0));
+  result.counts={confirmed:result.events.length,watchlist:result.watchlist.length,countries:new Set(result.events.map(e=>e.country)).size};
+  return result;
+}
+
 export async function fetchLandscapeHubs(sbFetchAll) {
   const [hubs, reviews] = await Promise.all([
     sbFetchAll('v_landscape_hubs', { select: '*', order: 'name.asc' }, 'hubs'),

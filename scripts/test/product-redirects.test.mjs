@@ -48,7 +48,7 @@ test('a product redirect is written into its target section, and a dead one is s
       { from_slug: 'alpha-old', to_slug: 'alpha', kind: 'company' },
     ],
     product_taxonomy_view: [], article_products: [], articles: [],
-    v_company_funding_rounds: [], v_company_investment_research: [], v_landscape_investors: [], v_investor_country_reviews: [], v_landscape_hubs: [], v_hub_country_reviews: [],
+    v_company_funding_rounds: [], v_company_investment_research: [], v_landscape_investors: [], v_investor_country_reviews: [], v_landscape_hubs: [], v_hub_country_reviews: [], ecosystem_events: [], ecosystem_event_sources: [],
   };
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
@@ -129,7 +129,7 @@ test('a category correction keeps the old /uav/ url alive via from_section', asy
       { from_slug: 'sky-mule', to_slug: 'sky-mule', kind: 'product', from_section: null },
     ],
     product_taxonomy_view: [], article_products: [], articles: [],
-    v_company_funding_rounds: [], v_company_investment_research: [], v_landscape_investors: [], v_investor_country_reviews: [], v_landscape_hubs: [], v_hub_country_reviews: [],
+    v_company_funding_rounds: [], v_company_investment_research: [], v_landscape_investors: [], v_investor_country_reviews: [], v_landscape_hubs: [], v_hub_country_reviews: [], ecosystem_events: [], ecosystem_event_sources: [],
   };
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');

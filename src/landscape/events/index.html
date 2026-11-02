@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>European UAV & Counter-UAS Events · xSonomy</title><meta name="description" content="Discover European drone, counter-UAS and defence events. Explore the calendar by country, year and technology focus."><link rel="canonical" href="https://xsonomy.com/landscape/events/"><!--LANDSCAPE_ANALYTICS--><link rel="stylesheet" href="/assets/atlas/atlas.css"><link rel="stylesheet" href="/assets/atlas/events.css"></head>
+<body class="events-page">
+<header class="ev-top"><a href="/" class="ev-brand">x<span>Sonomy</span></a><a href="/landscape/">← Ecosystem atlas</a></header>
+<section class="intro ev-intro"><div><div class="eyebrow">EUROPEAN UAV & COUNTER-UAS ECOSYSTEM</div><h1>Where the ecosystem meets<span>.</span></h1><p class="muted">The events, conversations and connections moving the industry forward.</p></div><div class="stats"><div><strong id="evTotal">—</strong><span>confirmed editions</span></div><div><strong id="evCountries">—</strong><span>countries</span></div><div><strong id="evTbaTotal">—</strong><span>dates to be announced</span></div></div></section>
+<nav aria-label="Explore"><a href="/landscape/">Overview</a><a href="/landscape/?view=companies">Companies</a><a href="/landscape/?view=hubs">Hubs</a><a href="/landscape/?view=investors">Investors</a><a href="/landscape/?view=technologies">Technologies</a><a class="active" href="/landscape/events/" aria-current="page">Events</a></nav>
+<main class="ev-main" id="eventsMain">
+<section class="ev-filters" aria-label="Filter events"><label class="ev-search"><span class="sr-only">Search events</span><input id="eventSearch" type="search" placeholder="Search events, cities or organisers…" autocomplete="off"></label><label><span>Country</span><select id="eventCountry"><option value="">All countries</option></select></label><label><span>Focus</span><select id="eventTopic"><option value="">All topics</option></select></label><label><span>Relevance</span><select id="eventRelevance"><option value="">All relevant events</option><option value="core">UAV & C-UAS specialist</option><option value="adjacent">Wider ecosystem</option></select></label><button id="clearEvents">Reset filters</button></section>
+<div class="ev-years" id="eventYears" aria-label="Filter by year"></div>
+<div class="ev-heading"><div class="ev-tabs" role="group" aria-label="Event date status"><button data-event-status="upcoming" class="active">Upcoming</button><button data-event-status="tba">Dates TBA</button><button data-event-status="past">Past</button></div><div class="ev-layout" role="group" aria-label="Event layout"><button data-event-layout="timeline" aria-pressed="true">Timeline</button><button data-event-layout="calendar" aria-pressed="false">Calendar</button><button id="shareEvents" aria-label="Copy event view link">↗ Share</button></div></div>
+<p class="ev-result-line" id="eventCount" role="status" aria-live="polite">Loading event calendar…</p>
+<div id="eventContent"><div class="ev-loading">Connecting the European ecosystem…</div></div>
+<p class="ev-evidence" id="eventEvidence">Dates are checked against published sources. Future programmes and dates can change.</p>
+</main>
+<dialog id="eventDialog" aria-labelledby="eventDialogTitle"><button id="closeEventDialog" class="ev-close" aria-label="Close event details">Close ×</button><div id="eventDetails"></div></dialog>
+<div id="eventToast" role="status" hidden></div>
+<noscript><p class="ev-evidence">Enable JavaScript to explore the event calendar. <a href="/landscape/">Return to the ecosystem atlas</a>.</p></noscript>
+<footer class="foot ev-footer">xSonomy · European UAV & Counter-UAS ecosystem <span>Created by Nazar Begen</span></footer>
+<script type="module" src="/assets/atlas/events.js"></script></body></html>

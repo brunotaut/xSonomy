@@ -11,7 +11,7 @@ import { fixture } from './landscape-fixture.mjs';
 test('whole static generator emits the gated landscape, analytics and sitemap from a read-only API',async()=>{
   const root=await mkdtemp(join(tmpdir(),'xsonomy-build-'));
   const f=fixture(); const requests=[];
-  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[],v_company_funding_rounds:[],v_company_investment_research:[],v_landscape_investors:[],v_investor_country_reviews:[],v_landscape_hubs:[],v_hub_country_reviews:[]};
+  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[],v_company_funding_rounds:[],v_company_investment_research:[],v_landscape_investors:[],v_investor_country_reviews:[],v_landscape_hubs:[],v_hub_country_reviews:[],ecosystem_events:[],ecosystem_event_sources:[]};
   tables.v_company_funding_rounds=[{id:'r1',company_id:'uav',round_key:'test-a',stage:'Series A',financing_type:'equity',announced_date:'2026-06-09',amount:50000000,currency:'EUR',amount_basis:'closed_amount',closing_status:'closed',checked_at:'2026-11-02',sources:[{url:'https://example.com/round',title:'Source'}],investors:[]}];
   tables.v_company_investment_research=[{company_id:'uav',coverage_status:'partial',coverage_note_en:'History incomplete',checked_at:'2026-11-02'}];
   const server=createServer((req,res)=>{
@@ -40,6 +40,14 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     assert.ok(html.indexOf("gtag('consent', 'default'")<html.indexOf('googletagmanager.com'));
     assert.ok(!html.includes('<!--LANDSCAPE_ANALYTICS-->'));
     assert.match(await readFile(join(root,'public/sitemap.xml'),'utf8'),/https:\/\/xsonomy.com\/landscape\//);
+    const eventData=JSON.parse(await readFile(join(root,'public/data/landscape-events.json'),'utf8'));
+    assert.equal(eventData.horizon,'open_ended');
+    assert.equal(eventData.events.length,0);
+    assert.equal(output.events.url,'/data/landscape-events.json');
+    const eventHtml=await readFile(join(root,'public/landscape/events/index.html'),'utf8');
+    assert.match(eventHtml,/id="eventContent"/);
+    assert.ok(!eventHtml.includes('<!--LANDSCAPE_ANALYTICS-->'));
+    assert.match(html,/href="\/landscape\/events\/"/);
     assert.ok(requests.every(r=>r.method==='GET'));
     for(const r of requests.filter(r=>r.url.startsWith('/rest/v1/companies?'))) assert.match(r.url,/publication_status=eq.live/);
   } finally { await new Promise(resolve=>server.close(resolve)); await rm(root,{recursive:true,force:true}); }
