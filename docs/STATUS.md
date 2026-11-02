@@ -24,6 +24,10 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — Events header aligned with landscape
+
+Removed the extra xSonomy logo/back-link header row from Events at Nazar’s request. The page now starts directly with the ecosystem introduction, matching the landscape page structure. Existing navigation and event functionality are unchanged.
+
 ### 2026-11-02 — funding research checkpoint 05 publication
 
 The source-audited investment workstream reviewed 21 more published-landscape
