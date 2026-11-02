@@ -1371,3 +1371,20 @@ not been run. Detail in `xsonomy-news`:
 Also prepared and not applied: deleting two stale "aerial" taxonomy rows from Cassio S and
 DA 15-N.ISS — a piloted light aircraft and a servo actuator that were tagged as uncrewed
 aerial systems because the tag was copied from a category they no longer have.
+
+### Two stale "aerial" tags removed
+
+**Cassio S** and **DA 15-N.ISS** no longer claim an aerial-UAV domain. Both were tagged
+that way because the tag had been copied from a category they no longer have — a piloted
+light aircraft and a servo actuator, filed as uncrewed aerial systems by inheritance. Both
+pages stay exactly where they are (`/other/cassio-s/` and `/other/da-15-niss/`), keep their
+companies and their news links, and simply carry no taxonomy field now, which is how every
+other component in the catalogue is treated.
+
+No other product is affected: aerial tags on non-UAV products went from 2 to **0**.
+
+Upstream, the extraction pipeline that produced the earlier bad records was hardened again
+after review found two defects in the first fix — a manufacturer could still be inferred
+from two names appearing in one sentence, and the duplicate guard caught less than claimed.
+Detail in `xsonomy-news`:
+`research-agent/reports/2026-11-02-extraction-validation-and-taxonomy-applied.md`.
