@@ -1324,9 +1324,10 @@ async function main() {
   landscape.events = { ...events.counts, url: "/data/landscape-events.json", horizon: "open_ended" };
   console.log(`  Events: ${events.counts.confirmed} dated + ${events.counts.watchlist} undated -> /landscape/events/`);
   urls.push(`${SITE}/landscape/events/`);
+  urls.push(`${SITE}/landscape/insights/`);
 
   await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
-  for (const section of ["landscape", "landscape/events"]) {
+  for (const section of ["landscape", "landscape/events", "landscape/insights"]) {
     const landscapePath = join(OUT, section, "index.html");
     await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))
       .replace("<!--LANDSCAPE_ANALYTICS-->", GA_TAG));

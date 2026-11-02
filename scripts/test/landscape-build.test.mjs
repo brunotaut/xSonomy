@@ -54,6 +54,12 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     assert.match(eventHtml,/id="eventContent"/);
     assert.ok(!eventHtml.includes('<!--LANDSCAPE_ANALYTICS-->'));
     assert.match(html,/href="\/landscape\/events\/"/);
+    assert.match(html,/href="\/landscape\/insights\/"/);
+    const insightHtml=await readFile(join(root,'public/landscape/insights/index.html'),'utf8');
+    assert.match(insightHtml,/id="insightGrid"/);
+    assert.ok(!insightHtml.includes('<!--LANDSCAPE_ANALYTICS-->'));
+    assert.match(insightHtml,/googletagmanager.com/);
+    assert.match(await readFile(join(root,'public/sitemap.xml'),'utf8'),/https:\/\/xsonomy.com\/landscape\/insights\//);
     assert.ok(requests.every(r=>r.method==='GET'));
     for(const r of requests.filter(r=>r.url.startsWith('/rest/v1/companies?'))) assert.match(r.url,/publication_status=eq.live/);
   } finally { await new Promise(resolve=>server.close(resolve)); await rm(root,{recursive:true,force:true}); }

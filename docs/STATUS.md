@@ -24,6 +24,15 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — Insights chapter
+
+Added `/landscape/insights/` and a separate Insights navigation link from the map, next-map route and Events. Six live charts cover HQ country concentration, exclusive UAV/C-UAS/both company mix, detailed capabilities, a country/capability heatmap, hub/investor location coverage and twelve calendar months of confirmed events. A shared country filter updates all six; bars and heatmap cells link to the corresponding atlas filters and event calendar. Data tables and explicit methodology accompany the charts.
+
+Uses existing public exports only; no DB writes or new publication rules. Counts are distinct company identities; capability overlap is disclosed. Network counts exclude associated site records, investor meeting-only locations and country research associations; cross-country organisation counts are explicitly non-additive. Events exclude past/undated editions, retain zero months and count ongoing editions once. Secondary feed failures remain local to their chart with retry; no invented sample data. Route is included in sitemap and consent-gated analytics.
+
+Validation: 105/105 tests passed, including the whole static generator and six aggregation/date tests. Desktop browser QA confirmed six charts, Germany filtering, zero-company Luxembourg without invalid numbers, full data tables, no page overflow, and a Ukraine bar opening the matching 94-company atlas selection. Responsive layouts use one column below 800px and a contained heatmap scroll area.
+
+
 ### 2026-11-02 — funding research checkpoint 06 publication
 
 The source-audited investment workstream reviewed 21 additional published-landscape
