@@ -1421,3 +1421,10 @@ Funding export and cards preserve approximate, more-than, at-least and up-to val
 ### 2026-11-02 — verified financing expansion published
 
 Read-only rebuild for writer commit `65bc1d27a573d3d1781bba85ecef72df05e22aeb`: 101 approved financing events across 54 companies, 306 investor participations and 287 investor profiles. Further 33 source-reviewed events include loans, mixed funding and historical original currencies. Full programme remains in progress; discovery candidates are not imported facts. Existing 88 catalogue tests pass; unchanged renderer preserves amount qualifiers and event sources.
+
+
+### 2026-11-02 — autonomous funding checkpoint 03
+
+Read-only rebuild requested for writer commit `2f9faa1ac23df56f595b5e98e99c9b21a895c609`: 123 approved sourced financing events across 65 companies, 376 round participations and 342 investor profiles. This checkpoint reviewed 20 published-landscape identities and imported 22 confirmed events, including the distinct October Buntar round, Volocopter Series C–E history, Skyports Series B/C, and separated Dronamics grant/equity financing. Lower bounds, signed commitments, unnamed participants and ownership transactions remain explicit rather than normalised into invented exact rounds.
+
+Writer validation: 146 tests pass; production rollback rehearsal restored the 101-event baseline; atomic import and idempotent rerun produced zero source or participant-source mismatches. The full programme remains in progress.
