@@ -1411,3 +1411,8 @@ Validation: 86 catalogue tests pass, including a full read-only generator build 
 Read-only funding export now preserves event kind, same-company extension parent and unknown dates (sorted last). Company and investor cards distinguish financing, lenders and individual contributions. Primary-source history import in xsonomy-news expands five-company pilot to 24 events / 110 participations and catalogue to 177 investors. No inferred funding totals. 87 catalogue tests pass; atlas asset versioned. Next 25 identities queued for research in xsonomy-news, not claimed researched.
 
 Funding history source commit: `74179987b30bb8189ee3d1b72753dd8e31e6b0ea`.
+
+
+### 2026-11-02 — financing amounts retain source qualifiers
+
+Funding export and cards preserve approximate, more-than, at-least and up-to values, avoiding false exact proceeds. Expansion in writer repo adds 44 sourced financing events across 23 further companies: 68 events and 215 participations overall, with 235 investor profiles. 88 catalogue tests pass. Source currencies and individual contributions remain separate.
