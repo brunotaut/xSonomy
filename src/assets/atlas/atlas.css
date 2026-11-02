@@ -38,3 +38,12 @@ details.more p{font-size:12px}
 #listToggle.active{background:#5a4428;border-color:#f2c87b;color:#ffe4b3}
 /* The desktop results column stays open; mobile detail sheets retain dismissal. */
 @media(min-width:721px){.panel .panel-close{display:none}}
+
+
+/* Company details: return to the filtered directory and open published products. */
+.panel-back{display:block;margin:0 0 16px;padding:5px 9px;font-size:12px;color:var(--mint);background:#182b28;border-color:#355347}
+.product-tags{display:flex;flex-wrap:wrap;gap:6px}
+.product-tag{margin:0;color:#e0d7ff;background:#29243d;border-color:#65558d;text-decoration:none;overflow-wrap:anywhere;max-width:100%}
+a.product-tag:hover{background:#3a3055;border-color:var(--purple);color:#fff}
+a.product-tag:focus-visible{outline-color:var(--purple)}
+.product-unlinked{color:#baafcf}

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
-import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-817ff0fd25b0.js';
+import {defaults,normalize,readState,filterInvestors,investorLocations,investorTypeOf,investorFocusOf,stagePositions,validateInvestors,NOT_ESTABLISHED} from '../../src/assets/atlas/model-9b603fcf8d2f.js';
 // Shaped exactly like /data/landscape-investors.json so the atlas is tested against the
 // export it actually consumes, including the fields the research layer may leave empty.
 const loc=(city,country,kind='published_office_or_contact_city')=>({city,country,latitude:50,longitude:10,kind,precision:'approximate_city_centroid',sources:[{url:'https://example.com/contact',title:'Contact',accessedAt:'2026-10-30'}]});
@@ -162,3 +162,4 @@ test('every stored metric type has a label and exactly one card slot',()=>{
  assert.ok(/SCALE_PREFIX=\{[^}]*cumulative_capital_raised:/.test(src),
   'capital raised since inception needs its own prefix: it is not assets under management');
 });
+
