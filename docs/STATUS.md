@@ -1404,3 +1404,10 @@ The catalogue now reads service-only `v_company_funding_rounds` and `v_company_i
 Amount basis and close status are explicit (notably Tekever: announced USD 580m size, first close with undisclosed exact proceeds). All five histories are labelled partial. No cumulative company funding totals are computed. Data, schema, exact sources, dry-run importer and rollback are in xsonomy-news commit f705ff6f98ca682a4ed0ef7e39df631123fcd33b, report `research-agent/reports/2026-11-02-company-funding-pilot.md`. The DB update is logged there; this catalogue remains read-only.
 
 Validation: 86 catalogue tests pass, including a full read-only generator build and source/amount/coverage checks. The database schema and idempotent importer also passed local PostgreSQL tests and a production rollback dry run. Publishing uses the existing Pages workflow.
+
+
+### 2026-11-02 — publish earlier financing histories
+
+Read-only funding export now preserves event kind, same-company extension parent and unknown dates (sorted last). Company and investor cards distinguish financing, lenders and individual contributions. Primary-source history import in xsonomy-news expands five-company pilot to 24 events / 110 participations and catalogue to 177 investors. No inferred funding totals. 87 catalogue tests pass; atlas asset versioned. Next 25 identities queued for research in xsonomy-news, not claimed researched.
+
+Funding history source commit: `74179987b30bb8189ee3d1b72753dd8e31e6b0ea`.
