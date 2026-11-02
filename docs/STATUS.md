@@ -24,6 +24,20 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — funding research checkpoint 06 publication
+
+The source-audited investment workstream reviewed 21 additional published-landscape
+identities and added five approved financing or investment events for Aether Aeronautics,
+Agilica and Aktyvus Photonics. The read-only landscape build now projects 175 events
+across 98 companies, 507 event participations and 436 investor profiles. Aether's
+secondary share purchase is explicitly separated from its primary capital increase;
+Aktyvus Photonics' ILTE loan and EU grant remain distinct; six unresolved secondary or
+aggregate claims stay documented as source holds.
+
+Validation: production rollback rehearsal restored the exact baseline, the atomic import
+was idempotent, all approved events and participations retain source links, and 154/154
+repository tests passed.
+
 ### 2026-11-02 — City locations and map density
 
 Nazar requested capitals, known company cities, graduated country shading and glowing city dots across company, hub/site and investor layers. Added a GeoNames CC BY 4.0 locality gazetteer, 32 capitals, anchored city groups, count-scaled circular markers, separate mint/purple/gold layers, country density gradients and zoom-dependent labels. Clicking a city opens its matching company/hub/investor lists. Country-only records retain dashed, explicitly approximate markers; office and test-site kinds remain distinct in details and tooltips. The read-only export now includes existing HQ city/coordinates. No database edits or publication-gate changes.
