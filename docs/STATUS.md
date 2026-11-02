@@ -1416,3 +1416,8 @@ Funding history source commit: `74179987b30bb8189ee3d1b72753dd8e31e6b0ea`.
 ### 2026-11-02 — financing amounts retain source qualifiers
 
 Funding export and cards preserve approximate, more-than, at-least and up-to values, avoiding false exact proceeds. Expansion in writer repo adds 44 sourced financing events across 23 further companies: 68 events and 215 participations overall, with 235 investor profiles. 88 catalogue tests pass. Source currencies and individual contributions remain separate.
+
+
+### 2026-11-02 — verified financing expansion published
+
+Read-only rebuild for writer commit `65bc1d27a573d3d1781bba85ecef72df05e22aeb`: 101 approved financing events across 54 companies, 306 investor participations and 287 investor profiles. Further 33 source-reviewed events include loans, mixed funding and historical original currencies. Full programme remains in progress; discovery candidates are not imported facts. Existing 88 catalogue tests pass; unchanged renderer preserves amount qualifiers and event sources.
