@@ -1377,9 +1377,16 @@ aerial systems because the tag was copied from a category they no longer have.
 **Cassio S** and **DA 15-N.ISS** no longer claim an aerial-UAV domain. Both were tagged
 that way because the tag had been copied from a category they no longer have — a piloted
 light aircraft and a servo actuator, filed as uncrewed aerial systems by inheritance. Both
-pages stay exactly where they are (`/other/cassio-s/` and `/other/da-15-niss/`), keep their
-companies and their news links, and simply carry no taxonomy field now, which is how every
-other component in the catalogue is treated.
+pages stay exactly where they are (`/other/cassio-s/` and `/other/da-15-n-iss/`), keep
+their companies and their news links, and simply carry no taxonomy field now, which is how
+every other component in the catalogue is treated.
+
+**Worth knowing, found while checking those URLs:** a product's public URL is generated from
+its **Name**, not from the `slug` column in the database
+(`generate-supabase.mjs:1203`). DA 15-N.ISS is stored with slug `da-15-niss` but published
+at `/other/da-15-n-iss/`. So renaming a product moves its page, while editing the stored
+slug does nothing — the opposite of what "keep the slug stable" implies. Nothing is broken
+today; it just means renames are the thing to be careful with, not slug edits.
 
 No other product is affected: aerial tags on non-UAV products went from 2 to **0**.
 
