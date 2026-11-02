@@ -24,6 +24,15 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-02 — funding research checkpoint 07 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and added 13 approved financing or investment events. The read-only landscape build now projects 188 events across 99 companies, 525 event participations and 447 investor profiles. The batch adds verified historical records for Tytan Technologies, Robin Radar, Marduk Technologies, Delair, Wingcopter, Windracers and Dufour Aerospace, plus investor links for The Fourth Law.
+
+Financing semantics remain explicit: Parcom's Robin Radar acquisition is secondary; grants, equity and debt stay separate; undisclosed strategic investments retain null amounts; cumulative totals and consortium budgets remain source holds. The Marduk 2024 grant was corrected from undisclosed to EUR93,875 with an expected-old-value transaction and exact rollback manifest.
+
+Validation: the production rehearsal restored the exact 175/507/436/98 baseline, the 2024 Marduk correction rollback restored its null before-image, the atomic import was idempotent, every approved batch event and participation retains a source, and 154/154 writer-repository tests passed.
+
+
 ### 2026-11-02 — Insights chapter
 
 Added `/landscape/insights/` and a separate Insights navigation link from the map, next-map route and Events. Six live charts cover HQ country concentration, exclusive UAV/C-UAS/both company mix, detailed capabilities, a country/capability heatmap, hub/investor location coverage and twelve calendar months of confirmed events. A shared country filter updates all six; bars and heatmap cells link to the corresponding atlas filters and event calendar. Data tables and explicit methodology accompany the charts.
