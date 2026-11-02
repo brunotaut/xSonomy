@@ -55,7 +55,7 @@ test('bad taxonomy and duplicate identities fail loudly',()=>{
 });
 test('fetch uses the working edition, stable pagination keys and propagates missing-source errors',async()=>{
   const f=fixture();const calls=[];
-  const tables={landscape_candidates:f.candidates,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments};
+  const tables={landscape_candidates:f.candidates,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,v_company_funding_rounds:[],v_company_investment_research:[]};
   const result=await fetchLandscape(async(table,params)=>{calls.push({table,params});return tables[table];},f.companies,f.productsByCompany);
   assert.equal(result.companies.length,3);
   assert.equal(calls[0].params.landscape_slug,`eq.${LANDSCAPE}`);

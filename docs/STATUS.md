@@ -1395,3 +1395,12 @@ after review found two defects in the first fix — a manufacturer could still b
 from two names appearing in one sentence, and the duplicate guard caught less than claimed.
 Detail in `xsonomy-news`:
 `research-agent/reports/2026-11-02-extraction-validation-and-taxonomy-applied.md`.
+
+
+### 2026-11-02 — structured company funding pilot on the landscape
+
+The catalogue now reads service-only `v_company_funding_rounds` and `v_company_investment_research`, projecting approved sourced rounds onto included live companies. Five pilot companies carry one verified 2026 round each, with 35 round participations. Investor export/search also carries the associated funding company identities without merging them into generic portfolio relationships. Company and investor panels link both ways; legacy rows already represented by structured rounds are not shown again as undated evidence.
+
+Amount basis and close status are explicit (notably Tekever: announced USD 580m size, first close with undisclosed exact proceeds). All five histories are labelled partial. No cumulative company funding totals are computed. Data, schema, exact sources, dry-run importer and rollback are in xsonomy-news commit f705ff6f98ca682a4ed0ef7e39df631123fcd33b, report `research-agent/reports/2026-11-02-company-funding-pilot.md`. The DB update is logged there; this catalogue remains read-only.
+
+Validation: 86 catalogue tests pass, including a full read-only generator build and source/amount/coverage checks. The database schema and idempotent importer also passed local PostgreSQL tests and a production rollback dry run. Publishing uses the existing Pages workflow.

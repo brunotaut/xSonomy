@@ -1,0 +1,22 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import vm from 'node:vm';
+import {buildLandscape,buildLandscapeInvestors} from '../lib/landscape.mjs';import {fixture} from './landscape-fixture.mjs';
+const app=readFileSync(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8');
+const raw={id:'round-a',company_id:'uav',round_key:'series-a-2026',stage:'Series A',financing_type:'equity',announced_date:'2026-06-09',amount:50000000,currency:'EUR',amount_basis:'closed_amount',closing_status:'closed',note_en:'Contributions not disclosed.',checked_at:'2026-11-02',sources:[{url:'https://example.com/round',title:'Company announcement'}],investors:[{slug:'air-street-capital',name:'Air Street Capital',role:'lead',contribution:null,source:'https://example.com/round'},{slug:'otb-ventures',name:'OTB Ventures',role:'participant',contribution:null,source:'https://example.com/round'}]};
+test('round export preserves one round with multiple investors and explicit partial history',()=>{
+ const result=buildLandscape({...fixture(),fundingRounds:[raw],investmentResearch:[{company_id:'uav',coverage_status:'partial',coverage_note_en:'Earlier rounds not researched.',checked_at:'2026-11-02'}]});
+ const c=result.companies.find(c=>c.id==='uav');assert.equal(c.fundingRounds.length,1);assert.equal(c.fundingRounds[0].investors.length,2);assert.deepEqual(c.fundingRounds[0].amount,{amount:50000000,currency:'EUR'});assert.equal(c.funding,null);assert.equal(c.investmentResearch.status,'partial');
+ assert.equal(result.companies.find(c=>c.id==='cuas').fundingRounds.length,0);
+});
+test('unsourced rounds and unsafe participant sources never become published facts',()=>{
+ const result=buildLandscape({...fixture(),fundingRounds:[{...raw,sources:[]}]});assert.equal(result.companies.find(c=>c.id==='uav').fundingRounds.length,0);
+ const row={...raw,investors:[{...raw.investors[0],source:'javascript:alert(1)'}]};assert.equal(buildLandscape({...fixture(),fundingRounds:[row]}).companies.find(c=>c.id==='uav').fundingRounds[0].investors.length,0);
+});
+test('round cards link both ways and distinguish the announced size from first-close proceeds',()=>{
+ const company=buildLandscape({...fixture(),fundingRounds:[{...raw,amount_basis:'announced_round_size',closing_status:'first_close'}]}).companies.find(c=>c.id==='uav');
+ const c=vm.createContext({D:{companies:[company]},V:{investors:[]},esc:s=>String(s??''),amt:m=>m.currency+' '+m.amount,safeUrl:u=>/^https:/.test(u)?u:'',vStatus:'ok',REL_LABEL:{},EVID_LABEL:{}});
+ vm.runInContext(app.slice(app.indexOf('function fundingRoundCards('),app.indexOf('function portfolioCompanyLink(')),c);c.company=company;
+ const html=vm.runInContext('companyInvestments(company)',c);assert.match(html,/Announced round size · First close/);assert.match(html,/Air Street Capital · Lead/);assert.match(html,/data-related-investor="air-street-capital"/);assert.doesNotMatch(html,/Total funding reported/);
+ assert.match(vm.runInContext("investorFundingRounds({slug:'air-street-capital'})",c),/data-related-company="uav"/);
+});
+
+test('funding-backed companies reach the investor export independently of generic portfolio claims',()=>{const companies=buildLandscape({...fixture(),fundingRounds:[raw]}).companies;const out=buildLandscapeInvestors({investors:[{id:'fund',slug:'air-street-capital',name:'Air Street Capital',evidence_status:'deal',locations:[]}],reviews:[],fundingCompanies:companies});assert.deepEqual(out.investors[0].fundingCompanies,[{id:'uav',name:companies.find(c=>c.id==='uav').name}]);assert.equal(out.investors[0].portfolio.length,0)});

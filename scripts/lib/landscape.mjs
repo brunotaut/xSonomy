@@ -3,16 +3,18 @@
 export const LANDSCAPE = 'europe-uav-cuas-2026';
 
 export async function fetchLandscape(sbFetchAll, companies, productsByCompany) {
-  const [candidates, countries, sectors, assignments] = await Promise.all([
+  const [candidates, countries, sectors, assignments, fundingRounds, investmentResearch] = await Promise.all([
     sbFetchAll('landscape_candidates', { select: 'company_id,status', landscape_slug: `eq.${LANDSCAPE}`, order: 'company_id.asc' }),
     sbFetchAll('countries', { select: 'code,name,is_landscape_scope', order: 'code.asc' }),
     sbFetchAll('sectors', { select: 'id,slug,name,parent_id', order: 'id.asc' }),
     sbFetchAll('company_sectors', { select: 'company_id,sector_id,source_urls', order: 'company_id.asc,sector_id.asc' }),
+    sbFetchAll('v_company_funding_rounds', { select: '*', order: 'company_id.asc,announced_date.desc,id.asc' }),
+    sbFetchAll('v_company_investment_research', { select: '*', order: 'company_id.asc' }),
   ]);
-  return buildLandscape({ companies, candidates, countries, sectors, assignments, productsByCompany });
+  return buildLandscape({ companies, candidates, countries, sectors, assignments, productsByCompany, fundingRounds, investmentResearch });
 }
 
-export function buildLandscape({ companies, candidates, countries, sectors, assignments, productsByCompany = new Map() }) {
+export function buildLandscape({ companies, candidates, countries, sectors, assignments, productsByCompany = new Map(), fundingRounds = [], investmentResearch = [] }) {
   const byId = new Map(sectors.map(s => [s.id, s]));
   const roots = sectors.filter(s => ['uav', 'counter-uas'].includes(s.slug));
   if (roots.length !== 2) throw new Error('Landscape requires UAV and Counter-UAS taxonomy roots.');
@@ -60,6 +62,8 @@ export function buildLandscape({ companies, candidates, countries, sectors, assi
       website: isWebUrl(c.website) ? c.website : null,
       products: (productsByCompany.get(c.id) || []).map(p => ({ name: p.name, url: p.url || null })),
       funding: c.total_funding != null && Number.isFinite(Number(c.total_funding)) ? { amount: Number(c.total_funding), currency: c.funding_currency || null } : null,
+      fundingRounds: (fundingRounds||[]).filter(r=>r.company_id===c.id).map(r=>({id:r.id,key:r.round_key,stage:r.stage,type:r.financing_type,date:r.announced_date,amount:r.amount!=null?{amount:Number(r.amount),currency:r.currency}:null,amountBasis:r.amount_basis,closingStatus:r.closing_status,note:r.note_en||null,checkedAt:r.checked_at,sources:(r.sources||[]).filter(s=>isWebUrl(s.url)),investors:(r.investors||[]).filter(i=>isWebUrl(i.source))})).filter(r=>r.sources.length),
+      investmentResearch: (()=>{const r=(investmentResearch||[]).find(r=>r.company_id===c.id);return r?{status:r.coverage_status,note:r.coverage_note_en,checkedAt:r.checked_at}:null})(),
     });
   }
   return {
@@ -86,7 +90,7 @@ function isWebUrl(value) {
 // range is not available capital; and an empty field means "not established", never zero.
 export const INVESTOR_EXPORT = 'european-defence-investors';
 
-export async function fetchLandscapeInvestors(sbFetchAll) {
+export async function fetchLandscapeInvestors(sbFetchAll, fundingCompanies = []) {
   const [investors, reviews] = await Promise.all([
     sbFetchAll('v_landscape_investors', { select: '*', order: 'name.asc' }, 'investors'),
     sbFetchAll('v_investor_country_reviews', { select: '*', order: 'country.asc' }, 'investor country reviews'),
@@ -95,10 +99,10 @@ export async function fetchLandscapeInvestors(sbFetchAll) {
   // additions, the Ukraine flag and the workbook row reference are all database columns now,
   // and the projection carries the whole 118-record directory rather than only the 21
   // records that had a city location.
-  return buildLandscapeInvestors({ investors, reviews });
+  return buildLandscapeInvestors({ investors, reviews, fundingCompanies });
 }
 
-export function buildLandscapeInvestors({ investors, reviews }) {
+export function buildLandscapeInvestors({ investors, reviews, fundingCompanies = [] }) {
   const records = investors.map((r) => {
     const locations = (r.locations || []).map((l) => ({
       city: l.city, country: l.country,
@@ -120,6 +124,7 @@ export function buildLandscapeInvestors({ investors, reviews }) {
       uavReviewPriority: r.priority_for_uav_review || null,
       stages: r.stages || [], focus: r.focus || [],
       selectedPortfolio: r.selected_portfolio || [],
+      fundingCompanies: fundingCompanies.filter(c=>(c.fundingRounds||[]).some(round=>(round.investors||[]).some(i=>i.slug===String(r.slug)))).map(c=>({id:c.id,name:c.name})),
       investmentGeography: r.investment_geography || [],
       ticket: r.ticket_currency ? {
         currency: r.ticket_currency, minimum: r.ticket_minimum, maximum: r.ticket_maximum,

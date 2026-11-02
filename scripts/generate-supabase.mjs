@@ -1273,7 +1273,7 @@ async function main() {
   // Portfolio links used to be computed here by unique exact name match against published
   // companies. They are stored relationships now, each with its own evidence, so the export
   // carries persistent company ids and stable profile URLs instead of a build-time guess.
-  const investors = await fetchLandscapeInvestors(sbFetchAll);
+  const investors = await fetchLandscapeInvestors(sbFetchAll, landscape.companies);
   await writeFile(join(OUT, "data", "landscape-investors.json"), JSON.stringify(investors));
   const portfolioRows = investors.investors.reduce((n, i) => n + i.portfolio.length, 0);
   // Fund positions are counted apart from portfolio relationships on purpose. A

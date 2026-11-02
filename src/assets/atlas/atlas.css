@@ -58,3 +58,8 @@ a.product-tag:focus-visible{outline-color:var(--purple)}
 .investment-card .round-label{font-weight:600;margin:10px 0 5px;font-size:13px}
 .investment-source{display:inline-block;margin-top:8px;font-size:11px}
 @media(max-width:720px){.workspace{height:calc(150dvh - 435px);min-height:600px}}
+
+.funding-round{border-color:#355347}.round-header{display:flex;gap:12px;align-items:baseline;justify-content:space-between}.round-header span{color:var(--muted);font-size:11px}
+.round-amount{color:var(--mint);font-size:24px;font-weight:650;margin:6px 0}.round-investors{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}
+.investor-round-tag{margin:0;color:#dcecff;background:#203347;border-color:#426581;text-align:left}.investor-round-tag:hover{border-color:var(--blue)}
+.coverage-note{font-size:11px;color:var(--muted);margin-top:10px}.round-sources{margin-top:10px}.round-sources summary{padding:5px 0;background:none;border:0;font-size:11px;color:var(--mint)}.round-sources a{display:block;font-size:11px;padding:5px 0}

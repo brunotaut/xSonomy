@@ -11,7 +11,9 @@ import { fixture } from './landscape-fixture.mjs';
 test('whole static generator emits the gated landscape, analytics and sitemap from a read-only API',async()=>{
   const root=await mkdtemp(join(tmpdir(),'xsonomy-build-'));
   const f=fixture(); const requests=[];
-  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[],v_landscape_investors:[],v_investor_country_reviews:[],v_landscape_hubs:[],v_hub_country_reviews:[]};
+  const tables={companies:f.companies,countries:f.countries,sectors:f.sectors,company_sectors:f.assignments,landscape_candidates:f.candidates,products:[],product_taxonomy_view:[],article_products:[],articles:[],slug_redirects:[],v_company_funding_rounds:[],v_company_investment_research:[],v_landscape_investors:[],v_investor_country_reviews:[],v_landscape_hubs:[],v_hub_country_reviews:[]};
+  tables.v_company_funding_rounds=[{id:'r1',company_id:'uav',round_key:'test-a',stage:'Series A',financing_type:'equity',announced_date:'2026-06-09',amount:50000000,currency:'EUR',amount_basis:'closed_amount',closing_status:'closed',checked_at:'2026-11-02',sources:[{url:'https://example.com/round',title:'Source'}],investors:[]}];
+  tables.v_company_investment_research=[{company_id:'uav',coverage_status:'partial',coverage_note_en:'History incomplete',checked_at:'2026-11-02'}];
   const server=createServer((req,res)=>{
     requests.push({method:req.method,url:req.url});
     const url=new URL(req.url,'http://localhost'); const table=url.pathname.split('/').pop();
@@ -31,6 +33,8 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     assert.match(stdout,/Landscape: 3 included, published/);
     const output=JSON.parse(await readFile(join(root,'public/data/landscape.json'),'utf8'));
     assert.deepEqual(output.companies.map(c=>c.id),['both','cuas','uav']);
+    assert.equal(output.companies.find(c=>c.id==='uav').fundingRounds[0].amount.amount,50000000);
+    assert.equal(output.companies.find(c=>c.id==='uav').investmentResearch.status,'partial');
     assert.ok(!JSON.stringify(output).includes('test-only-secret'));
     const html=await readFile(join(root,'public/landscape/index.html'),'utf8');
     assert.ok(html.indexOf("gtag('consent', 'default'")<html.indexOf('googletagmanager.com'));
