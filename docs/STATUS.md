@@ -24,6 +24,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-03 — funding research checkpoint 16 publication
+
+The source-audited investment workstream reviewed 21 additional published-landscape identities and imported 23 attributable events for 12 newly covered companies. The read-only landscape build now projects 321 events across 183 companies, 672 event participations and 549 investor profiles. The checkpoint adds Griff Aviation's 2018-2022 financings, six issuer-level Amper transactions, two HAVELSAN EU grants, investments or grants for Hecto Drone, Heliguy and Hellion Tech, HENSOLDT's primary IPO proceeds, the Quantum Systems acquisition of Hevi Optronics, Hexadrone's first round, Carlyle's HGH acquisition, Huless's mixed financing disclosure and two Hybrid Drones investments.
+
+Financing semantics remain explicit: secondary IPO shares, seller proceeds, subsidiary financings, projected capex and fundraising intentions are excluded; debt, grants, equity, mixed financing and secondary ownership events stay labelled separately. The rollback rehearsal restored the exact 298/392/649/171/535 baseline, and the atomic import plus idempotent rerun both resolved 321 events, 427 sources, 672 participations, 183 covered companies and 549 investors with zero source-integrity gaps.
+
 ### 2026-11-03 — funding research checkpoint 15 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported twelve attributable events for ten companies. The read-only landscape build now projects 298 events across 171 companies, 649 event participations and 535 investor profiles. The checkpoint adds Flowcopter's grant and TEKEVER acquisition, two FLYDE disclosures, FlyFocus's institutional round, Flying Eye's management buyout, Frequentis's primary IPO proceeds, Freya's seed, the General Dynamics acquisition of Santa Bárbara Sistemas, General Cherry's credit line, Germandrones' capital increase and Greenjets' Series A.
