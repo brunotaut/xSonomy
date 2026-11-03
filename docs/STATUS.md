@@ -1649,3 +1649,14 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 - First-pass lane timing was not captured, so no concurrency speedup is claimed.
 - Audit report: [100-company parallel funding pilot](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-funding-parallel-pilot.md)
 
+
+
+## Funding research checkpoint 28 — 100-company pilot second pass — 2026-11-03
+
+- Source commit: [`e57e5115765931f2576762fe28c159108d2b6ce9`](https://github.com/brunotaut/xsonomy-news/commit/e57e5115765931f2576762fe28c159108d2b6ce9)
+- Completed the second pass for all 41 held identities; all 100 pilot companies now have bounded public-source dispositions.
+- Imported 19 supported events across 13 companies and 16 explicitly sourced participant roles; 14 unresolved source limitations remain documented as holds rather than zero-funding claims.
+- Production rollback rehearsal, atomic import, post-import integrity checks and idempotent rerun passed.
+- Verified database totals before rebuild: 514 events, 312 companies with events, 911 round participations and 681 investor profiles.
+- Measured second-pass active time and throughput are recorded without claiming a causal parallel speedup.
+- Audit report: [company funding research checkpoint 28](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-28.md)
