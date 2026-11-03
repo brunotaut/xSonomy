@@ -25,6 +25,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 _(newest first; `/wrap-up` appends here)_
 
 
+### 2026-11-03 — funding research checkpoint 18 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 13 attributable financing, grant and ownership events for eleven newly covered companies. The read-only landscape build now projects 353 events across 204 companies, 700 event participations and 563 investor profiles. The checkpoint adds BAE Systems' Kirintec acquisition, two public grants for Kongsberg Defence & Aerospace, CIG's Kray investment, Kseonics' Brave1 grant, the Leonardo-Baykar LBA Systems joint venture, Hexagon's Leica Geosystems acquisition, Liebherr Aerospace's France Relance support, two LiveLink Aerospace grants, LMT's EIB loan, LV-Teh's defence grant and Lynred's France 2030 support.
+
+Original currencies and disclosed precision are retained; grants, debt, primary investment, joint-venture formation and secondary acquisition consideration remain distinct. Proposed listings, issuer spending, registry capital, project totals, programme ceilings, subsidiary financing and unsupported secondary-database claims are excluded or kept as source holds. The production rollback rehearsal restored the exact 340/193/686/556 baseline, and the atomic import resolved 353 approved events, 204 covered companies, 700 participations and 563 investor profiles.
+
 ### 2026-11-03 — funding research checkpoint 17 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 19 attributable financing, grant and ownership events for ten newly covered companies. The read-only landscape build now projects 340 events across 193 companies, 686 event participations and 556 investor profiles. The checkpoint adds the Fincantieri NexTech acquisition of IDS, Impianti's IPO, Infozahyst's development investment, three Innov'ATM financings, Grupo Oesia's Inster acquisition, Intelligent Energy's 2013-2017 financing and ownership history, QinetiQ's two-step Inzpire acquisition, Jenoptik's IPO, Kaedra's MIT grant and Green Flag Ventures' Kara Dag investment.
