@@ -24,6 +24,13 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-03 — funding research checkpoint 15 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported twelve attributable events for ten companies. The read-only landscape build now projects 298 events across 171 companies, 649 event participations and 535 investor profiles. The checkpoint adds Flowcopter's grant and TEKEVER acquisition, two FLYDE disclosures, FlyFocus's institutional round, Flying Eye's management buyout, Frequentis's primary IPO proceeds, Freya's seed, the General Dynamics acquisition of Santa Bárbara Sistemas, General Cherry's credit line, Germandrones' capital increase and Greenjets' Series A.
+
+Financing semantics remain explicit: the Frequentis IPO excludes secondary shareholder sales; General Cherry is debt; Flowcopter's grant is distinct from its acquisition; acquisition consideration is not presented as issuer proceeds; unnamed investors and aggregate historical claims remain undisclosed. The rollback rehearsal restored the exact 286/375/629/161/516 baseline, and the atomic import plus idempotent rerun both resolved 298 events, 392 sources, 649 participations, 171 covered companies and 535 investors.
+
+
 ### 2026-11-03 — funding research checkpoint 14 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported nine attributable events for eight companies. The read-only landscape build now projects 286 events across 161 companies, 629 event participations and 516 investor profiles. The checkpoint adds HENSOLDT's acquisition of ESG, the EUROSAM joint-venture formation, Ineo Defense's acquisition of Exavision, investments in Fadron and Falcons, FarmFleet's pre-seed, CSG's two-step acquisition of Fiocchi, and mixed founder financing for Fire Point.
