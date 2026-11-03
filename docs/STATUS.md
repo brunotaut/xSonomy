@@ -24,6 +24,13 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-03 — funding research checkpoint 14 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported nine attributable events for eight companies. The read-only landscape build now projects 286 events across 161 companies, 629 event participations and 516 investor profiles. The checkpoint adds HENSOLDT's acquisition of ESG, the EUROSAM joint-venture formation, Ineo Defense's acquisition of Exavision, investments in Fadron and Falcons, FarmFleet's pre-seed, CSG's two-step acquisition of Fiocchi, and mixed founder financing for Fire Point.
+
+Acquisition consideration is labelled as secondary rather than issuer proceeds; contingent consideration, parent-level Exail financing, contracts, donations, programme totals, prospective raises and contradictory secondary-database claims remain excluded or explicit source holds. A production rollback rehearsal and the atomic import both resolved 286 events, 375 event sources, 629 participations, 161 covered companies and 516 investors.
+
+
 ### 2026-11-02 — funding research checkpoint 07 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and added 13 approved financing or investment events. The read-only landscape build now projects 188 events across 99 companies, 525 event participations and 447 investor profiles. The batch adds verified historical records for Tytan Technologies, Robin Radar, Marduk Technologies, Delair, Wingcopter, Windracers and Dufour Aerospace, plus investor links for The Fourth Law.
