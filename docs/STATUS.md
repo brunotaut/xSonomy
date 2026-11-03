@@ -24,6 +24,13 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+
+### 2026-11-03 — funding research checkpoint 17 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 19 attributable financing, grant and ownership events for ten newly covered companies. The read-only landscape build now projects 340 events across 193 companies, 686 event participations and 556 investor profiles. The checkpoint adds the Fincantieri NexTech acquisition of IDS, Impianti's IPO, Infozahyst's development investment, three Innov'ATM financings, Grupo Oesia's Inster acquisition, Intelligent Energy's 2013-2017 financing and ownership history, QinetiQ's two-step Inzpire acquisition, Jenoptik's IPO, Kaedra's MIT grant and Green Flag Ventures' Kara Dag investment.
+
+Original currencies and precision are retained; grants, convertibles, primary equity and secondary acquisitions remain distinct. Subsidiary financing, consortium budgets, programme ceilings and open fundraising are excluded. The rollback rehearsal restored the exact 321/427/672/183/549 baseline, and the atomic import plus idempotent rerun both resolved 340 events, 456 sources, 686 participations, 193 covered companies and 556 investors with zero source-integrity gaps.
+
 ### 2026-11-03 — funding research checkpoint 16 publication
 
 The source-audited investment workstream reviewed 21 additional published-landscape identities and imported 23 attributable events for 12 newly covered companies. The read-only landscape build now projects 321 events across 183 companies, 672 event participations and 549 investor profiles. The checkpoint adds Griff Aviation's 2018-2022 financings, six issuer-level Amper transactions, two HAVELSAN EU grants, investments or grants for Hecto Drone, Heliguy and Hellion Tech, HENSOLDT's primary IPO proceeds, the Quantum Systems acquisition of Hevi Optronics, Hexadrone's first round, Carlyle's HGH acquisition, Huless's mixed financing disclosure and two Hybrid Drones investments.
