@@ -25,6 +25,13 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 _(newest first; `/wrap-up` appends here)_
 
 
+### 2026-11-03 — funding research checkpoint 20 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 10 attributable financing and grant events for six newly covered companies. The read-only landscape build now projects 374 events across 218 companies, 736 event participations and 580 investor profiles. The checkpoint adds two MGI Engineering public grants, Monava's Gungnir-led pre-seed, Monopulse's ILTE loan and Coinvest-led equity round, Motion Robotics' SEASHORE grant, two MSP InnTech EU contributions, and NORDA Dynamics' Angel One and Varangians-led rounds.
+
+Original currencies, public date precision and amount qualifiers are retained; debt, grants and equity remain distinct. Consortium budgets, procurement, issuer spending, predecessor and group-level transactions, proposed consolidations and unsupported accelerator or programme claims are excluded or kept as source holds. The production rollback rehearsal restored the exact 364/212/717/571 baseline, and the atomic import plus idempotent rerun resolved 374 approved events, 218 covered companies, 736 participations and 580 investor profiles.
+
+
 ### 2026-11-03 — funding research checkpoint 19 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 11 attributable financing, grant, debt and ownership events for eight newly covered companies. The read-only landscape build now projects 364 events across 212 companies, 717 event participations and 571 investor profiles. The checkpoint adds Nuburu's Lyocon acquisition, BAE Systems' Malloy Aeronautics acquisition, Cohort's two-stage Marlborough Communications ownership history, the Flowing River acquisition and Eden Rock debt raise for Marshall Land Systems, EOS's MARSS acquisition, two MaXon Systems rounds, the mixed Andera/Bpifrance/Tikehau MC2 Technologies transaction and MESKO's Reprivatisation Fund support.
