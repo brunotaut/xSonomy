@@ -1510,3 +1510,10 @@ Validation: atlas scripts and companyPage function passed syntax checks; empty/i
 ### 2026-11-03 — recovered funding checkpoint 08 publication
 
 Rebuild the read-only catalogue from writer commit `a77422057d307c13d287cb0cc33d1e8cd57586bb`: 203 approved sourced financing/investment events across 106 companies, 541 participations and 457 investor profiles. The prepared package adds 15 events, enriches one existing event and corrects FlyingBasket's 2022 Cysero amount to approximately EUR1.5m with guarded before-values. Production rollback rehearsal restored all seven table fingerprints; atomic import, idempotency, source constraints and unchanged legacy relationships verified. 169 existing writer tests plus one checkpoint-specific PostgreSQL regression pass. Full programme remains incomplete; 82 identities have bounded public-source review dispositions. No publication-gate or UI change.
+
+
+### 2026-11-03 — funding research checkpoint 09 publication
+
+Rebuild the read-only catalogue from writer commit `4a7de48a293ec537fa5e3a48ed2a3e6028360de8`: 213 approved sourced financing/investment events across 115 companies, 550 participations and 463 investor profiles. This checkpoint source-reviewed 20 additional published-landscape identities and added ten attributable events for nine companies, including acquisitions, public-market financing and company-specific grants. Secondary consideration, original currencies, amount qualifiers and unknown amounts remain explicit; unclosed raises, authorised capital, contracts and consortium totals were held rather than converted into financing facts.
+
+Production rollback rehearsal reached the expected post-import counts and restored the exact seven-table baseline. Atomic import, idempotent rerun, source integrity and duplicate-key checks passed. Full programme remains incomplete; 102 identities now have bounded public-source review dispositions. No publication-gate or UI change.
