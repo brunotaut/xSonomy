@@ -25,6 +25,13 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 _(newest first; `/wrap-up` appends here)_
 
 
+### 2026-11-03 — funding research checkpoint 19 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 11 attributable financing, grant, debt and ownership events for eight newly covered companies. The read-only landscape build now projects 364 events across 212 companies, 717 event participations and 571 investor profiles. The checkpoint adds Nuburu's Lyocon acquisition, BAE Systems' Malloy Aeronautics acquisition, Cohort's two-stage Marlborough Communications ownership history, the Flowing River acquisition and Eden Rock debt raise for Marshall Land Systems, EOS's MARSS acquisition, two MaXon Systems rounds, the mixed Andera/Bpifrance/Tikehau MC2 Technologies transaction and MESKO's Reprivatisation Fund support.
+
+Original currencies, disclosed precision and amount qualifiers are retained; grants, debt, mixed transaction financing and secondary acquisition consideration remain distinct. Contingent earnouts, issuer spending, open raises, registry capital, proposed public support, group financing misattributable to subsidiaries and unsupported secondary-database claims are excluded or kept as source holds. The production rollback rehearsal restored the exact 353/204/700/563 baseline, and the atomic import plus idempotent rerun resolved 364 approved events, 212 covered companies, 717 participations and 571 investor profiles.
+
+
 ### 2026-11-03 — funding research checkpoint 18 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 13 attributable financing, grant and ownership events for eleven newly covered companies. The read-only landscape build now projects 353 events across 204 companies, 700 event participations and 563 investor profiles. The checkpoint adds BAE Systems' Kirintec acquisition, two public grants for Kongsberg Defence & Aerospace, CIG's Kray investment, Kseonics' Brave1 grant, the Leonardo-Baykar LBA Systems joint venture, Hexagon's Leica Geosystems acquisition, Liebherr Aerospace's France Relance support, two LiveLink Aerospace grants, LMT's EIB loan, LV-Teh's defence grant and Lynred's France 2030 support.
