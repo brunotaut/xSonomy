@@ -1622,3 +1622,12 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 - Reviewed 20 additional published European landscape identities (306 of 567 reviewed); group/subsidiary allocations, unrelated same-name projects and aggregate grant histories remain explicitly held rather than guessed.
 - Audit manifest: [company-funding-research-24-2026-11-03.json](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/imports/company-funding-research-24-2026-11-03.json)
 - Audit report: [2026-11-03-company-funding-research-24.md](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-24.md)
+
+## Funding research checkpoint 25 — 2026-11-03
+
+- Source commit: [`ab435c46d410ea38e9af5cf6a7b5ef37da46f167`](https://github.com/brunotaut/xsonomy-news/commit/ab435c46d410ea38e9af5cf6a7b5ef37da46f167)
+- Imported 16 source-audited financing events across 13 published landscape companies, including 25 event sources and 27 round participations.
+- Production rollback rehearsal, atomic import and idempotent rerun passed.
+- Verified database totals before rebuild: 434 events, 264 companies with events, 816 round participations and 636 investor profiles.
+- Audit report: [company funding research checkpoint 25](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-25.md)
+
