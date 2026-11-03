@@ -1612,3 +1612,13 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 - Reviewed 20 additional published European landscape identities (286 of 567 reviewed); unresolved consortium allocations, conditional ownership events and undisclosed guarantees remain explicitly held rather than guessed.
 - Audit manifest: [company-funding-research-23-2026-11-03.json](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/imports/company-funding-research-23-2026-11-03.json)
 - Audit report: [2026-11-03-company-funding-research-23.md](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-23.md)
+
+
+## Funding research checkpoint 24 — 2026-11-03
+
+- Imported 14 source-audited financing, grant, credit and ownership events for 11 companies reviewed in the RETIA–Safran segment.
+- Production rollback rehearsal passed before the atomic import; an idempotent rerun produced no duplicates.
+- Funding catalogue after import: 418 events across 253 companies, 789 event-investor participations and 614 investor profiles.
+- Reviewed 20 additional published European landscape identities (306 of 567 reviewed); group/subsidiary allocations, unrelated same-name projects and aggregate grant histories remain explicitly held rather than guessed.
+- Audit manifest: [company-funding-research-24-2026-11-03.json](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/imports/company-funding-research-24-2026-11-03.json)
+- Audit report: [2026-11-03-company-funding-research-24.md](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-24.md)
