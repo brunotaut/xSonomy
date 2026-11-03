@@ -24,6 +24,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-03 — funding research checkpoint 21 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 12 attributable financing, equity, debt and grant events for ten newly covered companies. The read-only landscape build now projects 386 events across 228 companies, 759 event participations and 593 investor profiles. The checkpoint adds beneficiary-specific EU grants for Norsk Elektro Optikk, OLEDCOMM and Optoelectronica-2001; Novadem's DAP grant; two Occam Industries rounds; Oko Camera's MITS investment and IT Arena award; OODALOOP's Innofounder award; Orbion's mixed pre-seed package; Parrot's 2015 rights issue; and Patria's eALLIANCE grant.
+
+Original currencies, amount qualifiers and explicit participant roles are retained; grants, equity, debt and mixed packages remain distinct. Consortium totals, contracts, secondary share sales, planned raises, conflicting programme figures and grants hosted by another legal entity are excluded or kept as source holds. The production rollback rehearsal restored the exact 374/218/736/580 baseline, and the atomic import plus idempotent rerun resolved 386 approved events, 228 covered companies, 759 participations and 593 investor profiles.
+
 
 ### 2026-11-03 — funding research checkpoint 20 publication
 
