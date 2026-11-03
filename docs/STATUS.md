@@ -1660,3 +1660,13 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 - Verified database totals before rebuild: 514 events, 312 companies with events, 911 round participations and 681 investor profiles.
 - Measured second-pass active time and throughput are recorded without claiming a causal parallel speedup.
 - Audit report: [company funding research checkpoint 28](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-28.md)
+
+
+## Funding research checkpoint 29 — partial-history reconciliation — 2026-11-03
+
+- Source commit: [`fc1ef94c7c39907e4a00f0fc834a599ad1fbf026`](https://github.com/brunotaut/xsonomy-news/commit/fc1ef94c7c39907e4a00f0fc834a599ad1fbf026)
+- Reviewed 20 previously partial published-landscape identities and added 40 supported events across 10 companies.
+- Added 32 grants, four equity events, three instrument-undisclosed financings and one debt facility, preserving original currencies, date precision and explicit participant roles.
+- Production rollback rehearsal, atomic import, post-import integrity checks and idempotent rerun passed.
+- Verified database totals before rebuild: 554 events, 312 companies with events, 949 round participations and 689 investor profiles.
+- Audit report: [company funding research checkpoint 29](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-29.md)
