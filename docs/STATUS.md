@@ -24,6 +24,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 ## Session notes
 _(newest first; `/wrap-up` appends here)_
 
+### 2026-11-03 — funding research checkpoint 22 publication
+
+The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 11 attributable financing, equity and grant events for seven companies. The read-only landscape build now projects 397 events across 235 companies, 775 event participations and 605 investor profiles. The checkpoint adds PCO's PLN261m production support, PDKINEMATICS' EUR2m seed, Pelixar's disclosed EU-backed grant, Piaggio Aero's EUR190m capital increase, four POLARIS investments, PGZ's PLN44m Treasury subscription, and Primoco UAV's two public-market subscriptions.
+
+Original currencies, source date precision and explicit participant roles are retained. Cumulative totals, launched crowdfunding, proposed bonds, contracts, acquisitions and group or subsidiary financing are excluded or kept as source holds. The production rollback rehearsals restored the exact baselines, and the atomic imports plus idempotent reruns resolved 397 approved events, 235 covered companies, 775 participations and 605 investor profiles.
+
 ### 2026-11-03 — funding research checkpoint 21 publication
 
 The source-audited investment workstream reviewed 20 additional published-landscape identities and imported 12 attributable financing, equity, debt and grant events for ten newly covered companies. The read-only landscape build now projects 386 events across 228 companies, 759 event participations and 593 investor profiles. The checkpoint adds beneficiary-specific EU grants for Norsk Elektro Optikk, OLEDCOMM and Optoelectronica-2001; Novadem's DAP grant; two Occam Industries rounds; Oko Camera's MITS investment and IT Arena award; OODALOOP's Innofounder award; Orbion's mixed pre-seed package; Parrot's 2015 rights issue; and Patria's eALLIANCE grant.
