@@ -1505,3 +1505,8 @@ Writer validation: 146 tests pass; production rollback rehearsal restored the 10
 Company map panels and full company profiles now show an external website link and founding year directly beneath the name when present. Landscape export includes foundedYear from the existing founded_year field. Missing facts are omitted; HTTP(S) links are parsed and escaped. A new versioned atlas entry retains the existing versioned model import. No database changes.
 
 Validation: atlas scripts and companyPage function passed syntax checks; empty/invalid-value rendering checked. Local Node/browser execution unavailable in this session; deployment build is the integration check.
+
+
+### 2026-11-03 — recovered funding checkpoint 08 publication
+
+Rebuild the read-only catalogue from writer commit `a77422057d307c13d287cb0cc33d1e8cd57586bb`: 203 approved sourced financing/investment events across 106 companies, 541 participations and 457 investor profiles. The prepared package adds 15 events, enriches one existing event and corrects FlyingBasket's 2022 Cysero amount to approximately EUR1.5m with guarded before-values. Production rollback rehearsal restored all seven table fingerprints; atomic import, idempotency, source constraints and unchanged legacy relationships verified. 169 existing writer tests plus one checkpoint-specific PostgreSQL regression pass. Full programme remains incomplete; 82 identities have bounded public-source review dispositions. No publication-gate or UI change.
