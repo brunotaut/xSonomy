@@ -1602,3 +1602,13 @@ Production rollback rehearsal reached the expected post-import counts and restor
 Rebuild the read-only catalogue from writer commit `d80aab15698617340508a5cb0bd4aa0a7572ee58`: 277 approved sourced financing/investment events across 153 companies, 619 participations and 510 investor profiles. This checkpoint source-reviewed 20 additional published-landscape identities and imported 13 attributable events for eleven companies, including acquisitions, a crowdfunded bond financing, strategic investments, a joint-venture formation and a Series A. Original currencies, acquisition consideration, contingent earn-outs, conflicting instrument descriptions, unnamed investors and unknown amounts remain explicit; aggregate historical totals, offering ceilings, prospective investments and issuer-ambiguous facility funding were held for reconciliation.
 
 Production rollback rehearsal restored the exact baseline; the corrected count assertion, atomic import, idempotent rerun, source integrity, participant-source and duplicate-key checks passed. Full programme remains incomplete; 182 identities now have bounded public-source review dispositions. No publication-gate or UI change.
+
+
+## Funding research checkpoint 23 — 2026-11-03
+
+- Imported 7 source-audited events for Prometheus UAV, PZL Defence, Leonardo PZL-Świdnik, QinetiQ, Qognifly, Ratel Robotics and Restube.
+- Production rollback rehearsal passed before the atomic import; the idempotent rerun produced no duplicates.
+- Funding catalogue after import: 404 events across 242 companies, 779 event-investor participations and 609 investor profiles.
+- Reviewed 20 additional published European landscape identities (286 of 567 reviewed); unresolved consortium allocations, conditional ownership events and undisclosed guarantees remain explicitly held rather than guessed.
+- Audit manifest: [company-funding-research-23-2026-11-03.json](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/imports/company-funding-research-23-2026-11-03.json)
+- Audit report: [2026-11-03-company-funding-research-23.md](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-23.md)
