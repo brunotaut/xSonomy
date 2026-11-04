@@ -1700,3 +1700,8 @@ Writer source commit 27de54aab831db3670d27bf320c5917408693d19. Harmattan Series 
 ## Funding checkpoint 36 — 4 November 2026
 
 Writer 3231de6fc88bb5c03f576ae7203f6979158fce56. Five Amper historical cash capital increases added after production rollback rehearsal, atomic import and idempotency check. 575 events, 966 participations, 693 investor profiles. Registration dates explicitly qualified; convertible financing holds preserved. Rebuild for publication.
+
+
+## Funding checkpoint38 — 4 November2026
+
+Writer a8c5b485e9275b95e38ece1d76e564caaf7dff31. Zuri EUR300k2021 financing added after production rollback rehearsal, atomic import and idempotency.576 events,968 participations,695 investor profiles. Instrument and cheque splits remain undisclosed. Rebuild for publication.
