@@ -1695,3 +1695,8 @@ HAVELSAN HIVEMIND EUR220,000 and MARITIME EUR400,750 beneficiary grants imported
 ## Funding checkpoint 34 — 4 November 2026
 
 Writer source commit 27de54aab831db3670d27bf320c5917408693d19. Harmattan Series B participation evidence added for Bpifrance and Future French Champions. Production rollback rehearsal, atomic import and idempotency verified: 570 events, 966 participations, 693 investor profiles. Rebuild catalogue; live verification pending.
+
+
+## Funding checkpoint 36 — 4 November 2026
+
+Writer 3231de6fc88bb5c03f576ae7203f6979158fce56. Five Amper historical cash capital increases added after production rollback rehearsal, atomic import and idempotency check. 575 events, 966 participations, 693 investor profiles. Registration dates explicitly qualified; convertible financing holds preserved. Rebuild for publication.
