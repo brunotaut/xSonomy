@@ -1675,3 +1675,8 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 ## Funding checkpoint 30 — 4 November 2026
 
 Six financing events for Griff Aviation and Hecto Drone were imported after production rollback rehearsal and an idempotent atomic import. Database totals are 560 events, 954 participations and 690 investor profiles. Source manifest is research-agent/imports/company-funding-research-30-2026-11-04.json in brunotaut/xsonomy-news, committed as 7d196df56f4bfaa5def5013f1d21bcb907918a1a. Live publication verification is pending.
+
+
+## Funding checkpoint 31 — 4 November 2026
+
+Granta Autonomy's EUR59,275.78 Erkė development grant and Heliguy's amount-undisclosed SAM equipment grant were imported after production rollback rehearsal and idempotent atomic import. Verified DB totals are 562 events, 956 participations and 692 investor profiles. Manifest commit d522b37060f478c9e2e449649f6ee17f98b0a748 in brunotaut/xsonomy-news. Live verification pending.
