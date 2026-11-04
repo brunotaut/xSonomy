@@ -1680,3 +1680,8 @@ Six financing events for Griff Aviation and Hecto Drone were imported after prod
 ## Funding checkpoint 31 — 4 November 2026
 
 Granta Autonomy's EUR59,275.78 Erkė development grant and Heliguy's amount-undisclosed SAM equipment grant were imported after production rollback rehearsal and idempotent atomic import. Verified DB totals are 562 events, 956 participations and 692 investor profiles. Manifest commit d522b37060f478c9e2e449649f6ee17f98b0a748 in brunotaut/xsonomy-news. Live verification pending.
+
+
+## Funding checkpoint 32 — 4 November 2026
+
+Six beneficiary-specific Greenjets grants imported with production rollback rehearsal and idempotent atomic import. Database totals are 568 events, 962 participations and 692 investor profiles. Manifest research-agent/imports/company-funding-research-32-2026-11-04.json in brunotaut/xsonomy-news. Live verification pending.
