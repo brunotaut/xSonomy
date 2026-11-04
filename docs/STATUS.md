@@ -1685,3 +1685,8 @@ Granta Autonomy's EUR59,275.78 Erkė development grant and Heliguy's amount-undi
 ## Funding checkpoint 32 — 4 November 2026
 
 Six beneficiary-specific Greenjets grants imported with production rollback rehearsal and idempotent atomic import. Database totals are 568 events, 962 participations and 692 investor profiles. Manifest research-agent/imports/company-funding-research-32-2026-11-04.json in brunotaut/xsonomy-news. Live verification pending.
+
+
+## Funding checkpoint 33 — 4 November 2026
+
+HAVELSAN HIVEMIND EUR220,000 and MARITIME EUR400,750 beneficiary grants imported after production rollback rehearsal and idempotent atomic import. Database totals are 570 events, 964 participations and 692 investor profiles. Source manifest company-funding-research-33-2026-11-04.json in brunotaut/xsonomy-news. Live verification pending.
