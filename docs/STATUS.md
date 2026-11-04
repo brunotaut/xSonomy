@@ -1670,3 +1670,8 @@ Production rollback rehearsal restored the exact baseline; the corrected count a
 - Production rollback rehearsal, atomic import, post-import integrity checks and idempotent rerun passed.
 - Verified database totals before rebuild: 554 events, 312 companies with events, 949 round participations and 689 investor profiles.
 - Audit report: [company funding research checkpoint 29](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-03-company-funding-research-29.md)
+
+
+## Funding checkpoint 30 — 4 November 2026
+
+Six financing events for Griff Aviation and Hecto Drone were imported after production rollback rehearsal and an idempotent atomic import. Database totals are 560 events, 954 participations and 690 investor profiles. Source manifest is research-agent/imports/company-funding-research-30-2026-11-04.json in brunotaut/xsonomy-news, committed as 7d196df56f4bfaa5def5013f1d21bcb907918a1a. Live publication verification is pending.
