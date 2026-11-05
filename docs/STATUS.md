@@ -1715,3 +1715,8 @@ Writer 43a3397e810088d07f9a694bfe486d90625bf396. Specim2017 EUR3.5m Bocap invest
 ## Funding checkpoint45 — 5 November2026
 
 Writer 212e586f478305f1b3d2d82c81df7a64fd85228e. INLEAP pre-seed and Ventis participation added after rollback rehearsal, atomic import and idempotency.578 events,971 participations,697 profiles. Announcement/closing period distinction explicit; amount undisclosed. Rebuild catalogue.
+
+
+## Funding checkpoint49 — 5 November2026
+
+Writer bd6d46ecceec0c817df8a126bb104a6821fd1813. Manna USD25m2021 Series A and Meteomatics undisclosed2024 strategic round added after production rollback rehearsal, atomic import and idempotency.580 events,978 participations,701 investor profiles. Historical Draper Esprit mapped to existing Molten profile. Rebuild catalogue.
