@@ -1735,3 +1735,8 @@ Rebuild public catalogue after source-audited Lyocon USD500,000 funded operation
 ### Funding research checkpoint 52 — 2026-11-05
 
 Rebuild for two Lynred CORDIS beneficiary allocations, with predecessor continuity preserved. Production rollback, atomic import and idempotency verified: 587 events, 984 participations, 702 investor profiles. Writer 1a1b98f6dfb942be176e505dd61a59fb61ec956e. Checkpoint51 publication verified before this import.
+
+
+### Funding research checkpoint 53 — 2026-11-05
+
+Rebuild after source-audited18new events,24new participations and explicit Kitemill precision correction. Production rollback, expected-old correction/reversal, atomic import and idempotency passed:605events,1008participations,705profiles. Writer source commit 374828e09f58994afd5b69619f5efcf6d6be3322. Existing co-lead roles and curated profiles retained.
