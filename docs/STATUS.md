@@ -1730,3 +1730,8 @@ Writer 7ad70acc4c354b2a5b930a7283981e4167f984fe. Three KrattWorks support alloca
 ### Funding research checkpoint 51 — 2026-11-05
 
 Rebuild public catalogue after source-audited Lyocon USD500,000 funded operational debt tranche. Database verified at 585 events, 982 participations and 702 investor profiles; rollback rehearsal and idempotent import passed. Writer checkpoint: 80e106ff479bc6fa1b4b41dd30c4784760964a3a.
+
+
+### Funding research checkpoint 52 — 2026-11-05
+
+Rebuild for two Lynred CORDIS beneficiary allocations, with predecessor continuity preserved. Production rollback, atomic import and idempotency verified: 587 events, 984 participations, 702 investor profiles. Writer 1a1b98f6dfb942be176e505dd61a59fb61ec956e. Checkpoint51 publication verified before this import.
