@@ -1750,3 +1750,7 @@ Rebuild after25source-confirmed events and34new participations. Production rollb
 ### Funding checkpoint 55 — 2026-11-05
 
 Rebuild after seven Exail beneficiary grants, one Intelligent Energy operating-company equity issuance, and guarded corrections to Fotokite and Unifly. The rollback rehearsal and import verification passed at 638 events, 1,049 participations and 719 investor profiles. Writer 4a8a6726258f3de1ceda5614b8d930032aa89148.
+
+### 2026-11-05 — funding research checkpoint 56 publication
+
+Writer checkpoint `ec143702ef0d7a707ba9429173e162b27caadad8` added Greenjets' completed USD7m Pre-Series A and six assigned Latvian grants for FIXAR-AERO SIA. It added five source-backed company–investor relationships and corrected two historical disclosures from original transaction-party sources. Production rollback restored the pre-import baseline, and the atomic import and idempotency checks returned 645 approved events across 314 companies, 1,063 event participations and 729 investor profiles.
