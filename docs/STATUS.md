@@ -1705,3 +1705,8 @@ Writer 3231de6fc88bb5c03f576ae7203f6979158fce56. Five Amper historical cash capi
 ## Funding checkpoint38 — 4 November2026
 
 Writer a8c5b485e9275b95e38ece1d76e564caaf7dff31. Zuri EUR300k2021 financing added after production rollback rehearsal, atomic import and idempotency.576 events,968 participations,695 investor profiles. Instrument and cheque splits remain undisclosed. Rebuild for publication.
+
+
+## Funding checkpoint40 — 5 November2026
+
+Writer 43a3397e810088d07f9a694bfe486d90625bf396. Specim2017 EUR3.5m Bocap investment added after rollback rehearsal, atomic import and idempotency.577 events,969 participations,696 profiles. Year precision retained; instrument undisclosed. Rebuild catalogue.
