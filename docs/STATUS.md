@@ -1710,3 +1710,8 @@ Writer a8c5b485e9275b95e38ece1d76e564caaf7dff31. Zuri EUR300k2021 financing adde
 ## Funding checkpoint40 — 5 November2026
 
 Writer 43a3397e810088d07f9a694bfe486d90625bf396. Specim2017 EUR3.5m Bocap investment added after rollback rehearsal, atomic import and idempotency.577 events,969 participations,696 profiles. Year precision retained; instrument undisclosed. Rebuild catalogue.
+
+
+## Funding checkpoint45 — 5 November2026
+
+Writer 212e586f478305f1b3d2d82c81df7a64fd85228e. INLEAP pre-seed and Ventis participation added after rollback rehearsal, atomic import and idempotency.578 events,971 participations,697 profiles. Announcement/closing period distinction explicit; amount undisclosed. Rebuild catalogue.
