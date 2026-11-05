@@ -1725,3 +1725,8 @@ Writer bd6d46ecceec0c817df8a126bb104a6821fd1813. Manna USD25m2021 Series A and M
 ## Funding checkpoint50 — 5 November2026
 
 Writer 7ad70acc4c354b2a5b930a7283981e4167f984fe. Three KrattWorks support allocations and LiveLink OWGP award added after production rollback rehearsal, atomic import and idempotency.584events,981participations,702profiles. Unknown dates/amounts retained, programme totals excluded. Rebuild catalogue.
+
+
+### Funding research checkpoint 51 — 2026-11-05
+
+Rebuild public catalogue after source-audited Lyocon USD500,000 funded operational debt tranche. Database verified at 585 events, 982 participations and 702 investor profiles; rollback rehearsal and idempotent import passed. Writer checkpoint: 80e106ff479bc6fa1b4b41dd30c4784760964a3a.
