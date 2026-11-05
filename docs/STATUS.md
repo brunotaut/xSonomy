@@ -1740,3 +1740,8 @@ Rebuild for two Lynred CORDIS beneficiary allocations, with predecessor continui
 ### Funding research checkpoint 53 — 2026-11-05
 
 Rebuild after source-audited18new events,24new participations and explicit Kitemill precision correction. Production rollback, expected-old correction/reversal, atomic import and idempotency passed:605events,1008participations,705profiles. Writer source commit 374828e09f58994afd5b69619f5efcf6d6be3322. Existing co-lead roles and curated profiles retained.
+
+
+### Funding checkpoint 54 — 2026-11-05
+
+Rebuild after25source-confirmed events and34new participations. Production rollback, atomic import and idempotency verified at630events,1,042participations,719profiles. Credit limits, bond nominal principal, awards and paid proceeds kept distinct. Writer cee0c4d35319ccaef1c91adb0483b87e74a9eab1.
