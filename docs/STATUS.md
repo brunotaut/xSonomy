@@ -1754,3 +1754,8 @@ Rebuild after seven Exail beneficiary grants, one Intelligent Energy operating-c
 ### 2026-11-05 — funding research checkpoint 56 publication
 
 Writer checkpoint `ec143702ef0d7a707ba9429173e162b27caadad8` added Greenjets' completed USD7m Pre-Series A and six assigned Latvian grants for FIXAR-AERO SIA. It added five source-backed company–investor relationships and corrected two historical disclosures from original transaction-party sources. Production rollback restored the pre-import baseline, and the atomic import and idempotency checks returned 645 approved events across 314 companies, 1,063 event participations and 729 investor profiles.
+
+
+### 2026-11-07 — Unifly source correction
+
+Writer commit 36382fda2ddc87412690c06daf3a09254a123e47 corrects the existing 2016 Series A to EUR5m and its public announcement date to 21 November 2016. Original issuer press release confirms completion and distinguishes the 17 November signing. Production rollback and idempotent atomic correction succeeded.
