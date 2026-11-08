@@ -1779,3 +1779,8 @@ Writer 8630bff89ed4db1589fd3a71587313da8dd83f81 adds Indra's signed EUR385m EIB 
 ### 2026-11-08 — Jenoptik original-currency financing
 
 Writer dc84b53fbb85b66b49f94d90f4aa0f758f984f7f adds EUR350m and USD59m components of one 2021 promissory-note issuance, preserving original currencies and shared-issuance context. Production rollback and atomic idempotency passed. Existing December2021 revolving facility remains separate.
+
+
+### 2026-11-08 — Kitemill investor relationships
+
+Writer 266ab428dba9662b049393a17dd6545f2eb79420 adds issuer-confirmed Expanding Dreams BV and Jérôme Guillet portfolio relationships, preserving undisclosed dates and cheque sizes. Tested importer production rollback restored baseline and atomic idempotent application succeeded.
