@@ -1774,3 +1774,8 @@ Writer c8161348cb36da9bd086d2dcec4b03541211e36b adds Infini's original-source po
 ### 2026-11-08 — Indra and INLEAP financing
 
 Writer 8630bff89ed4db1589fd3a71587313da8dd83f81 adds Indra's signed EUR385m EIB loan, with drawdown undisclosed, and HTGF's explicitly confirmed lead role in the existing INLEAP pre-seed. Original lender and investor sources verified. Production rollback restored prior state and repeated atomic application was idempotent.
+
+
+### 2026-11-08 — Jenoptik original-currency financing
+
+Writer dc84b53fbb85b66b49f94d90f4aa0f758f984f7f adds EUR350m and USD59m components of one 2021 promissory-note issuance, preserving original currencies and shared-issuance context. Production rollback and atomic idempotency passed. Existing December2021 revolving facility remains separate.
