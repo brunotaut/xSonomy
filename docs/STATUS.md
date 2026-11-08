@@ -1769,3 +1769,8 @@ Writer commit 6b12437fde366d52658baa4789a4fd5c2eb31064 imported PMV's historical
 ### 2026-11-08 — Infini portfolio relationship
 
 Writer c8161348cb36da9bd086d2dcec4b03541211e36b adds Infini's original-source portfolio relationship with FlyTech UAV after production rollback and idempotent atomic import. Round date and individual contribution remain undisclosed.
+
+
+### 2026-11-08 — Indra and INLEAP financing
+
+Writer 8630bff89ed4db1589fd3a71587313da8dd83f81 adds Indra's signed EUR385m EIB loan, with drawdown undisclosed, and HTGF's explicitly confirmed lead role in the existing INLEAP pre-seed. Original lender and investor sources verified. Production rollback restored prior state and repeated atomic application was idempotent.
