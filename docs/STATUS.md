@@ -1759,3 +1759,8 @@ Writer checkpoint `ec143702ef0d7a707ba9429173e162b27caadad8` added Greenjets' co
 ### 2026-11-07 — Unifly source correction
 
 Writer commit 36382fda2ddc87412690c06daf3a09254a123e47 corrects the existing 2016 Series A to EUR5m and its public announcement date to 21 November 2016. Original issuer press release confirms completion and distinguishes the 17 November signing. Production rollback and idempotent atomic correction succeeded.
+
+
+### 2026-11-08 — Unifly PMV loan disclosure
+
+Writer commit 6b12437fde366d52658baa4789a4fd5c2eb31064 imported PMV's historical loan disclosure for Unifly with undisclosed amount and terms. The public announcement date is distinguished from the 2018 lending year. The tested importer passed production rollback and idempotent atomic application. Rebuild the existing read-only catalogue to publish the source-backed record.
