@@ -1764,3 +1764,8 @@ Writer commit 36382fda2ddc87412690c06daf3a09254a123e47 corrects the existing 201
 ### 2026-11-08 — Unifly PMV loan disclosure
 
 Writer commit 6b12437fde366d52658baa4789a4fd5c2eb31064 imported PMV's historical loan disclosure for Unifly with undisclosed amount and terms. The public announcement date is distinguished from the 2018 lending year. The tested importer passed production rollback and idempotent atomic application. Rebuild the existing read-only catalogue to publish the source-backed record.
+
+
+### 2026-11-08 — Infini portfolio relationship
+
+Writer c8161348cb36da9bd086d2dcec4b03541211e36b adds Infini's original-source portfolio relationship with FlyTech UAV after production rollback and idempotent atomic import. Round date and individual contribution remain undisclosed.
