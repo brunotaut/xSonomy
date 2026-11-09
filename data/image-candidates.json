@@ -70,6 +70,16 @@
     "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/MQ-1C_Warrior_%282005-08-11%29.jpg/500px-MQ-1C_Warrior_%282005-08-11%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
   },
   {
+    "name": "Hilt",
+    "company": "",
+    "article": "Hilt",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Rapiere-Morges-1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 2.0 fr",
+    "author": "Rama",
+    "source": "https://commons.wikimedia.org/wiki/File:Rapiere-Morges-1.jpg",
+    "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Rapiere-Morges-1.jpg/500px-Rapiere-Morges-1.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  },
+  {
     "name": "Kargu",
     "company": "",
     "article": "Rudi Kargus",
@@ -92,12 +102,12 @@
   {
     "name": "Kurier",
     "company": "",
-    "article": "Berliner Kurier",
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Berliner_Kurier_Logo_2020.svg/1280px-Berliner_Kurier_Logo_2020.svg.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "article": "Kurier Wileński",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/1/17/Kurier_Wile%C5%84ski_logo-en.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
     "licence": "Public domain",
-    "author": "Berliner Verlag GmbH",
-    "source": "https://commons.wikimedia.org/wiki/File:Berliner_Kurier_Logo_2020.svg",
-    "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Berliner_Kurier_Logo_2020.svg/500px-Berliner_Kurier_Logo_2020.svg.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    "author": null,
+    "source": "https://commons.wikimedia.org/wiki/File:Kurier_Wile%C5%84ski_logo-en.png",
+    "preview": "https://upload.wikimedia.org/wikipedia/commons/1/17/Kurier_Wile%C5%84ski_logo-en.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
   },
   {
     "name": "Leleka",
@@ -138,6 +148,16 @@
     "author": "ZLEA",
     "source": "https://commons.wikimedia.org/wiki/File:DJI_DN1A0626_Neo_(FA3PEWAH34)_(1-18-2025).jpg",
     "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/DJI_DN1A0626_Neo_%28FA3PEWAH34%29_%281-18-2025%29.jpg/500px-DJI_DN1A0626_Neo_%28FA3PEWAH34%29_%281-18-2025%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  },
+  {
+    "name": "NextGen",
+    "company": "",
+    "article": "NextGen Healthcare",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/03/NG_Logo_1024x768.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC BY-SA 4.0",
+    "author": "NextGen Healthcare Inc's creative team",
+    "source": "https://commons.wikimedia.org/wiki/File:NG_Logo_1024x768.png",
+    "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/NG_Logo_1024x768.png/500px-NG_Logo_1024x768.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
   },
   {
     "name": "PANDA",
@@ -188,6 +208,26 @@
     "author": "Anne-Louis Girodet",
     "source": "https://commons.wikimedia.org/wiki/File:Houghton_54C-508_-_Girodet-Trioson,_Pan_poursuivant_Syrinx_(cropped).jpg",
     "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Houghton_54C-508_-_Girodet-Trioson%2C_Pan_poursuivant_Syrinx_%28cropped%29.jpg/500px-Houghton_54C-508_-_Girodet-Trioson%2C_Pan_poursuivant_Syrinx_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  },
+  {
+    "name": "TALAY",
+    "company": "",
+    "article": "Ufuk Talay",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Ufuk_Talay_-_01-2011.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "CC0",
+    "author": "TabloidFootprints",
+    "source": "https://commons.wikimedia.org/wiki/File:Ufuk_Talay_-_01-2011.png",
+    "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Ufuk_Talay_-_01-2011.png/500px-Ufuk_Talay_-_01-2011.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  },
+  {
+    "name": "Venus",
+    "company": "",
+    "article": "Venus",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/08/Venus_from_Mariner_10.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "licence": "Public domain",
+    "author": "NASA/JPL-Caltech",
+    "source": "https://commons.wikimedia.org/wiki/File:Venus_from_Mariner_10.jpg",
+    "preview": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/500px-Venus_from_Mariner_10.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
   },
   {
     "name": "Z4",
