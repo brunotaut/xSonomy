@@ -1816,3 +1816,7 @@ Writer 9fd1b149e13867fd7205cb6d106147c64c6f638c adds 28 source-backed financing 
 ### 2026-11-09 — Issuer funding reconciliation
 
 Writer da154a71d932dac45df84f270a886351c409b6fc adds 32 source-backed events, corrects two existing grant facts and links FirstMark to the existing Harmattan Series B. Beneficiary allocations, nominal facility limits and offers are distinguished from paid proceeds. Production rollback and atomic importer replay passed.
+
+### 2026-11-09 — issuer and grant funding publication
+
+The investment research import added 91 source-checked financing events. Production rollback and importer replay passed. The build reads 925 approved events, 1131 event participation links and 752 approved investor profiles. The manifest and audit checkpoint are in [xsonomy-news at 5d59feeedd1a](https://github.com/brunotaut/xsonomy-news/tree/5d59feeedd1af0e89ea96892f275acf405835c19/research-agent).
