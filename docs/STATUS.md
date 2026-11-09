@@ -1812,3 +1812,7 @@ Writer 2c4ed3903ca623b1f42caf08eee276a82290214b adds 43 evidenced financing and 
 ### 2026-11-09 — Landscape financing follow-ups
 
 Writer 9fd1b149e13867fd7205cb6d106147c64c6f638c adds 28 source-backed financing and ownership events after checking the prior production baseline, rehearsing rollback and verifying an atomic importer replay. Grant limits, nominal bond principal and ownership consideration are distinguished from proceeds.
+
+### 2026-11-09 — Issuer funding reconciliation
+
+Writer da154a71d932dac45df84f270a886351c409b6fc adds 32 source-backed events, corrects two existing grant facts and links FirstMark to the existing Harmattan Series B. Beneficiary allocations, nominal facility limits and offers are distinguished from paid proceeds. Production rollback and atomic importer replay passed.
