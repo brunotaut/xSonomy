@@ -1788,3 +1788,7 @@ Writer 266ab428dba9662b049393a17dd6545f2eb79420 adds issuer-confirmed Expanding 
 ### 2026-11-09 — Leonardo and Manna financing
 
 Writer f310ec85983437edf295f3be7d3e1eddfa29c9b2 adds the signed EUR600m Leonardo term loan and the 2023 disclosure of Coca-Cola HBC's investment in Manna, with amount and transaction date undisclosed. Production rollback restored the baseline and the atomic replay preserved existing events.
+
+### 2026-11-09 — Published funding follow-ups
+
+Writer 55b43853f160118a0ebb34cd5bcc9c2b8dd9d7da adds 23 verified financing events, corrects RESTUBE’s crowdfunding instrument and documents the termination of ScoutDI’s proposed acquisition. It adds the sourced Series C2 investor and preserves existing event amounts. Production rollback and atomic replay passed.
