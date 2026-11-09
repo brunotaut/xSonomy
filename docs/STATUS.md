@@ -1800,3 +1800,7 @@ Writer a0698c02d56fe8ed497b406660bcda81de9c5861 adds 26 sourced financing events
 ### 2026-11-09 — sees.ai beneficiary award precision
 
 Writer a5007ab261ab5fdeb4a79cd56796b5fecb296a80 records two sees.ai grant offers to the penny from the Innovate UK workbook, retaining event IDs and all participant links. A rollback rehearsal and atomic replay passed.
+
+### 2026-11-09 — Prepared funding reconciliations
+
+Writer 05de12faa6b7e80839ce37123b10f750f01da0cd adds 30 source-backed financing and ownership events and corrects three existing records using original contracts and an issuer prospectus. Production rollback restored the baseline and atomic importer replay passed.
