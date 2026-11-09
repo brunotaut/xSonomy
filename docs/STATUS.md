@@ -1820,3 +1820,7 @@ Writer da154a71d932dac45df84f270a886351c409b6fc adds 32 source-backed events, co
 ### 2026-11-09 — issuer and grant funding publication
 
 The investment research import added 91 source-checked financing events. Production rollback and importer replay passed. The build reads 925 approved events, 1131 event participation links and 752 approved investor profiles. The manifest and audit checkpoint are in [xsonomy-news at 5d59feeedd1a](https://github.com/brunotaut/xsonomy-news/tree/5d59feeedd1af0e89ea96892f275acf405835c19/research-agent).
+
+### 2026-11-09 — funding award follow-up publication
+
+The source audit added 47 financing events and refined the public announcement date on one existing investment. The production rollback rehearsal and guarded date reversal passed. This rebuild reads 972 approved events, 1139 participation links and 755 investor profiles. The manifest and audit are in [xsonomy-news](https://github.com/brunotaut/xsonomy-news/tree/7e3ba9ee1ca58e2faa18526cb8abe48af339dc93/research-agent).
