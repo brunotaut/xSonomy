@@ -1808,3 +1808,7 @@ Writer 05de12faa6b7e80839ce37123b10f750f01da0cd adds 30 source-backed financing 
 ### 2026-11-09 — Published-company funding evidence
 
 Writer 2c4ed3903ca623b1f42caf08eee276a82290214b adds 43 evidenced financing and ownership events and updates an existing Threod Systems grant to its original award amount. Contractual capacities and offers are identified separately from proceeds. Production rollback restored the baseline and the atomic importer replay passed.
+
+### 2026-11-09 — Landscape financing follow-ups
+
+Writer 9fd1b149e13867fd7205cb6d106147c64c6f638c adds 28 source-backed financing and ownership events after checking the prior production baseline, rehearsing rollback and verifying an atomic importer replay. Grant limits, nominal bond principal and ownership consideration are distinguished from proceeds.
