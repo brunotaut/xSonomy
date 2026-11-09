@@ -1792,3 +1792,7 @@ Writer f310ec85983437edf295f3be7d3e1eddfa29c9b2 adds the signed EUR600m Leonardo
 ### 2026-11-09 — Published funding follow-ups
 
 Writer 55b43853f160118a0ebb34cd5bcc9c2b8dd9d7da adds 23 verified financing events, corrects RESTUBE’s crowdfunding instrument and documents the termination of ScoutDI’s proposed acquisition. It adds the sourced Series C2 investor and preserves existing event amounts. Production rollback and atomic replay passed.
+
+### 2026-11-09 — Funding securities and grants
+
+Writer a0698c02d56fe8ed497b406660bcda81de9c5861 adds 26 sourced financing events and revises four existing records, including Sensofusion’s final primary IPO proceeds and three Innovate UK beneficiary grant offers. The production rollback rehearsal restored the baseline, and the atomic import replay passed.
