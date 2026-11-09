@@ -1784,3 +1784,7 @@ Writer dc84b53fbb85b66b49f94d90f4aa0f758f984f7f adds EUR350m and USD59m componen
 ### 2026-11-08 — Kitemill investor relationships
 
 Writer 266ab428dba9662b049393a17dd6545f2eb79420 adds issuer-confirmed Expanding Dreams BV and Jérôme Guillet portfolio relationships, preserving undisclosed dates and cheque sizes. Tested importer production rollback restored baseline and atomic idempotent application succeeded.
+
+### 2026-11-09 — Leonardo and Manna financing
+
+Writer f310ec85983437edf295f3be7d3e1eddfa29c9b2 adds the signed EUR600m Leonardo term loan and the 2023 disclosure of Coca-Cola HBC's investment in Manna, with amount and transaction date undisclosed. Production rollback restored the baseline and the atomic replay preserved existing events.
