@@ -1804,3 +1804,7 @@ Writer a5007ab261ab5fdeb4a79cd56796b5fecb296a80 records two sees.ai grant offers
 ### 2026-11-09 — Prepared funding reconciliations
 
 Writer 05de12faa6b7e80839ce37123b10f750f01da0cd adds 30 source-backed financing and ownership events and corrects three existing records using original contracts and an issuer prospectus. Production rollback restored the baseline and atomic importer replay passed.
+
+### 2026-11-09 — Published-company funding evidence
+
+Writer 2c4ed3903ca623b1f42caf08eee276a82290214b adds 43 evidenced financing and ownership events and updates an existing Threod Systems grant to its original award amount. Contractual capacities and offers are identified separately from proceeds. Production rollback restored the baseline and the atomic importer replay passed.
