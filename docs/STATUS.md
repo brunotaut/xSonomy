@@ -1796,3 +1796,7 @@ Writer 55b43853f160118a0ebb34cd5bcc9c2b8dd9d7da adds 23 verified financing event
 ### 2026-11-09 — Funding securities and grants
 
 Writer a0698c02d56fe8ed497b406660bcda81de9c5861 adds 26 sourced financing events and revises four existing records, including Sensofusion’s final primary IPO proceeds and three Innovate UK beneficiary grant offers. The production rollback rehearsal restored the baseline, and the atomic import replay passed.
+
+### 2026-11-09 — sees.ai beneficiary award precision
+
+Writer a5007ab261ab5fdeb4a79cd56796b5fecb296a80 records two sees.ai grant offers to the penny from the Innovate UK workbook, retaining event IDs and all participant links. A rollback rehearsal and atomic replay passed.
