@@ -1828,3 +1828,7 @@ The source audit added 47 financing events and refined the public announcement d
 ### 2026-11-09 — industry financing evidence publication
 
 The source audit added 58 financing records and refined three existing records. Production rollback, importer replay and guarded field reversal passed. The rebuild reads 1030 approved events, 1153 participation links and 757 investor profiles. The [writer checkpoint](https://github.com/brunotaut/xsonomy-news/tree/3ddcb0e4c04bf588accd2343f7409b5a7a92c86b/research-agent) contains the manifest and audit.
+
+### 2026-11-10 — published-landscape funding reconciliation
+
+The source audit reconciled 20 published identities and added eight verified financing events with seven participation links. Subsidiary financing, consortium totals and unsupported secondary amounts remain explicit holds. Production rollback, importer replay and atomic count checks passed. The rebuild reads 1038 approved events, 1160 participation links and 761 approved investor profiles. The [writer checkpoint](https://github.com/brunotaut/xsonomy-news/tree/dd3dbac5b9332cc9080a7b3453214cb16b7aeabd/research-agent) contains the manifest and audit.
