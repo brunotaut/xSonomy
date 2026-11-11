@@ -1841,3 +1841,8 @@ The source audit reconciled 20 published identities and added eight verified fin
 ### 2026-11-11 — Publish verified funding research
 
 Nazar authorised a minimal catalogue write to trigger the existing build, without schedule changes. Source audit: research-agent/reports/2026-11-11-funding-landscape-ninth-night.json in brunotaut/xsonomy-news. Production rollback and atomic imports verified; expected 1,587 approved funding events, 1,380 participations and 820 investor profiles. Publish approved records only and retain the four exact funding exclusions. Live publication must be verified after deployment.
+
+
+### 2026-11-11 — Verified tenth funding import
+
+Nazar's explicit permission allows this minimal publication trigger without schedule changes. Source commit `12fd37c444f14eabc4dd05ad863b026f3ceb612d` in xsonomy-news contains three supported events and two guarded corrections, tested by repeated production rollback and atomic import. Previous21 manifests verified live:511 approved event records,9 withheld records and289 participation links. This build should add two INCAS funded participations and expose corrected Motion/Samel semantics; 2Excel is outside landscape membership and remains a DB fact. Expected landscape1,589 events/1,380 links and investor directory821 profiles; global approved DB events1,590. Verify live after deployment.
