@@ -1836,3 +1836,8 @@ The source audit reconciled 20 published identities and added eight verified fin
 ### Funding evidence refresh — 2026-11-10
 
 - Source checkpoint: [`f574972ae861`](https://github.com/brunotaut/xsonomy-news/commit/f574972ae861e924f0327fe48e3486c382eaaba6). Production rehearsal restored the baseline, then the atomic importer verified 24 new events and 21 source-backed participation links. This entry triggers the existing catalogue build.
+
+
+### 2026-11-11 — Publish verified funding research
+
+Nazar authorised a minimal catalogue write to trigger the existing build, without schedule changes. Source audit: research-agent/reports/2026-11-11-funding-landscape-ninth-night.json in brunotaut/xsonomy-news. Production rollback and atomic imports verified; expected 1,587 approved funding events, 1,380 participations and 820 investor profiles. Publish approved records only and retain the four exact funding exclusions. Live publication must be verified after deployment.
