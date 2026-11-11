@@ -1846,3 +1846,8 @@ Nazar authorised a minimal catalogue write to trigger the existing build, withou
 ### 2026-11-11 — Verified tenth funding import
 
 Nazar's explicit permission allows this minimal publication trigger without schedule changes. Source commit `12fd37c444f14eabc4dd05ad863b026f3ceb612d` in xsonomy-news contains three supported events and two guarded corrections, tested by repeated production rollback and atomic import. Previous21 manifests verified live:511 approved event records,9 withheld records and289 participation links. This build should add two INCAS funded participations and expose corrected Motion/Samel semantics; 2Excel is outside landscape membership and remains a DB fact. Expected landscape1,589 events/1,380 links and investor directory821 profiles; global approved DB events1,590. Verify live after deployment.
+
+
+### 2026-11-11 — Verified eleventh funding import
+
+Nazar's explicit permission allows this minimal publication trigger without schedule changes. Source commit `a5983d149d1712d09d2b5a6d3f089c8685e29c56` in xsonomy-news checkpoints 21 company reviews, 28 new approved events, one guarded Hecto correction, 19 round links, four generic investor relationships, 19 investor profiles and 33 source rows. Production rollback rehearsal, atomic import, repeated idempotency run and post-import audits passed; global approved DB counts are 1,618 events, 1,400 round links, 840 investor profiles and 365 funded companies. The 28 new events are outside the 567-company published landscape; the build should retain 1,589 landscape events and 1,380 landscape links while publishing the corrected Hecto amount and refreshed investor directory. Verify live after deployment.
