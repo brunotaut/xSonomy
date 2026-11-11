@@ -1869,3 +1869,5 @@ Nazar's explicit permission allows this minimal publication trigger without sche
 ## Funding research publication trigger — fifteenth wider-cohort batch (2026-11-11 15:06 UTC)
 
 Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approved funding events, 49 round links, 31 investor profiles and 44 source rows after a production rollback rehearsal. Global approved database counts are now 1,765 events, 1,672 round links, 1,019 investor profiles and 420 companies with partial funding coverage. All 38 new events belong to wider-cohort issuers outside the 567-company published landscape; the existing build should therefore retain the landscape event/link totals while publishing the refreshed investor directory. No schedules or build logic changed.
+
+- 2026-11-11 16:08 UTC — Triggered sixteenth source-audited funding publication build (68 approved events; wider-cohort batch).
