@@ -1865,3 +1865,7 @@ Nazar's explicit permission allows this minimal publication trigger without sche
 ### 2026-11-11 — Verified fourteenth funding import
 
 Nazar's explicit permission allows this minimal publication trigger without schedule changes. Source commit `57fa95610342412b6e202e9227554e144c0ae90a` in xsonomy-news checkpoints 24 wider-cohort reviews, 34 new approved events, 91 round links, 59 investor profiles and 43 source rows. Production repeated-import rollback, atomic import and post-import count audits passed; global approved DB counts are 1,727 events, 1,623 round links, 988 investor profiles and 405 funded companies. All 34 new events belong to wider-cohort issuers outside the 567-company published landscape, so the build should retain 1,589 landscape events and 1,380 landscape links while refreshing the investor directory to 988 profiles. Verify live after deployment.
+
+## Funding research publication trigger — fifteenth wider-cohort batch (2026-11-11 15:06 UTC)
+
+Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approved funding events, 49 round links, 31 investor profiles and 44 source rows after a production rollback rehearsal. Global approved database counts are now 1,765 events, 1,672 round links, 1,019 investor profiles and 420 companies with partial funding coverage. All 38 new events belong to wider-cohort issuers outside the 567-company published landscape; the existing build should therefore retain the landscape event/link totals while publishing the refreshed investor directory. No schedules or build logic changed.
