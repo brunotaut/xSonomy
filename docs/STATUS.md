@@ -1881,3 +1881,4 @@ Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approve
 - 2026-11-11T20:19:52Z — Triggered existing production build after the twentieth source-audited funding import (41 approved events, 41 round links and 27 investor profiles; no schedule changes).
 
 - 2026-11-11T21:47:35Z — Recovery trigger for the already-imported twentieth funding batch after workflow #388 remained queued with zero jobs; verified all 41 manifest rounds approved in Supabase; no schedule or build-logic changes.
+- 2026-11-11T22:01:40.899Z: funding publication refresh requested for xsonomy-news checkpoint 519d58b1d61ed75c7f605d61c6dd82bb665a6a20 (twenty-first manifest; schedules unchanged).
