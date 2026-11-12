@@ -1935,3 +1935,8 @@ Research source commit da582cc8c7c9130986a05f4b2b51d3af27b00a2f in brunotaut/xso
 
 ## Funding reconciliation 38 — 2026-11-12
 Research source commit 34a2275bf21b177943b7693415d62b6642aad111 in brunotaut/xsonomy-news: 24 identities researched; 49 financing events, 101 participant links and 7 ownership relationships reconciled. Production rollback rehearsal, atomic import, source audit and post-import idempotency passed. Rebuild the current approved catalogue and investor data.
+
+
+### Funding reconciliation 39 — 2026-11-12
+
+Rebuild verified funding from writer source commit 7c0d3aea24b52800780be101bf5ef371ae26e3d0. Twenty-four wider-cohort identities checked: 28 approved events, 81 sourced participant links, 36 source rows, 4 generic investor relationships and 45 new named profiles. Production rollback, atomic import, idempotency rollback and PostgreSQL source/conflict tests passed. Database 2839 total / 2826 approved events, 3551 links, 2141 profiles, 725 event-covered companies. No geography, publication gates or schedules changed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-thirty-ninth.json
