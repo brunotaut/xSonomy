@@ -1977,3 +1977,8 @@ Source checkpoint brunotaut/xsonomy-news@1239b4fa8fde263e6c498bca42dd7b4f2bbcf44
 ## Forty-fourth funding publication — 12 November 2026
 
 Source checkpoint brunotaut/xsonomy-news@4f75d56a9e63bb49658fbc07bb6555a106107092. Reviewed24 wider-cohort identities fromHarland&Wolff throughHIDGlobal. Imported11 approved financing records,83 participant links,13 event source rows,55 named profiles and13 generic relationships. PostgreSQL tests, production rollback, atomic import, idempotency and exact fact/role/source audit passed. Hermeus equity/debt components avoid aggregate duplication; Harvard direct issuer and announced status preserved. Curated profiles, publication gates and schedules preserved; existing push build only.
+
+
+### 2026-11-12 — UAV and counter-UAS news navigation
+
+Added Nazar's requested “UAV & counter-UAS news” external menu link to http://uav360.xyz/ on the landscape, Insights and Events pages. It opens in a new tab; the existing responsive navigation remains scrollable. Verified the link is inside each Explore navigation; normal Pages build publishes the change.
