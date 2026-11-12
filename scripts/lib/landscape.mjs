@@ -433,3 +433,16 @@ export function buildLandscapeHubs({ hubs, reviews }) {
     hubs: records,
   };
 }
+
+// Reference-date EUR equivalents for investment comparisons, never transaction settlement.
+export async function refreshLandscapeFx(fallback,{fetchFn=fetch,today=new Date().toISOString().slice(0,10),offline=false}={}){
+ const valid=d=>d?.base==='EUR'&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)&&d.date<=today&&d.rates?.EUR===1&&['USD','GBP','CHF','DKK','NOK','SEK','CZK','PLN'].every(c=>Number.isFinite(d.rates[c])&&d.rates[c]>0);
+ if(!valid(fallback))throw Error('Invalid bundled landscape FX snapshot');
+ if(offline)return {...fallback,refreshStatus:'bundled'};
+ try{
+  const response=await fetchFn('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml',{signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('ECB unavailable');
+  const xml=await response.text(),date=xml.match(/<Cube\s+time=['"](\d{4}-\d{2}-\d{2})['"]/)?.[1],rates={EUR:1};
+  for(const m of xml.matchAll(/<Cube\s+currency=['"]([A-Z]{3})['"]\s+rate=['"]([0-9.]+)['"]\s*\//g)){const rate=Number(m[2]);if(!Number.isFinite(rate)||rate<=0)throw Error('Invalid ECB rate');rates[m[1]]=rate}
+  const fresh={...fallback,date,rates,refreshStatus:'fresh'};if(!valid(fresh)||date<fallback.date)throw Error('Invalid ECB reference date');return fresh;
+ }catch{return {...fallback,refreshStatus:'bundled_fallback'}}
+}

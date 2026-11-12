@@ -23,6 +23,14 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 
 ## Session notes
 
+### 2026-11-12 — One unified EUR investment view
+
+Removed the investment currency selector, currency shortcuts and per-currency chart cohorts. All six charts, recent-round cards, totals and company rankings now aggregate EUR equivalents across qualifying currencies; old `currency` URL parameters are ignored and removed. Original funding data is unchanged and remains visible in the expandable records table alongside EUR amount, exact conversion rate and reference date.
+
+Conversion uses one dated ECB daily snapshot (original currency units per EUR; divide to convert), refreshed on each static build with an 8-second timeout and a validated dated bundled fallback. EUR amounts stay unchanged; BEF/DEM/FRF/BGN use official fixed euro conversion rates. Values are reference-date comparisons, not historical transaction-date rates or inflation adjustments. Converted values are marked approximate. Unsupported rates are explicitly counted in coverage, never treated as EUR at 1:1. Existing qualifying live records have complete FX coverage in both venture/growth and broader primary-equity scopes.
+
+Validation: 117 tests pass, including unified currency/domain reconciliation, UFORCE across every monetary chart, original amount preservation, quote direction, legacy conversions, unknown rate exclusion, valid ECB refresh and unavailable/stale/future response fallback. Fixture builds publish the FX snapshot without network dependency and assert no currency controls. At the 12 November snapshot the default view has 131 rounds across 89 companies, approximately EUR6.91bn; UFORCE’s USD700m Series A is approximately EUR631.71m and its two recorded rounds total approximately EUR676.83m.
+
 ### 2026-11-12 — UFORCE funding verification and insight visibility
 
 Rechecked the issuer’s 12 November announcement: USD700m Series A, USD6bn valuation, co-led by Valor Equity Partners and National Wealth Fund, ten named participants. The autonomous research run43 already stored and published the correct approved, closed Series A (`series-a-november-2026`) plus the separate USD50m seed. Live DB and published JSON were checked; no duplicate financing event or participant cheque was inserted. NWF GBP113m stays an individual contribution within, not above, the USD700m total. Company remains GB/London HQ, both domains.

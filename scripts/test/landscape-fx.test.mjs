@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+import {refreshLandscapeFx} from '../lib/landscape.mjs';
+const bundled=JSON.parse(readFileSync(new URL('../../src/data/landscape-fx.json',import.meta.url)));
+const xml=(date='2026-11-12',usd='1.2')=>`<Cube><Cube time='${date}'>${Object.entries({...bundled.rates,USD:usd}).filter(([c])=>c!=='EUR').map(([c,v])=>`<Cube currency='${c}' rate='${v}'/>`).join('')}</Cube></Cube>`;
+test('FX build refresh preserves ECB quote direction and fixed legacy rates',async()=>{const fx=await refreshLandscapeFx(bundled,{today:'2026-11-12',fetchFn:async()=>new Response(xml())});assert.equal(fx.rates.USD,1.2);assert.equal(fx.rates.EUR,1);assert.equal(fx.fixedRates.BEF,40.3399);assert.equal(fx.refreshStatus,'fresh')});
+test('unavailable, incomplete, stale or future FX responses retain an explicit dated fallback',async()=>{for(const fetchFn of [async()=>{throw Error('offline')},async()=>new Response('<Cube/>'),async()=>new Response(xml('2026-11-13')),async()=>new Response(xml('2025-01-01')),async()=>new Response(xml('2026-11-12','0'))]){const fx=await refreshLandscapeFx(bundled,{today:'2026-11-12',fetchFn});assert.equal(fx.refreshStatus,'bundled_fallback');assert.equal(fx.date,bundled.date);assert.equal(fx.rates.USD,bundled.rates.USD)}});

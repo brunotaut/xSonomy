@@ -30,9 +30,14 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     await mkdir(join(root,'scripts/lib'),{recursive:true});
     await cp(new URL('../generate-supabase.mjs',import.meta.url),join(root,'scripts/generate-supabase.mjs'));
     await cp(new URL('../lib/landscape.mjs',import.meta.url),join(root,'scripts/lib/landscape.mjs'));
-    const {stdout}=await promisify(execFile)(process.execPath,['scripts/generate-supabase.mjs'],{cwd:root,env:{...process.env,SUPABASE_URL:`http://127.0.0.1:${server.address().port}`,SUPABASE_SERVICE_KEY:'test-only-secret'},timeout:30000});
+    const {stdout}=await promisify(execFile)(process.execPath,['scripts/generate-supabase.mjs'],{cwd:root,env:{...process.env,SUPABASE_URL:`http://127.0.0.1:${server.address().port}`,LANDSCAPE_FX_OFFLINE:'1',SUPABASE_SERVICE_KEY:'test-only-secret'},timeout:30000});
     assert.match(stdout,/Landscape: 3 included, published/);
     const output=JSON.parse(await readFile(join(root,'public/data/landscape.json'),'utf8'));
+    const fx=JSON.parse(await readFile(join(root,'public/data/landscape-fx.json'),'utf8'));
+    assert.equal(fx.base,'EUR');assert.equal(fx.rates.EUR,1);assert.ok(fx.rates.USD>0);
+    const insightsHtml=await readFile(join(root,'public/landscape/insights/index.html'),'utf8');
+    assert.doesNotMatch(insightsHtml,/name="currency"|investmentCurrencies/);
+    assert.match(insightsHtml,/investmentFxNote/);
     assert.deepEqual(output.companies.map(c=>c.id),['both','cuas','uav']);
     assert.equal(output.companies.find(c=>c.id==='uav').fundingRounds[0].amount.amount,50000000);
     assert.equal(output.companies.find(c=>c.id==='uav').investmentResearch.status,'partial');

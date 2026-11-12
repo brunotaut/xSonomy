@@ -14,7 +14,7 @@ import { mkdir, rm, cp, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchLandscape, fetchLandscapeInvestors, fetchLandscapeHubs, fetchLandscapeEvents } from "./lib/landscape.mjs";
+import { fetchLandscape, fetchLandscapeInvestors, fetchLandscapeHubs, fetchLandscapeEvents, refreshLandscapeFx } from "./lib/landscape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -1328,6 +1328,9 @@ async function main() {
   urls.push(`${SITE}/landscape/feedback/`);
 
   await writeFile(join(OUT, "data", "landscape.json"), JSON.stringify(landscape));
+  const fx = await refreshLandscapeFx(JSON.parse(await readFile(join(SRC, "data", "landscape-fx.json"), "utf8")), { offline: process.env.LANDSCAPE_FX_OFFLINE === "1" });
+  await writeFile(join(OUT, "data", "landscape-fx.json"), JSON.stringify(fx));
+  console.log(`  Investment FX: ECB ${fx.date} (${fx.refreshStatus}) -> EUR`);
   for (const section of ["landscape", "landscape/events", "landscape/insights", "landscape/feedback"]) {
     const landscapePath = join(OUT, section, "index.html");
     await writeFile(landscapePath, (await readFile(landscapePath, "utf8"))

@@ -59,7 +59,7 @@ test('universities and research institutes leave the company count but keep thei
     await cp(new URL('../lib/landscape.mjs', import.meta.url), join(root, 'scripts/lib/landscape.mjs'));
     await promisify(execFile)(process.execPath, ['scripts/generate-supabase.mjs'], {
       cwd: root, timeout: 30000,
-      env: { ...process.env, SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, SUPABASE_SERVICE_KEY: 'test-only-secret' },
+      env: { ...process.env, SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, LANDSCAPE_FX_OFFLINE:'1',SUPABASE_SERVICE_KEY: 'test-only-secret' },
     });
     const read = (p) => readFile(join(root, 'public', p), 'utf8');
     const json = async (p) => JSON.parse(await read(p));
