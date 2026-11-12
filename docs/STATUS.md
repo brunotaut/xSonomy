@@ -1909,3 +1909,7 @@ Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approve
 - 2026-11-12T11:04:23.481Z: publish funding reconciliation thirty-fourth from xsonomy-news 65cb24ba4a18557224d688079bc4c19e1cb53855.
 
 - 2026-11-12T11:59:26.770Z: publish funding reconciliation thirty-fifth from xsonomy-news 9da3a1bf9886d11205d80917f0ec3252f16c6b79.
+
+
+## Funding reconciliation 36 — 2026-11-12
+Research source commit 45ecb5186de1e8e354c584f93639c22266d0503d in brunotaut/xsonomy-news: 24 identities reviewed, 38 financing events and 102 participant links imported after production rollback rehearsal, atomic import and idempotency verification. Rebuild the existing catalogue and investor directory from approved records.
