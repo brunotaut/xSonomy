@@ -1988,3 +1988,8 @@ Source checkpoint brunotaut/xsonomy-news@4f75d56a9e63bb49658fbc07bb6555a10610709
 ### 2026-11-12 — UAV and counter-UAS news navigation
 
 Added Nazar's requested “UAV & counter-UAS news” external menu link to http://uav360.xyz/ on the landscape, Insights and Events pages. It opens in a new tab; the existing responsive navigation remains scrollable. Verified the link is inside each Explore navigation; normal Pages build publishes the change.
+
+
+### Funding source audit — 12 November 2026, reconciliation 45
+
+Imported 28 approved financing records and 43 source-linked investor participations across 24 wider-cohort identity reviews; 22 named investor profiles and seven new generic relationships (one existing relationship preserved). Production rollback, atomic import, idempotency and exact fact/source audits passed. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/0c642ad33d65738778576908cd750b99dc47d7f5. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-fifth.json . Existing build/publication trigger only; no schedule or membership changes.
