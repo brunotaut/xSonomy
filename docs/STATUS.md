@@ -1959,3 +1959,8 @@ Replaced GitHub correction links across the landscape, Insights and Events with 
 Validation: 108 catalogue tests pass, including full read-only generator output for the feedback page, required consent/contact fields, links, analytics and sitemap. Backend tests total 178 passing in the writer repo. Live endpoint checks confirmed rejected missing consent, rejected honeypot, rejected wrong origin, saved synthetic message and identical retry returning the same reference. Production table/RPC privileges deny public reads and direct inserts; live page and owner email checks follow deployment.
 
 Live mail check: synthetic submission d4fcbe78-64e2-4b98-ba1d-7e73386b030d was saved once, delivered on its first attempt by workflow run 43284631381 and confirmed in brntaut@gmail.com Inbox.
+
+
+## Funding publication — forty-second reconciliation (12 November 2026)
+
+Source checkpoint: brunotaut/xsonomy-news@bef36ed46a47d307c0d5bd7656744fc0d637aca0. Reviewed 24 wider-cohort identities, Glenair through Griffon Aerospace: 13 completed bounded reviews and 11 partial histories. Imported 24 approved events, 28 participant links, 42 source rows, 20 new named profiles and 5 generic portfolio relationships. PostgreSQL atomicity/conflict/source tests, production rollback, atomic import and idempotency rehearsal passed; exact manifest/source audit matched with no missing participant sources. Curated profiles and company publication gates preserved. Existing push build only; no schedule changes.
