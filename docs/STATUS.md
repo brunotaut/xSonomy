@@ -1945,3 +1945,8 @@ Rebuild verified funding from writer source commit 7c0d3aea24b52800780be101bf5ef
 ### Funding reconciliation 40 — 2026-11-12
 
 Rebuild verified funding from writer source commit 20822c3a142c81440e612eddb44f429743403055. Twenty-four wider-cohort identities checked: 30 approved events, 45 sourced participant links, 38 source rows, 7 generic relationships and 30 new named profiles. Production rollback, atomic import, idempotency rollback and PostgreSQL source/conflict tests passed. Database 2869 total / 2856 approved events, 3596 links, 2171 profiles, 737 event-covered companies. No geography, classification, publication gates or schedules changed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-fortieth.json
+
+
+### Funding reconciliation 41 — 2026-11-12
+
+Rebuild verified funding from writer source commit cec7790b1dd07d3da7ef810de3c30f413c53c31d. Twenty-four wider-cohort identities checked: 21 approved events, 17 sourced participant links, 29 source rows, 13 generic relationships and 19 new named profiles. Production rollback, atomic import, idempotency rollback and PostgreSQL source/conflict tests passed. Database 2890 total / 2877 approved events, 3613 links, 2190 profiles, 747 event-covered companies. GE and GA-ASI duplicate issuers not assigned duplicate finance; acquisition consideration, parent financing and programme budgets excluded. Geography, classification, publication gates and schedules preserved. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-first.json
