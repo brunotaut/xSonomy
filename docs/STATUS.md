@@ -1927,3 +1927,7 @@ Validation: 108 Node tests pass, including a complete generator build against a 
 
 
 Launch cleanup verified live on 2026-11-12: deployment run 43222512826 succeeded. The served company export retains 567 companies and all 1,589 financing events; the refreshed directory contains 1,999 named profiles and no anonymous placeholder identities. All new script/model/helper assets, the 1200×630 PNG and the three page routes return HTTP 200. Social metadata and correction links are served on the live pages. The coverage section opens via its query link and displays current counts. Responsive browser checks at 337 CSS pixels show no horizontal document overflow on the map, loaded Insights or Events shells; map filters and list switching work. Earlier profile/open/back checks also passed at 337 pixels. This is desktop browser zoom testing of the responsive layout, not a physical phone test. A live desktop screenshot is saved at docs/previews/launch-investor-cleanup-20261112.jpg.
+
+
+## Funding reconciliation 37 — 2026-11-12
+Research source commit da582cc8c7c9130986a05f4b2b51d3af27b00a2f in brunotaut/xsonomy-news: 24 identities researched, 33 financing events, 70 participant links and 8 ownership relationships reconciled. Production rollback rehearsal, atomic import, source audit and post-import idempotency passed. Rebuild the existing approved catalogue/investor data.
