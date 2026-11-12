@@ -29,7 +29,7 @@ Rechecked the issuer’s 12 November announcement: USD700m Series A, USD6bn valu
 
 Fixed discoverability: Investment Insights now shows the three latest dated qualifying rounds across original currencies, and labelled currency shortcuts with round counts. These panels obey scope/status/country/domain/period filters; all six chart totals remain restricted to one selected currency. UFORCE is visible in the default EUR view’s latest panel; the USD company chart contains USD750m across two rounds. No FX conversion or cross-currency grand total. Sources remain linked on each round.
 
-Validation: all 114 tests pass, including a UFORCE-style regression covering EUR default visibility, two-round USD total, country/domain/year/stage/company sums, investor participation count, original GBP investor cheque exclusion, and filter handling.
+Validation: all 114 tests pass, including a UFORCE-style regression covering EUR default visibility, two-round USD total, country/domain/year/stage/company sums, investor participation count, original GBP investor cheque exclusion, and filter handling. Deployment `22e8154` / Actions run43326646919 succeeded. Live browser confirmed UFORCE USD700m as latest round in both EUR and USD views, USD750m/two rounds in the company chart, working currency shortcuts and exclusion under the France filter. At 337 CSS pixels the recent-round cards stack with no horizontal overflow. Proof: `docs/previews/uforce-investment-insights-live-20261112.jpg`.
 
 ### 2026-11-12 — Landscape email subscriptions
 
