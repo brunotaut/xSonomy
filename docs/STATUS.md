@@ -1884,3 +1884,4 @@ Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approve
 - 2026-11-11T22:01:40.899Z: funding publication refresh requested for xsonomy-news checkpoint 519d58b1d61ed75c7f605d61c6dd82bb665a6a20 (twenty-first manifest; schedules unchanged).
 
 - 2026-11-11T23:02:42.239Z: funding publication refresh requested for xsonomy-news checkpoint 518ceb1163c4b9695083fdf697a01008a38a2f47 (twenty-second manifest: 27 approved events, 45 round links, 41 investor profiles and three generic relationships; schedules unchanged).
+- 2026-11-12T00:02:08.380Z — Funding research twenty-third batch: source checkpoint `2921c7a1276591ceee816422a9e5348c351f6156`; 29 approved events, 47 round-participation links, 13 verified ownership/portfolio relationships, 23 new investor profiles, and 45 event-source rows. Production rollback rehearsal, atomic import, post-import idempotency rehearsal and database audit passed; rebuilding to publish the verified data.
