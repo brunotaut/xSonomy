@@ -1972,3 +1972,8 @@ Feedback verified live: catalogue deployment run 43284914575 succeeded; form, wo
 ## Forty-third funding publication — 12 November 2026
 
 Source checkpoint brunotaut/xsonomy-news@1239b4fa8fde263e6c498bca42dd7b4f2bbcf448. Reconciled24 new wider-cohort identities plus published UFORCE followup. Imported16 approved events,93 participant links,26 source rows,53 new named profiles and11 generic relationships. PostgreSQL tests, production rollback, atomic import, idempotency and source audits passed. UFORCE new Series A preserves original currencies and existing seed; curated profiles and publication gates preserved. Existing push build only; no schedule changes.
+
+
+## Forty-fourth funding publication — 12 November 2026
+
+Source checkpoint brunotaut/xsonomy-news@4f75d56a9e63bb49658fbc07bb6555a106107092. Reviewed24 wider-cohort identities fromHarland&Wolff throughHIDGlobal. Imported11 approved financing records,83 participant links,13 event source rows,55 named profiles and13 generic relationships. PostgreSQL tests, production rollback, atomic import, idempotency and exact fact/role/source audit passed. Hermeus equity/debt components avoid aggregate duplication; Harvard direct issuer and announced status preserved. Curated profiles, publication gates and schedules preserved; existing push build only.
