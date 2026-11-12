@@ -23,6 +23,14 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 
 ## Session notes
 
+### 2026-11-12 — UFORCE funding verification and insight visibility
+
+Rechecked the issuer’s 12 November announcement: USD700m Series A, USD6bn valuation, co-led by Valor Equity Partners and National Wealth Fund, ten named participants. The autonomous research run43 already stored and published the correct approved, closed Series A (`series-a-november-2026`) plus the separate USD50m seed. Live DB and published JSON were checked; no duplicate financing event or participant cheque was inserted. NWF GBP113m stays an individual contribution within, not above, the USD700m total. Company remains GB/London HQ, both domains.
+
+Fixed discoverability: Investment Insights now shows the three latest dated qualifying rounds across original currencies, and labelled currency shortcuts with round counts. These panels obey scope/status/country/domain/period filters; all six chart totals remain restricted to one selected currency. UFORCE is visible in the default EUR view’s latest panel; the USD company chart contains USD750m across two rounds. No FX conversion or cross-currency grand total. Sources remain linked on each round.
+
+Validation: all 114 tests pass, including a UFORCE-style regression covering EUR default visibility, two-round USD total, country/domain/year/stage/company sums, investor participation count, original GBP investor cheque exclusion, and filter handling.
+
 ### 2026-11-12 — Landscape email subscriptions
 
 Added email-only “Subscribe to updates” in the map, Events and Insights headers. A public `landscape-subscribe` Edge Function verifies a short-lived signed proof of work, a bot-trap field, explicit versioned signup consent and an atomic database quota (20/IP/hour, 3/email/hour, 200/day). It normalises and deduplicates email addresses without revealing whether an address already exists. Private `landscape_subscribers` stores the email and consent; `landscape_subscription_requests` holds short-lived hashed rate-limit identifiers and single-use challenge IDs. RLS is enabled with public/authenticated table and RPC permissions revoked; only the server role can save signups. No service key reaches the browser. The list is separate from the news digest and no campaign emails or new schedules were introduced. Privacy/removal instructions are beside the form.

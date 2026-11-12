@@ -39,7 +39,10 @@ export function buildInvestmentInsights(data,selection={},today=new Date().toISO
  if(!currencies.includes(s.currency))s.currency=currencies.includes('EUR')?'EUR':currencies[0]||'EUR';
  if(s.country&&!data.countries.some(c=>c.code===s.country))s.country='';if(!Object.hasOwn(DOMAIN_LABEL,s.domain))s.domain='';
  const periodMatch=r=>{if(s.period==='all')return true;const y=/^\d{4}/.test(r.date||'')?Number(r.date.slice(0,4)):null;return y!==null&&(s.period==='5y'?y>=year-4&&y<=year:y===Number(s.period))};
- const rows=eligible.filter(x=>x.round.amount.currency===s.currency&&(!s.country||x.company.country===s.country)&&(!s.domain||x.domain===s.domain)&&periodMatch(x.round));
+ const acrossCurrencies=eligible.filter(x=>(!s.country||x.company.country===s.country)&&(!s.domain||x.domain===s.domain)&&periodMatch(x.round));
+ const rows=acrossCurrencies.filter(x=>x.round.amount.currency===s.currency);
+ const currencyCounts=currencies.map(currency=>({currency,n:acrossCurrencies.filter(x=>x.round.amount.currency===currency).length}));
+ const latest=acrossCurrencies.filter(x=>/^\d{4}(?:-\d{2})?(?:-\d{2})?$/.test(x.round.date||'')).sort((a,b)=>b.round.date.localeCompare(a.round.date)||a.company.name.localeCompare(b.company.name)).slice(0,3);
  const name=code=>data.countries.find(c=>c.code===code)?.name||code;
  const countries=group(rows,x=>x.company.country,x=>name(x.company.country));
  const domains=['uav','counter-uas','both'].map(id=>{const rs=rows.filter(x=>x.domain===id);return {id,name:DOMAIN_LABEL[id],amount:sum(rs),n:rs.length,approximate:rs.some(x=>x.round.amountQualifier==='approximate')}});
@@ -49,5 +52,5 @@ export function buildInvestmentInsights(data,selection={},today=new Date().toISO
  const first=years.length?Math.min(...years):year,last=years.length?Math.max(...years):year;
  for(let y=first;y<=last;y++){const rs=dated.filter(x=>Number(x.round.date.slice(0,4))===y);timeline.push({year:y,name:String(y),amount:sum(rs),n:rs.length,approximate:rs.some(x=>x.round.amountQualifier==='approximate')})}
  const investors=new Map();for(const row of rows){const seen=new Set();for(const i of row.round.investors||[]){if(!i.slug||seen.has(i.slug)||!isNamedInvestor(i)||['lender','grantor','arranger','adviser','underwriter'].includes(i.role))continue;seen.add(i.slug);const g=investors.get(i.slug)||{id:i.slug,name:i.name,n:0,companyIds:new Set(),lead:0};g.n++;g.companyIds.add(row.company.id);if(['lead','co_lead'].includes(i.role))g.lead++;investors.set(i.slug,g)}}
- return {selection:s,year,allRecords:all.length,eligibleRecords:eligible.length,exclusions,currencies,rows,total:sum(rows),approximate:rows.some(x=>x.round.amountQualifier==='approximate'),companyCount:new Set(rows.map(x=>x.company.id)).size,countries,domains,companies,stages,timeline,undated:rows.length-dated.length,investors:rank([...investors.values()].map(i=>({...i,companies:i.companyIds.size})),'n'),announced:rows.filter(x=>!['closed','final_close'].includes(x.round.closingStatus)).length,periods:allowedPeriods};
+ return {selection:s,year,allRecords:all.length,eligibleRecords:eligible.length,exclusions,currencies,currencyCounts,latest,rows,total:sum(rows),approximate:rows.some(x=>x.round.amountQualifier==='approximate'),companyCount:new Set(rows.map(x=>x.company.id)).size,countries,domains,companies,stages,timeline,undated:rows.length-dated.length,investors:rank([...investors.values()].map(i=>({...i,companies:i.companyIds.size})),'n'),announced:rows.filter(x=>!['closed','final_close'].includes(x.round.closingStatus)).length,periods:allowedPeriods};
 }
