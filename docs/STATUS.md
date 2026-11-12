@@ -1998,3 +1998,8 @@ Imported 28 approved financing records and 43 source-linked investor participati
 ### Funding source audit — 12 November 2026, reconciliation 46
 
 Imported 56 approved financing records and 51 source-linked investor participations after24 wider-cohort identity checks; 35 named investor profiles and2 generic relationships. Production rollback, atomic import, idempotency and fact/source audits passed. Separate original-currency note tranches and facility ceilings retained; parent/brand duplicates and noncash/cumulative amounts excluded. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/c15c532999541ca62c8e85281e2e9f099a309637. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-sixth.json . Existing build trigger only; no schedules or membership changes.
+
+
+### Funding source audit — 12 November 2026, reconciliation 47
+
+Imported37 approved financing records and100 source-linked investor participations across24 identity reviews;36 named investor profiles and5 generic relationships. Production rollback, atomic import, idempotency and exactfact/source audits passed. Primary proceeds separated from secondary sales, fund-manager aliases reconciled, subsidiary/parent and programme-budget overlap excluded. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/7fdef27e50e3720f38858974bc1ef66c2921be63. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-seventh.json . Existing build trigger only; schedules and membership unchanged.
