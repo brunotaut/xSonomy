@@ -22,6 +22,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 - 2026-09-05 — This repo stays read-only against the DB.
 
 ## Session notes
+
+### 2026-11-12 — Investment Insights
+
+Added a separate Investment Insights section at `/landscape/insights/?section=investment` with six charts: equity volume by HQ country, mutually exclusive company domain, round year, financing stage, company, and investor participation count. Shared currency/country/domain/period/scope/status filters persist in the URL. Each chart has a full data table; an underlying-round table links to public sources. Defaults to venture/growth, original EUR amounts and reported announced/signed/closed rounds; closed-only and broader primary-equity views are available. Excludes grants/debt/mixed/convertibles, secondary disclosures, linked extensions, noncash, bounded/target/first-close amounts, missing sources and future dates. Approximate amounts are marked. No FX conversion or allocation of whole-round amounts to investors. Existing six ecosystem charts are preserved.
+
+Validation: all 113 tests pass, including five new aggregation tests for currency/domain reconciliation, exclusions, status/scope, deduplication/investor counts and undated/year handling. Live published data initially yields 68 qualifying EUR venture/growth rounds, 48 companies and approximately EUR2.27bn in reported volume; values update with catalogue builds.
 _(newest first; `/wrap-up` appends here)_
 
 ### 2026-11-03 — funding research checkpoint 22 publication
