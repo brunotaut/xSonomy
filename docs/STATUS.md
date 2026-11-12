@@ -23,6 +23,12 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 
 ## Session notes
 
+### 2026-11-12 — Landscape email subscriptions
+
+Added email-only “Subscribe to updates” in the map, Events and Insights headers. A public `landscape-subscribe` Edge Function verifies a short-lived signed proof of work, a bot-trap field, explicit versioned signup consent and an atomic database quota (20/IP/hour, 3/email/hour, 200/day). It normalises and deduplicates email addresses without revealing whether an address already exists. Private `landscape_subscribers` stores the email and consent; `landscape_subscription_requests` holds short-lived hashed rate-limit identifiers and single-use challenge IDs. RLS is enabled with public/authenticated table and RPC permissions revoked; only the server role can save signups. No service key reaches the browser. The list is separate from the news digest and no campaign emails or new schedules were introduced. Privacy/removal instructions are beside the form.
+
+Validation: 113 frontend and 180 backend tests pass, including private access, consent, replay binding, duplicate addresses, quotas, signed/aged challenge verification, bot trap and expired challenges. Live schema permissions verified. Supabase advisor notices that these private tables have no RLS policies are expected: client access is deliberately denied.
+
 ### 2026-11-12 — Investment Insights
 
 Added a separate Investment Insights section at `/landscape/insights/?section=investment` with six charts: equity volume by HQ country, mutually exclusive company domain, round year, financing stage, company, and investor participation count. Shared currency/country/domain/period/scope/status filters persist in the URL. Each chart has a full data table; an underlying-round table links to public sources. Defaults to venture/growth, original EUR amounts and reported announced/signed/closed rounds; closed-only and broader primary-equity views are available. Excludes grants/debt/mixed/convertibles, secondary disclosures, linked extensions, noncash, bounded/target/first-close amounts, missing sources and future dates. Approximate amounts are marked. No FX conversion or allocation of whole-round amounts to investors. Existing six ecosystem charts are preserved.
