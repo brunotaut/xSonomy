@@ -1905,3 +1905,5 @@ Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approve
 - 2026-11-12T08:59:52.254Z — Funding research thirty-second batch: source checkpoint `4e125c68d9d0100a310bdd9d3d0194c2ad1f505d`; 39 approved events, 77 round-participation links, nine verified ownership/portfolio relationships, 49 new investor profiles, and 54 event-source rows. Rollback rehearsal, atomic import, idempotency and database audit passed; schedules unchanged.
 
 - 2026-11-12T10:04:57.684Z — Funding research thirty-third batch: source checkpoint `0e228a43c0a47c4bd77bac5186b736eec562aa62`; 38 approved events, 48 round-participation links, six verified ownership/portfolio relationships, 35 new investor profiles, and 55 event-source rows. Rollback rehearsal, atomic import, idempotency and database audit passed; schedules unchanged.
+
+- 2026-11-12T11:04:23.481Z: publish funding reconciliation thirty-fourth from xsonomy-news 65cb24ba4a18557224d688079bc4c19e1cb53855.
