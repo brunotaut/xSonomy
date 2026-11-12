@@ -1931,3 +1931,7 @@ Launch cleanup verified live on 2026-11-12: deployment run 43222512826 succeeded
 
 ## Funding reconciliation 37 — 2026-11-12
 Research source commit da582cc8c7c9130986a05f4b2b51d3af27b00a2f in brunotaut/xsonomy-news: 24 identities researched, 33 financing events, 70 participant links and 8 ownership relationships reconciled. Production rollback rehearsal, atomic import, source audit and post-import idempotency passed. Rebuild the existing approved catalogue/investor data.
+
+
+## Funding reconciliation 38 — 2026-11-12
+Research source commit 34a2275bf21b177943b7693415d62b6642aad111 in brunotaut/xsonomy-news: 24 identities researched; 49 financing events, 101 participant links and 7 ownership relationships reconciled. Production rollback rehearsal, atomic import, source audit and post-import idempotency passed. Rebuild the current approved catalogue and investor data.
