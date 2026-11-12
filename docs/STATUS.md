@@ -1993,3 +1993,8 @@ Added Nazar's requested “UAV & counter-UAS news” external menu link to http:
 ### Funding source audit — 12 November 2026, reconciliation 45
 
 Imported 28 approved financing records and 43 source-linked investor participations across 24 wider-cohort identity reviews; 22 named investor profiles and seven new generic relationships (one existing relationship preserved). Production rollback, atomic import, idempotency and exact fact/source audits passed. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/0c642ad33d65738778576908cd750b99dc47d7f5. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-fifth.json . Existing build/publication trigger only; no schedule or membership changes.
+
+
+### Funding source audit — 12 November 2026, reconciliation 46
+
+Imported 56 approved financing records and 51 source-linked investor participations after24 wider-cohort identity checks; 35 named investor profiles and2 generic relationships. Production rollback, atomic import, idempotency and fact/source audits passed. Separate original-currency note tranches and facility ceilings retained; parent/brand duplicates and noncash/cumulative amounts excluded. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/c15c532999541ca62c8e85281e2e9f099a309637. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-sixth.json . Existing build trigger only; no schedules or membership changes.
