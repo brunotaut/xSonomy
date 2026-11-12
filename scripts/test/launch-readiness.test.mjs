@@ -41,7 +41,8 @@ test('launch pages expose valid social image metadata and a correction route wit
   const html=readFileSync(new URL('../../src/'+route+'/index.html',import.meta.url),'utf8');
   assert.match(html,/<meta property="og:image" content="https:\/\/xsonomy.com\/assets\/atlas\/landscape-social.png">/);
   assert.match(html,/<meta name="twitter:card" content="summary_large_image">/);
-  assert.match(html,/Suggest a correction/);
+  assert.match(html,/Share a suggestion/);
+  assert.match(html,/href="\/landscape\/feedback\/"/);
   assert.doesNotMatch(html,/href="\/landscape\/#about-data"/);
  }
 });

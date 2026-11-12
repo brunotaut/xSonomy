@@ -1950,3 +1950,12 @@ Rebuild verified funding from writer source commit 20822c3a142c81440e612eddb44f4
 ### Funding reconciliation 41 — 2026-11-12
 
 Rebuild verified funding from writer source commit cec7790b1dd07d3da7ef810de3c30f413c53c31d. Twenty-four wider-cohort identities checked: 21 approved events, 17 sourced participant links, 29 source rows, 13 generic relationships and 19 new named profiles. Production rollback, atomic import, idempotency rollback and PostgreSQL source/conflict tests passed. Database 2890 total / 2877 approved events, 3613 links, 2190 profiles, 747 event-covered companies. GE and GA-ASI duplicate issuers not assigned duplicate finance; acquisition consideration, parent financing and programme budgets excluded. Geography, classification, publication gates and schedules preserved. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-first.json
+
+
+### 2026-11-12 — simple protected feedback form
+
+Replaced GitHub correction links across the landscape, Insights and Events with `/landscape/feedback/`. The page has just a required email, free-text suggestion and unchecked mandatory processing-consent checkbox, with privacy/contact details below. A browser worker solves the signed anti-spam challenge; the form also has a honeypot, bounded requests, clear saving/error states and retry-safe references. The separate server-side inbox, quotas, consent audit and Resend queue worker live in xsonomy-news commit 81b3f05d07ea56266c954cf36a0098286a52353b. All accepted submissions are saved privately; owner notification is queued for brntaut@gmail.com and checked every five minutes (GitHub scheduling can delay delivery). No browser DB privileges or service keys are exposed.
+
+Validation: 108 catalogue tests pass, including full read-only generator output for the feedback page, required consent/contact fields, links, analytics and sitemap. Backend tests total 178 passing in the writer repo. Live endpoint checks confirmed rejected missing consent, rejected honeypot, rejected wrong origin, saved synthetic message and identical retry returning the same reference. Production table/RPC privileges deny public reads and direct inserts; live page and owner email checks follow deployment.
+
+Live mail check: synthetic submission d4fcbe78-64e2-4b98-ba1d-7e73386b030d was saved once, delivered on its first attempt by workflow run 43284631381 and confirmed in brntaut@gmail.com Inbox.
