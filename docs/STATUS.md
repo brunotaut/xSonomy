@@ -1967,3 +1967,8 @@ Source checkpoint: brunotaut/xsonomy-news@bef36ed46a47d307c0d5bd7656744fc0d637ac
 
 
 Feedback verified live: catalogue deployment run 43284914575 succeeded; form, worker, stylesheet and all three footer routes return 200 with no old GitHub issue links. A browser submission without consent stayed on the form; accepting consent ran the spam check and returned saved reference f3260736-3081-42d3-83d6-0c03eb3de5cd, confirmed in the private table. The earlier backend test was delivered to the owner's actual Gmail Inbox (first attempt). Responsive browser layout at 337 CSS pixels has no horizontal overflow; this is browser zoom testing, not a physical-device claim. Internal feedback links open in the same tab. Screenshot: docs/previews/feedback-form-20261112.jpg. The 108 catalogue and 178 news tests pass; the final footer adjustment also passes the targeted generator/launch checks.
+
+
+## Forty-third funding publication — 12 November 2026
+
+Source checkpoint brunotaut/xsonomy-news@1239b4fa8fde263e6c498bca42dd7b4f2bbcf448. Reconciled24 new wider-cohort identities plus published UFORCE followup. Imported16 approved events,93 participant links,26 source rows,53 new named profiles and11 generic relationships. PostgreSQL tests, production rollback, atomic import, idempotency and source audits passed. UFORCE new Series A preserves original currencies and existing seed; curated profiles and publication gates preserved. Existing push build only; no schedule changes.
