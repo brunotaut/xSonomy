@@ -1,3 +1,4 @@
+import {isNamedInvestor} from '../../src/assets/atlas/investor-presentation.js';
 // Read-only projection of the reconciled working edition. Never publishes drafts
 // or recomputes research verdicts from loose product/category/name matches.
 export const LANDSCAPE = 'europe-uav-cuas-2026';
@@ -107,7 +108,7 @@ export async function fetchLandscapeInvestors(sbFetchAll, fundingCompanies = [])
 }
 
 export function buildLandscapeInvestors({ investors, reviews, fundingCompanies = [] }) {
-  const records = investors.map((r) => {
+  const records = investors.filter(isNamedInvestor).map((r) => {
     const locations = (r.locations || []).map((l) => ({
       city: l.city, country: l.country,
       latitude: l.latitude, longitude: l.longitude,
@@ -181,7 +182,7 @@ export function buildLandscapeInvestors({ investors, reviews, fundingCompanies =
   });
   return {
     edition: INVESTOR_EXPORT, generatedAt: new Date().toISOString(),
-    membership: 'Investor research directory: confirmed investments, stated mandates, ' +
+    membership: 'Named investors and funding organisations: confirmed investments, stated mandates, ' +
       'adjacent investors, separately labelled unverified candidates and funding programmes.',
     caveats: {
       countryAssociations: investors[0]?.country_association_meaning ||

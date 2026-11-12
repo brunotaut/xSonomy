@@ -8,6 +8,6 @@ const model=await readFile(new URL('model.js',assets),'utf8'),modelName=`model-$
 await writeFile(new URL(modelName,assets),model);
 const app=(await readFile(new URL('atlas.js',assets),'utf8')).replace("'./model.js'",`'./${modelName}'`),appName=`atlas-${hash(app)}.js`;
 await writeFile(new URL(appName,assets),app);
-for(const page of ['landscape','landscape-next']){const path=new URL(`src/${page}/index.html`,root);await writeFile(path,(await readFile(path,'utf8')).replace(/\/assets\/atlas\/atlas(?:-[a-f0-9]+)?\.js/g,`/assets/atlas/${appName}`))}
+for(const page of ['landscape','landscape-next']){const path=new URL(`src/${page}/index.html`,root);await writeFile(path,(await readFile(path,'utf8')).replace(/\/assets\/atlas\/atlas(?:-[a-zA-Z0-9-]+)?\.js/g,`/assets/atlas/${appName}`))}
 for(const name of ['atlas-ui','atlas-investors','atlas-hubs']){const testPath=new URL(`scripts/test/${name}.test.mjs`,root);await writeFile(testPath,(await readFile(testPath,'utf8')).replace(/\/assets\/atlas\/model(?:-[a-f0-9]+)?\.js/g,`/assets/atlas/${modelName}`))}
 console.log(`Atlas assets: ${appName}, ${modelName}`);

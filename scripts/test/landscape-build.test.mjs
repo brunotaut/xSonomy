@@ -43,7 +43,7 @@ test('whole static generator emits the gated landscape, analytics and sitemap fr
     const html=await readFile(join(root,'public/landscape/index.html'),'utf8');
     assert.ok(html.indexOf("gtag('consent', 'default'")<html.indexOf('googletagmanager.com'));
     assert.ok(!html.includes('<!--LANDSCAPE_ANALYTICS-->'));
-    assert.match(html,/atlas-map-20261102.js/);
+    assert.match(html,/\/assets\/atlas\/atlas-[a-f0-9]{12}\.js/);
     assert.match(html,/mapDensityDefs/);
     assert.match(await readFile(join(root,'public/sitemap.xml'),'utf8'),/https:\/\/xsonomy.com\/landscape\//);
     const eventData=JSON.parse(await readFile(join(root,'public/data/landscape-events.json'),'utf8'));

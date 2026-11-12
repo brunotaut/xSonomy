@@ -1,3 +1,4 @@
+import {isNamedInvestor} from '../../src/assets/atlas/investor-presentation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -6,7 +7,7 @@ import {buildLandscape} from '../lib/landscape.mjs';
 import {fixture} from './landscape-fixture.mjs';
 const source=readFileSync(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8');
 const helpers=source.slice(source.indexOf('function companyInvestments('),source.indexOf('function companyProducts('));
-function context(extra={}){return vm.createContext({esc:s=>String(s??'').replaceAll('<','&lt;').replaceAll('"','&quot;'),safeUrl:u=>/^https?:\/\//.test(u||'')?u:'',amt:m=>`${m.currency||''} ${m.amount}`,REL_LABEL:{portfolio_listed:'Listed in portfolio material',direct_investment:'Direct investment'},EVID_LABEL:{},titleise:s=>s,vStatus:'ok',D:{companies:[{id:'co'}]},...extra})}
+function context(extra={}){return vm.createContext({isNamedInvestor,esc:s=>String(s??'').replaceAll('<','&lt;').replaceAll('"','&quot;'),safeUrl:u=>/^https?:\/\//.test(u||'')?u:'',amt:m=>`${m.currency||''} ${m.amount}`,REL_LABEL:{portfolio_listed:'Listed in portfolio material',direct_investment:'Direct investment'},EVID_LABEL:{},titleise:s=>s,vStatus:'ok',D:{companies:[{id:'co'}]},...extra})}
 test('investments match stable company IDs and keep round totals apart from investor contributions',()=>{
   const c=context({V:{investors:[{name:'Fund',slug:'fund',portfolio:[{companyId:'co',name:'Company',round:'Seed',roundTotal:{currency:'EUR',amount:5000000},investorContribution:{currency:'EUR',amount:1000000},relationshipType:'direct_investment',investmentDate:'2025-01-01',source:'https://example.com/deal'}]},{name:'Wrong fund',slug:'wrong',portfolio:[{companyId:'other',name:'Company',round:'Series A'}]}]}});
   vm.runInContext(helpers,c);

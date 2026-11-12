@@ -1913,3 +1913,14 @@ Source checkpoint `90fa507ca9591150198c2e58214530a726bd88aa` imported 38 approve
 
 ## Funding reconciliation 36 — 2026-11-12
 Research source commit 45ecb5186de1e8e354c584f93639c22266d0503d in brunotaut/xsonomy-news: 24 identities reviewed, 38 financing events and 102 participant links imported after production rollback rehearsal, atomic import and idempotency verification. Rebuild the existing catalogue and investor directory from approved records.
+
+
+### 2026-11-12 — public launch presentation cleanup
+
+Nazar authorised the full launch-readiness cleanup and publication. The investor export now counts named identities only: generic descriptions such as “11 undisclosed accredited investors” stay attached to sourced financing events, with amounts and roles preserved, rather than becoming standalone profiles. The directory heading now covers investors and funding organisations, including international participants. List cards display available financial figures and company/fund links without repeating missing fields; detail records retain evidence and caveats. Enum-style investor types are formatted for readers.
+
+The atlas now has a collapsible coverage explanation, counts calculated from the current export, and correction links (GitHub issue draft, with LinkedIn as an alternative contact). All three landscape pages have complete Open Graph / Twitter metadata pointing to a 1200×630 PNG based on the existing Natural Earth outline. The preview uses no changing catalogue totals. Mobile status lines wrap, detail sheets respect safe areas, and correction links have larger tap targets.
+
+The editable atlas/model sources were synchronised with the deployed city-map version before creating a new content-hashed entry; the versioning script now recognises dated map entry names. Existing cached assets remain available. No database writes or research conclusions changed.
+
+Validation: 108 Node tests pass, including a complete generator build against a read-only API fixture, anonymous-participant preservation, financial-card rendering and social-image metadata. Browser checks of the existing responsive layout at 449 CSS pixels verified filter opening, Counter-UAS selection (252 matches) and list switching without horizontal document overflow. Final updated-site checks follow deployment. Physical-device testing is not claimed.

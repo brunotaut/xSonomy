@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {defaults,normalize,readState,filterHubs,hubLocations,hubTypeOf,hubFocusOf,hubKindLabel,isTestOrResearchLocality,isSiteRecord,validateHubs,titleise,NOT_ESTABLISHED} from '../../src/assets/atlas/model-56c96e9c93bf.js';
+import {defaults,normalize,readState,filterHubs,hubLocations,hubTypeOf,hubFocusOf,hubKindLabel,isTestOrResearchLocality,isSiteRecord,validateHubs,titleise,NOT_ESTABLISHED} from '../../src/assets/atlas/model-d604d20bbab0.js';
 // Shaped exactly like /data/landscape-hubs.json so the atlas is tested against the export
 // it actually consumes, including the five relationship cases the import had to separate.
 const loc=(locality,country,kind='published_campus_or_test_locality')=>({locality,country,latitude:50,longitude:10,kind,precision:'approximate_locality_centroid',coordinateBasis:'Manually selected approximate place centroid; not an operator-provided coordinate or a facility boundary.'});
@@ -189,7 +189,7 @@ test('the hub panel links from the resolved fields and does not re-derive the ru
 });
 
 test('no Ukrainian UI label and no demo record survives in the model',async()=>{
- const model=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/model-56c96e9c93bf.js',import.meta.url),'utf8'));
+ const model=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/model-d604d20bbab0.js',import.meta.url),'utf8'));
  const app=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../src/assets/atlas/atlas.js',import.meta.url),'utf8'));
  for(const [name,text] of [['model.js',model],['atlas.js',app]]){
   assert.equal(/[Ѐ-ӿ]/.test(text),false,`${name} must carry no Cyrillic UI text`);
