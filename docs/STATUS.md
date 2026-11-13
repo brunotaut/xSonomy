@@ -2079,3 +2079,12 @@ Publish verified xsonomy-news source commit b03e0d268ab8172a3b2de7175040bdddce72
 Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Curated-profile hash preserved. Kpler primary proceeds were separated from secondary sales; Kraken namesakes, Kongsberg subsidiaries, Kubota Credit USA and WESCAM were not assigned other issuers' funding. Grant award dates, implementation periods, facility capacities and actual draws remain distinct. No schedule, geography, classification or publication-gate changes.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-fourth.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
+
+
+## Investment research publication — 2026-11-13 (fifty-fifth run)
+
+Publish verified source commit 5030199487bc751be7153ef19d5d8a0f90fd4082, manifest funding-landscape-20261113-fifty-fifth. Researched24 cohort identities; six bounded reviews completed,18 remain partial. Added62 approved events,72 sourced participations,68 event sources,40 investor profiles and4 generic links. Production3312events/3299approved,4259participations,2579profiles,878event-covered companies,389generic associations.
+
+Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, idempotency and curated-profile preservation passed. Primary/secondary proceeds, exact issuer, conditional commitments, actual draws and undrawn capacity remain distinct. No schedules, geography, classification or publication gates changed.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-fifth.json . Verify both live JSON datasets. Wider-cohort events are not claimed as European map events.
