@@ -2097,3 +2097,12 @@ Publish verified source commit 83d602e5bd92e18a689c43757ea960c6f2e375c1, manifes
 Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, idempotency and curated-profile preservation passed. Possible Living Optics duplicate rounds, exact issuer conflicts, ESA support instrument, actual draws, net/gross proceeds and IPO secondary sales remain distinct. No schedules, geography, classification or publication gates changed.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-sixth.json . Verify both live JSON datasets. Wider-cohort events are not claimed as European map events.
+
+
+## Investment research publication — 2026-11-13 (fifty-seventh run)
+
+Publish verified source commit 802d8913eed6c386b4e3dccd27dfbe2da582c616, manifest funding-landscape-20261113-fifty-seventh. Researched 24 cohort identities; eight bounded reviews completed, 16 remain partial. Added 29 approved events, 55 sourced participations, 35 event sources, 35 investor profiles and 15 generic associations. Production: 3,382 events / 3,369 approved, 4,384 participations, 2,654 profiles, 900 event-covered companies and 417 generic associations.
+
+Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, extension parent, idempotency and curated-profile preservation passed. Manna's six canonical events were not duplicated. Mach Series C extension, MagLev actual sales, conditional Afcon subsidiary MOU, parent securities, secondary sales, orders and acquisition consideration remain distinct. No schedules, geography, classification or publication gates changed.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-seventh.json . Verify both live JSON datasets and generic entry identities/source URLs. Wider-cohort events are not claimed as European map events.
