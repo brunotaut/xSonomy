@@ -2034,3 +2034,12 @@ Publish source-audited import `funding-landscape-20261113-forty-ninth` from xson
 Current importer validated with PostgreSQL rollback/atomicity/idempotency/conflict/source-constraint tests. Production rollback baseline restored, atomic import passed, post-import idempotency and exact fact/role/source audit passed; existing curated-profile hash unchanged. Vertex Venture Capital reconciled to existing Vertex Ventures Israel. Public grant allocations remain distinct from paid cash; acquisition prices, procurement, valuations and unverified histories excluded.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-forty-ninth.json . Existing build only; no schedule changes.
+
+
+## Investment research publication — 2026-11-13 (fiftieth run)
+
+Publish verified source commit 280c14f58d28550de2b34931e68f4c62f97c9950 from xsonomy-news, manifest funding-landscape-20261113-fiftieth:23events,23sourced participations,28event sources,20new investor profiles and10generic ownership/support links across24researched identities. Five bounded reviews completed,19historiespartial. DB3109events/3096approved,4081participations,2468profiles,823event-covered identities,350genericassociations.
+
+Current importer/schema fixtures checked; PostgreSQL rollback/atomicity/idempotency/conflict/source-FK tests, production rollback baseline, atomic commit, exactfact/role/sourceaudit andpost-importidempotency passed. Curated-profilehash unchanged. Exactprimaryissuer and originalcurrencies preserved; acquisitionconsideration/contracts/consortiumtotals andunsupported historiesheld. No repositoryschedule orpublicationgate changes.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fiftieth.json . Existing build only; verify live landscape and investor datasets after deployment. Wider-cohort events are not asserted to appear on European map.
