@@ -2061,3 +2061,12 @@ Publish verified xsonomy-news source commit a1540acf65fac181c505baa703d1196c6aa6
 Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Existing curated-profile hash preserved. Kara Dag alias events not duplicated. Facility limits, bond principal, gross/net proceeds and pending allotments remain distinct. No schedule, geography, classification or publication-gate changes.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-second.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
+
+
+## Investment research publication — 2026-11-13 (fifty-third run)
+
+Publish verified xsonomy-news source commit 2ffc3134a9310be7be56d6deef2f1c322fe4c40c, manifest funding-landscape-20261113-fifty-third. Added 18 events, 19 sourced participations, 24 event sources, 11 investor profiles and ten generic ownership/support links across 24 researched cohort identities. Eight bounded reviews completed; 16 histories remain partial. Production: 3,173 events / 3,160 approved, 4,147 participations, 2,514 profiles, 849 event-covered companies and 377 generic associations.
+
+Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Existing curated-profile hash preserved. Kinetica and Kite identities reconciled; parent, subsidiary and joint-borrower sums were not misassigned. Kinnami instrument remains undisclosed; own Klein PPP allocation and Kodiak's named Ares contribution verified. No schedule, geography, classification or publication-gate changes.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-third.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
