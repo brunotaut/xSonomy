@@ -2070,3 +2070,12 @@ Publish verified xsonomy-news source commit 2ffc3134a9310be7be56d6deef2f1c322fe4
 Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Existing curated-profile hash preserved. Kinetica and Kite identities reconciled; parent, subsidiary and joint-borrower sums were not misassigned. Kinnami instrument remains undisclosed; own Klein PPP allocation and Kodiak's named Ares contribution verified. No schedule, geography, classification or publication-gate changes.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-third.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
+
+
+## Investment research publication — 2026-11-13 (fifty-fourth run)
+
+Publish verified xsonomy-news source commit b03e0d268ab8172a3b2de7175040bdddce7248e2, manifest funding-landscape-20261113-fifty-fourth. Researched 24 new cohort identities plus a priority follow-up of published Liebherr Aerospace. Added 77 approved events, 40 sourced participations, 98 event sources, 25 investor profiles and eight new generic links; one existing SmartCap link preserved. Seven bounded reviews completed. Production: 3,250 events / 3,237 approved, 4,187 participations, 2,539 profiles, 862 event-covered companies and 385 generic associations.
+
+Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Curated-profile hash preserved. Kpler primary proceeds were separated from secondary sales; Kraken namesakes, Kongsberg subsidiaries, Kubota Credit USA and WESCAM were not assigned other issuers' funding. Grant award dates, implementation periods, facility capacities and actual draws remain distinct. No schedule, geography, classification or publication-gate changes.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-fourth.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
