@@ -2106,3 +2106,10 @@ Publish verified source commit 802d8913eed6c386b4e3dccd27dfbe2da582c616, manifes
 Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, extension parent, idempotency and curated-profile preservation passed. Manna's six canonical events were not duplicated. Mach Series C extension, MagLev actual sales, conditional Afcon subsidiary MOU, parent securities, secondary sales, orders and acquisition consideration remain distinct. No schedules, geography, classification or publication gates changed.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-seventh.json . Verify both live JSON datasets and generic entry identities/source URLs. Wider-cohort events are not claimed as European map events.
+
+
+## 2026-11-13 — funding research run58 publication
+
+Source checkpoint: brunotaut/xsonomy-news@02e7e4df545fcaebb5c72fa39574878cc71d39a6. Source-audited 24 further cohort identities; atomic importer added 22 approved events, 21 sourced participations, 28 event-source rows, 10 investor profiles and 4 generic owner/parent portfolio associations. Eleven bounded public-source reviews and thirteen partial histories were recorded, without zero-funding inference.
+
+Unchanged tested importer passed local PostgreSQL rollback, repeat/idempotency, conflict and source-FK checks, production rollback rehearsal, exact event/role/source/contribution and same-company extension-parent audits. Existing curated profile hash preserved. Amounts distinguish net equity proceeds, facility capacity, actual cash closes, converted debt and recipient-specific grants. Unresolved claims remain in [source audit](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-eighth.json). All24 targets remain outside European map; existing geography, classification, company gates and schedules unchanged. This documentation-only commit triggers the existing push build; live verification is recorded in the writer audit.
