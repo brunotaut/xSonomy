@@ -2052,3 +2052,12 @@ Publish source-audited xsonomy-news commit 7a5d3e1065b84e3f65b9b89a6aaff33911243
 Current importer/schema confirmed. PostgreSQL tests, production rollbackbaseline, atomicimport, exactfact/role/source/contribution audit and post-importidempotency passed. Existingcuratedprofilehash unchanged. ConditionalToyota/ATM/JVcash, parentborrowings, procurement andconsortiumtotals excluded. All24targets outsideEuropeanlandscape; no gate/geography/schedulechanges.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-first.json . Existing build only; live JSON verification follows.
+
+
+## Investment research publication — 2026-11-13 (fifty-second run)
+
+Publish verified xsonomy-news source commit a1540acf65fac181c505baa703d1196c6aa6da0e, manifest funding-landscape-20261113-fifty-second. Added 28 events, 20 sourced participations, 35 event sources, 14 investor profiles and nine generic ownership/support links across 24 researched identities. Four bounded reviews completed; 20 histories remain partial. Production: 3,155 events / 3,142 approved, 4,128 participations, 2,503 profiles, 843 event-covered companies and 367 generic associations.
+
+Current importer/schema checks, meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit and idempotency passed. Existing curated-profile hash preserved. Kara Dag alias events not duplicated. Facility limits, bond principal, gross/net proceeds and pending allotments remain distinct. No schedule, geography, classification or publication-gate changes.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-second.json . Use the existing build and verify both live JSON datasets. Wider-cohort events are not asserted to appear on the European map.
