@@ -2043,3 +2043,12 @@ Publish verified source commit 280c14f58d28550de2b34931e68f4c62f97c9950 from xso
 Current importer/schema fixtures checked; PostgreSQL rollback/atomicity/idempotency/conflict/source-FK tests, production rollback baseline, atomic commit, exactfact/role/sourceaudit andpost-importidempotency passed. Curated-profilehash unchanged. Exactprimaryissuer and originalcurrencies preserved; acquisitionconsideration/contracts/consortiumtotals andunsupported historiesheld. No repositoryschedule orpublicationgate changes.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fiftieth.json . Existing build only; verify live landscape and investor datasets after deployment. Wider-cohort events are not asserted to appear on European map.
+
+
+## Investment research publication — 2026-11-13 (fifty-first run)
+
+Publish source-audited xsonomy-news commit 7a5d3e1065b84e3f65b9b89a6aaff33911243828, manifest funding-landscape-20261113-fifty-first. Added18events,27source-backed participations,20event sources,21investor profiles and8genericownership/backing links across24researched identities. Sixbounded reviews completed;18historiespartial. DB3127events/3114approved,4108participations,2489profiles,830event-covered identities,358genericassociations. IWI/iXblue aliases reconciled without duplicatefinancing; oldRostecsources unavailable, held.
+
+Current importer/schema confirmed. PostgreSQL tests, production rollbackbaseline, atomicimport, exactfact/role/source/contribution audit and post-importidempotency passed. Existingcuratedprofilehash unchanged. ConditionalToyota/ATM/JVcash, parentborrowings, procurement andconsortiumtotals excluded. All24targets outsideEuropeanlandscape; no gate/geography/schedulechanges.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-first.json . Existing build only; live JSON verification follows.
