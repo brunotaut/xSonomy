@@ -2025,3 +2025,12 @@ Imported 56 approved financing records and 51 source-linked investor participati
 ### Funding source audit — 12 November 2026, reconciliation 47
 
 Imported37 approved financing records and100 source-linked investor participations across24 identity reviews;36 named investor profiles and5 generic relationships. Production rollback, atomic import, idempotency and exactfact/source audits passed. Primary proceeds separated from secondary sales, fund-manager aliases reconciled, subsidiary/parent and programme-budget overlap excluded. Source checkpoint: https://github.com/brunotaut/xsonomy-news/commit/7fdef27e50e3720f38858974bc1ef66c2921be63. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-12-funding-landscape-forty-seventh.json . Existing build trigger only; schedules and membership unchanged.
+
+
+## Funding enrichment — 2026-11-13 (recovered forty-eighth preparation)
+
+Publish source-audited import `funding-landscape-20261113-forty-ninth` from xsonomy-news commit 4f82b1b0f8ef8ea82dbdc572beaff3ed3d8da7b2. Added24 financing events,47 sourced participations,34 event sources,37 investor profiles and16 generic ownership/support associations across24 reviewed wider-cohort identities. Current production:3086 events/3073 approved,4058 participations,2448 investor profiles,815 event-covered identities,340 generic associations. Five bounded public-source reviews completed;19 histories remain partial. All24 target identities are outside the European landscape; preserve geography and publication gates.
+
+Current importer validated with PostgreSQL rollback/atomicity/idempotency/conflict/source-constraint tests. Production rollback baseline restored, atomic import passed, post-import idempotency and exact fact/role/source audit passed; existing curated-profile hash unchanged. Vertex Venture Capital reconciled to existing Vertex Ventures Israel. Public grant allocations remain distinct from paid cash; acquisition prices, procurement, valuations and unverified histories excluded.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-forty-ninth.json . Existing build only; no schedule changes.
