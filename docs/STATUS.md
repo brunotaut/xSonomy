@@ -2088,3 +2088,12 @@ Publish verified source commit 5030199487bc751be7153ef19d5d8a0f90fd4082, manifes
 Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, idempotency and curated-profile preservation passed. Primary/secondary proceeds, exact issuer, conditional commitments, actual draws and undrawn capacity remain distinct. No schedules, geography, classification or publication gates changed.
 
 Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-fifth.json . Verify both live JSON datasets. Wider-cohort events are not claimed as European map events.
+
+
+## Investment research publication — 2026-11-13 (fifty-sixth run)
+
+Publish verified source commit 83d602e5bd92e18a689c43757ea960c6f2e375c1, manifest funding-landscape-20261113-fifty-sixth. Researched 24 cohort identities; six bounded reviews completed, 18 remain partial. Added 41 approved events, 70 sourced participations, 48 event sources, 40 investor profiles and 13 generic associations. Production: 3,353 events / 3,340 approved, 4,329 participations, 2,619 profiles, 889 event-covered companies and 402 generic associations.
+
+Current importer/schema and meaningful PostgreSQL tests, production rollback baseline, atomic import, exact fact/role/source/contribution audit, idempotency and curated-profile preservation passed. Possible Living Optics duplicate rounds, exact issuer conflicts, ESA support instrument, actual draws, net/gross proceeds and IPO secondary sales remain distinct. No schedules, geography, classification or publication gates changed.
+
+Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-fifty-sixth.json . Verify both live JSON datasets. Wider-cohort events are not claimed as European map events.
