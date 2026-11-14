@@ -2233,3 +2233,8 @@ Source commit f795a19f0abdc29056c8fdb6403ca1f0ce90171f in brunotaut/xsonomy-news
 ## Funding data refresh — 14 November 2026, eightieth continuation
 
 Source commit 98fb9812c766f4da4252fed3030ac4c3618a0e6c in brunotaut/xsonomy-news. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eightieth.json .24 identities checked;8 bounded reviews completed.33 supported events,35 participations,39 sources,16 new profiles and9 generic relationships imported after current PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency. Trigger existing build to refresh approved data. Scope gates, frontend and repository schedules unchanged.
+
+
+## Funding data refresh — 14 November 2026, eighty-first continuation
+
+Source commit 988b45af5a36b52f9b4ce012745c86a016441ce9 in brunotaut/xsonomy-news. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-first.json .24 identities checked;8 bounded reviews complete.18 supported events,25 participations,24 sources,16 new profiles and14 generic relationships imported with one reviewed Quantum Systems canonical co-lead identity correction. Expected-old guards, saved reversal, current PostgreSQL tests, combined production rollback, atomic import, exact source/fact audits and idempotency passed. Both legacy profiles preserved. Trigger existing build; company gates, frontend and schedules unchanged.
