@@ -2203,3 +2203,8 @@ Source writer commit: `e0cccfda12e4f105e23ad1438d5afe823879950b`. [Source audit]
 ### 2026-11-14 — Publish seventy-fourth audited funding reconciliation
 
 Source writer commit: `e6ecbe2a0afe68757f2aea627d24ceaa08a0a543`. [Source audit](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-seventy-fourth.json).24 reviewed identities,19 verified events,59 participations,25 sources,34 profiles and7 backing relationships. PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency passed. Rebuild existing catalogue using read-only Supabase access; company gates and curated records preserved. No frontend or schedule changes.
+
+
+### 2026-11-14 — Publish seventy-fifth audited funding reconciliation
+
+Source writer commit: `f11d8cc1fea8467a25ec074e9c3f1051007b043c`. [Source audit](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-seventy-fifth.json).24 checked identities,25 verified events,42 participations,33 sources,17 profiles and8 backing relationships. PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency passed. Rebuild existing catalogue using read-only Supabase access; company gates and curated records preserved. No frontend or schedule changes.
