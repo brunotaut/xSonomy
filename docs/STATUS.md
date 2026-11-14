@@ -2228,3 +2228,8 @@ Source commit d671c4176769fd00b0c2e28696597cae772494ac in brunotaut/xsonomy-news
 ## Funding data refresh — 14 November 2026, seventy-ninth continuation
 
 Source commit f795a19f0abdc29056c8fdb6403ca1f0ce90171f in brunotaut/xsonomy-news. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-seventy-ninth.json .24 identities checked;8 bounded reviews complete.13 supported events,41 participations,15 sources,22 new profiles and6 generic relationships imported after current PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency. Trigger existing build to refresh approved data. Company scope gates, frontend and repository schedules unchanged.
+
+
+## Funding data refresh — 14 November 2026, eightieth continuation
+
+Source commit 98fb9812c766f4da4252fed3030ac4c3618a0e6c in brunotaut/xsonomy-news. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eightieth.json .24 identities checked;8 bounded reviews completed.33 supported events,35 participations,39 sources,16 new profiles and9 generic relationships imported after current PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency. Trigger existing build to refresh approved data. Scope gates, frontend and repository schedules unchanged.
