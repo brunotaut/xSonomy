@@ -2266,3 +2266,8 @@ Source: brunotaut/xsonomy-news@3e895cd8f866f5ff41e5d65ee471852a80ee4e16. Tested 
 ### 2026-11-14 — recovered eighty-fifth verified funding publication
 
 Source: brunotaut/xsonomy-news@87b03746bcb87f3129b089938a201c03b09f022c. Recovered research checked against committed DB facts before one tested atomic import:32 approved financing disclosures,56 participations and7 ownership associations across24 researched identities. Trigger existing build; schedules and publication gates unchanged. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-fifth.json
+
+
+### 2026-11-14 — eighty-sixth verified funding publication
+
+Source: brunotaut/xsonomy-news@1a1c978c7b9377c11fe87d9ed3bdbea17f77394a. Tested atomic import adds28 approved source-audited financing disclosures,24 participations and4 ownership/portfolio associations across24 researched identities. Trigger existing build; schedules and publication gates unchanged. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-sixth.json
