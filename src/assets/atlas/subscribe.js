@@ -10,7 +10,7 @@ if(form){
   try{
    if(!pending||pending.email!==email||Date.now()-pending.started>540000){const started=Date.now(),response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(15000)}),c=await response.json();if(!response.ok||c.difficulty!==16||c.consentVersion!==version)throw Error('Subscriptions are temporarily unavailable. Please try again later.');const solution=await solve(c.token,c.difficulty);await pause(Math.max(0,1700-(Date.now()-started)));pending={email,started,token:c.token,solution}}
    status.textContent='Subscribing…';const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,consent:true,consentVersion:version,contactWebsite:form.elements.contactWebsite.value,token:pending.token,solution:pending.solution}),signal:AbortSignal.timeout(20000)}),result=await response.json();if(!response.ok||!result.ok){if(result.retryChallenge)pending=null;throw Error(result.error||'Could not confirm your subscription. Please try again.')}
-   form.hidden=true;status.textContent='You’re subscribed. Thank you for following xSonomy.';status.tabIndex=-1;status.focus();pending=null;
+   form.hidden=true;status.textContent='You’re subscribed. Thank you!';status.tabIndex=-1;status.focus();pending=null;
   }catch(error){status.classList.add('subscription-error');status.textContent=['TimeoutError','TypeError'].includes(error.name)?'Could not confirm your subscription. Please try again.':error.message}
   finally{busy=false;button.disabled=false;form.elements.email.readOnly=false}
  });

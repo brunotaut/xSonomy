@@ -23,6 +23,14 @@ _Last updated: 2026-09-05 (initial, from repo inspection; verify in session 1)_
 
 ## Session notes
 
+### 2026-11-14 — Compact signup below content and full-workspace company/investor details
+
+Moved the subscription form from above navigation to immediately below the map workspace; Events and Insights now place the same form below their main content. The consent sentence omits xSonomy and sits inline to the right of Subscribe together with Privacy & removal on wide screens. Privacy details expand upward without growing the row. Small screens wrap safely. Email-only signup, consent intent, endpoint and bot protection are unchanged.
+
+Selecting a company or investor now covers the entire map workspace with a readable scrollable detail view, including a sticky Back control. The covered map is inert and hidden from assistive technology. Back restores the previous map/list, filters, camera, list scroll and a visible keyboard focus target; linked company/investor history still steps back to the originating detail. Escape and browser history continue to close the detail view. Hub/locality behaviour is unchanged. Versioned atlas JS and CSS avoid stale-client mismatches.
+
+Validation: all 120 tests pass, including company/investor Back state/scroll/focus restoration, skipping hidden duplicate list buttons, covered-map accessibility, and linked detail navigation.
+
 ### 2026-11-12 — One unified EUR investment view
 
 Removed the investment currency selector, currency shortcuts and per-currency chart cohorts. All six charts, recent-round cards, totals and company rankings now aggregate EUR equivalents across qualifying currencies; old `currency` URL parameters are ignored and removed. Original funding data is unchanged and remains visible in the expandable records table alongside EUR amount, exact conversion rate and reference date.
