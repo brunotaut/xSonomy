@@ -2193,3 +2193,8 @@ Source commit `1a04e9f8e5b492d4b9b444b0782f7dafee252c7f`: 24 identities audited 
 Source writer commit: `fd4b6009e82734b3fa4ae15321a05504a7954056`. Source audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-13-funding-landscape-seventy-second.json.
 
 24 reviewed identities;24 verified funding events,61 source-backed participations,38 event sources,19 profiles andone historical backing relationship. Current importer PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency passed. Existing company gates and curated records preserved. SandboxAQ final SeriesE is one exactUSD452m primary raise; secondary proceeds excluded. Rebuild existing catalogue from read-only Supabase access. No schedule or frontend changes.
+
+
+### 2026-11-14 — Publish seventy-third audited funding reconciliation
+
+Source writer commit: `e0cccfda12e4f105e23ad1438d5afe823879950b`. [Source audit](https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-seventy-third.json).24 reviewed identities,33 verified events,124 participations,40 sources,39 profiles and4 backing relationships. PostgreSQL tests, production rollback, atomic import, exact fact/role/source/contribution audit and idempotency passed. Rebuild existing catalogue using read-only Supabase access; company gates and curated records preserved. No frontend or schedule changes.
