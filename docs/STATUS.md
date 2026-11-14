@@ -2276,3 +2276,8 @@ Source: brunotaut/xsonomy-news@1a1c978c7b9377c11fe87d9ed3bdbea17f77394a. Tested 
 ## Verified funding refresh — 14 November 2026, run87
 
 Source commit: brunotaut/xsonomy-news@3f877ffde0153fe882575e6b8bc83f46bc549ca2. Reconciled 24 cohort identities and imported 38 source-audited financing disclosures, 61 participations, 50 source associations, 10 generic portfolio relationships and 32 investor profiles. Current importer tests, production rollback, atomic import, exact fact/role/source/contribution audit and replay passed; curated profiles and company metadata preserved. Rebuild the existing catalogue datasets under current geography and publication gates. No schedule changes. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-seventh.json
+
+
+## Verified funding refresh — 14 November 2026, run88
+
+Source commit: brunotaut/xsonomy-news@719d8f51d92ac294fd8fb11afe8f1f5f354fa32c. Reconciled24identities;41financing disclosures/100participations/50source associations and14new generic links plus50profiles. PostgreSQL tests, production rollbacks, exact audit and idempotence passed. Final UPS ownership addition used tested replay without duplicating events. Preserve current geography/publication gates and schedules. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-eighth.json
