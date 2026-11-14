@@ -2299,3 +2299,7 @@ Source `brunotaut/xsonomy-news@77e9467ad394074a4f914db6537a29b9b1fb1db5`:24 coho
 
 ### Funding evidence refresh92 — 2026-11-14
 Source `brunotaut/xsonomy-news@640f7449d0ca858d988f566b5876169f141c341f`:24cohort reviews,25approved events,34participations,30sources,9generic associations. Tested importer, production rollback, one atomic import, exact fact/role/source audit, idempotency and curated/legacy preservation passed. Rebuild with existing gates. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-ninety-second.json
+
+
+### Funding evidence refresh93 — 2026-11-14
+Source `brunotaut/xsonomy-news@8e470bc16f6190ef848f2de76cecfe478cdde7dd`:24cohort reviews,28approved events,62participations,34sources,5generic associations. Tested importer, production rollback, one atomic import, exact fact/role/source audit, idempotency and curated/legacy preservation passed. Rebuild with existing gates. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-ninety-third.json
