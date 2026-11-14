@@ -29,7 +29,7 @@ Moved the subscription form from above navigation to immediately below the map w
 
 Selecting a company or investor now covers the entire map workspace with a readable scrollable detail view, including a sticky Back control. The covered map is inert and hidden from assistive technology. Back restores the previous map/list, filters, camera, list scroll and a visible keyboard focus target; linked company/investor history still steps back to the originating detail. Escape and browser history continue to close the detail view. Hub/locality behaviour is unchanged. Versioned atlas JS and CSS avoid stale-client mismatches.
 
-Validation: all 120 tests pass, including company/investor Back state/scroll/focus restoration, skipping hidden duplicate list buttons, covered-map accessibility, and linked detail navigation.
+Validation: all 120 tests pass, including company/investor Back state/scroll/focus restoration, skipping hidden duplicate list buttons, covered-map accessibility, and linked detail navigation. Deployment `75a5b6d` / run43588599715 succeeded. Live browser QA confirmed the compact signup immediately below the workspace (63.4px tall at 1348 CSS pixels), consent and privacy on the right, company and investor details covering the full workspace width, linked company→investor→Back→map navigation, direct investor Back, map/list restoration, and Escape closure. At a 337px viewport both the full detail panel and privacy popover fit with no horizontal page or panel overflow. Screenshot: `docs/previews/landscape-full-company-detail-20261114.jpg`.
 
 ### 2026-11-12 — One unified EUR investment view
 
