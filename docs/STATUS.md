@@ -2243,3 +2243,8 @@ Source commit 988b45af5a36b52f9b4ce012745c86a016441ce9 in brunotaut/xsonomy-news
 ### 2026-11-14 — verified eighty-second funding data refresh
 
 Source: brunotaut/xsonomy-news@c3726950448c24651b9e257feb75bbe8caeb4265. Tested atomic import adds27 approved source-audited financing disclosures,24 participations and19 ownership/portfolio entries across24 reviewed cohort identities. Trigger existing publication build; schedules and landscape gates unchanged. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-second.json
+
+
+### 2026-11-14 — eighty-third verified funding publication
+
+Source: brunotaut/xsonomy-news@c209ad6bd835768b26edeeac67e35009951c7db3. Tested atomic import adds27 approved financing disclosures,23 source-linked participations and18 ownership/portfolio entries across24 researched identities. Trigger existing publication build; schedules and landscape gates unchanged. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-14-funding-landscape-eighty-third.json
