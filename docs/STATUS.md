@@ -2351,3 +2351,7 @@ Source `brunotaut/xsonomy-news@627d3230f0ad9ff7cdf58086ffdda23a7052c6ba`, report
 ### Funding source reconciliation — 2026-11-15, run104
 
 Source `brunotaut/xsonomy-news@61d3bd0d38219de38ef67681217e523080c23bb9`, report `research-agent/reports/2026-11-15-funding-landscape-one-hundred-fourth.json`. Verified production rollback and one atomic import:15 events,13 participants,25 event-source rows,2 generic links,9financial corrections and2agency-role corrections. Public dates, contract award values and signed financing commitments distinguished from paid cash. Exact guards, reversals, idempotence and prior-data hashes passed; previous Dornier retirement verified without retry. Existing geography/publication gates and schedules unchanged. This append triggers the existing read-only catalogue build.
+
+
+### 2026-11-15 — funding research run105 publication
+Source: brunotaut/xsonomy-news@6149ceb920141c9860fcc57848fdad2f0de11f4d. Verified 26 new funding/support disclosures, 22 participants, five historical portfolio relationships and guarded date/instrument/role corrections. Fresh importer tests, production rollback, one atomic import, exact facts, preservation hashes and idempotent rollback replay passed. Existing company publication gates retained. Audit: https://github.com/brunotaut/xsonomy-news/blob/6149ceb920141c9860fcc57848fdad2f0de11f4d/research-agent/reports/2026-11-15-funding-landscape-one-hundred-fifth.json . Rebuild existing read-only catalogue from Supabase.
