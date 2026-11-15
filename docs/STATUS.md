@@ -2379,3 +2379,7 @@ Source brunotaut/xsonomy-news@f04462e8786c218fc8cf36437c0c48c2f3282b3d. Eleven a
 
 ### 2026-11-15 — Funding source refresh 111
 Rebuild approved database facts from xsonomy-news source commit 73aa779079411c8b8baf625593b842542b9bacc8:26 disclosures,31 participant links,37 source links,9 profiles and8 guarded issuer/date/instrument corrections. Production rollback, atomic import, exact audits and preservation checks passed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-eleventh.json. Catalogue remains read-only to Supabase; company publication gates unchanged.
+
+
+### 2026-11-15 — Funding source refresh 112
+Rebuild approved database facts from xsonomy-news source commit 8b38c414476a6eda12807f170707e7e6cf26e1e1:41 disclosures,33 participant links,70 source links,7 profiles and38 guarded issuer/date/source-conflict corrections. PostgreSQL checks, production rollback, one atomic import, exact audits and preservation passed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-twelfth.json. Catalogue remains read-only to Supabase; company gates including draft HyImpulse unchanged.
