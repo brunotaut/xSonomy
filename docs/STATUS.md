@@ -2341,3 +2341,8 @@ Source: `brunotaut/xsonomy-news@bad802e7f7e05a0e41c405b86a5ffd9dbb7a965b` (`rese
 ### Funding source reconciliation — 2026-11-15, run102
 
 Source `brunotaut/xsonomy-news@939849f35db894e55df2a2e5e01775843c38b2f0`, report `research-agent/reports/2026-11-15-funding-landscape-one-hundred-second.json`. Tested production rollback and one atomic import:22 new approved events,16 participants,39 event-source rows,14 guarded corrections including2 exact CETC duplicate retirements. Exact canonical-issuer guards, reversals, fact/source audits and preservation hashes passed. Existing company geography/publication gates and schedules preserved. This append triggers the existing read-only catalogue build.
+
+
+### Funding source reconciliation — 2026-11-15, run103
+
+Source `brunotaut/xsonomy-news@627d3230f0ad9ff7cdf58086ffdda23a7052c6ba`, report `research-agent/reports/2026-11-15-funding-landscape-one-hundred-third.json`. Verified production rollback and one atomic import:12 events,6 participants,23 event-source rows,3 generic ownership links,12 financial corrections,one participant-role correction andtwo guarded generic retirements. Misassigned DornierSeawings facts retired from the distinct DornierGroup identity; all history preserved. Existing geography/publication gates and schedules unchanged. This append triggers the existing read-only catalogue build.
