@@ -2375,3 +2375,7 @@ Source brunotaut/xsonomy-news@bb6e4ce20b5ae28b82aec70299e314f212c4866f. Six appr
 
 ### 2026-11-15 — funding research run110
 Source brunotaut/xsonomy-news@f04462e8786c218fc8cf36437c0c48c2f3282b3d. Eleven approved financing/research disclosures, four source-linked participants and fifteen sources; old financial rows/profiles/relationships preserved. Public dates, cash vs face principal and exact-round vs aggregate histories reconciled. Fresh PostgreSQL tests, production rollback, one atomic import, exact/preservation audits and idempotent replay passed. Rebuild existing read-only catalogue with publication gates retained. Audit https://github.com/brunotaut/xsonomy-news/blob/f04462e8786c218fc8cf36437c0c48c2f3282b3d/research-agent/reports/2026-11-15-funding-landscape-one-hundred-tenth.json .
+
+
+### 2026-11-15 — Funding source refresh 111
+Rebuild approved database facts from xsonomy-news source commit 73aa779079411c8b8baf625593b842542b9bacc8:26 disclosures,31 participant links,37 source links,9 profiles and8 guarded issuer/date/instrument corrections. Production rollback, atomic import, exact audits and preservation checks passed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-eleventh.json. Catalogue remains read-only to Supabase; company publication gates unchanged.
