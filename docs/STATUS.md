@@ -2387,3 +2387,7 @@ Rebuild approved database facts from xsonomy-news source commit 8b38c414476a6eda
 
 ### 2026-11-15 — Funding source refresh113
 Source 22405fe6c1a88a1c1b1b856c157be686ef457936:37 audited disclosures,27 participation links,43 sources,3 portfolios,4 profiles and10 guarded corrections. Rollback/import/preservation checks passed. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-thirteenth.json. Catalogue read-only to Supabase; company gates unchanged.
+
+
+### 2026-11-15 — Funding source refresh114
+Source b2a53bd597f1511d79e98f818513ba7d2bbbb712:26 disclosures,22 participation links,45 event sources,7 portfolios,6 profiles and6 guarded corrections. Rollback/import/preservation checks passed. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-fourteenth.json. Catalogue read-only to Supabase; company gates unchanged.
