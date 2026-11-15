@@ -2391,3 +2391,7 @@ Source 22405fe6c1a88a1c1b1b856c157be686ef457936:37 audited disclosures,27 partic
 
 ### 2026-11-15 — Funding source refresh114
 Source b2a53bd597f1511d79e98f818513ba7d2bbbb712:26 disclosures,22 participation links,45 event sources,7 portfolios,6 profiles and6 guarded corrections. Rollback/import/preservation checks passed. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-fourteenth.json. Catalogue read-only to Supabase; company gates unchanged.
+
+
+### 2026-11-15 — Funding research group115 publication
+Rebuild the existing publication from audited funding source commit addf18b626bc192a958f9a4f3767a930f74a8af9. Audit: https://github.com/brunotaut/xsonomy-news/blob/addf18b626bc192a958f9a4f3767a930f74a8af9/research-agent/reports/2026-11-15-funding-landscape-one-hundred-fifteenth.json. 24 additional disclosures,25 participation links,40 event sources,1 portfolio relationship and5 guarded reconciliations imported atomically after production rollback and preservation tests. Preserve geography, company gates and curated records; no workflow or schedule changes.
