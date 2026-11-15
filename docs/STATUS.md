@@ -2359,3 +2359,7 @@ Source: brunotaut/xsonomy-news@6149ceb920141c9860fcc57848fdad2f0de11f4d. Verifie
 
 ### 2026-11-15 — funding research run106
 Source brunotaut/xsonomy-news@849f9fc3634a106b362bdfb7a2ce4cb86f16e9d4. Nine approved funding/support disclosures, three source-linked participants, one historical portfolio relationship and ten guarded chronology/amount-basis corrections. Importer tests, production rollback, one atomic import, exact audits and preservation hashes passed. Rebuild existing read-only catalogue with company publication gates retained. Audit https://github.com/brunotaut/xsonomy-news/blob/849f9fc3634a106b362bdfb7a2ce4cb86f16e9d4/research-agent/reports/2026-11-15-funding-landscape-one-hundred-sixth.json .
+
+
+### 2026-11-15 — funding research run107
+Source brunotaut/xsonomy-news@5e9ac0d1fd18f13dad2a1bde2ba7b5911c40d899. Seven approved funding/support/capacity disclosures, sixteen cited participants, three historical ownership relationships and four guarded date/amount-basis corrections. PostgreSQL tests, production rollback, one atomic import, exact facts, preservation hashes and idempotent rollback replay passed. Rebuild existing read-only catalogue, preserving company gates. Audit https://github.com/brunotaut/xsonomy-news/blob/5e9ac0d1fd18f13dad2a1bde2ba7b5911c40d899/research-agent/reports/2026-11-15-funding-landscape-one-hundred-seventh.json .
