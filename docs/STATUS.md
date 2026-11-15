@@ -2319,3 +2319,7 @@ Source checkpoint: brunotaut/xsonomy-news@d30ce163db1862b725e488b27bf7e4f5e78853
 
 ### 2026-11-15 funding reconciliation ninety-seventh
 Source brunotaut/xsonomy-news@8561baa0245aede5fb97e507d23be50764987b21. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-ninety-seventh.json. Checked24 identities;12 bounded closures/12 source holds. Tested production rollback and one atomic import:18events/18participations/25sources/8generic associations. R&Dcontracts, grantallocations, issuer treasuryresale and actual loanproceeds explicitly distinguished. Allpreviousfinancialfacts/curatedprofiles andpublicationgates preserved; prepared Archerdatecorrection notapplied. Rebuild existingexports forliveverification. No schedule changes.
+
+
+### 2026-11-15 funding reconciliation ninety-eighth
+Source brunotaut/xsonomy-news@25e4618bd9155ed268fcbd853eb9021513568ba9. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-ninety-eighth.json. Checked24nextqueueidentities+Archerpreparedcheck. Onecombinedtestedatomicimport added28events/23participations/36sources/7genericlinks andguardedArcherdatecorrection. Fullrowguard/reversal/latefailure, productionrollback, preservationhashes, exactfacts/roles/sources andidempotencereplay passed. Financingcapacities/receipts, originalcurrencies, grantallocations/approvals andissuerboundaries explicit. Fournewconflictspreparedfornextreconciliation. Existingpublicationgates/schedules unchanged; rebuildexports forlivecheck.
