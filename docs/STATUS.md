@@ -2336,3 +2336,8 @@ Source brunotaut/xsonomy-news@020bd4abdf3dfec3af313c7425de722124d3ff0e. Audit ht
 ### Funding source reconciliation — 2026-11-15, run 101
 
 Source: `brunotaut/xsonomy-news@bad802e7f7e05a0e41c405b86a5ffd9dbb7a965b` (`research-agent/reports/2026-11-15-funding-landscape-one-hundred-first.json`). One production rollback rehearsal and one atomic import verified 37 approved financing/contract disclosures, 26 participants, 56 event-source records, plus three guarded Carnegie Robotics event and three agency-role corrections. Prior curated data and company publication/geography gates preserved. This status append triggers the existing read-only catalogue build; no schedule or frontend changes.
+
+
+### Funding source reconciliation — 2026-11-15, run102
+
+Source `brunotaut/xsonomy-news@939849f35db894e55df2a2e5e01775843c38b2f0`, report `research-agent/reports/2026-11-15-funding-landscape-one-hundred-second.json`. Tested production rollback and one atomic import:22 new approved events,16 participants,39 event-source rows,14 guarded corrections including2 exact CETC duplicate retirements. Exact canonical-issuer guards, reversals, fact/source audits and preservation hashes passed. Existing company geography/publication gates and schedules preserved. This append triggers the existing read-only catalogue build.
