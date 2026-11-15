@@ -2331,3 +2331,8 @@ Source brunotaut/xsonomy-news@f4bee43aed86f2af76fde7a5bb5749e612354418. Audit ht
 
 ### 2026-11-15 funding reconciliation one-hundredth
 Source brunotaut/xsonomy-news@020bd4abdf3dfec3af313c7425de722124d3ff0e. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundredth.json. One tested combined atomic import:33 events,24 participations,45 evidence rows,6 generic relationships and4 reviewed corrections. Original SEC public dates replace Birdstop first-sale dates; UKRI own Cambridge allocations reconciled to exact supported precision. Guard/reversal/late-conflict tests, production rollback, exact audits, preservation hashes and idempotent replay passed. Existing metadata, curated records, geography/publication gates and schedules unchanged. Rebuild existing exports for live verification.
+
+
+### Funding source reconciliation — 2026-11-15, run 101
+
+Source: `brunotaut/xsonomy-news@bad802e7f7e05a0e41c405b86a5ffd9dbb7a965b` (`research-agent/reports/2026-11-15-funding-landscape-one-hundred-first.json`). One production rollback rehearsal and one atomic import verified 37 approved financing/contract disclosures, 26 participants, 56 event-source records, plus three guarded Carnegie Robotics event and three agency-role corrections. Prior curated data and company publication/geography gates preserved. This status append triggers the existing read-only catalogue build; no schedule or frontend changes.
