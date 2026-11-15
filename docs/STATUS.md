@@ -2311,3 +2311,7 @@ Source `brunotaut/xsonomy-news@d1ecf26c08dcd519e22df93c36db3fd462805814`:31cohor
 
 ### Funding evidence refresh95 — 2026-11-15
 Source `brunotaut/xsonomy-news@4f557d3ddacf15ab45de6b9acb04af00bd808b4e`:24partial-source reviews,15boundedclosures,12new approvedevents,13participations,22sources,8generic associations. Testedimporter/productionrollback/oneatomicimport/exactaudit/idempotency/preservationpassed. Rebuild with existinggates. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-ninety-fifth.json
+
+
+### 2026-11-15 funding reconciliation ninety-sixth
+Source checkpoint: brunotaut/xsonomy-news@d30ce163db1862b725e488b27bf7e4f5e78853dc. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-ninety-sixth.json. Checked24 identities;16 bounded closures/8 source holds. One tested atomic import added2 events,2 participations,6 evidence rows and11 generic relationships; guarded reviewed corrections cover8 event rows and one coverage row, including retirement of two wrong-issuer AMAX PPP records while preserving sources/links. Production rollback, exact fact/role/source checks, guarded reversal tests and idempotence passed. Curated profiles, metadata, publication gates and schedules preserved. Rebuild existing data exports; verify both fresh datasets and live landscape.
