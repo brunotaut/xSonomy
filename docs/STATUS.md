@@ -2399,3 +2399,7 @@ Rebuild the existing publication from audited funding source commit addf18b626bc
 
 ### 2026-11-15 — Funding research group116 publication
 Rebuild existing publication from audited funding source commit 96b1c2be3cb4648898cb81ef13f7bd9f37a54f53. Audit: https://github.com/brunotaut/xsonomy-news/blob/96b1c2be3cb4648898cb81ef13f7bd9f37a54f53/research-agent/reports/2026-11-15-funding-landscape-one-hundred-sixteenth.json.29 disclosures,16 participation links,50 event sources,16 guarded event corrections and one guarded investor contribution correction imported after production rollback and exact preservation audits. Preserve company geography/gates and curated records; no workflow or schedule changes.
+
+
+### 2026-11-15 — Funding research group117 publication
+Rebuild existing catalogue from audited funding source commit 881ccb774b23d3ada4dca8434da45b7782f43242. Audit: https://github.com/brunotaut/xsonomy-news/blob/881ccb774b23d3ada4dca8434da45b7782f43242/research-agent/reports/2026-11-15-funding-landscape-one-hundred-seventeenth.json.21 disclosures,16 participation links,33 event sources,1 portfolio and20 guarded reconciliations imported after production rollback and exact preservation tests. Preserve company geography/gates and curated records; no workflow or schedule changes.
