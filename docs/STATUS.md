@@ -2383,3 +2383,7 @@ Rebuild approved database facts from xsonomy-news source commit 73aa779079411c8b
 
 ### 2026-11-15 — Funding source refresh 112
 Rebuild approved database facts from xsonomy-news source commit 8b38c414476a6eda12807f170707e7e6cf26e1e1:41 disclosures,33 participant links,70 source links,7 profiles and38 guarded issuer/date/source-conflict corrections. PostgreSQL checks, production rollback, one atomic import, exact audits and preservation passed. Audit: https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-twelfth.json. Catalogue remains read-only to Supabase; company gates including draft HyImpulse unchanged.
+
+
+### 2026-11-15 — Funding source refresh113
+Source 22405fe6c1a88a1c1b1b856c157be686ef457936:37 audited disclosures,27 participation links,43 sources,3 portfolios,4 profiles and10 guarded corrections. Rollback/import/preservation checks passed. Audit https://github.com/brunotaut/xsonomy-news/blob/main/research-agent/reports/2026-11-15-funding-landscape-one-hundred-thirteenth.json. Catalogue read-only to Supabase; company gates unchanged.
