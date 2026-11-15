@@ -2395,3 +2395,7 @@ Source b2a53bd597f1511d79e98f818513ba7d2bbbb712:26 disclosures,22 participation 
 
 ### 2026-11-15 — Funding research group115 publication
 Rebuild the existing publication from audited funding source commit addf18b626bc192a958f9a4f3767a930f74a8af9. Audit: https://github.com/brunotaut/xsonomy-news/blob/addf18b626bc192a958f9a4f3767a930f74a8af9/research-agent/reports/2026-11-15-funding-landscape-one-hundred-fifteenth.json. 24 additional disclosures,25 participation links,40 event sources,1 portfolio relationship and5 guarded reconciliations imported atomically after production rollback and preservation tests. Preserve geography, company gates and curated records; no workflow or schedule changes.
+
+
+### 2026-11-15 — Funding research group116 publication
+Rebuild existing publication from audited funding source commit 96b1c2be3cb4648898cb81ef13f7bd9f37a54f53. Audit: https://github.com/brunotaut/xsonomy-news/blob/96b1c2be3cb4648898cb81ef13f7bd9f37a54f53/research-agent/reports/2026-11-15-funding-landscape-one-hundred-sixteenth.json.29 disclosures,16 participation links,50 event sources,16 guarded event corrections and one guarded investor contribution correction imported after production rollback and exact preservation audits. Preserve company geography/gates and curated records; no workflow or schedule changes.
