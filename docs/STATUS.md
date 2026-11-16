@@ -2436,3 +2436,7 @@ Rebuild sourceauditedimport 85487a9aceb801308ee61259a77acc9076b80dec (brunotaut/
 ## 2026-11-16 — Funding research124 publication
 
 Rebuildsourceauditedimport 8ff7cf47da653eaf29ee13d135b8595363b3037f (brunotaut/xsonomy-news),audit research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-fourth.json.20events/disclosures,5participations,30citations,2profiles,3guardeddatecorrections. Exactissuer/currency/qualifier/cash-vs-commitmentboundariesretained; OHB/Ondascompositesnofinancingcopy. FullPostgreSQL/productionrollback/atomicity/idempotency/exactpreservationpassed. Catalogueremainsread-onlytoSupabase;nofrontend/schedules/gateschanged.
+
+
+### Funding publication 2026-11-16 — run125
+Rebuild from source audit commit `712119cf1ae12afcd1b9f568f51919628695dc84` in `brunotaut/xsonomy-news`, report `research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-fifth.json`.24approved events/17participations/55event sources;7guarded corrections;1generic relationship;26source identities checked. Production rollback, atomic import, exact preservation and idempotency verified. Keep geography and company publication gates unchanged; financial targets outside567-company European map. Existing read-only Supabase build only; schedules unchanged.
