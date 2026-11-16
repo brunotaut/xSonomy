@@ -2421,3 +2421,8 @@ Rebuild from source-audited funding import 564898dd6fa15a38a0196e83cf292da493702
 ## 2026-11-16 — Funding research121 publication
 
 Rebuild source-audited import 362af9a75ed4b6b7a34f2d8b38b0bf2c44c708ba (brunotaut/xsonomy-news); audit research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-first.json.18events/14participations/29citations/18guardedcorrections; PostgreSQL rollback/atomicity/idempotency and fullpreservation passed. Exactissuer/date/currency/cashvsface distinctions retained. Catalogue remains read-only toSupabase; no schedules/frontend/gates changed.
+
+
+## 2026-11-16 — Funding research122 publication
+
+Rebuild sourceauditedimport 3a5dd25cec9d9b94165f2d31734d5c65a4670d63 (brunotaut/xsonomy-news), audit research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-second.json.29events/disclosures,23participations,45citations,7profiles,11guardedcorrections. FullPostgreSQL/productionrollback/atomicimport/idempotency/exactpreservationpassed. Frameworkceilingsnotissuerproceeds; NextVisionaliasprotected. Catalogue remainsread-onlytoSupabase; no frontend/schedules/gates changed.
