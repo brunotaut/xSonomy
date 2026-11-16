@@ -2431,3 +2431,8 @@ Rebuild sourceauditedimport 3a5dd25cec9d9b94165f2d31734d5c65a4670d63 (brunotaut/
 ## 2026-11-16 — Funding research123 publication
 
 Rebuild sourceauditedimport 85487a9aceb801308ee61259a77acc9076b80dec (brunotaut/xsonomy-news),audit research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-third.json.30events/disclosures,6participations,47citations,3profiles,13guardedcorrections. Nordic300m+700msameISINsplitavoidsdoublecount; EURENCOsubsidiary/reservesnotparentcash. FullPostgreSQL/productionrollback/atomicity/idempotency/exactpreservationpassed. Catalogueremainsread-onlytoSupabase;nofrontend/schedules/gates changed.
+
+
+## 2026-11-16 — Funding research124 publication
+
+Rebuildsourceauditedimport 8ff7cf47da653eaf29ee13d135b8595363b3037f (brunotaut/xsonomy-news),audit research-agent/reports/2026-11-16-funding-landscape-one-hundred-twenty-fourth.json.20events/disclosures,5participations,30citations,2profiles,3guardeddatecorrections. Exactissuer/currency/qualifier/cash-vs-commitmentboundariesretained; OHB/Ondascompositesnofinancingcopy. FullPostgreSQL/productionrollback/atomicity/idempotency/exactpreservationpassed. Catalogueremainsread-onlytoSupabase;nofrontend/schedules/gateschanged.
