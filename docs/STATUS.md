@@ -2411,3 +2411,8 @@ Rebuild existing catalogue from audited funding source commit e3af51b7460c9e8534
 
 ### 2026-11-16 — Funding research group119 publication
 Rebuild existing catalogue from audited funding source commit f34f8ad0ae3480b43fa224f82cefb07cc4fe7148. Audit: https://github.com/brunotaut/xsonomy-news/blob/f34f8ad0ae3480b43fa224f82cefb07cc4fe7148/research-agent/reports/2026-11-16-funding-landscape-one-hundred-nineteenth.json.17 disclosures,14 participation links,30 event sources and25 guarded corrections imported after production rollback and exact preservation tests. Preserve geography/company gates/curated records; no workflow or schedule changes.
+
+
+## 2026-11-16 — Funding research120 publication
+
+Rebuild from source-audited funding import 564898dd6fa15a38a0196e83cf292da4937028a8 in brunotaut/xsonomy-news. Audit: research-agent/reports/2026-11-16-funding-landscape-one-hundred-twentieth.json. Writer verified22 new approved events/13 participations,31 citations,3 profiles,1 generic relationship and10 guarded corrections, production rollback/atomic import/exact preservation/idempotency. Published Liebherr project/Toulouse scope corrected to undisclosed issuer amount; geography and publication gates unchanged. This catalogue remains read-only to Supabase; no frontend or workflow schedule changes.
